@@ -1,3 +1,4 @@
+
 QT -= qui
 
 TARGET = qtTestApp
