@@ -4,6 +4,8 @@
 #include <memory>
 #include <asio.hpp>
 
+#include "define.h"
+
 class Session
         : public std::enable_shared_from_this<Session>
 {
@@ -12,15 +14,15 @@ class Session
 
         Session(asio::ip::tcp::socket& socket);
 
-        std::shared_ptr<Session> getNewSession();
+        static std::shared_ptr<Session> getNewSession(asio::ip::tcp::socket& socket);
 
         void start();
 
     private:
         void handle_read(asio::error_code error, size_t bufferSize);
 
-        asio::ip::tcp::socket& socket;
-        std::string buffer;
+        asio::ip::tcp::socket& socket_;
+        std::vector<char> buffer_;
 };
 
 typedef std::shared_ptr<Session> SessionPtr;

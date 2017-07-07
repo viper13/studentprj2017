@@ -17,10 +17,10 @@ void Session::start()
 {
     asio::async_read(socket_
                      , asio::buffer(buffer_)
-                     , std::bind(Session::handle_read
+                     , std::bind(&Session::handle_read
                         , shared_from_this()
-                        , std::placeholder::_1
-                        , std::placeholder::_2
+                        , std::placeholders::_1
+                        , std::placeholders::_2
                      ));
 }
 
@@ -30,11 +30,11 @@ void Session::handle_read(asio::error_code error, size_t bufferSize)
     {
         //process message
         buffer_.resize(bufferSize);
-        LOG_INFO("Message:(" << buffer_ << ")");
+        LOG_INFO("Message:[]");
 
         start();
     }
-    esle
+    else
     {
         LOG_ERR("Failure: read error code" << error.value() << " description: "
                 << error.message());

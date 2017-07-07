@@ -2,6 +2,7 @@
 #define SERVER_H
 
 #include <asio.hpp>
+#include <Server.h>
 #include "session.h"
 
 class Server
@@ -16,7 +17,7 @@ private:
     asio::ip::tcp::acceptor acceptor_;
     asio::ip::tcp::socket socket_;
 
-    std::vector<SessionPtr> session;
+    std::vector<SessionPtr> sessions_;
 };
 
 #endif // SERVER_H
