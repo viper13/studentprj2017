@@ -1,4 +1,4 @@
-
+QT - = gui
 TARGET = client
 CONFIG += console
 CONFIG -= app_bundle

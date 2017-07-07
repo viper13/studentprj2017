@@ -1,3 +1,5 @@
+QT -= gui
+
 TARGET = server
 CONFIG += console
 CONFIG -= app_bundle
