@@ -1,4 +1,4 @@
-
+QT -= qui
 
 TARGET = qtTestApp
 CONFIG += console
