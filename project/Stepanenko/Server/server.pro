@@ -11,11 +11,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     worker.cpp \
-    server.cpp
+    server.cpp \
+    sesion.cpp
 
 HEADERS += \
     worker.h \
     define.h \
-    server.h
+    server.h \
+    sesion.h
 
 

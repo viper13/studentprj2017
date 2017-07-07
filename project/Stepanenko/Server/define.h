@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#define BUFFER_MAX_SIZE 65535
 
 #define WORKER_THREAD_COUNT 4
 
