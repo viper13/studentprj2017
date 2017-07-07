@@ -1,0 +1,2702 @@
+local/connect_pair.o: local/connect_pair.cpp /usr/include/stdc-predef.h \
+ /usr/include/c++/6/iostream \
+ /usr/include/x86_64-linux-gnu/c++/6/bits/c++config.h \
+ /usr/include/x86_64-linux-gnu/c++/6/bits/os_defines.h \
+ /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+ /usr/include/x86_64-linux-gnu/bits/wordsize.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
+ /usr/include/x86_64-linux-gnu/c++/6/bits/cpu_defines.h \
+ /usr/include/c++/6/ostream /usr/include/c++/6/ios \
+ /usr/include/c++/6/iosfwd /usr/include/c++/6/bits/stringfwd.h \
+ /usr/include/c++/6/bits/memoryfwd.h /usr/include/c++/6/bits/postypes.h \
+ /usr/include/c++/6/cwchar /usr/include/wchar.h /usr/include/stdio.h \
+ /usr/lib/gcc/x86_64-linux-gnu/6/include/stdarg.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar.h \
+ /usr/lib/gcc/x86_64-linux-gnu/6/include/stddef.h /usr/include/xlocale.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar2.h /usr/include/c++/6/exception \
+ /usr/include/c++/6/bits/atomic_lockfree_defines.h \
+ /usr/include/c++/6/bits/exception_ptr.h \
+ /usr/include/c++/6/bits/exception_defines.h \
+ /usr/include/c++/6/bits/nested_exception.h \
+ /usr/include/c++/6/bits/move.h /usr/include/c++/6/bits/concept_check.h \
+ /usr/include/c++/6/type_traits /usr/include/c++/6/bits/char_traits.h \
+ /usr/include/c++/6/bits/stl_algobase.h \
+ /usr/include/c++/6/bits/functexcept.h \
+ /usr/include/c++/6/bits/cpp_type_traits.h \
+ /usr/include/c++/6/ext/type_traits.h \
+ /usr/include/c++/6/ext/numeric_traits.h \
+ /usr/include/c++/6/bits/stl_pair.h \
+ /usr/include/c++/6/bits/stl_iterator_base_types.h \
+ /usr/include/c++/6/bits/stl_iterator_base_funcs.h \
+ /usr/include/c++/6/debug/assertions.h \
+ /usr/include/c++/6/bits/stl_iterator.h \
+ /usr/include/c++/6/bits/ptr_traits.h /usr/include/c++/6/debug/debug.h \
+ /usr/include/c++/6/bits/predefined_ops.h /usr/include/c++/6/cstdint \
+ /usr/lib/gcc/x86_64-linux-gnu/6/include/stdint.h /usr/include/stdint.h \
+ /usr/include/c++/6/bits/localefwd.h \
+ /usr/include/x86_64-linux-gnu/c++/6/bits/c++locale.h \
+ /usr/include/c++/6/clocale /usr/include/locale.h \
+ /usr/include/x86_64-linux-gnu/bits/locale.h /usr/include/c++/6/cctype \
+ /usr/include/ctype.h /usr/include/x86_64-linux-gnu/bits/types.h \
+ /usr/include/x86_64-linux-gnu/bits/typesizes.h /usr/include/endian.h \
+ /usr/include/x86_64-linux-gnu/bits/endian.h \
+ /usr/include/x86_64-linux-gnu/bits/byteswap.h \
+ /usr/include/x86_64-linux-gnu/bits/byteswap-16.h \
+ /usr/include/c++/6/bits/ios_base.h /usr/include/c++/6/ext/atomicity.h \
+ /usr/include/x86_64-linux-gnu/c++/6/bits/gthr.h \
+ /usr/include/x86_64-linux-gnu/c++/6/bits/gthr-default.h \
+ /usr/include/pthread.h /usr/include/sched.h /usr/include/time.h \
+ /usr/include/x86_64-linux-gnu/bits/sched.h \
+ /usr/include/x86_64-linux-gnu/bits/time.h \
+ /usr/include/x86_64-linux-gnu/bits/timex.h \
+ /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
+ /usr/include/x86_64-linux-gnu/bits/setjmp.h \
+ /usr/include/x86_64-linux-gnu/c++/6/bits/atomic_word.h \
+ /usr/include/c++/6/bits/locale_classes.h /usr/include/c++/6/string \
+ /usr/include/c++/6/bits/allocator.h \
+ /usr/include/x86_64-linux-gnu/c++/6/bits/c++allocator.h \
+ /usr/include/c++/6/ext/new_allocator.h /usr/include/c++/6/new \
+ /usr/include/c++/6/bits/ostream_insert.h \
+ /usr/include/c++/6/bits/cxxabi_forced.h \
+ /usr/include/c++/6/bits/stl_function.h \
+ /usr/include/c++/6/backward/binders.h \
+ /usr/include/c++/6/bits/range_access.h \
+ /usr/include/c++/6/initializer_list \
+ /usr/include/c++/6/bits/basic_string.h \
+ /usr/include/c++/6/ext/alloc_traits.h \
+ /usr/include/c++/6/bits/alloc_traits.h \
+ /usr/include/c++/6/ext/string_conversions.h /usr/include/c++/6/cstdlib \
+ /usr/include/stdlib.h /usr/include/x86_64-linux-gnu/bits/waitflags.h \
+ /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
+ /usr/include/x86_64-linux-gnu/sys/types.h \
+ /usr/include/x86_64-linux-gnu/sys/select.h \
+ /usr/include/x86_64-linux-gnu/bits/select.h \
+ /usr/include/x86_64-linux-gnu/bits/sigset.h \
+ /usr/include/x86_64-linux-gnu/bits/select2.h \
+ /usr/include/x86_64-linux-gnu/sys/sysmacros.h /usr/include/alloca.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib.h /usr/include/c++/6/cstdio \
+ /usr/include/libio.h /usr/include/_G_config.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2.h /usr/include/c++/6/cerrno \
+ /usr/include/errno.h /usr/include/x86_64-linux-gnu/bits/errno.h \
+ /usr/include/linux/errno.h /usr/include/x86_64-linux-gnu/asm/errno.h \
+ /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
+ /usr/include/c++/6/bits/functional_hash.h \
+ /usr/include/c++/6/bits/hash_bytes.h \
+ /usr/include/c++/6/bits/basic_string.tcc \
+ /usr/include/c++/6/bits/locale_classes.tcc \
+ /usr/include/c++/6/system_error \
+ /usr/include/x86_64-linux-gnu/c++/6/bits/error_constants.h \
+ /usr/include/c++/6/stdexcept /usr/include/c++/6/streambuf \
+ /usr/include/c++/6/bits/streambuf.tcc \
+ /usr/include/c++/6/bits/basic_ios.h \
+ /usr/include/c++/6/bits/locale_facets.h /usr/include/c++/6/cwctype \
+ /usr/include/wctype.h \
+ /usr/include/x86_64-linux-gnu/c++/6/bits/ctype_base.h \
+ /usr/include/c++/6/bits/streambuf_iterator.h \
+ /usr/include/x86_64-linux-gnu/c++/6/bits/ctype_inline.h \
+ /usr/include/c++/6/bits/locale_facets.tcc \
+ /usr/include/c++/6/bits/basic_ios.tcc \
+ /usr/include/c++/6/bits/ostream.tcc /usr/include/c++/6/istream \
+ /usr/include/c++/6/bits/istream.tcc ../../../include/asio.hpp \
+ ../../../include/asio/async_result.hpp \
+ ../../../include/asio/detail/config.hpp /usr/include/boost/config.hpp \
+ /usr/include/boost/config/user.hpp \
+ /usr/include/boost/config/select_compiler_config.hpp \
+ /usr/include/boost/config/compiler/gcc.hpp /usr/include/c++/6/cstddef \
+ /usr/include/boost/config/select_stdlib_config.hpp \
+ /usr/include/boost/config/stdlib/libstdcpp3.hpp /usr/include/unistd.h \
+ /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+ /usr/include/x86_64-linux-gnu/bits/environments.h \
+ /usr/include/x86_64-linux-gnu/bits/confname.h /usr/include/getopt.h \
+ /usr/include/x86_64-linux-gnu/bits/unistd.h \
+ /usr/include/boost/config/select_platform_config.hpp \
+ /usr/include/boost/config/platform/linux.hpp \
+ /usr/include/boost/config/posix_features.hpp \
+ /usr/include/boost/config/suffix.hpp /usr/include/boost/version.hpp \
+ /usr/include/linux/version.h ../../../include/asio/handler_type.hpp \
+ ../../../include/asio/detail/push_options.hpp \
+ ../../../include/asio/detail/pop_options.hpp \
+ ../../../include/asio/basic_datagram_socket.hpp \
+ ../../../include/asio/basic_socket.hpp \
+ ../../../include/asio/async_result.hpp \
+ ../../../include/asio/basic_io_object.hpp \
+ ../../../include/asio/io_service.hpp /usr/include/c++/6/typeinfo \
+ ../../../include/asio/detail/noncopyable.hpp \
+ ../../../include/asio/detail/wrapped_handler.hpp \
+ ../../../include/asio/detail/bind_handler.hpp \
+ ../../../include/asio/detail/handler_alloc_helpers.hpp \
+ ../../../include/asio/detail/addressof.hpp /usr/include/c++/6/memory \
+ /usr/include/c++/6/bits/stl_construct.h \
+ /usr/include/c++/6/bits/stl_uninitialized.h \
+ /usr/include/c++/6/bits/stl_tempbuf.h \
+ /usr/include/c++/6/bits/stl_raw_storage_iter.h \
+ /usr/include/c++/6/ext/concurrence.h \
+ /usr/include/c++/6/bits/uses_allocator.h /usr/include/c++/6/functional \
+ /usr/include/c++/6/tuple /usr/include/c++/6/utility \
+ /usr/include/c++/6/bits/stl_relops.h /usr/include/c++/6/array \
+ /usr/include/c++/6/bits/unique_ptr.h \
+ /usr/include/c++/6/bits/shared_ptr.h \
+ /usr/include/c++/6/bits/shared_ptr_base.h \
+ /usr/include/c++/6/bits/allocated_ptr.h \
+ /usr/include/c++/6/ext/aligned_buffer.h \
+ /usr/include/c++/6/bits/shared_ptr_atomic.h \
+ /usr/include/c++/6/bits/atomic_base.h \
+ /usr/include/c++/6/backward/auto_ptr.h \
+ ../../../include/asio/handler_alloc_hook.hpp \
+ ../../../include/asio/impl/handler_alloc_hook.ipp \
+ ../../../include/asio/detail/call_stack.hpp \
+ ../../../include/asio/detail/tss_ptr.hpp \
+ ../../../include/asio/detail/keyword_tss_ptr.hpp \
+ ../../../include/asio/detail/task_io_service_thread_info.hpp \
+ ../../../include/asio/detail/op_queue.hpp \
+ ../../../include/asio/detail/thread_info_base.hpp \
+ /usr/include/c++/6/climits \
+ /usr/lib/gcc/x86_64-linux-gnu/6/include-fixed/limits.h \
+ /usr/lib/gcc/x86_64-linux-gnu/6/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/local_lim.h \
+ /usr/include/linux/limits.h \
+ /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
+ ../../../include/asio/detail/handler_cont_helpers.hpp \
+ ../../../include/asio/handler_continuation_hook.hpp \
+ ../../../include/asio/detail/handler_invoke_helpers.hpp \
+ ../../../include/asio/handler_invoke_hook.hpp \
+ ../../../include/asio/error_code.hpp \
+ ../../../include/asio/impl/error_code.ipp /usr/include/c++/6/cstring \
+ /usr/include/string.h /usr/include/x86_64-linux-gnu/bits/string3.h \
+ ../../../include/asio/detail/local_free_on_block_exit.hpp \
+ ../../../include/asio/detail/socket_types.hpp \
+ /usr/include/x86_64-linux-gnu/sys/ioctl.h \
+ /usr/include/x86_64-linux-gnu/bits/ioctls.h \
+ /usr/include/x86_64-linux-gnu/asm/ioctls.h \
+ /usr/include/asm-generic/ioctls.h /usr/include/linux/ioctl.h \
+ /usr/include/x86_64-linux-gnu/asm/ioctl.h \
+ /usr/include/asm-generic/ioctl.h \
+ /usr/include/x86_64-linux-gnu/bits/ioctl-types.h \
+ /usr/include/x86_64-linux-gnu/sys/ttydefaults.h \
+ /usr/include/x86_64-linux-gnu/sys/poll.h \
+ /usr/include/x86_64-linux-gnu/bits/poll.h \
+ /usr/include/x86_64-linux-gnu/bits/poll2.h \
+ /usr/include/x86_64-linux-gnu/sys/stat.h \
+ /usr/include/x86_64-linux-gnu/bits/stat.h /usr/include/fcntl.h \
+ /usr/include/x86_64-linux-gnu/bits/fcntl.h \
+ /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
+ /usr/include/x86_64-linux-gnu/bits/uio.h \
+ /usr/include/x86_64-linux-gnu/bits/fcntl2.h \
+ /usr/include/x86_64-linux-gnu/sys/socket.h \
+ /usr/include/x86_64-linux-gnu/sys/uio.h \
+ /usr/include/x86_64-linux-gnu/bits/socket.h \
+ /usr/include/x86_64-linux-gnu/bits/socket_type.h \
+ /usr/include/x86_64-linux-gnu/bits/sockaddr.h \
+ /usr/include/x86_64-linux-gnu/asm/socket.h \
+ /usr/include/asm-generic/socket.h \
+ /usr/include/x86_64-linux-gnu/asm/sockios.h \
+ /usr/include/asm-generic/sockios.h \
+ /usr/include/x86_64-linux-gnu/bits/socket2.h \
+ /usr/include/x86_64-linux-gnu/sys/un.h /usr/include/netinet/in.h \
+ /usr/include/x86_64-linux-gnu/bits/in.h /usr/include/netinet/tcp.h \
+ /usr/include/arpa/inet.h /usr/include/netdb.h /usr/include/rpc/netdb.h \
+ /usr/include/x86_64-linux-gnu/bits/siginfo.h \
+ /usr/include/x86_64-linux-gnu/bits/netdb.h /usr/include/net/if.h \
+ ../../../include/asio/impl/io_service.hpp \
+ ../../../include/asio/detail/handler_type_requirements.hpp \
+ ../../../include/asio/detail/service_registry.hpp \
+ ../../../include/asio/detail/mutex.hpp \
+ ../../../include/asio/detail/posix_mutex.hpp \
+ ../../../include/asio/detail/scoped_lock.hpp \
+ ../../../include/asio/detail/impl/posix_mutex.ipp \
+ ../../../include/asio/detail/throw_error.hpp \
+ ../../../include/asio/detail/impl/throw_error.ipp \
+ ../../../include/asio/detail/throw_exception.hpp \
+ /usr/include/boost/throw_exception.hpp \
+ /usr/include/boost/detail/workaround.hpp \
+ /usr/include/boost/exception/exception.hpp \
+ /usr/include/boost/current_function.hpp \
+ ../../../include/asio/system_error.hpp ../../../include/asio/error.hpp \
+ ../../../include/asio/impl/error.ipp \
+ ../../../include/asio/detail/impl/service_registry.hpp \
+ ../../../include/asio/detail/impl/service_registry.ipp \
+ /usr/include/c++/6/vector /usr/include/c++/6/bits/stl_vector.h \
+ /usr/include/c++/6/bits/stl_bvector.h /usr/include/c++/6/bits/vector.tcc \
+ ../../../include/asio/detail/task_io_service.hpp \
+ ../../../include/asio/detail/atomic_count.hpp /usr/include/c++/6/atomic \
+ ../../../include/asio/detail/event.hpp \
+ ../../../include/asio/detail/posix_event.hpp \
+ ../../../include/asio/detail/assert.hpp /usr/include/boost/assert.hpp \
+ /usr/include/assert.h ../../../include/asio/detail/impl/posix_event.ipp \
+ ../../../include/asio/detail/reactor_fwd.hpp \
+ ../../../include/asio/detail/task_io_service_operation.hpp \
+ ../../../include/asio/detail/handler_tracking.hpp \
+ ../../../include/asio/detail/impl/handler_tracking.ipp \
+ ../../../include/asio/detail/impl/task_io_service.hpp \
+ ../../../include/asio/detail/completion_handler.hpp \
+ ../../../include/asio/detail/fenced_block.hpp \
+ ../../../include/asio/detail/gcc_x86_fenced_block.hpp \
+ ../../../include/asio/detail/operation.hpp \
+ ../../../include/asio/detail/impl/task_io_service.ipp \
+ ../../../include/asio/detail/limits.hpp /usr/include/boost/limits.hpp \
+ /usr/include/c++/6/limits ../../../include/asio/detail/reactor.hpp \
+ ../../../include/asio/detail/epoll_reactor.hpp \
+ ../../../include/asio/detail/object_pool.hpp \
+ ../../../include/asio/detail/reactor_op.hpp \
+ ../../../include/asio/detail/select_interrupter.hpp \
+ ../../../include/asio/detail/eventfd_select_interrupter.hpp \
+ ../../../include/asio/detail/impl/eventfd_select_interrupter.ipp \
+ /usr/include/x86_64-linux-gnu/sys/eventfd.h \
+ /usr/include/x86_64-linux-gnu/bits/eventfd.h \
+ ../../../include/asio/detail/cstdint.hpp \
+ ../../../include/asio/detail/timer_queue_base.hpp \
+ ../../../include/asio/detail/timer_queue_set.hpp \
+ ../../../include/asio/detail/impl/timer_queue_set.ipp \
+ ../../../include/asio/detail/wait_op.hpp \
+ ../../../include/asio/detail/impl/epoll_reactor.hpp \
+ ../../../include/asio/detail/impl/epoll_reactor.ipp \
+ /usr/include/x86_64-linux-gnu/sys/epoll.h \
+ /usr/include/x86_64-linux-gnu/bits/epoll.h \
+ /usr/include/x86_64-linux-gnu/sys/timerfd.h \
+ /usr/include/x86_64-linux-gnu/bits/timerfd.h \
+ ../../../include/asio/impl/io_service.ipp \
+ ../../../include/asio/detail/scoped_ptr.hpp \
+ ../../../include/asio/detail/type_traits.hpp \
+ ../../../include/asio/socket_base.hpp \
+ ../../../include/asio/detail/io_control.hpp \
+ ../../../include/asio/detail/socket_option.hpp \
+ ../../../include/asio/datagram_socket_service.hpp \
+ ../../../include/asio/detail/reactive_socket_service.hpp \
+ ../../../include/asio/buffer.hpp \
+ ../../../include/asio/detail/array_fwd.hpp \
+ ../../../include/asio/detail/buffer_sequence_adapter.hpp \
+ ../../../include/asio/detail/impl/buffer_sequence_adapter.ipp \
+ ../../../include/asio/detail/reactive_null_buffers_op.hpp \
+ ../../../include/asio/detail/reactive_socket_accept_op.hpp \
+ ../../../include/asio/detail/socket_holder.hpp \
+ ../../../include/asio/detail/socket_ops.hpp \
+ ../../../include/asio/detail/shared_ptr.hpp \
+ ../../../include/asio/detail/weak_ptr.hpp \
+ ../../../include/asio/detail/impl/socket_ops.ipp \
+ ../../../include/asio/detail/reactive_socket_connect_op.hpp \
+ ../../../include/asio/detail/reactive_socket_recvfrom_op.hpp \
+ ../../../include/asio/detail/reactive_socket_sendto_op.hpp \
+ ../../../include/asio/detail/reactive_socket_service_base.hpp \
+ ../../../include/asio/detail/reactive_socket_recv_op.hpp \
+ ../../../include/asio/detail/reactive_socket_recvmsg_op.hpp \
+ ../../../include/asio/detail/reactive_socket_send_op.hpp \
+ ../../../include/asio/detail/impl/reactive_socket_service_base.ipp \
+ ../../../include/asio/basic_deadline_timer.hpp \
+ ../../../include/asio/deadline_timer_service.hpp \
+ ../../../include/asio/detail/deadline_timer_service.hpp \
+ ../../../include/asio/detail/timer_queue.hpp \
+ ../../../include/asio/detail/date_time_fwd.hpp \
+ ../../../include/asio/detail/timer_scheduler.hpp \
+ ../../../include/asio/detail/timer_scheduler_fwd.hpp \
+ ../../../include/asio/detail/wait_handler.hpp \
+ ../../../include/asio/time_traits.hpp \
+ /usr/include/boost/date_time/posix_time/posix_time_types.hpp \
+ /usr/include/boost/date_time/time_clock.hpp \
+ /usr/include/boost/date_time/c_time.hpp /usr/include/c++/6/ctime \
+ /usr/include/boost/date_time/compiler_config.hpp \
+ /usr/include/boost/date_time/locale_config.hpp \
+ /usr/include/boost/cstdint.hpp /usr/include/boost/config/auto_link.hpp \
+ /usr/include/x86_64-linux-gnu/sys/time.h \
+ /usr/include/boost/shared_ptr.hpp \
+ /usr/include/boost/smart_ptr/shared_ptr.hpp \
+ /usr/include/boost/config/no_tr1/memory.hpp \
+ /usr/include/boost/checked_delete.hpp \
+ /usr/include/boost/core/checked_delete.hpp \
+ /usr/include/boost/smart_ptr/detail/shared_count.hpp \
+ /usr/include/boost/smart_ptr/bad_weak_ptr.hpp \
+ /usr/include/boost/smart_ptr/detail/sp_counted_base.hpp \
+ /usr/include/boost/smart_ptr/detail/sp_has_sync.hpp \
+ /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp \
+ /usr/include/boost/detail/sp_typeinfo.hpp \
+ /usr/include/boost/core/typeinfo.hpp \
+ /usr/include/boost/core/demangle.hpp /usr/include/c++/6/cxxabi.h \
+ /usr/include/x86_64-linux-gnu/c++/6/bits/cxxabi_tweaks.h \
+ /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp \
+ /usr/include/boost/smart_ptr/detail/sp_disable_deprecated.hpp \
+ /usr/include/boost/core/addressof.hpp \
+ /usr/include/boost/smart_ptr/detail/sp_convertible.hpp \
+ /usr/include/boost/smart_ptr/detail/sp_nullptr_t.hpp \
+ /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp \
+ /usr/include/boost/smart_ptr/detail/spinlock.hpp \
+ /usr/include/boost/smart_ptr/detail/spinlock_sync.hpp \
+ /usr/include/boost/smart_ptr/detail/yield_k.hpp \
+ /usr/include/boost/predef.h /usr/include/boost/predef/language.h \
+ /usr/include/boost/predef/language/stdc.h \
+ /usr/include/boost/predef/version_number.h \
+ /usr/include/boost/predef/make.h /usr/include/boost/predef/detail/test.h \
+ /usr/include/boost/predef/language/stdcpp.h \
+ /usr/include/boost/predef/language/objc.h \
+ /usr/include/boost/predef/architecture.h \
+ /usr/include/boost/predef/architecture/alpha.h \
+ /usr/include/boost/predef/architecture/arm.h \
+ /usr/include/boost/predef/architecture/blackfin.h \
+ /usr/include/boost/predef/architecture/convex.h \
+ /usr/include/boost/predef/architecture/ia64.h \
+ /usr/include/boost/predef/architecture/m68k.h \
+ /usr/include/boost/predef/architecture/mips.h \
+ /usr/include/boost/predef/architecture/parisc.h \
+ /usr/include/boost/predef/architecture/ppc.h \
+ /usr/include/boost/predef/architecture/pyramid.h \
+ /usr/include/boost/predef/architecture/rs6k.h \
+ /usr/include/boost/predef/architecture/sparc.h \
+ /usr/include/boost/predef/architecture/superh.h \
+ /usr/include/boost/predef/architecture/sys370.h \
+ /usr/include/boost/predef/architecture/sys390.h \
+ /usr/include/boost/predef/architecture/x86.h \
+ /usr/include/boost/predef/architecture/x86/32.h \
+ /usr/include/boost/predef/architecture/x86/64.h \
+ /usr/include/boost/predef/architecture/z.h \
+ /usr/include/boost/predef/compiler.h \
+ /usr/include/boost/predef/compiler/borland.h \
+ /usr/include/boost/predef/compiler/clang.h \
+ /usr/include/boost/predef/compiler/comeau.h \
+ /usr/include/boost/predef/compiler/compaq.h \
+ /usr/include/boost/predef/compiler/diab.h \
+ /usr/include/boost/predef/compiler/digitalmars.h \
+ /usr/include/boost/predef/compiler/dignus.h \
+ /usr/include/boost/predef/compiler/edg.h \
+ /usr/include/boost/predef/compiler/ekopath.h \
+ /usr/include/boost/predef/compiler/gcc_xml.h \
+ /usr/include/boost/predef/compiler/gcc.h \
+ /usr/include/boost/predef/detail/comp_detected.h \
+ /usr/include/boost/predef/compiler/greenhills.h \
+ /usr/include/boost/predef/compiler/hp_acc.h \
+ /usr/include/boost/predef/compiler/iar.h \
+ /usr/include/boost/predef/compiler/ibm.h \
+ /usr/include/boost/predef/compiler/intel.h \
+ /usr/include/boost/predef/compiler/kai.h \
+ /usr/include/boost/predef/compiler/llvm.h \
+ /usr/include/boost/predef/compiler/metaware.h \
+ /usr/include/boost/predef/compiler/metrowerks.h \
+ /usr/include/boost/predef/compiler/microtec.h \
+ /usr/include/boost/predef/compiler/mpw.h \
+ /usr/include/boost/predef/compiler/palm.h \
+ /usr/include/boost/predef/compiler/pgi.h \
+ /usr/include/boost/predef/compiler/sgi_mipspro.h \
+ /usr/include/boost/predef/compiler/sunpro.h \
+ /usr/include/boost/predef/compiler/tendra.h \
+ /usr/include/boost/predef/compiler/visualc.h \
+ /usr/include/boost/predef/compiler/watcom.h \
+ /usr/include/boost/predef/library.h \
+ /usr/include/boost/predef/library/c.h \
+ /usr/include/boost/predef/library/c/_prefix.h \
+ /usr/include/boost/predef/detail/_cassert.h /usr/include/c++/6/cassert \
+ /usr/include/boost/predef/library/c/gnu.h \
+ /usr/include/boost/predef/library/c/uc.h \
+ /usr/include/boost/predef/library/c/vms.h \
+ /usr/include/boost/predef/library/c/zos.h \
+ /usr/include/boost/predef/library/std.h \
+ /usr/include/boost/predef/library/std/_prefix.h \
+ /usr/include/boost/predef/detail/_exception.h \
+ /usr/include/boost/predef/library/std/cxx.h \
+ /usr/include/boost/predef/library/std/dinkumware.h \
+ /usr/include/boost/predef/library/std/libcomo.h \
+ /usr/include/boost/predef/library/std/modena.h \
+ /usr/include/boost/predef/library/std/msl.h \
+ /usr/include/boost/predef/library/std/roguewave.h \
+ /usr/include/boost/predef/library/std/sgi.h \
+ /usr/include/boost/predef/library/std/stdcpp3.h \
+ /usr/include/boost/predef/library/std/stlport.h \
+ /usr/include/boost/predef/library/std/vacpp.h \
+ /usr/include/boost/predef/os.h /usr/include/boost/predef/os/aix.h \
+ /usr/include/boost/predef/os/amigaos.h \
+ /usr/include/boost/predef/os/android.h \
+ /usr/include/boost/predef/os/beos.h /usr/include/boost/predef/os/bsd.h \
+ /usr/include/boost/predef/os/macos.h /usr/include/boost/predef/os/ios.h \
+ /usr/include/boost/predef/os/bsd/bsdi.h \
+ /usr/include/boost/predef/os/bsd/dragonfly.h \
+ /usr/include/boost/predef/os/bsd/free.h \
+ /usr/include/boost/predef/os/bsd/open.h \
+ /usr/include/boost/predef/os/bsd/net.h \
+ /usr/include/boost/predef/os/cygwin.h \
+ /usr/include/boost/predef/os/haiku.h /usr/include/boost/predef/os/hpux.h \
+ /usr/include/boost/predef/os/irix.h /usr/include/boost/predef/os/linux.h \
+ /usr/include/boost/predef/detail/os_detected.h \
+ /usr/include/boost/predef/os/os400.h \
+ /usr/include/boost/predef/os/qnxnto.h \
+ /usr/include/boost/predef/os/solaris.h \
+ /usr/include/boost/predef/os/unix.h /usr/include/boost/predef/os/vms.h \
+ /usr/include/boost/predef/os/windows.h /usr/include/boost/predef/other.h \
+ /usr/include/boost/predef/other/endian.h \
+ /usr/include/boost/predef/platform.h \
+ /usr/include/boost/predef/platform/mingw.h \
+ /usr/include/boost/predef/platform/windows_desktop.h \
+ /usr/include/boost/predef/platform/windows_store.h \
+ /usr/include/boost/predef/platform/windows_phone.h \
+ /usr/include/boost/predef/platform/windows_runtime.h \
+ /usr/include/boost/predef/hardware.h \
+ /usr/include/boost/predef/hardware/simd.h \
+ /usr/include/boost/predef/hardware/simd/x86.h \
+ /usr/include/boost/predef/hardware/simd/x86/versions.h \
+ /usr/include/boost/predef/hardware/simd/x86_amd.h \
+ /usr/include/boost/predef/hardware/simd/x86_amd/versions.h \
+ /usr/include/boost/predef/hardware/simd/arm.h \
+ /usr/include/boost/predef/hardware/simd/arm/versions.h \
+ /usr/include/boost/predef/hardware/simd/ppc.h \
+ /usr/include/boost/predef/hardware/simd/ppc/versions.h \
+ /usr/include/boost/predef/version.h /usr/include/c++/6/algorithm \
+ /usr/include/c++/6/bits/stl_algo.h \
+ /usr/include/c++/6/bits/algorithmfwd.h \
+ /usr/include/c++/6/bits/stl_heap.h \
+ /usr/include/c++/6/bits/uniform_int_dist.h \
+ /usr/include/boost/smart_ptr/detail/operator_bool.hpp \
+ /usr/include/boost/date_time/microsec_time_clock.hpp \
+ /usr/include/boost/date_time/filetime_functions.hpp \
+ /usr/include/boost/date_time/posix_time/ptime.hpp \
+ /usr/include/boost/date_time/posix_time/posix_time_system.hpp \
+ /usr/include/boost/date_time/posix_time/posix_time_config.hpp \
+ /usr/include/boost/config/no_tr1/cmath.hpp /usr/include/c++/6/cmath \
+ /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+ /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
+ /usr/include/x86_64-linux-gnu/bits/huge_val.h \
+ /usr/include/x86_64-linux-gnu/bits/huge_valf.h \
+ /usr/include/x86_64-linux-gnu/bits/huge_vall.h \
+ /usr/include/x86_64-linux-gnu/bits/inf.h \
+ /usr/include/x86_64-linux-gnu/bits/nan.h \
+ /usr/include/x86_64-linux-gnu/bits/mathdef.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
+ /usr/include/x86_64-linux-gnu/bits/mathinline.h \
+ /usr/include/boost/date_time/time_duration.hpp \
+ /usr/include/boost/operators.hpp /usr/include/c++/6/iterator \
+ /usr/include/c++/6/bits/stream_iterator.h \
+ /usr/include/boost/static_assert.hpp \
+ /usr/include/boost/date_time/time_defs.hpp \
+ /usr/include/boost/date_time/special_defs.hpp \
+ /usr/include/boost/date_time/time_resolution_traits.hpp \
+ /usr/include/boost/date_time/int_adapter.hpp \
+ /usr/include/boost/date_time/gregorian/gregorian_types.hpp \
+ /usr/include/boost/date_time/date.hpp \
+ /usr/include/boost/date_time/year_month_day.hpp \
+ /usr/include/boost/date_time/period.hpp \
+ /usr/include/boost/date_time/gregorian/greg_calendar.hpp \
+ /usr/include/boost/date_time/gregorian/greg_weekday.hpp \
+ /usr/include/boost/date_time/constrained_value.hpp \
+ /usr/include/boost/mpl/if.hpp /usr/include/boost/mpl/aux_/value_wknd.hpp \
+ /usr/include/boost/mpl/aux_/static_cast.hpp \
+ /usr/include/boost/mpl/aux_/config/workaround.hpp \
+ /usr/include/boost/mpl/aux_/config/integral.hpp \
+ /usr/include/boost/mpl/aux_/config/msvc.hpp \
+ /usr/include/boost/mpl/aux_/config/eti.hpp \
+ /usr/include/boost/mpl/aux_/na_spec.hpp \
+ /usr/include/boost/mpl/lambda_fwd.hpp \
+ /usr/include/boost/mpl/void_fwd.hpp \
+ /usr/include/boost/mpl/aux_/adl_barrier.hpp \
+ /usr/include/boost/mpl/aux_/config/adl.hpp \
+ /usr/include/boost/mpl/aux_/config/intel.hpp \
+ /usr/include/boost/mpl/aux_/config/gcc.hpp \
+ /usr/include/boost/mpl/aux_/na.hpp /usr/include/boost/mpl/bool.hpp \
+ /usr/include/boost/mpl/bool_fwd.hpp \
+ /usr/include/boost/mpl/integral_c_tag.hpp \
+ /usr/include/boost/mpl/aux_/config/static_constant.hpp \
+ /usr/include/boost/mpl/aux_/na_fwd.hpp \
+ /usr/include/boost/mpl/aux_/config/ctps.hpp \
+ /usr/include/boost/mpl/aux_/config/lambda.hpp \
+ /usr/include/boost/mpl/aux_/config/ttp.hpp \
+ /usr/include/boost/mpl/int.hpp /usr/include/boost/mpl/int_fwd.hpp \
+ /usr/include/boost/mpl/aux_/nttp_decl.hpp \
+ /usr/include/boost/mpl/aux_/config/nttp.hpp \
+ /usr/include/boost/mpl/aux_/integral_wrapper.hpp \
+ /usr/include/boost/preprocessor/cat.hpp \
+ /usr/include/boost/preprocessor/config/config.hpp \
+ /usr/include/boost/mpl/aux_/lambda_arity_param.hpp \
+ /usr/include/boost/mpl/aux_/template_arity_fwd.hpp \
+ /usr/include/boost/mpl/aux_/arity.hpp \
+ /usr/include/boost/mpl/aux_/config/dtp.hpp \
+ /usr/include/boost/mpl/aux_/preprocessor/params.hpp \
+ /usr/include/boost/mpl/aux_/config/preprocessor.hpp \
+ /usr/include/boost/preprocessor/comma_if.hpp \
+ /usr/include/boost/preprocessor/punctuation/comma_if.hpp \
+ /usr/include/boost/preprocessor/control/if.hpp \
+ /usr/include/boost/preprocessor/control/iif.hpp \
+ /usr/include/boost/preprocessor/logical/bool.hpp \
+ /usr/include/boost/preprocessor/facilities/empty.hpp \
+ /usr/include/boost/preprocessor/punctuation/comma.hpp \
+ /usr/include/boost/preprocessor/repeat.hpp \
+ /usr/include/boost/preprocessor/repetition/repeat.hpp \
+ /usr/include/boost/preprocessor/debug/error.hpp \
+ /usr/include/boost/preprocessor/detail/auto_rec.hpp \
+ /usr/include/boost/preprocessor/tuple/eat.hpp \
+ /usr/include/boost/preprocessor/inc.hpp \
+ /usr/include/boost/preprocessor/arithmetic/inc.hpp \
+ /usr/include/boost/mpl/aux_/preprocessor/enum.hpp \
+ /usr/include/boost/mpl/aux_/preprocessor/def_params_tail.hpp \
+ /usr/include/boost/mpl/limits/arity.hpp \
+ /usr/include/boost/preprocessor/logical/and.hpp \
+ /usr/include/boost/preprocessor/logical/bitand.hpp \
+ /usr/include/boost/preprocessor/identity.hpp \
+ /usr/include/boost/preprocessor/facilities/identity.hpp \
+ /usr/include/boost/preprocessor/empty.hpp \
+ /usr/include/boost/preprocessor/arithmetic/add.hpp \
+ /usr/include/boost/preprocessor/arithmetic/dec.hpp \
+ /usr/include/boost/preprocessor/control/while.hpp \
+ /usr/include/boost/preprocessor/list/fold_left.hpp \
+ /usr/include/boost/preprocessor/list/detail/fold_left.hpp \
+ /usr/include/boost/preprocessor/control/expr_iif.hpp \
+ /usr/include/boost/preprocessor/list/adt.hpp \
+ /usr/include/boost/preprocessor/detail/is_binary.hpp \
+ /usr/include/boost/preprocessor/detail/check.hpp \
+ /usr/include/boost/preprocessor/logical/compl.hpp \
+ /usr/include/boost/preprocessor/list/fold_right.hpp \
+ /usr/include/boost/preprocessor/list/detail/fold_right.hpp \
+ /usr/include/boost/preprocessor/list/reverse.hpp \
+ /usr/include/boost/preprocessor/control/detail/while.hpp \
+ /usr/include/boost/preprocessor/tuple/elem.hpp \
+ /usr/include/boost/preprocessor/facilities/expand.hpp \
+ /usr/include/boost/preprocessor/facilities/overload.hpp \
+ /usr/include/boost/preprocessor/variadic/size.hpp \
+ /usr/include/boost/preprocessor/tuple/rem.hpp \
+ /usr/include/boost/preprocessor/tuple/detail/is_single_return.hpp \
+ /usr/include/boost/preprocessor/variadic/elem.hpp \
+ /usr/include/boost/preprocessor/arithmetic/sub.hpp \
+ /usr/include/boost/mpl/aux_/config/overload_resolution.hpp \
+ /usr/include/boost/mpl/aux_/lambda_support.hpp \
+ /usr/include/boost/type_traits/is_base_of.hpp \
+ /usr/include/boost/type_traits/is_base_and_derived.hpp \
+ /usr/include/boost/type_traits/intrinsics.hpp \
+ /usr/include/boost/type_traits/detail/config.hpp \
+ /usr/include/boost/type_traits/integral_constant.hpp \
+ /usr/include/boost/type_traits/remove_cv.hpp \
+ /usr/include/boost/type_traits/is_same.hpp \
+ /usr/include/boost/type_traits/is_class.hpp \
+ /usr/include/boost/date_time/date_defs.hpp \
+ /usr/include/boost/date_time/gregorian/greg_day_of_year.hpp \
+ /usr/include/boost/date_time/gregorian_calendar.hpp \
+ /usr/include/boost/date_time/gregorian_calendar.ipp \
+ /usr/include/boost/date_time/gregorian/greg_ymd.hpp \
+ /usr/include/boost/date_time/gregorian/greg_day.hpp \
+ /usr/include/boost/date_time/gregorian/greg_year.hpp \
+ /usr/include/boost/date_time/gregorian/greg_month.hpp \
+ /usr/include/c++/6/map /usr/include/c++/6/bits/stl_tree.h \
+ /usr/include/c++/6/bits/stl_map.h /usr/include/c++/6/bits/stl_multimap.h \
+ /usr/include/boost/date_time/gregorian/greg_duration.hpp \
+ /usr/include/boost/date_time/date_duration.hpp \
+ /usr/include/boost/date_time/date_duration_types.hpp \
+ /usr/include/boost/date_time/gregorian/greg_duration_types.hpp \
+ /usr/include/boost/date_time/gregorian/greg_date.hpp \
+ /usr/include/boost/date_time/adjust_functors.hpp \
+ /usr/include/boost/date_time/wrapping_int.hpp \
+ /usr/include/boost/date_time/date_generators.hpp \
+ /usr/include/c++/6/sstream /usr/include/c++/6/bits/sstream.tcc \
+ /usr/include/boost/date_time/date_clock_device.hpp \
+ /usr/include/boost/date_time/date_iterator.hpp \
+ /usr/include/boost/date_time/time_system_split.hpp \
+ /usr/include/boost/date_time/time_system_counted.hpp \
+ /usr/include/boost/date_time/time.hpp \
+ /usr/include/boost/date_time/posix_time/date_duration_operators.hpp \
+ /usr/include/boost/date_time/posix_time/posix_time_duration.hpp \
+ /usr/include/boost/date_time/posix_time/time_period.hpp \
+ /usr/include/boost/date_time/time_iterator.hpp \
+ /usr/include/boost/date_time/dst_rules.hpp \
+ ../../../include/asio/detail/timer_queue_ptime.hpp \
+ ../../../include/asio/detail/impl/timer_queue_ptime.ipp \
+ ../../../include/asio/basic_io_object.hpp \
+ ../../../include/asio/basic_raw_socket.hpp \
+ ../../../include/asio/raw_socket_service.hpp \
+ ../../../include/asio/basic_seq_packet_socket.hpp \
+ ../../../include/asio/seq_packet_socket_service.hpp \
+ ../../../include/asio/basic_serial_port.hpp \
+ ../../../include/asio/serial_port_base.hpp /usr/include/termios.h \
+ /usr/include/x86_64-linux-gnu/bits/termios.h \
+ ../../../include/asio/impl/serial_port_base.hpp \
+ ../../../include/asio/impl/serial_port_base.ipp \
+ ../../../include/asio/serial_port_service.hpp \
+ ../../../include/asio/detail/reactive_serial_port_service.hpp \
+ ../../../include/asio/detail/descriptor_ops.hpp \
+ ../../../include/asio/detail/impl/descriptor_ops.ipp \
+ ../../../include/asio/detail/reactive_descriptor_service.hpp \
+ ../../../include/asio/detail/descriptor_read_op.hpp \
+ ../../../include/asio/detail/descriptor_write_op.hpp \
+ ../../../include/asio/detail/impl/reactive_descriptor_service.ipp \
+ ../../../include/asio/detail/impl/reactive_serial_port_service.ipp \
+ ../../../include/asio/detail/win_iocp_serial_port_service.hpp \
+ ../../../include/asio/basic_signal_set.hpp \
+ ../../../include/asio/signal_set_service.hpp \
+ ../../../include/asio/detail/signal_set_service.hpp \
+ /usr/include/signal.h /usr/include/x86_64-linux-gnu/bits/signum.h \
+ /usr/include/x86_64-linux-gnu/bits/sigaction.h \
+ /usr/include/x86_64-linux-gnu/bits/sigcontext.h \
+ /usr/include/x86_64-linux-gnu/bits/sigstack.h \
+ /usr/include/x86_64-linux-gnu/sys/ucontext.h \
+ /usr/include/x86_64-linux-gnu/bits/sigthread.h \
+ ../../../include/asio/detail/signal_handler.hpp \
+ ../../../include/asio/detail/signal_op.hpp \
+ ../../../include/asio/detail/impl/signal_set_service.ipp \
+ ../../../include/asio/detail/signal_blocker.hpp \
+ ../../../include/asio/detail/posix_signal_blocker.hpp \
+ /usr/include/c++/6/csignal ../../../include/asio/detail/static_mutex.hpp \
+ ../../../include/asio/detail/posix_static_mutex.hpp \
+ ../../../include/asio/basic_socket_acceptor.hpp \
+ ../../../include/asio/socket_acceptor_service.hpp \
+ ../../../include/asio/basic_socket_iostream.hpp \
+ ../../../include/asio/basic_socket_streambuf.hpp \
+ ../../../include/asio/detail/array.hpp \
+ ../../../include/asio/stream_socket_service.hpp \
+ ../../../include/asio/deadline_timer.hpp \
+ ../../../include/asio/basic_deadline_timer.hpp \
+ ../../../include/asio/basic_socket_streambuf.hpp \
+ ../../../include/asio/basic_stream_socket.hpp \
+ ../../../include/asio/basic_streambuf.hpp \
+ ../../../include/asio/basic_streambuf_fwd.hpp \
+ ../../../include/asio/basic_waitable_timer.hpp \
+ ../../../include/asio/wait_traits.hpp \
+ ../../../include/asio/waitable_timer_service.hpp \
+ ../../../include/asio/detail/chrono_time_traits.hpp \
+ ../../../include/asio/buffer.hpp \
+ ../../../include/asio/buffered_read_stream_fwd.hpp \
+ ../../../include/asio/buffered_read_stream.hpp \
+ ../../../include/asio/buffered_read_stream_fwd.hpp \
+ ../../../include/asio/detail/buffer_resize_guard.hpp \
+ ../../../include/asio/detail/buffered_stream_storage.hpp \
+ ../../../include/asio/impl/buffered_read_stream.hpp \
+ ../../../include/asio/buffered_stream_fwd.hpp \
+ ../../../include/asio/buffered_stream.hpp \
+ ../../../include/asio/buffered_read_stream.hpp \
+ ../../../include/asio/buffered_write_stream.hpp \
+ ../../../include/asio/buffered_write_stream_fwd.hpp \
+ ../../../include/asio/completion_condition.hpp \
+ ../../../include/asio/write.hpp ../../../include/asio/impl/write.hpp \
+ ../../../include/asio/detail/base_from_completion_cond.hpp \
+ ../../../include/asio/detail/consuming_buffers.hpp \
+ ../../../include/asio/detail/dependent_type.hpp \
+ ../../../include/asio/impl/buffered_write_stream.hpp \
+ ../../../include/asio/buffered_stream_fwd.hpp \
+ ../../../include/asio/buffered_write_stream_fwd.hpp \
+ ../../../include/asio/buffered_write_stream.hpp \
+ ../../../include/asio/buffers_iterator.hpp \
+ ../../../include/asio/completion_condition.hpp \
+ ../../../include/asio/connect.hpp ../../../include/asio/impl/connect.hpp \
+ ../../../include/asio/coroutine.hpp \
+ ../../../include/asio/datagram_socket_service.hpp \
+ ../../../include/asio/deadline_timer_service.hpp \
+ ../../../include/asio/deadline_timer.hpp ../../../include/asio/error.hpp \
+ ../../../include/asio/error_code.hpp \
+ ../../../include/asio/generic/basic_endpoint.hpp \
+ ../../../include/asio/generic/detail/endpoint.hpp \
+ ../../../include/asio/generic/detail/impl/endpoint.ipp \
+ ../../../include/asio/generic/datagram_protocol.hpp \
+ ../../../include/asio/basic_datagram_socket.hpp \
+ ../../../include/asio/generic/basic_endpoint.hpp \
+ ../../../include/asio/generic/raw_protocol.hpp \
+ ../../../include/asio/basic_raw_socket.hpp \
+ ../../../include/asio/generic/seq_packet_protocol.hpp \
+ ../../../include/asio/basic_seq_packet_socket.hpp \
+ ../../../include/asio/generic/stream_protocol.hpp \
+ ../../../include/asio/basic_socket_iostream.hpp \
+ ../../../include/asio/basic_stream_socket.hpp \
+ ../../../include/asio/handler_alloc_hook.hpp \
+ ../../../include/asio/handler_continuation_hook.hpp \
+ ../../../include/asio/handler_invoke_hook.hpp \
+ ../../../include/asio/handler_type.hpp \
+ ../../../include/asio/io_service.hpp \
+ ../../../include/asio/ip/address.hpp \
+ ../../../include/asio/ip/address_v4.hpp \
+ ../../../include/asio/detail/winsock_init.hpp \
+ ../../../include/asio/ip/impl/address_v4.hpp \
+ ../../../include/asio/ip/impl/address_v4.ipp \
+ ../../../include/asio/ip/address_v6.hpp \
+ ../../../include/asio/ip/impl/address_v6.hpp \
+ ../../../include/asio/ip/impl/address_v6.ipp \
+ ../../../include/asio/ip/impl/address.hpp \
+ ../../../include/asio/ip/impl/address.ipp \
+ ../../../include/asio/ip/address.hpp \
+ ../../../include/asio/ip/address_v4.hpp \
+ ../../../include/asio/ip/address_v6.hpp \
+ ../../../include/asio/ip/basic_endpoint.hpp \
+ ../../../include/asio/ip/detail/endpoint.hpp \
+ ../../../include/asio/ip/detail/impl/endpoint.ipp \
+ ../../../include/asio/ip/impl/basic_endpoint.hpp \
+ ../../../include/asio/ip/basic_resolver.hpp \
+ ../../../include/asio/ip/basic_resolver_iterator.hpp \
+ ../../../include/asio/ip/basic_resolver_entry.hpp \
+ ../../../include/asio/ip/basic_resolver_query.hpp \
+ ../../../include/asio/ip/resolver_query_base.hpp \
+ ../../../include/asio/ip/resolver_service.hpp \
+ ../../../include/asio/detail/resolver_service.hpp \
+ ../../../include/asio/detail/resolve_endpoint_op.hpp \
+ ../../../include/asio/detail/resolve_op.hpp \
+ ../../../include/asio/detail/resolver_service_base.hpp \
+ ../../../include/asio/detail/thread.hpp \
+ ../../../include/asio/detail/posix_thread.hpp \
+ ../../../include/asio/detail/impl/posix_thread.ipp \
+ ../../../include/asio/detail/impl/resolver_service_base.ipp \
+ ../../../include/asio/ip/basic_resolver_entry.hpp \
+ ../../../include/asio/ip/basic_resolver_iterator.hpp \
+ ../../../include/asio/ip/basic_resolver_query.hpp \
+ ../../../include/asio/ip/host_name.hpp \
+ ../../../include/asio/ip/impl/host_name.ipp \
+ ../../../include/asio/ip/host_name.hpp ../../../include/asio/ip/icmp.hpp \
+ ../../../include/asio/ip/basic_endpoint.hpp \
+ ../../../include/asio/ip/basic_resolver.hpp \
+ ../../../include/asio/ip/multicast.hpp \
+ ../../../include/asio/ip/detail/socket_option.hpp \
+ ../../../include/asio/ip/resolver_query_base.hpp \
+ ../../../include/asio/ip/resolver_service.hpp \
+ ../../../include/asio/ip/tcp.hpp \
+ ../../../include/asio/basic_socket_acceptor.hpp \
+ ../../../include/asio/ip/udp.hpp ../../../include/asio/ip/unicast.hpp \
+ ../../../include/asio/ip/v6_only.hpp \
+ ../../../include/asio/is_read_buffered.hpp \
+ ../../../include/asio/is_write_buffered.hpp \
+ ../../../include/asio/local/basic_endpoint.hpp \
+ ../../../include/asio/local/detail/endpoint.hpp \
+ ../../../include/asio/local/detail/impl/endpoint.ipp \
+ ../../../include/asio/local/connect_pair.hpp \
+ ../../../include/asio/local/basic_endpoint.hpp \
+ ../../../include/asio/local/datagram_protocol.hpp \
+ ../../../include/asio/local/stream_protocol.hpp \
+ ../../../include/asio/placeholders.hpp /usr/include/boost/bind/arg.hpp \
+ /usr/include/boost/is_placeholder.hpp \
+ ../../../include/asio/posix/basic_descriptor.hpp \
+ ../../../include/asio/posix/descriptor_base.hpp \
+ ../../../include/asio/posix/basic_stream_descriptor.hpp \
+ ../../../include/asio/posix/basic_descriptor.hpp \
+ ../../../include/asio/posix/stream_descriptor_service.hpp \
+ ../../../include/asio/posix/descriptor_base.hpp \
+ ../../../include/asio/posix/stream_descriptor.hpp \
+ ../../../include/asio/posix/basic_stream_descriptor.hpp \
+ ../../../include/asio/posix/stream_descriptor_service.hpp \
+ ../../../include/asio/raw_socket_service.hpp \
+ ../../../include/asio/read.hpp ../../../include/asio/impl/read.hpp \
+ ../../../include/asio/read_at.hpp ../../../include/asio/impl/read_at.hpp \
+ ../../../include/asio/read_until.hpp \
+ ../../../include/asio/basic_streambuf.hpp \
+ ../../../include/asio/detail/regex_fwd.hpp \
+ /usr/include/boost/regex_fwd.hpp /usr/include/boost/regex/config.hpp \
+ /usr/include/boost/regex/user.hpp \
+ /usr/include/boost/regex/config/cwchar.hpp \
+ /usr/include/boost/regex/v4/regex_fwd.hpp \
+ /usr/include/boost/regex/v4/match_flags.hpp \
+ ../../../include/asio/impl/read_until.hpp \
+ ../../../include/asio/buffers_iterator.hpp \
+ ../../../include/asio/seq_packet_socket_service.hpp \
+ ../../../include/asio/serial_port.hpp \
+ ../../../include/asio/basic_serial_port.hpp \
+ ../../../include/asio/serial_port_base.hpp \
+ ../../../include/asio/serial_port_service.hpp \
+ ../../../include/asio/signal_set.hpp \
+ ../../../include/asio/basic_signal_set.hpp \
+ ../../../include/asio/signal_set_service.hpp \
+ ../../../include/asio/socket_acceptor_service.hpp \
+ ../../../include/asio/socket_base.hpp ../../../include/asio/strand.hpp \
+ ../../../include/asio/detail/strand_service.hpp \
+ ../../../include/asio/detail/impl/strand_service.hpp \
+ ../../../include/asio/detail/impl/strand_service.ipp \
+ ../../../include/asio/stream_socket_service.hpp \
+ ../../../include/asio/streambuf.hpp \
+ ../../../include/asio/system_error.hpp ../../../include/asio/thread.hpp \
+ ../../../include/asio/time_traits.hpp ../../../include/asio/version.hpp \
+ ../../../include/asio/wait_traits.hpp \
+ ../../../include/asio/waitable_timer_service.hpp \
+ ../../../include/asio/windows/basic_handle.hpp \
+ ../../../include/asio/windows/basic_object_handle.hpp \
+ ../../../include/asio/windows/basic_random_access_handle.hpp \
+ ../../../include/asio/windows/basic_stream_handle.hpp \
+ ../../../include/asio/windows/object_handle.hpp \
+ ../../../include/asio/windows/object_handle_service.hpp \
+ ../../../include/asio/windows/overlapped_ptr.hpp \
+ ../../../include/asio/windows/random_access_handle.hpp \
+ ../../../include/asio/windows/random_access_handle_service.hpp \
+ ../../../include/asio/windows/stream_handle.hpp \
+ ../../../include/asio/windows/stream_handle_service.hpp \
+ ../../../include/asio/write.hpp ../../../include/asio/write_at.hpp \
+ ../../../include/asio/impl/write_at.hpp /usr/include/boost/array.hpp \
+ /usr/include/boost/swap.hpp /usr/include/boost/core/swap.hpp \
+ /usr/include/boost/detail/iterator.hpp \
+ /usr/include/boost/functional/hash_fwd.hpp \
+ /usr/include/boost/functional/hash/hash_fwd.hpp \
+ /usr/include/boost/bind.hpp /usr/include/boost/bind/bind.hpp \
+ /usr/include/boost/ref.hpp /usr/include/boost/core/ref.hpp \
+ /usr/include/boost/utility/addressof.hpp /usr/include/boost/mem_fn.hpp \
+ /usr/include/boost/bind/mem_fn.hpp /usr/include/boost/get_pointer.hpp \
+ /usr/include/boost/bind/mem_fn_template.hpp \
+ /usr/include/boost/bind/mem_fn_cc.hpp /usr/include/boost/type.hpp \
+ /usr/include/boost/visit_each.hpp /usr/include/boost/core/enable_if.hpp \
+ /usr/include/boost/core/is_same.hpp /usr/include/boost/bind/storage.hpp \
+ /usr/include/boost/bind/bind_cc.hpp \
+ /usr/include/boost/bind/bind_mf_cc.hpp \
+ /usr/include/boost/bind/bind_mf2_cc.hpp \
+ /usr/include/boost/bind/placeholders.hpp
+
+/usr/include/stdc-predef.h:
+
+/usr/include/c++/6/iostream:
+
+/usr/include/x86_64-linux-gnu/c++/6/bits/c++config.h:
+
+/usr/include/x86_64-linux-gnu/c++/6/bits/os_defines.h:
+
+/usr/include/features.h:
+
+/usr/include/x86_64-linux-gnu/sys/cdefs.h:
+
+/usr/include/x86_64-linux-gnu/bits/wordsize.h:
+
+/usr/include/x86_64-linux-gnu/gnu/stubs.h:
+
+/usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
+
+/usr/include/x86_64-linux-gnu/c++/6/bits/cpu_defines.h:
+
+/usr/include/c++/6/ostream:
+
+/usr/include/c++/6/ios:
+
+/usr/include/c++/6/iosfwd:
+
+/usr/include/c++/6/bits/stringfwd.h:
+
+/usr/include/c++/6/bits/memoryfwd.h:
+
+/usr/include/c++/6/bits/postypes.h:
+
+/usr/include/c++/6/cwchar:
+
+/usr/include/wchar.h:
+
+/usr/include/stdio.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/6/include/stdarg.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/6/include/stddef.h:
+
+/usr/include/xlocale.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar2.h:
+
+/usr/include/c++/6/exception:
+
+/usr/include/c++/6/bits/atomic_lockfree_defines.h:
+
+/usr/include/c++/6/bits/exception_ptr.h:
+
+/usr/include/c++/6/bits/exception_defines.h:
+
+/usr/include/c++/6/bits/nested_exception.h:
+
+/usr/include/c++/6/bits/move.h:
+
+/usr/include/c++/6/bits/concept_check.h:
+
+/usr/include/c++/6/type_traits:
+
+/usr/include/c++/6/bits/char_traits.h:
+
+/usr/include/c++/6/bits/stl_algobase.h:
+
+/usr/include/c++/6/bits/functexcept.h:
+
+/usr/include/c++/6/bits/cpp_type_traits.h:
+
+/usr/include/c++/6/ext/type_traits.h:
+
+/usr/include/c++/6/ext/numeric_traits.h:
+
+/usr/include/c++/6/bits/stl_pair.h:
+
+/usr/include/c++/6/bits/stl_iterator_base_types.h:
+
+/usr/include/c++/6/bits/stl_iterator_base_funcs.h:
+
+/usr/include/c++/6/debug/assertions.h:
+
+/usr/include/c++/6/bits/stl_iterator.h:
+
+/usr/include/c++/6/bits/ptr_traits.h:
+
+/usr/include/c++/6/debug/debug.h:
+
+/usr/include/c++/6/bits/predefined_ops.h:
+
+/usr/include/c++/6/cstdint:
+
+/usr/lib/gcc/x86_64-linux-gnu/6/include/stdint.h:
+
+/usr/include/stdint.h:
+
+/usr/include/c++/6/bits/localefwd.h:
+
+/usr/include/x86_64-linux-gnu/c++/6/bits/c++locale.h:
+
+/usr/include/c++/6/clocale:
+
+/usr/include/locale.h:
+
+/usr/include/x86_64-linux-gnu/bits/locale.h:
+
+/usr/include/c++/6/cctype:
+
+/usr/include/ctype.h:
+
+/usr/include/x86_64-linux-gnu/bits/types.h:
+
+/usr/include/x86_64-linux-gnu/bits/typesizes.h:
+
+/usr/include/endian.h:
+
+/usr/include/x86_64-linux-gnu/bits/endian.h:
+
+/usr/include/x86_64-linux-gnu/bits/byteswap.h:
+
+/usr/include/x86_64-linux-gnu/bits/byteswap-16.h:
+
+/usr/include/c++/6/bits/ios_base.h:
+
+/usr/include/c++/6/ext/atomicity.h:
+
+/usr/include/x86_64-linux-gnu/c++/6/bits/gthr.h:
+
+/usr/include/x86_64-linux-gnu/c++/6/bits/gthr-default.h:
+
+/usr/include/pthread.h:
+
+/usr/include/sched.h:
+
+/usr/include/time.h:
+
+/usr/include/x86_64-linux-gnu/bits/sched.h:
+
+/usr/include/x86_64-linux-gnu/bits/time.h:
+
+/usr/include/x86_64-linux-gnu/bits/timex.h:
+
+/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
+
+/usr/include/x86_64-linux-gnu/bits/setjmp.h:
+
+/usr/include/x86_64-linux-gnu/c++/6/bits/atomic_word.h:
+
+/usr/include/c++/6/bits/locale_classes.h:
+
+/usr/include/c++/6/string:
+
+/usr/include/c++/6/bits/allocator.h:
+
+/usr/include/x86_64-linux-gnu/c++/6/bits/c++allocator.h:
+
+/usr/include/c++/6/ext/new_allocator.h:
+
+/usr/include/c++/6/new:
+
+/usr/include/c++/6/bits/ostream_insert.h:
+
+/usr/include/c++/6/bits/cxxabi_forced.h:
+
+/usr/include/c++/6/bits/stl_function.h:
+
+/usr/include/c++/6/backward/binders.h:
+
+/usr/include/c++/6/bits/range_access.h:
+
+/usr/include/c++/6/initializer_list:
+
+/usr/include/c++/6/bits/basic_string.h:
+
+/usr/include/c++/6/ext/alloc_traits.h:
+
+/usr/include/c++/6/bits/alloc_traits.h:
+
+/usr/include/c++/6/ext/string_conversions.h:
+
+/usr/include/c++/6/cstdlib:
+
+/usr/include/stdlib.h:
+
+/usr/include/x86_64-linux-gnu/bits/waitflags.h:
+
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
+
+/usr/include/x86_64-linux-gnu/sys/types.h:
+
+/usr/include/x86_64-linux-gnu/sys/select.h:
+
+/usr/include/x86_64-linux-gnu/bits/select.h:
+
+/usr/include/x86_64-linux-gnu/bits/sigset.h:
+
+/usr/include/x86_64-linux-gnu/bits/select2.h:
+
+/usr/include/x86_64-linux-gnu/sys/sysmacros.h:
+
+/usr/include/alloca.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdlib.h:
+
+/usr/include/c++/6/cstdio:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
+
+/usr/include/x86_64-linux-gnu/bits/sys_errlist.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:
+
+/usr/include/c++/6/cerrno:
+
+/usr/include/errno.h:
+
+/usr/include/x86_64-linux-gnu/bits/errno.h:
+
+/usr/include/linux/errno.h:
+
+/usr/include/x86_64-linux-gnu/asm/errno.h:
+
+/usr/include/asm-generic/errno.h:
+
+/usr/include/asm-generic/errno-base.h:
+
+/usr/include/c++/6/bits/functional_hash.h:
+
+/usr/include/c++/6/bits/hash_bytes.h:
+
+/usr/include/c++/6/bits/basic_string.tcc:
+
+/usr/include/c++/6/bits/locale_classes.tcc:
+
+/usr/include/c++/6/system_error:
+
+/usr/include/x86_64-linux-gnu/c++/6/bits/error_constants.h:
+
+/usr/include/c++/6/stdexcept:
+
+/usr/include/c++/6/streambuf:
+
+/usr/include/c++/6/bits/streambuf.tcc:
+
+/usr/include/c++/6/bits/basic_ios.h:
+
+/usr/include/c++/6/bits/locale_facets.h:
+
+/usr/include/c++/6/cwctype:
+
+/usr/include/wctype.h:
+
+/usr/include/x86_64-linux-gnu/c++/6/bits/ctype_base.h:
+
+/usr/include/c++/6/bits/streambuf_iterator.h:
+
+/usr/include/x86_64-linux-gnu/c++/6/bits/ctype_inline.h:
+
+/usr/include/c++/6/bits/locale_facets.tcc:
+
+/usr/include/c++/6/bits/basic_ios.tcc:
+
+/usr/include/c++/6/bits/ostream.tcc:
+
+/usr/include/c++/6/istream:
+
+/usr/include/c++/6/bits/istream.tcc:
+
+../../../include/asio.hpp:
+
+../../../include/asio/async_result.hpp:
+
+../../../include/asio/detail/config.hpp:
+
+/usr/include/boost/config.hpp:
+
+/usr/include/boost/config/user.hpp:
+
+/usr/include/boost/config/select_compiler_config.hpp:
+
+/usr/include/boost/config/compiler/gcc.hpp:
+
+/usr/include/c++/6/cstddef:
+
+/usr/include/boost/config/select_stdlib_config.hpp:
+
+/usr/include/boost/config/stdlib/libstdcpp3.hpp:
+
+/usr/include/unistd.h:
+
+/usr/include/x86_64-linux-gnu/bits/posix_opt.h:
+
+/usr/include/x86_64-linux-gnu/bits/environments.h:
+
+/usr/include/x86_64-linux-gnu/bits/confname.h:
+
+/usr/include/getopt.h:
+
+/usr/include/x86_64-linux-gnu/bits/unistd.h:
+
+/usr/include/boost/config/select_platform_config.hpp:
+
+/usr/include/boost/config/platform/linux.hpp:
+
+/usr/include/boost/config/posix_features.hpp:
+
+/usr/include/boost/config/suffix.hpp:
+
+/usr/include/boost/version.hpp:
+
+/usr/include/linux/version.h:
+
+../../../include/asio/handler_type.hpp:
+
+../../../include/asio/detail/push_options.hpp:
+
+../../../include/asio/detail/pop_options.hpp:
+
+../../../include/asio/basic_datagram_socket.hpp:
+
+../../../include/asio/basic_socket.hpp:
+
+../../../include/asio/async_result.hpp:
+
+../../../include/asio/basic_io_object.hpp:
+
+../../../include/asio/io_service.hpp:
+
+/usr/include/c++/6/typeinfo:
+
+../../../include/asio/detail/noncopyable.hpp:
+
+../../../include/asio/detail/wrapped_handler.hpp:
+
+../../../include/asio/detail/bind_handler.hpp:
+
+../../../include/asio/detail/handler_alloc_helpers.hpp:
+
+../../../include/asio/detail/addressof.hpp:
+
+/usr/include/c++/6/memory:
+
+/usr/include/c++/6/bits/stl_construct.h:
+
+/usr/include/c++/6/bits/stl_uninitialized.h:
+
+/usr/include/c++/6/bits/stl_tempbuf.h:
+
+/usr/include/c++/6/bits/stl_raw_storage_iter.h:
+
+/usr/include/c++/6/ext/concurrence.h:
+
+/usr/include/c++/6/bits/uses_allocator.h:
+
+/usr/include/c++/6/functional:
+
+/usr/include/c++/6/tuple:
+
+/usr/include/c++/6/utility:
+
+/usr/include/c++/6/bits/stl_relops.h:
+
+/usr/include/c++/6/array:
+
+/usr/include/c++/6/bits/unique_ptr.h:
+
+/usr/include/c++/6/bits/shared_ptr.h:
+
+/usr/include/c++/6/bits/shared_ptr_base.h:
+
+/usr/include/c++/6/bits/allocated_ptr.h:
+
+/usr/include/c++/6/ext/aligned_buffer.h:
+
+/usr/include/c++/6/bits/shared_ptr_atomic.h:
+
+/usr/include/c++/6/bits/atomic_base.h:
+
+/usr/include/c++/6/backward/auto_ptr.h:
+
+../../../include/asio/handler_alloc_hook.hpp:
+
+../../../include/asio/impl/handler_alloc_hook.ipp:
+
+../../../include/asio/detail/call_stack.hpp:
+
+../../../include/asio/detail/tss_ptr.hpp:
+
+../../../include/asio/detail/keyword_tss_ptr.hpp:
+
+../../../include/asio/detail/task_io_service_thread_info.hpp:
+
+../../../include/asio/detail/op_queue.hpp:
+
+../../../include/asio/detail/thread_info_base.hpp:
+
+/usr/include/c++/6/climits:
+
+/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed/limits.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed/syslimits.h:
+
+/usr/include/limits.h:
+
+/usr/include/x86_64-linux-gnu/bits/posix1_lim.h:
+
+/usr/include/x86_64-linux-gnu/bits/local_lim.h:
+
+/usr/include/linux/limits.h:
+
+/usr/include/x86_64-linux-gnu/bits/posix2_lim.h:
+
+/usr/include/x86_64-linux-gnu/bits/xopen_lim.h:
+
+../../../include/asio/detail/handler_cont_helpers.hpp:
+
+../../../include/asio/handler_continuation_hook.hpp:
+
+../../../include/asio/detail/handler_invoke_helpers.hpp:
+
+../../../include/asio/handler_invoke_hook.hpp:
+
+../../../include/asio/error_code.hpp:
+
+../../../include/asio/impl/error_code.ipp:
+
+/usr/include/c++/6/cstring:
+
+/usr/include/string.h:
+
+/usr/include/x86_64-linux-gnu/bits/string3.h:
+
+../../../include/asio/detail/local_free_on_block_exit.hpp:
+
+../../../include/asio/detail/socket_types.hpp:
+
+/usr/include/x86_64-linux-gnu/sys/ioctl.h:
+
+/usr/include/x86_64-linux-gnu/bits/ioctls.h:
+
+/usr/include/x86_64-linux-gnu/asm/ioctls.h:
+
+/usr/include/asm-generic/ioctls.h:
+
+/usr/include/linux/ioctl.h:
+
+/usr/include/x86_64-linux-gnu/asm/ioctl.h:
+
+/usr/include/asm-generic/ioctl.h:
+
+/usr/include/x86_64-linux-gnu/bits/ioctl-types.h:
+
+/usr/include/x86_64-linux-gnu/sys/ttydefaults.h:
+
+/usr/include/x86_64-linux-gnu/sys/poll.h:
+
+/usr/include/x86_64-linux-gnu/bits/poll.h:
+
+/usr/include/x86_64-linux-gnu/bits/poll2.h:
+
+/usr/include/x86_64-linux-gnu/sys/stat.h:
+
+/usr/include/x86_64-linux-gnu/bits/stat.h:
+
+/usr/include/fcntl.h:
+
+/usr/include/x86_64-linux-gnu/bits/fcntl.h:
+
+/usr/include/x86_64-linux-gnu/bits/fcntl-linux.h:
+
+/usr/include/x86_64-linux-gnu/bits/uio.h:
+
+/usr/include/x86_64-linux-gnu/bits/fcntl2.h:
+
+/usr/include/x86_64-linux-gnu/sys/socket.h:
+
+/usr/include/x86_64-linux-gnu/sys/uio.h:
+
+/usr/include/x86_64-linux-gnu/bits/socket.h:
+
+/usr/include/x86_64-linux-gnu/bits/socket_type.h:
+
+/usr/include/x86_64-linux-gnu/bits/sockaddr.h:
+
+/usr/include/x86_64-linux-gnu/asm/socket.h:
+
+/usr/include/asm-generic/socket.h:
+
+/usr/include/x86_64-linux-gnu/asm/sockios.h:
+
+/usr/include/asm-generic/sockios.h:
+
+/usr/include/x86_64-linux-gnu/bits/socket2.h:
+
+/usr/include/x86_64-linux-gnu/sys/un.h:
+
+/usr/include/netinet/in.h:
+
+/usr/include/x86_64-linux-gnu/bits/in.h:
+
+/usr/include/netinet/tcp.h:
+
+/usr/include/arpa/inet.h:
+
+/usr/include/netdb.h:
+
+/usr/include/rpc/netdb.h:
+
+/usr/include/x86_64-linux-gnu/bits/siginfo.h:
+
+/usr/include/x86_64-linux-gnu/bits/netdb.h:
+
+/usr/include/net/if.h:
+
+../../../include/asio/impl/io_service.hpp:
+
+../../../include/asio/detail/handler_type_requirements.hpp:
+
+../../../include/asio/detail/service_registry.hpp:
+
+../../../include/asio/detail/mutex.hpp:
+
+../../../include/asio/detail/posix_mutex.hpp:
+
+../../../include/asio/detail/scoped_lock.hpp:
+
+../../../include/asio/detail/impl/posix_mutex.ipp:
+
+../../../include/asio/detail/throw_error.hpp:
+
+../../../include/asio/detail/impl/throw_error.ipp:
+
+../../../include/asio/detail/throw_exception.hpp:
+
+/usr/include/boost/throw_exception.hpp:
+
+/usr/include/boost/detail/workaround.hpp:
+
+/usr/include/boost/exception/exception.hpp:
+
+/usr/include/boost/current_function.hpp:
+
+../../../include/asio/system_error.hpp:
+
+../../../include/asio/error.hpp:
+
+../../../include/asio/impl/error.ipp:
+
+../../../include/asio/detail/impl/service_registry.hpp:
+
+../../../include/asio/detail/impl/service_registry.ipp:
+
+/usr/include/c++/6/vector:
+
+/usr/include/c++/6/bits/stl_vector.h:
+
+/usr/include/c++/6/bits/stl_bvector.h:
+
+/usr/include/c++/6/bits/vector.tcc:
+
+../../../include/asio/detail/task_io_service.hpp:
+
+../../../include/asio/detail/atomic_count.hpp:
+
+/usr/include/c++/6/atomic:
+
+../../../include/asio/detail/event.hpp:
+
+../../../include/asio/detail/posix_event.hpp:
+
+../../../include/asio/detail/assert.hpp:
+
+/usr/include/boost/assert.hpp:
+
+/usr/include/assert.h:
+
+../../../include/asio/detail/impl/posix_event.ipp:
+
+../../../include/asio/detail/reactor_fwd.hpp:
+
+../../../include/asio/detail/task_io_service_operation.hpp:
+
+../../../include/asio/detail/handler_tracking.hpp:
+
+../../../include/asio/detail/impl/handler_tracking.ipp:
+
+../../../include/asio/detail/impl/task_io_service.hpp:
+
+../../../include/asio/detail/completion_handler.hpp:
+
+../../../include/asio/detail/fenced_block.hpp:
+
+../../../include/asio/detail/gcc_x86_fenced_block.hpp:
+
+../../../include/asio/detail/operation.hpp:
+
+../../../include/asio/detail/impl/task_io_service.ipp:
+
+../../../include/asio/detail/limits.hpp:
+
+/usr/include/boost/limits.hpp:
+
+/usr/include/c++/6/limits:
+
+../../../include/asio/detail/reactor.hpp:
+
+../../../include/asio/detail/epoll_reactor.hpp:
+
+../../../include/asio/detail/object_pool.hpp:
+
+../../../include/asio/detail/reactor_op.hpp:
+
+../../../include/asio/detail/select_interrupter.hpp:
+
+../../../include/asio/detail/eventfd_select_interrupter.hpp:
+
+../../../include/asio/detail/impl/eventfd_select_interrupter.ipp:
+
+/usr/include/x86_64-linux-gnu/sys/eventfd.h:
+
+/usr/include/x86_64-linux-gnu/bits/eventfd.h:
+
+../../../include/asio/detail/cstdint.hpp:
+
+../../../include/asio/detail/timer_queue_base.hpp:
+
+../../../include/asio/detail/timer_queue_set.hpp:
+
+../../../include/asio/detail/impl/timer_queue_set.ipp:
+
+../../../include/asio/detail/wait_op.hpp:
+
+../../../include/asio/detail/impl/epoll_reactor.hpp:
+
+../../../include/asio/detail/impl/epoll_reactor.ipp:
+
+/usr/include/x86_64-linux-gnu/sys/epoll.h:
+
+/usr/include/x86_64-linux-gnu/bits/epoll.h:
+
+/usr/include/x86_64-linux-gnu/sys/timerfd.h:
+
+/usr/include/x86_64-linux-gnu/bits/timerfd.h:
+
+../../../include/asio/impl/io_service.ipp:
+
+../../../include/asio/detail/scoped_ptr.hpp:
+
+../../../include/asio/detail/type_traits.hpp:
+
+../../../include/asio/socket_base.hpp:
+
+../../../include/asio/detail/io_control.hpp:
+
+../../../include/asio/detail/socket_option.hpp:
+
+../../../include/asio/datagram_socket_service.hpp:
+
+../../../include/asio/detail/reactive_socket_service.hpp:
+
+../../../include/asio/buffer.hpp:
+
+../../../include/asio/detail/array_fwd.hpp:
+
+../../../include/asio/detail/buffer_sequence_adapter.hpp:
+
+../../../include/asio/detail/impl/buffer_sequence_adapter.ipp:
+
+../../../include/asio/detail/reactive_null_buffers_op.hpp:
+
+../../../include/asio/detail/reactive_socket_accept_op.hpp:
+
+../../../include/asio/detail/socket_holder.hpp:
+
+../../../include/asio/detail/socket_ops.hpp:
+
+../../../include/asio/detail/shared_ptr.hpp:
+
+../../../include/asio/detail/weak_ptr.hpp:
+
+../../../include/asio/detail/impl/socket_ops.ipp:
+
+../../../include/asio/detail/reactive_socket_connect_op.hpp:
+
+../../../include/asio/detail/reactive_socket_recvfrom_op.hpp:
+
+../../../include/asio/detail/reactive_socket_sendto_op.hpp:
+
+../../../include/asio/detail/reactive_socket_service_base.hpp:
+
+../../../include/asio/detail/reactive_socket_recv_op.hpp:
+
+../../../include/asio/detail/reactive_socket_recvmsg_op.hpp:
+
+../../../include/asio/detail/reactive_socket_send_op.hpp:
+
+../../../include/asio/detail/impl/reactive_socket_service_base.ipp:
+
+../../../include/asio/basic_deadline_timer.hpp:
+
+../../../include/asio/deadline_timer_service.hpp:
+
+../../../include/asio/detail/deadline_timer_service.hpp:
+
+../../../include/asio/detail/timer_queue.hpp:
+
+../../../include/asio/detail/date_time_fwd.hpp:
+
+../../../include/asio/detail/timer_scheduler.hpp:
+
+../../../include/asio/detail/timer_scheduler_fwd.hpp:
+
+../../../include/asio/detail/wait_handler.hpp:
+
+../../../include/asio/time_traits.hpp:
+
+/usr/include/boost/date_time/posix_time/posix_time_types.hpp:
+
+/usr/include/boost/date_time/time_clock.hpp:
+
+/usr/include/boost/date_time/c_time.hpp:
+
+/usr/include/c++/6/ctime:
+
+/usr/include/boost/date_time/compiler_config.hpp:
+
+/usr/include/boost/date_time/locale_config.hpp:
+
+/usr/include/boost/cstdint.hpp:
+
+/usr/include/boost/config/auto_link.hpp:
+
+/usr/include/x86_64-linux-gnu/sys/time.h:
+
+/usr/include/boost/shared_ptr.hpp:
+
+/usr/include/boost/smart_ptr/shared_ptr.hpp:
+
+/usr/include/boost/config/no_tr1/memory.hpp:
+
+/usr/include/boost/checked_delete.hpp:
+
+/usr/include/boost/core/checked_delete.hpp:
+
+/usr/include/boost/smart_ptr/detail/shared_count.hpp:
+
+/usr/include/boost/smart_ptr/bad_weak_ptr.hpp:
+
+/usr/include/boost/smart_ptr/detail/sp_counted_base.hpp:
+
+/usr/include/boost/smart_ptr/detail/sp_has_sync.hpp:
+
+/usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp:
+
+/usr/include/boost/detail/sp_typeinfo.hpp:
+
+/usr/include/boost/core/typeinfo.hpp:
+
+/usr/include/boost/core/demangle.hpp:
+
+/usr/include/c++/6/cxxabi.h:
+
+/usr/include/x86_64-linux-gnu/c++/6/bits/cxxabi_tweaks.h:
+
+/usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp:
+
+/usr/include/boost/smart_ptr/detail/sp_disable_deprecated.hpp:
+
+/usr/include/boost/core/addressof.hpp:
+
+/usr/include/boost/smart_ptr/detail/sp_convertible.hpp:
+
+/usr/include/boost/smart_ptr/detail/sp_nullptr_t.hpp:
+
+/usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:
+
+/usr/include/boost/smart_ptr/detail/spinlock.hpp:
+
+/usr/include/boost/smart_ptr/detail/spinlock_sync.hpp:
+
+/usr/include/boost/smart_ptr/detail/yield_k.hpp:
+
+/usr/include/boost/predef.h:
+
+/usr/include/boost/predef/language.h:
+
+/usr/include/boost/predef/language/stdc.h:
+
+/usr/include/boost/predef/version_number.h:
+
+/usr/include/boost/predef/make.h:
+
+/usr/include/boost/predef/detail/test.h:
+
+/usr/include/boost/predef/language/stdcpp.h:
+
+/usr/include/boost/predef/language/objc.h:
+
+/usr/include/boost/predef/architecture.h:
+
+/usr/include/boost/predef/architecture/alpha.h:
+
+/usr/include/boost/predef/architecture/arm.h:
+
+/usr/include/boost/predef/architecture/blackfin.h:
+
+/usr/include/boost/predef/architecture/convex.h:
+
+/usr/include/boost/predef/architecture/ia64.h:
+
+/usr/include/boost/predef/architecture/m68k.h:
+
+/usr/include/boost/predef/architecture/mips.h:
+
+/usr/include/boost/predef/architecture/parisc.h:
+
+/usr/include/boost/predef/architecture/ppc.h:
+
+/usr/include/boost/predef/architecture/pyramid.h:
+
+/usr/include/boost/predef/architecture/rs6k.h:
+
+/usr/include/boost/predef/architecture/sparc.h:
+
+/usr/include/boost/predef/architecture/superh.h:
+
+/usr/include/boost/predef/architecture/sys370.h:
+
+/usr/include/boost/predef/architecture/sys390.h:
+
+/usr/include/boost/predef/architecture/x86.h:
+
+/usr/include/boost/predef/architecture/x86/32.h:
+
+/usr/include/boost/predef/architecture/x86/64.h:
+
+/usr/include/boost/predef/architecture/z.h:
+
+/usr/include/boost/predef/compiler.h:
+
+/usr/include/boost/predef/compiler/borland.h:
+
+/usr/include/boost/predef/compiler/clang.h:
+
+/usr/include/boost/predef/compiler/comeau.h:
+
+/usr/include/boost/predef/compiler/compaq.h:
+
+/usr/include/boost/predef/compiler/diab.h:
+
+/usr/include/boost/predef/compiler/digitalmars.h:
+
+/usr/include/boost/predef/compiler/dignus.h:
+
+/usr/include/boost/predef/compiler/edg.h:
+
+/usr/include/boost/predef/compiler/ekopath.h:
+
+/usr/include/boost/predef/compiler/gcc_xml.h:
+
+/usr/include/boost/predef/compiler/gcc.h:
+
+/usr/include/boost/predef/detail/comp_detected.h:
+
+/usr/include/boost/predef/compiler/greenhills.h:
+
+/usr/include/boost/predef/compiler/hp_acc.h:
+
+/usr/include/boost/predef/compiler/iar.h:
+
+/usr/include/boost/predef/compiler/ibm.h:
+
+/usr/include/boost/predef/compiler/intel.h:
+
+/usr/include/boost/predef/compiler/kai.h:
+
+/usr/include/boost/predef/compiler/llvm.h:
+
+/usr/include/boost/predef/compiler/metaware.h:
+
+/usr/include/boost/predef/compiler/metrowerks.h:
+
+/usr/include/boost/predef/compiler/microtec.h:
+
+/usr/include/boost/predef/compiler/mpw.h:
+
+/usr/include/boost/predef/compiler/palm.h:
+
+/usr/include/boost/predef/compiler/pgi.h:
+
+/usr/include/boost/predef/compiler/sgi_mipspro.h:
+
+/usr/include/boost/predef/compiler/sunpro.h:
+
+/usr/include/boost/predef/compiler/tendra.h:
+
+/usr/include/boost/predef/compiler/visualc.h:
+
+/usr/include/boost/predef/compiler/watcom.h:
+
+/usr/include/boost/predef/library.h:
+
+/usr/include/boost/predef/library/c.h:
+
+/usr/include/boost/predef/library/c/_prefix.h:
+
+/usr/include/boost/predef/detail/_cassert.h:
+
+/usr/include/c++/6/cassert:
+
+/usr/include/boost/predef/library/c/gnu.h:
+
+/usr/include/boost/predef/library/c/uc.h:
+
+/usr/include/boost/predef/library/c/vms.h:
+
+/usr/include/boost/predef/library/c/zos.h:
+
+/usr/include/boost/predef/library/std.h:
+
+/usr/include/boost/predef/library/std/_prefix.h:
+
+/usr/include/boost/predef/detail/_exception.h:
+
+/usr/include/boost/predef/library/std/cxx.h:
+
+/usr/include/boost/predef/library/std/dinkumware.h:
+
+/usr/include/boost/predef/library/std/libcomo.h:
+
+/usr/include/boost/predef/library/std/modena.h:
+
+/usr/include/boost/predef/library/std/msl.h:
+
+/usr/include/boost/predef/library/std/roguewave.h:
+
+/usr/include/boost/predef/library/std/sgi.h:
+
+/usr/include/boost/predef/library/std/stdcpp3.h:
+
+/usr/include/boost/predef/library/std/stlport.h:
+
+/usr/include/boost/predef/library/std/vacpp.h:
+
+/usr/include/boost/predef/os.h:
+
+/usr/include/boost/predef/os/aix.h:
+
+/usr/include/boost/predef/os/amigaos.h:
+
+/usr/include/boost/predef/os/android.h:
+
+/usr/include/boost/predef/os/beos.h:
+
+/usr/include/boost/predef/os/bsd.h:
+
+/usr/include/boost/predef/os/macos.h:
+
+/usr/include/boost/predef/os/ios.h:
+
+/usr/include/boost/predef/os/bsd/bsdi.h:
+
+/usr/include/boost/predef/os/bsd/dragonfly.h:
+
+/usr/include/boost/predef/os/bsd/free.h:
+
+/usr/include/boost/predef/os/bsd/open.h:
+
+/usr/include/boost/predef/os/bsd/net.h:
+
+/usr/include/boost/predef/os/cygwin.h:
+
+/usr/include/boost/predef/os/haiku.h:
+
+/usr/include/boost/predef/os/hpux.h:
+
+/usr/include/boost/predef/os/irix.h:
+
+/usr/include/boost/predef/os/linux.h:
+
+/usr/include/boost/predef/detail/os_detected.h:
+
+/usr/include/boost/predef/os/os400.h:
+
+/usr/include/boost/predef/os/qnxnto.h:
+
+/usr/include/boost/predef/os/solaris.h:
+
+/usr/include/boost/predef/os/unix.h:
+
+/usr/include/boost/predef/os/vms.h:
+
+/usr/include/boost/predef/os/windows.h:
+
+/usr/include/boost/predef/other.h:
+
+/usr/include/boost/predef/other/endian.h:
+
+/usr/include/boost/predef/platform.h:
+
+/usr/include/boost/predef/platform/mingw.h:
+
+/usr/include/boost/predef/platform/windows_desktop.h:
+
+/usr/include/boost/predef/platform/windows_store.h:
+
+/usr/include/boost/predef/platform/windows_phone.h:
+
+/usr/include/boost/predef/platform/windows_runtime.h:
+
+/usr/include/boost/predef/hardware.h:
+
+/usr/include/boost/predef/hardware/simd.h:
+
+/usr/include/boost/predef/hardware/simd/x86.h:
+
+/usr/include/boost/predef/hardware/simd/x86/versions.h:
+
+/usr/include/boost/predef/hardware/simd/x86_amd.h:
+
+/usr/include/boost/predef/hardware/simd/x86_amd/versions.h:
+
+/usr/include/boost/predef/hardware/simd/arm.h:
+
+/usr/include/boost/predef/hardware/simd/arm/versions.h:
+
+/usr/include/boost/predef/hardware/simd/ppc.h:
+
+/usr/include/boost/predef/hardware/simd/ppc/versions.h:
+
+/usr/include/boost/predef/version.h:
+
+/usr/include/c++/6/algorithm:
+
+/usr/include/c++/6/bits/stl_algo.h:
+
+/usr/include/c++/6/bits/algorithmfwd.h:
+
+/usr/include/c++/6/bits/stl_heap.h:
+
+/usr/include/c++/6/bits/uniform_int_dist.h:
+
+/usr/include/boost/smart_ptr/detail/operator_bool.hpp:
+
+/usr/include/boost/date_time/microsec_time_clock.hpp:
+
+/usr/include/boost/date_time/filetime_functions.hpp:
+
+/usr/include/boost/date_time/posix_time/ptime.hpp:
+
+/usr/include/boost/date_time/posix_time/posix_time_system.hpp:
+
+/usr/include/boost/date_time/posix_time/posix_time_config.hpp:
+
+/usr/include/boost/config/no_tr1/cmath.hpp:
+
+/usr/include/c++/6/cmath:
+
+/usr/include/math.h:
+
+/usr/include/x86_64-linux-gnu/bits/math-vector.h:
+
+/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
+
+/usr/include/x86_64-linux-gnu/bits/huge_val.h:
+
+/usr/include/x86_64-linux-gnu/bits/huge_valf.h:
+
+/usr/include/x86_64-linux-gnu/bits/huge_vall.h:
+
+/usr/include/x86_64-linux-gnu/bits/inf.h:
+
+/usr/include/x86_64-linux-gnu/bits/nan.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathdef.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathinline.h:
+
+/usr/include/boost/date_time/time_duration.hpp:
+
+/usr/include/boost/operators.hpp:
+
+/usr/include/c++/6/iterator:
+
+/usr/include/c++/6/bits/stream_iterator.h:
+
+/usr/include/boost/static_assert.hpp:
+
+/usr/include/boost/date_time/time_defs.hpp:
+
+/usr/include/boost/date_time/special_defs.hpp:
+
+/usr/include/boost/date_time/time_resolution_traits.hpp:
+
+/usr/include/boost/date_time/int_adapter.hpp:
+
+/usr/include/boost/date_time/gregorian/gregorian_types.hpp:
+
+/usr/include/boost/date_time/date.hpp:
+
+/usr/include/boost/date_time/year_month_day.hpp:
+
+/usr/include/boost/date_time/period.hpp:
+
+/usr/include/boost/date_time/gregorian/greg_calendar.hpp:
+
+/usr/include/boost/date_time/gregorian/greg_weekday.hpp:
+
+/usr/include/boost/date_time/constrained_value.hpp:
+
+/usr/include/boost/mpl/if.hpp:
+
+/usr/include/boost/mpl/aux_/value_wknd.hpp:
+
+/usr/include/boost/mpl/aux_/static_cast.hpp:
+
+/usr/include/boost/mpl/aux_/config/workaround.hpp:
+
+/usr/include/boost/mpl/aux_/config/integral.hpp:
+
+/usr/include/boost/mpl/aux_/config/msvc.hpp:
+
+/usr/include/boost/mpl/aux_/config/eti.hpp:
+
+/usr/include/boost/mpl/aux_/na_spec.hpp:
+
+/usr/include/boost/mpl/lambda_fwd.hpp:
+
+/usr/include/boost/mpl/void_fwd.hpp:
+
+/usr/include/boost/mpl/aux_/adl_barrier.hpp:
+
+/usr/include/boost/mpl/aux_/config/adl.hpp:
+
+/usr/include/boost/mpl/aux_/config/intel.hpp:
+
+/usr/include/boost/mpl/aux_/config/gcc.hpp:
+
+/usr/include/boost/mpl/aux_/na.hpp:
+
+/usr/include/boost/mpl/bool.hpp:
+
+/usr/include/boost/mpl/bool_fwd.hpp:
+
+/usr/include/boost/mpl/integral_c_tag.hpp:
+
+/usr/include/boost/mpl/aux_/config/static_constant.hpp:
+
+/usr/include/boost/mpl/aux_/na_fwd.hpp:
+
+/usr/include/boost/mpl/aux_/config/ctps.hpp:
+
+/usr/include/boost/mpl/aux_/config/lambda.hpp:
+
+/usr/include/boost/mpl/aux_/config/ttp.hpp:
+
+/usr/include/boost/mpl/int.hpp:
+
+/usr/include/boost/mpl/int_fwd.hpp:
+
+/usr/include/boost/mpl/aux_/nttp_decl.hpp:
+
+/usr/include/boost/mpl/aux_/config/nttp.hpp:
+
+/usr/include/boost/mpl/aux_/integral_wrapper.hpp:
+
+/usr/include/boost/preprocessor/cat.hpp:
+
+/usr/include/boost/preprocessor/config/config.hpp:
+
+/usr/include/boost/mpl/aux_/lambda_arity_param.hpp:
+
+/usr/include/boost/mpl/aux_/template_arity_fwd.hpp:
+
+/usr/include/boost/mpl/aux_/arity.hpp:
+
+/usr/include/boost/mpl/aux_/config/dtp.hpp:
+
+/usr/include/boost/mpl/aux_/preprocessor/params.hpp:
+
+/usr/include/boost/mpl/aux_/config/preprocessor.hpp:
+
+/usr/include/boost/preprocessor/comma_if.hpp:
+
+/usr/include/boost/preprocessor/punctuation/comma_if.hpp:
+
+/usr/include/boost/preprocessor/control/if.hpp:
+
+/usr/include/boost/preprocessor/control/iif.hpp:
+
+/usr/include/boost/preprocessor/logical/bool.hpp:
+
+/usr/include/boost/preprocessor/facilities/empty.hpp:
+
+/usr/include/boost/preprocessor/punctuation/comma.hpp:
+
+/usr/include/boost/preprocessor/repeat.hpp:
+
+/usr/include/boost/preprocessor/repetition/repeat.hpp:
+
+/usr/include/boost/preprocessor/debug/error.hpp:
+
+/usr/include/boost/preprocessor/detail/auto_rec.hpp:
+
+/usr/include/boost/preprocessor/tuple/eat.hpp:
+
+/usr/include/boost/preprocessor/inc.hpp:
+
+/usr/include/boost/preprocessor/arithmetic/inc.hpp:
+
+/usr/include/boost/mpl/aux_/preprocessor/enum.hpp:
+
+/usr/include/boost/mpl/aux_/preprocessor/def_params_tail.hpp:
+
+/usr/include/boost/mpl/limits/arity.hpp:
+
+/usr/include/boost/preprocessor/logical/and.hpp:
+
+/usr/include/boost/preprocessor/logical/bitand.hpp:
+
+/usr/include/boost/preprocessor/identity.hpp:
+
+/usr/include/boost/preprocessor/facilities/identity.hpp:
+
+/usr/include/boost/preprocessor/empty.hpp:
+
+/usr/include/boost/preprocessor/arithmetic/add.hpp:
+
+/usr/include/boost/preprocessor/arithmetic/dec.hpp:
+
+/usr/include/boost/preprocessor/control/while.hpp:
+
+/usr/include/boost/preprocessor/list/fold_left.hpp:
+
+/usr/include/boost/preprocessor/list/detail/fold_left.hpp:
+
+/usr/include/boost/preprocessor/control/expr_iif.hpp:
+
+/usr/include/boost/preprocessor/list/adt.hpp:
+
+/usr/include/boost/preprocessor/detail/is_binary.hpp:
+
+/usr/include/boost/preprocessor/detail/check.hpp:
+
+/usr/include/boost/preprocessor/logical/compl.hpp:
+
+/usr/include/boost/preprocessor/list/fold_right.hpp:
+
+/usr/include/boost/preprocessor/list/detail/fold_right.hpp:
+
+/usr/include/boost/preprocessor/list/reverse.hpp:
+
+/usr/include/boost/preprocessor/control/detail/while.hpp:
+
+/usr/include/boost/preprocessor/tuple/elem.hpp:
+
+/usr/include/boost/preprocessor/facilities/expand.hpp:
+
+/usr/include/boost/preprocessor/facilities/overload.hpp:
+
+/usr/include/boost/preprocessor/variadic/size.hpp:
+
+/usr/include/boost/preprocessor/tuple/rem.hpp:
+
+/usr/include/boost/preprocessor/tuple/detail/is_single_return.hpp:
+
+/usr/include/boost/preprocessor/variadic/elem.hpp:
+
+/usr/include/boost/preprocessor/arithmetic/sub.hpp:
+
+/usr/include/boost/mpl/aux_/config/overload_resolution.hpp:
+
+/usr/include/boost/mpl/aux_/lambda_support.hpp:
+
+/usr/include/boost/type_traits/is_base_of.hpp:
+
+/usr/include/boost/type_traits/is_base_and_derived.hpp:
+
+/usr/include/boost/type_traits/intrinsics.hpp:
+
+/usr/include/boost/type_traits/detail/config.hpp:
+
+/usr/include/boost/type_traits/integral_constant.hpp:
+
+/usr/include/boost/type_traits/remove_cv.hpp:
+
+/usr/include/boost/type_traits/is_same.hpp:
+
+/usr/include/boost/type_traits/is_class.hpp:
+
+/usr/include/boost/date_time/date_defs.hpp:
+
+/usr/include/boost/date_time/gregorian/greg_day_of_year.hpp:
+
+/usr/include/boost/date_time/gregorian_calendar.hpp:
+
+/usr/include/boost/date_time/gregorian_calendar.ipp:
+
+/usr/include/boost/date_time/gregorian/greg_ymd.hpp:
+
+/usr/include/boost/date_time/gregorian/greg_day.hpp:
+
+/usr/include/boost/date_time/gregorian/greg_year.hpp:
+
+/usr/include/boost/date_time/gregorian/greg_month.hpp:
+
+/usr/include/c++/6/map:
+
+/usr/include/c++/6/bits/stl_tree.h:
+
+/usr/include/c++/6/bits/stl_map.h:
+
+/usr/include/c++/6/bits/stl_multimap.h:
+
+/usr/include/boost/date_time/gregorian/greg_duration.hpp:
+
+/usr/include/boost/date_time/date_duration.hpp:
+
+/usr/include/boost/date_time/date_duration_types.hpp:
+
+/usr/include/boost/date_time/gregorian/greg_duration_types.hpp:
+
+/usr/include/boost/date_time/gregorian/greg_date.hpp:
+
+/usr/include/boost/date_time/adjust_functors.hpp:
+
+/usr/include/boost/date_time/wrapping_int.hpp:
+
+/usr/include/boost/date_time/date_generators.hpp:
+
+/usr/include/c++/6/sstream:
+
+/usr/include/c++/6/bits/sstream.tcc:
+
+/usr/include/boost/date_time/date_clock_device.hpp:
+
+/usr/include/boost/date_time/date_iterator.hpp:
+
+/usr/include/boost/date_time/time_system_split.hpp:
+
+/usr/include/boost/date_time/time_system_counted.hpp:
+
+/usr/include/boost/date_time/time.hpp:
+
+/usr/include/boost/date_time/posix_time/date_duration_operators.hpp:
+
+/usr/include/boost/date_time/posix_time/posix_time_duration.hpp:
+
+/usr/include/boost/date_time/posix_time/time_period.hpp:
+
+/usr/include/boost/date_time/time_iterator.hpp:
+
+/usr/include/boost/date_time/dst_rules.hpp:
+
+../../../include/asio/detail/timer_queue_ptime.hpp:
+
+../../../include/asio/detail/impl/timer_queue_ptime.ipp:
+
+../../../include/asio/basic_io_object.hpp:
+
+../../../include/asio/basic_raw_socket.hpp:
+
+../../../include/asio/raw_socket_service.hpp:
+
+../../../include/asio/basic_seq_packet_socket.hpp:
+
+../../../include/asio/seq_packet_socket_service.hpp:
+
+../../../include/asio/basic_serial_port.hpp:
+
+../../../include/asio/serial_port_base.hpp:
+
+/usr/include/termios.h:
+
+/usr/include/x86_64-linux-gnu/bits/termios.h:
+
+../../../include/asio/impl/serial_port_base.hpp:
+
+../../../include/asio/impl/serial_port_base.ipp:
+
+../../../include/asio/serial_port_service.hpp:
+
+../../../include/asio/detail/reactive_serial_port_service.hpp:
+
+../../../include/asio/detail/descriptor_ops.hpp:
+
+../../../include/asio/detail/impl/descriptor_ops.ipp:
+
+../../../include/asio/detail/reactive_descriptor_service.hpp:
+
+../../../include/asio/detail/descriptor_read_op.hpp:
+
+../../../include/asio/detail/descriptor_write_op.hpp:
+
+../../../include/asio/detail/impl/reactive_descriptor_service.ipp:
+
+../../../include/asio/detail/impl/reactive_serial_port_service.ipp:
+
+../../../include/asio/detail/win_iocp_serial_port_service.hpp:
+
+../../../include/asio/basic_signal_set.hpp:
+
+../../../include/asio/signal_set_service.hpp:
+
+../../../include/asio/detail/signal_set_service.hpp:
+
+/usr/include/signal.h:
+
+/usr/include/x86_64-linux-gnu/bits/signum.h:
+
+/usr/include/x86_64-linux-gnu/bits/sigaction.h:
+
+/usr/include/x86_64-linux-gnu/bits/sigcontext.h:
+
+/usr/include/x86_64-linux-gnu/bits/sigstack.h:
+
+/usr/include/x86_64-linux-gnu/sys/ucontext.h:
+
+/usr/include/x86_64-linux-gnu/bits/sigthread.h:
+
+../../../include/asio/detail/signal_handler.hpp:
+
+../../../include/asio/detail/signal_op.hpp:
+
+../../../include/asio/detail/impl/signal_set_service.ipp:
+
+../../../include/asio/detail/signal_blocker.hpp:
+
+../../../include/asio/detail/posix_signal_blocker.hpp:
+
+/usr/include/c++/6/csignal:
+
+../../../include/asio/detail/static_mutex.hpp:
+
+../../../include/asio/detail/posix_static_mutex.hpp:
+
+../../../include/asio/basic_socket_acceptor.hpp:
+
+../../../include/asio/socket_acceptor_service.hpp:
+
+../../../include/asio/basic_socket_iostream.hpp:
+
+../../../include/asio/basic_socket_streambuf.hpp:
+
+../../../include/asio/detail/array.hpp:
+
+../../../include/asio/stream_socket_service.hpp:
+
+../../../include/asio/deadline_timer.hpp:
+
+../../../include/asio/basic_deadline_timer.hpp:
+
+../../../include/asio/basic_socket_streambuf.hpp:
+
+../../../include/asio/basic_stream_socket.hpp:
+
+../../../include/asio/basic_streambuf.hpp:
+
+../../../include/asio/basic_streambuf_fwd.hpp:
+
+../../../include/asio/basic_waitable_timer.hpp:
+
+../../../include/asio/wait_traits.hpp:
+
+../../../include/asio/waitable_timer_service.hpp:
+
+../../../include/asio/detail/chrono_time_traits.hpp:
+
+../../../include/asio/buffer.hpp:
+
+../../../include/asio/buffered_read_stream_fwd.hpp:
+
+../../../include/asio/buffered_read_stream.hpp:
+
+../../../include/asio/buffered_read_stream_fwd.hpp:
+
+../../../include/asio/detail/buffer_resize_guard.hpp:
+
+../../../include/asio/detail/buffered_stream_storage.hpp:
+
+../../../include/asio/impl/buffered_read_stream.hpp:
+
+../../../include/asio/buffered_stream_fwd.hpp:
+
+../../../include/asio/buffered_stream.hpp:
+
+../../../include/asio/buffered_read_stream.hpp:
+
+../../../include/asio/buffered_write_stream.hpp:
+
+../../../include/asio/buffered_write_stream_fwd.hpp:
+
+../../../include/asio/completion_condition.hpp:
+
+../../../include/asio/write.hpp:
+
+../../../include/asio/impl/write.hpp:
+
+../../../include/asio/detail/base_from_completion_cond.hpp:
+
+../../../include/asio/detail/consuming_buffers.hpp:
+
+../../../include/asio/detail/dependent_type.hpp:
+
+../../../include/asio/impl/buffered_write_stream.hpp:
+
+../../../include/asio/buffered_stream_fwd.hpp:
+
+../../../include/asio/buffered_write_stream_fwd.hpp:
+
+../../../include/asio/buffered_write_stream.hpp:
+
+../../../include/asio/buffers_iterator.hpp:
+
+../../../include/asio/completion_condition.hpp:
+
+../../../include/asio/connect.hpp:
+
+../../../include/asio/impl/connect.hpp:
+
+../../../include/asio/coroutine.hpp:
+
+../../../include/asio/datagram_socket_service.hpp:
+
+../../../include/asio/deadline_timer_service.hpp:
+
+../../../include/asio/deadline_timer.hpp:
+
+../../../include/asio/error.hpp:
+
+../../../include/asio/error_code.hpp:
+
+../../../include/asio/generic/basic_endpoint.hpp:
+
+../../../include/asio/generic/detail/endpoint.hpp:
+
+../../../include/asio/generic/detail/impl/endpoint.ipp:
+
+../../../include/asio/generic/datagram_protocol.hpp:
+
+../../../include/asio/basic_datagram_socket.hpp:
+
+../../../include/asio/generic/basic_endpoint.hpp:
+
+../../../include/asio/generic/raw_protocol.hpp:
+
+../../../include/asio/basic_raw_socket.hpp:
+
+../../../include/asio/generic/seq_packet_protocol.hpp:
+
+../../../include/asio/basic_seq_packet_socket.hpp:
+
+../../../include/asio/generic/stream_protocol.hpp:
+
+../../../include/asio/basic_socket_iostream.hpp:
+
+../../../include/asio/basic_stream_socket.hpp:
+
+../../../include/asio/handler_alloc_hook.hpp:
+
+../../../include/asio/handler_continuation_hook.hpp:
+
+../../../include/asio/handler_invoke_hook.hpp:
+
+../../../include/asio/handler_type.hpp:
+
+../../../include/asio/io_service.hpp:
+
+../../../include/asio/ip/address.hpp:
+
+../../../include/asio/ip/address_v4.hpp:
+
+../../../include/asio/detail/winsock_init.hpp:
+
+../../../include/asio/ip/impl/address_v4.hpp:
+
+../../../include/asio/ip/impl/address_v4.ipp:
+
+../../../include/asio/ip/address_v6.hpp:
+
+../../../include/asio/ip/impl/address_v6.hpp:
+
+../../../include/asio/ip/impl/address_v6.ipp:
+
+../../../include/asio/ip/impl/address.hpp:
+
+../../../include/asio/ip/impl/address.ipp:
+
+../../../include/asio/ip/address.hpp:
+
+../../../include/asio/ip/address_v4.hpp:
+
+../../../include/asio/ip/address_v6.hpp:
+
+../../../include/asio/ip/basic_endpoint.hpp:
+
+../../../include/asio/ip/detail/endpoint.hpp:
+
+../../../include/asio/ip/detail/impl/endpoint.ipp:
+
+../../../include/asio/ip/impl/basic_endpoint.hpp:
+
+../../../include/asio/ip/basic_resolver.hpp:
+
+../../../include/asio/ip/basic_resolver_iterator.hpp:
+
+../../../include/asio/ip/basic_resolver_entry.hpp:
+
+../../../include/asio/ip/basic_resolver_query.hpp:
+
+../../../include/asio/ip/resolver_query_base.hpp:
+
+../../../include/asio/ip/resolver_service.hpp:
+
+../../../include/asio/detail/resolver_service.hpp:
+
+../../../include/asio/detail/resolve_endpoint_op.hpp:
+
+../../../include/asio/detail/resolve_op.hpp:
+
+../../../include/asio/detail/resolver_service_base.hpp:
+
+../../../include/asio/detail/thread.hpp:
+
+../../../include/asio/detail/posix_thread.hpp:
+
+../../../include/asio/detail/impl/posix_thread.ipp:
+
+../../../include/asio/detail/impl/resolver_service_base.ipp:
+
+../../../include/asio/ip/basic_resolver_entry.hpp:
+
+../../../include/asio/ip/basic_resolver_iterator.hpp:
+
+../../../include/asio/ip/basic_resolver_query.hpp:
+
+../../../include/asio/ip/host_name.hpp:
+
+../../../include/asio/ip/impl/host_name.ipp:
+
+../../../include/asio/ip/host_name.hpp:
+
+../../../include/asio/ip/icmp.hpp:
+
+../../../include/asio/ip/basic_endpoint.hpp:
+
+../../../include/asio/ip/basic_resolver.hpp:
+
+../../../include/asio/ip/multicast.hpp:
+
+../../../include/asio/ip/detail/socket_option.hpp:
+
+../../../include/asio/ip/resolver_query_base.hpp:
+
+../../../include/asio/ip/resolver_service.hpp:
+
+../../../include/asio/ip/tcp.hpp:
+
+../../../include/asio/basic_socket_acceptor.hpp:
+
+../../../include/asio/ip/udp.hpp:
+
+../../../include/asio/ip/unicast.hpp:
+
+../../../include/asio/ip/v6_only.hpp:
+
+../../../include/asio/is_read_buffered.hpp:
+
+../../../include/asio/is_write_buffered.hpp:
+
+../../../include/asio/local/basic_endpoint.hpp:
+
+../../../include/asio/local/detail/endpoint.hpp:
+
+../../../include/asio/local/detail/impl/endpoint.ipp:
+
+../../../include/asio/local/connect_pair.hpp:
+
+../../../include/asio/local/basic_endpoint.hpp:
+
+../../../include/asio/local/datagram_protocol.hpp:
+
+../../../include/asio/local/stream_protocol.hpp:
+
+../../../include/asio/placeholders.hpp:
+
+/usr/include/boost/bind/arg.hpp:
+
+/usr/include/boost/is_placeholder.hpp:
+
+../../../include/asio/posix/basic_descriptor.hpp:
+
+../../../include/asio/posix/descriptor_base.hpp:
+
+../../../include/asio/posix/basic_stream_descriptor.hpp:
+
+../../../include/asio/posix/basic_descriptor.hpp:
+
+../../../include/asio/posix/stream_descriptor_service.hpp:
+
+../../../include/asio/posix/descriptor_base.hpp:
+
+../../../include/asio/posix/stream_descriptor.hpp:
+
+../../../include/asio/posix/basic_stream_descriptor.hpp:
+
+../../../include/asio/posix/stream_descriptor_service.hpp:
+
+../../../include/asio/raw_socket_service.hpp:
+
+../../../include/asio/read.hpp:
+
+../../../include/asio/impl/read.hpp:
+
+../../../include/asio/read_at.hpp:
+
+../../../include/asio/impl/read_at.hpp:
+
+../../../include/asio/read_until.hpp:
+
+../../../include/asio/basic_streambuf.hpp:
+
+../../../include/asio/detail/regex_fwd.hpp:
+
+/usr/include/boost/regex_fwd.hpp:
+
+/usr/include/boost/regex/config.hpp:
+
+/usr/include/boost/regex/user.hpp:
+
+/usr/include/boost/regex/config/cwchar.hpp:
+
+/usr/include/boost/regex/v4/regex_fwd.hpp:
+
+/usr/include/boost/regex/v4/match_flags.hpp:
+
+../../../include/asio/impl/read_until.hpp:
+
+../../../include/asio/buffers_iterator.hpp:
+
+../../../include/asio/seq_packet_socket_service.hpp:
+
+../../../include/asio/serial_port.hpp:
+
+../../../include/asio/basic_serial_port.hpp:
+
+../../../include/asio/serial_port_base.hpp:
+
+../../../include/asio/serial_port_service.hpp:
+
+../../../include/asio/signal_set.hpp:
+
+../../../include/asio/basic_signal_set.hpp:
+
+../../../include/asio/signal_set_service.hpp:
+
+../../../include/asio/socket_acceptor_service.hpp:
+
+../../../include/asio/socket_base.hpp:
+
+../../../include/asio/strand.hpp:
+
+../../../include/asio/detail/strand_service.hpp:
+
+../../../include/asio/detail/impl/strand_service.hpp:
+
+../../../include/asio/detail/impl/strand_service.ipp:
+
+../../../include/asio/stream_socket_service.hpp:
+
+../../../include/asio/streambuf.hpp:
+
+../../../include/asio/system_error.hpp:
+
+../../../include/asio/thread.hpp:
+
+../../../include/asio/time_traits.hpp:
+
+../../../include/asio/version.hpp:
+
+../../../include/asio/wait_traits.hpp:
+
+../../../include/asio/waitable_timer_service.hpp:
+
+../../../include/asio/windows/basic_handle.hpp:
+
+../../../include/asio/windows/basic_object_handle.hpp:
+
+../../../include/asio/windows/basic_random_access_handle.hpp:
+
+../../../include/asio/windows/basic_stream_handle.hpp:
+
+../../../include/asio/windows/object_handle.hpp:
+
+../../../include/asio/windows/object_handle_service.hpp:
+
+../../../include/asio/windows/overlapped_ptr.hpp:
+
+../../../include/asio/windows/random_access_handle.hpp:
+
+../../../include/asio/windows/random_access_handle_service.hpp:
+
+../../../include/asio/windows/stream_handle.hpp:
+
+../../../include/asio/windows/stream_handle_service.hpp:
+
+../../../include/asio/write.hpp:
+
+../../../include/asio/write_at.hpp:
+
+../../../include/asio/impl/write_at.hpp:
+
+/usr/include/boost/array.hpp:
+
+/usr/include/boost/swap.hpp:
+
+/usr/include/boost/core/swap.hpp:
+
+/usr/include/boost/detail/iterator.hpp:
+
+/usr/include/boost/functional/hash_fwd.hpp:
+
+/usr/include/boost/functional/hash/hash_fwd.hpp:
+
+/usr/include/boost/bind.hpp:
+
+/usr/include/boost/bind/bind.hpp:
+
+/usr/include/boost/ref.hpp:
+
+/usr/include/boost/core/ref.hpp:
+
+/usr/include/boost/utility/addressof.hpp:
+
+/usr/include/boost/mem_fn.hpp:
+
+/usr/include/boost/bind/mem_fn.hpp:
+
+/usr/include/boost/get_pointer.hpp:
+
+/usr/include/boost/bind/mem_fn_template.hpp:
+
+/usr/include/boost/bind/mem_fn_cc.hpp:
+
+/usr/include/boost/type.hpp:
+
+/usr/include/boost/visit_each.hpp:
+
+/usr/include/boost/core/enable_if.hpp:
+
+/usr/include/boost/core/is_same.hpp:
+
+/usr/include/boost/bind/storage.hpp:
+
+/usr/include/boost/bind/bind_cc.hpp:
+
+/usr/include/boost/bind/bind_mf_cc.hpp:
+
+/usr/include/boost/bind/bind_mf2_cc.hpp:
+
+/usr/include/boost/bind/placeholders.hpp:
