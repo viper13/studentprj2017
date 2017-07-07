@@ -11,7 +11,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     Worker.cpp \
-    Server.cpp
+    Server.cpp \
+    Session.cpp
 
 LIBS += -L"/usr/include/boost" -lboost_system
 # The following define makes your compiler emit warnings if you use
@@ -28,4 +29,5 @@ DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS += \
     define.h \
     Worker.h \
-    Server.h
+    Server.h \
+    Session.h
