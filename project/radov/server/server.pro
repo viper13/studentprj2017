@@ -9,10 +9,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     Worker.cpp \
-    Server.cpp
+    Server.cpp \
+    session.cpp
 
 HEADERS += \
     Worker.h \
     define.h \
-    Server.h
+    Server.h \
+    session.h
 
