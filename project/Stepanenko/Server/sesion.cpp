@@ -28,7 +28,7 @@ void Session::handle_read(asio::error_code error, size_t bufferSize)
     {
         //process message
         buffer_.resize(bufferSize);
-        LOG_INFO("Message:[" << "" << "]");
+        LOG_INFO("Message:[" << "" << "]");        ///Change here
 
         start();
     }

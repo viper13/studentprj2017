@@ -21,6 +21,7 @@ void Worker::start()
                 LOG_ERR(ex.what());
             }
         }));
+
         threadPool_.push_back(thread);
     }
 }
