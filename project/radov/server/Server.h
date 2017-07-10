@@ -15,7 +15,7 @@ private:
 
     asio::io_service& io_service_;
     asio::ip::tcp::acceptor acceptor_;
-    asio::ip::tcp::socket socket_;
+    //asio::ip::tcp::socket socket_;
 
     std::vector<SessionPtr> sessions_;
 };
