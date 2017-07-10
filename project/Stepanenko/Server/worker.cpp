@@ -35,7 +35,7 @@ void Worker::join()
     threadPool_.clear();
 }
 
-asio::io_service &Worker::io_service()
+asio::io_service &Worker::ioService()
 {
     return service_;
 }

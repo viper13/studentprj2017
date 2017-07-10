@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
     Server server(1122);
 
-    server.start_accept();
+    server.startAccept();
 
     Worker::instance()->start();
 

@@ -8,9 +8,7 @@ class Server
 {
 public:
     Server(int port);
-
-    void start_accept();
-
+    void startAccept();
 private:
     asio::io_service& io_service_;
     asio::ip::tcp::acceptor acceptor_;

@@ -8,19 +8,13 @@ class Client : public std::enable_shared_from_this<Client>
 {
 public:
     Client(std::string address, std::string port);
-
     void start();
-
-
-
 private:
-
-    void handleResolveEndPoint(asio::error_code error, asio::ip::tcp::resolver::iterator iterator);
-
-    void handleConnect(asio::error_code error, asio::ip::tcp::resolver::iterator iterator);
-
+    void handleResolveEndPoint(asio::error_code error
+                               , asio::ip::tcp::resolver::iterator iterator);
+    void handleConnect(asio::error_code error
+                       , asio::ip::tcp::resolver::iterator iterator);
     void read();
-
     void handleRead(asio::error_code error, size_t buf_size);
 
     asio::io_service& io_service_;

@@ -3,7 +3,7 @@
 #include "define.h"
 
 Client::Client(std::string address, std::string port)
-    : io_service_(Worker::instance()->io_service())
+    : io_service_(Worker::instance()->ioService())
     , socket_(io_service_)
     , address_(address)
     , port_(port)
@@ -14,20 +14,19 @@ Client::Client(std::string address, std::string port)
 
 void Client::start()
 {
-
-        asio::ip::tcp::resolver::query query(address_, port_);
-        resolver_.async_resolve(query,
-                                std::bind(&Client::handleResolveEndPoint
-                                          , shared_from_this()
-                                          , std::placeholders::_1
-                                          , std::placeholders::_2));
+    asio::ip::tcp::resolver::query query(address_, port_);
+    resolver_.async_resolve(query
+                            , std::bind(&Client::handleResolveEndPoint
+                                        , shared_from_this()
+                                        , std::placeholders::_1
+                                        , std::placeholders::_2));
 
 }
 
 void Client::read()
 {
-   asio::async_read(socket_
-          , asio::buffer(buffer_, BUFFER_MAX_SIZE)
+    asio::async_read(socket_
+                     , asio::buffer(buffer_, BUFFER_MAX_SIZE)
                      , std::bind(&Client::handleRead
                                  , shared_from_this()
                                  , std::placeholders::_1
@@ -36,13 +35,10 @@ void Client::read()
 
 void Client::handleRead(asio::error_code error, size_t buf_size)
 {
-
     if (!error)
     {
-        //process message
         buffer_.resize(buf_size);
         LOG_INFO("Message:[" << "" << "]");        ///Change here
-
         read();
     }
     else
@@ -65,17 +61,18 @@ void Client::handleResolveEndPoint(asio::error_code error, asio::ip::tcp::resolv
     }
     else
     {
-        LOG_ERR("Failure to resolve host: " << address_ << ":" << port_ );
+        LOG_ERR("Failure to resolve host: " << address_
+                << ":" << port_ );
     }
 
 }
 
-void Client::handleConnect(asio::error_code error, asio::ip::tcp::resolver::iterator iterator)
+void Client::handleConnect(asio::error_code error
+                           , asio::ip::tcp::resolver::iterator iterator)
 {
     if(!error)
     {
         read();
-
     }
     else if (iterator != asio::ip::tcp::resolver::iterator())
     {
