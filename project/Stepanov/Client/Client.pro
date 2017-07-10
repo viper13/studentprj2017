@@ -10,7 +10,8 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    Worker.cpp
+    Worker.cpp \
+    Client.cpp
 LIBS += -L"/usr/include/boost" -lboost_system
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -25,4 +26,5 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += \
     Define.h \
-    Worker.h
+    Worker.h \
+    Client.h

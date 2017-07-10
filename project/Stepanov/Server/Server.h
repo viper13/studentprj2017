@@ -15,7 +15,7 @@ private:
 
     boost::asio::io_service& io_service_;
     boost::asio::ip::tcp::acceptor acceptor_;
-    boost::asio::ip::tcp::socket socket_;
+
 
     std::vector<SessionPtr> sessions_;
 };
