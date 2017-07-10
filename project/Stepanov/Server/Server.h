@@ -2,7 +2,6 @@
 #define SERVER_H
 
 #include <boost/asio.hpp>
-#include <Server.h>
 #include "Session.h"
 
 class Server

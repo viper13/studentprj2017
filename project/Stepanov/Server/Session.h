@@ -3,25 +3,25 @@
 
 #include <memory>
 #include <boost/asio.hpp>
+#include <define.h>
 
-#include "define.h"
+using namespace boost;
 
 class Session
         : public std::enable_shared_from_this<Session>
 {
-
 public:
-    Session(boost::asio::ip::tcp::socket &socket);
+    Session(asio::ip::tcp::socket &socket);
 
-    static std::shared_ptr<Session> getNewSession(boost::asio::ip::tcp::socket&);
+    static std::shared_ptr<Session> getNewSession(asio::ip::tcp::socket& socket);
 
     void start();
 
 private:
-    boost::asio::ip::tcp::socket& socket_;
-    std::vector<std::string> buffer_;
+    void handle_read(system::error_code error, size_t bufferSize);
 
-    void handle_read(boost::system::error_code error, size_t bufferSize);
+    asio::ip::tcp::socket& socket_;
+    std::vector<char> buffer_;
 };
 
 typedef std::shared_ptr<Session> SessionPtr;

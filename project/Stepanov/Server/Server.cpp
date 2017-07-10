@@ -2,7 +2,8 @@
 
 #include "define.h"
 #include "Worker.h"
-#include "Session.h"
+
+using namespace boost;
 
 Server::Server(int port)
     : io_service_(Worker::instance()->io_service())
@@ -15,16 +16,15 @@ Server::Server(int port)
 
 void Server::start_accept()
 {
-    acceptor_.async_accept(socket_ ,[this](boost::system::error_code error)
+    acceptor_.async_accept(socket_, [this](system::error_code error)
     {
-        if(!error)
+        if (!error)
         {
             SessionPtr session = Session::getNewSession(socket_);
             sessions_.push_back(session);
-            session.start();
+            session->start();
         }
 
         start_accept();
     });
-
 }

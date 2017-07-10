@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 
     Worker::instance()->start();
 
-    LOG_INFO("Threads started!!!");
+    LOG_INFO("/n Threads started!!!");
 
     Worker::instance()->join();
 
