@@ -9,10 +9,12 @@ CONFIG += c++11
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    worker.cpp
+    worker.cpp \
+    client.cpp
 
 HEADERS += \
     worker.h \
-    define.h
+    define.h \
+    client.h
 
 

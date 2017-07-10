@@ -14,11 +14,13 @@ Server::Server(int port)
 
 void Server::start_accept()
 {
-    acceptor_.async_accept(socket_, [this](asio::error_code error)
+     SessionPtr session = Session::getNewSession();
+
+    acceptor_.async_accept(session->socket(), [session, this](asio::error_code error)
     {
         if (!error)
         {
-            SessionPtr session = Session::getNewSession(socket_);
+
             sessions_.push_back(session);
             session->start();
         }
