@@ -1,14 +1,15 @@
 #include "Session.h"
+#include "Worker.h"
 
-Session::Session(asio::ip::tcp::socket& socket)
-    : socket_(socket)
+Session::Session()
+    : socket_(Worker::instance()->io_service())
 {
     buffer_.reserve(BUFFER_MAX_SIZE);
 }
 
-std::shared_ptr<Session> Session::getNewSession(asio::ip::tcp::socket& socket)
+std::shared_ptr<Session> Session::getNewSession()
 {
-    SessionPtr session(new Session(socket));
+    SessionPtr session(new Session());
     return session;
 }
 
@@ -18,7 +19,12 @@ void Session::start()
                      std::bind(&Session::handle_read
                    , shared_from_this()
                    , std::placeholders::_1
-                   , std::placeholders::_2));
+                               , std::placeholders::_2));
+}
+
+asio::ip::tcp::socket &Session::socket()
+{
+    return socket_;
 }
 
 void Session::handle_read(asio::error_code error, size_t bufferSize)
