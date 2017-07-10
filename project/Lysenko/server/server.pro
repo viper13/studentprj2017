@@ -1,3 +1,5 @@
+QT -= gui
+
 TARGET = server
 CONFIG += console
 CONFIG -= app_bundle
@@ -7,10 +9,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     Worker.cpp \
-    Server.cpp
+    Server.cpp \
+    session.cpp
 
 HEADERS += \
     Worker.h \
     define.h \
-    Server.h
+    Server.h \
+    session.h
 
