@@ -10,15 +10,17 @@ class Session
 {
 
 public:
-    Session(asio::ip::tcp::socket &socket);
-    static std::shared_ptr<Session> getNewSessions(asio::ip::tcp::socket& socket_);
+    Session();
+    static std::shared_ptr<Session> getNewSessions();
 
     void start();
+
+    asio::ip::tcp::socket& socket();
 private:
     void handle_read(asio::error_code error, size_t bufferSize);
 
-    asio::ip::tcp::socket& socket_;
-    std::vector<char> buffer_;
+    asio::ip::tcp::socket socket_;
+    ByteBuffer buffer_;
 };
 
 typedef std::shared_ptr<Session> SessionPtr;
