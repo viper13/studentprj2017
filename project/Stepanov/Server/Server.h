@@ -12,12 +12,11 @@ public:
     void start_accept();
 
 private:
+     boost::asio::io_service& io_service_;
 
-    boost::asio::io_service& io_service_;
-    boost::asio::ip::tcp::acceptor acceptor_;
+     boost::asio::ip::tcp::acceptor acceptor_;
 
-
-    std::vector<SessionPtr> sessions_;
+     std::vector<SessionPtr> sessions_;
 };
 
 #endif // SERVER_H

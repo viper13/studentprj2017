@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <boost/asio.hpp>
-#include <define.h>
+#include <Define.h>
 
 using namespace boost;
 
@@ -13,17 +13,18 @@ class Session
 public:
     Session();
 
-    static std::shared_ptr<Session> getNewSession();
+    asio::ip::tcp::socket& socket();
 
     void start();
 
-    asio::ip::tcp::socket& socket();
+    static std::shared_ptr<Session> getNewSession();
 
 private:
-    void handle_read(system::error_code error, size_t bufferSize);
-
     asio::ip::tcp::socket socket_;
+
     std::vector<char> buffer_;
+
+    void handle_read(system::error_code error, size_t bufferSize);
 };
 
 typedef std::shared_ptr<Session> SessionPtr;

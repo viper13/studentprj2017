@@ -12,6 +12,7 @@ Session::Session()
 std::shared_ptr<Session> Session::getNewSession()
 {
     std::shared_ptr<Session> result(new Session());
+
     return result;
 }
 
@@ -19,7 +20,7 @@ std::shared_ptr<Session> Session::getNewSession()
 
 void Session::start()
 {
-    asio::async_read(socket_
+    asio::async_read(  socket_
                      , asio::buffer(buffer_, BUFFER_MAX_SIZE)
                      , std::bind(&Session::handle_read
                                  , shared_from_this()
@@ -36,8 +37,8 @@ void Session::handle_read(system::error_code error, size_t bufferSize)
 {
     if (!error)
     {
-        // process message
         buffer_.resize(bufferSize);
+
         LOG_INFO("Message:[]");
 
         start();
@@ -45,6 +46,6 @@ void Session::handle_read(system::error_code error, size_t bufferSize)
     else
     {
         LOG_ERR("Failure: read error code " << error.value()
-                << " description: " << error.message());
+                << " description: " << error.message()<< std::endl);
     }
 }

@@ -1,9 +1,10 @@
 #include "Worker.h"
-#include "define.h"
+#include "Define.h"
 
 Worker *Worker::instance()
 {
     static Worker inst;
+
     return &inst;
 }
 
@@ -22,6 +23,7 @@ void Worker::start()
                 LOG_ERR(ex.what());
             }
         }));
+
         threadPool_.push_back(thread);
     }
 }
@@ -32,6 +34,7 @@ void Worker::join()
     {
         thread->join();
     }
+
     threadPool_.clear();
 }
 
@@ -39,7 +42,6 @@ asio::io_service &Worker::io_service()
 {
     return service_;
 }
-
 Worker::Worker()
 {
 

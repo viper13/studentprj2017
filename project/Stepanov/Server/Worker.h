@@ -6,7 +6,7 @@
 #include <thread>
 #include <memory>
 
-#include "define.h"
+#include "Define.h"
 
 using namespace boost;
 

@@ -1,6 +1,6 @@
 #include "Server.h"
 
-#include "define.h"
+#include "Define.h"
 #include "Worker.h"
 
 using namespace boost;

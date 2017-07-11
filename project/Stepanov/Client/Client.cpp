@@ -1,9 +1,6 @@
 #include "Client.h"
 #include "Worker.h"
 
-
-
-
 Client::Client(std::string adress, std::string port)
     : io_service_(Worker::instance()->io_service())
     , socket_(io_service_)
@@ -20,7 +17,7 @@ void Client::start()
     {
         asio::ip::tcp::resolver::query querry(adress_, port_);
 
-        resolver_.async_resolve(querry
+        resolver_.async_resolve(  querry
                                 , std::bind(&Client::handleResolveEndPoint
                                             , shared_from_this()
                                             , std::placeholders::_1
@@ -33,7 +30,8 @@ void Client::start()
 
 }
 
-void Client::handleConnect(system::error_code error, asio::ip::tcp::resolver::iterator iterator)
+void Client::handleConnect(  system::error_code error
+                           , asio::ip::tcp::resolver::iterator iterator)
 {
     if(!error)
     {
@@ -42,15 +40,16 @@ void Client::handleConnect(system::error_code error, asio::ip::tcp::resolver::it
     else if(iterator != asio::ip::tcp::resolver::iterator())
     {
         asio::ip::tcp::endpoint endPoint = *iterator;
-        socket_.async_connect(endPoint
+        socket_.async_connect(  endPoint
                               , std::bind(&Client::handleConnect
                                           , shared_from_this()
                                           , std::placeholders::_1
-                                          ,++iterator));
+                                          , ++iterator));
     }
     else
     {
-        LOG_ERR("An error" << error.message()<<"\n");
+        LOG_ERR("Failure: read error code " << error.value()
+                << " description: " << error.message()<< std::endl);
     }
 }
 
@@ -72,16 +71,19 @@ void Client::handleRead(system::error_code error, size_t bufferSize)
     }
     else
     {
-        LOG_ERR("Failure");
+        LOG_ERR("Failure: read error code " << error.value()
+                << " description: " << error.message() << std::endl);
     }
 
 }
 
-void Client::handleResolveEndPoint(system::error_code error, asio::ip::tcp::resolver::iterator iterator)
+void Client::handleResolveEndPoint(system::error_code error
+                                   , asio::ip::tcp::resolver::iterator iterator)
 {
     if (!error)
     {
         asio::ip::tcp::endpoint endPoint = *iterator;
+
         socket_.async_connect(endPoint
                               , std::bind(&Client::handleConnect
                                           , shared_from_this()
@@ -93,7 +95,7 @@ void Client::handleResolveEndPoint(system::error_code error, asio::ip::tcp::reso
     else
     {
         LOG_ERR("Failure to resolve host address : "
-                << adress_ << " : "<< port_);
+                << adress_ << " : "<< port_<< std::endl);
 
     }
 }
