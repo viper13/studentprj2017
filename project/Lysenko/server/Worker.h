@@ -1,30 +1,41 @@
 #ifndef WORKER_H
 #define WORKER_H
 
-#include <asio.hpp>
-
 #include <thread>
 #include <memory>
 
+#include <asio.hpp>
+
 #include "define.h"
+
+typedef std::shared_ptr<std::thread> ThreadPtr;
 
 class Worker
 {
-public:
-    static Worker* instance();
+    public:
 
-    void start();
+        static Worker* instance();
 
-    void join();
 
-    asio::io_service& io_service();
 
-private:
-    Worker();
+        void start();
 
-    asio::io_service service_;
+        void join();
 
-    std::vector<std::shared_ptr<std::thread>> threadPool_;
+
+
+        asio::io_service& io_service();
+
+
+
+    private:
+
+        Worker();
+
+
+
+        asio::io_service service_;
+        std::vector<ThreadPtr> threadPool_;
 };
 
 #endif // WORKER_H

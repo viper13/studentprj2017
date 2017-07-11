@@ -3,28 +3,44 @@
 
 #include <memory>
 #include <functional>
-#include <asio.hpp>
-#include <define.h>
 
-class Session : public std::enable_shared_from_this<Session>
+#include <asio.hpp>
+
+#include "define.h"
+
+class Session;
+
+typedef std::shared_ptr<Session> SessionPtr;
+
+class Session
+        : public std::enable_shared_from_this<Session>
 {
     public:
+
         Session();
 
-        static std::shared_ptr<Session> getNewSession();
+
+
+        static SessionPtr getNewSession();
+
+
 
         void start();
 
+
+
         asio::ip::tcp::socket& socket();
 
-    private:
-        std::vector<char> buffer_;
-        asio::ip::tcp::socket socket_;
 
+
+    private:
 
         void handle_read(asio::error_code error, size_t bufferSize);
-};
 
-typedef std::shared_ptr<Session> SessionPtr;
+
+
+        ByteBuffer buffer_;
+        asio::ip::tcp::socket socket_;
+};
 
 #endif // SESSION_H
