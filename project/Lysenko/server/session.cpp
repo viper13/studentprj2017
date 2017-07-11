@@ -49,8 +49,8 @@ void Session::handle_read(asio::error_code error, size_t bufferSize)
     }
     else
     {
-        LOG_ERR("Failure: read error code " <<
-                error.value() << " description " << error.message());
+        LOG_ERR("Failure: read error code " << error.value()
+                << " description " << error.message());
     }
 
 }
