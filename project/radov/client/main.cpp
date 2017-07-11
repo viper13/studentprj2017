@@ -1,10 +1,11 @@
-#include "Worker.h"
+#include "worker.h"
 #include "client.h"
 
 int main()
 {
 
     std::shared_ptr<Client> clientPtr(new Client("127.0.0.1", "1122"));
+
     clientPtr->start();
 
     Worker::instance()->start();

@@ -1,5 +1,5 @@
 #include "session.h"
-#include "Worker.h"
+#include "worker.h"
 
 Session::Session()
     :socket_(Worker::instance()->io_service())
@@ -29,7 +29,6 @@ void Session::handle_read(asio::error_code error, size_t bufferSize)
 {
     if(!error)
     {
-        //process message
         buffer_.resize(bufferSize);
         LOG_INFO("Message:[]");
 

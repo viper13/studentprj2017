@@ -1,5 +1,5 @@
-#include "Worker.h"
-#include "Server.h"
+#include "worker.h"
+#include "server.h"
 
 int main()
 {

@@ -8,13 +8,13 @@ CONFIG += c++11
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    Worker.cpp \
-    Server.cpp \
-    session.cpp
+    session.cpp \
+    worker.cpp \
+    server.cpp
 
 HEADERS += \
-    Worker.h \
     define.h \
-    Server.h \
-    session.h
+    session.h \
+    worker.h \
+    server.h
 

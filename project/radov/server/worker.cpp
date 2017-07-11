@@ -1,4 +1,4 @@
-#include "Worker.h"
+#include "worker.h"
 #include "define.h"
 
 Worker *Worker::instance()
@@ -22,6 +22,7 @@ void Worker::start()
                 LOG_ERR(ex.what());
             }
         }));
+
         threadPool_.push_back(thread);
     }
 }
@@ -32,6 +33,7 @@ void Worker::join()
     {
         thread->join();
     }
+
     threadPool_.clear();
 }
 

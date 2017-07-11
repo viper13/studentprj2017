@@ -1,5 +1,5 @@
 #include "client.h"
-#include "Worker.h"
+#include "worker.h"
 
 Client::Client(std::string address, std::string port)
     : io_service_(Worker::instance()->io_service())
@@ -12,21 +12,16 @@ Client::Client(std::string address, std::string port)
 
 }
 
-
 void Client::start()
 {
-
         asio::ip::tcp::resolver::query query(address_, port_);
 
         resolver_.async_resolve(query
                           ,std::bind(&Client::handleResolveEndPoint
                                      , shared_from_this()
                                      , std::placeholders::_1
-                                     , std::placeholders::_2));
-
-
-
-
+                                     , std::placeholders::_2
+                                     ));
 }
 
 
@@ -37,9 +32,8 @@ void Client::handleResolveEndPoint(asio::error_code error
     if(!error)
     {
         asio::ip::tcp::endpoint endPoint = *iterator;
-        socket_.async_connect(endPoint,
-
-                              std::bind(&Client::handleConnect
+        socket_.async_connect(endPoint
+                              ,std::bind(&Client::handleConnect
                                         , shared_from_this()
                                         , std::placeholders::_1
                                         , ++iterator
@@ -48,7 +42,8 @@ void Client::handleResolveEndPoint(asio::error_code error
     }
     else
     {
-        LOG_ERR("Failure to resolve host address: " << address_ << ":" << port_);
+        LOG_ERR("Failure to resolve host address: "
+                << address_ << ":" << port_);
     }
 
 }
@@ -76,8 +71,6 @@ void Client::handleConnect(asio::error_code error
         LOG_ERR("Failure connect to address: "
                 << address_ << ":" << port_);
     }
-
-
 }
 
 void Client::read()
@@ -91,12 +84,11 @@ void Client::read()
                                  ));
 }
 
-void Client::handleRead(asio::error_code error, size_t BufferSize)
+void Client::handleRead(asio::error_code error, size_t bufferSize)
 {
     if(!error)
     {
-        //process message
-        buffer_.resize(BufferSize);
+        buffer_.resize(bufferSize);
         LOG_INFO("Message:[]");
 
         start();

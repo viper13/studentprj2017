@@ -2,7 +2,7 @@
 #define SERVER_H
 
 #include <asio.hpp>
-#include <Server.h>
+#include <server.h>
 #include "session.h"
 
 class Server
@@ -11,11 +11,11 @@ public:
     Server(int port);
 
     void start_accept();
-private:
 
+private:
     asio::io_service& io_service_;
+
     asio::ip::tcp::acceptor acceptor_;
-    //asio::ip::tcp::socket socket_;
 
     std::vector<SessionPtr> sessions_;
 };

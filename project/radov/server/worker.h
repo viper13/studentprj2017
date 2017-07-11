@@ -1,10 +1,10 @@
 #ifndef WORKER_H
 #define WORKER_H
 
-#include <asio.hpp>
-
 #include <thread>
 #include <memory>
+
+#include <asio.hpp>
 
 #include "define.h"
 
