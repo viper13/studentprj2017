@@ -1,5 +1,6 @@
 #include "Worker.h"
 #include "client.h"
+#include "define.h"
 
 int main(int argc, char *argv[])
 {
@@ -9,6 +10,19 @@ int main(int argc, char *argv[])
 
     Worker::instance()->startThreads();
     LOG_INFO("Threads started!!!");
+
+    std::string message;
+
+    bool needStop = false;
+    while (!needStop)
+    {
+        LOG_INFO("Enter message: ");
+
+        std::cin >> message;
+
+        needStop = ( message == "stop" );
+    }
+
     Worker::instance()->joinThreads();
 
     LOG_INFO("Threads FINISHED!!!");

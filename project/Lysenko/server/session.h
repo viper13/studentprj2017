@@ -27,6 +27,8 @@ class Session
 
         void start();
 
+        void write(std::string message);
+
 
 
         asio::ip::tcp::socket& getSocket();
@@ -35,7 +37,11 @@ class Session
 
     private:
 
+        void read();
+
         void handleRead(asio::error_code error, size_t bufferSize);
+
+        void handleWrite(ByteBufferPtr data, asio::error_code error, size_t writtenBytesCount);
 
 
 

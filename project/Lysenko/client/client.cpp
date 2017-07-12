@@ -10,7 +10,7 @@ Client::Client(std::string adress, std::string port)
       port_ (port),
       resolver_ (io_service_)
 {
-    buffer_.resize (BUFFER_MAX_SIZE);
+
 }
 
 
@@ -23,7 +23,22 @@ void Client::start()
                             std::bind (&Client::handleResolveEndPoint,
                             shared_from_this(),
                             std::placeholders::_1,
-                            std::placeholders::_2) );
+                                       std::placeholders::_2) );
+}
+
+
+
+void Client::write(std::string message)
+{
+    ByteBufferPtr messageBuffer(new ByteBuffer(message.begin(),
+                                               message.end()));
+    asio::async_write(socket_,
+                      asio::buffer(*messageBuffer),
+                      std::bind( &Client::handleWrite,
+                                 shared_from_this(),
+                                 ByteBufferPtr,
+                                 std::placeholders::_1,
+                                 std::placeholders::_2) );
 }
 
 
@@ -79,7 +94,7 @@ void Client::handleRead(asio::error_code error,
     if ( !error )
     {
         buffer_.resize (bufferSize);
-        LOG_INFO("Message:[]");
+        LOG_INFO("Message: " << buffer_);
 
         read();
     }
@@ -94,9 +109,26 @@ void Client::handleRead(asio::error_code error,
 
 void Client::read()
 {
-    asio::async_read( socket_, asio::buffer(buffer_, BUFFER_MAX_SIZE),
-                     std::bind (&Client::handleRead,
-                                shared_from_this(),
-                                std::placeholders::_1,
-                                std::placeholders::_2) );
+    buffer_.resize (BUFFER_MAX_SIZE);
+    asio::async_read( socket_,
+                      asio::buffer(buffer_, BUFFER_MAX_SIZE),
+                      asio::transfer_at_least(1),
+                      std::bind (&Client::handleRead,
+                                 shared_from_this(),
+                                 std::placeholders::_1,
+                                 std::placeholders::_2) );
+}
+
+
+
+void Client::handleWrite(ByteBufferPtr data, asio::error_code error, size_t wroteBytes)
+{
+    if ( !error )
+    {
+        LOG_INFO("Message has been written")
+    }
+    else
+    {
+
+    }
 }

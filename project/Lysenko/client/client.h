@@ -16,23 +16,21 @@ class Client
 
         void start();
 
+        void write(std::string message);
+
     private:
 
         void handleResolveEndPoint(asio::error_code error,
                                    asio::ip::tcp::resolver::iterator iterator);
 
-
-
         void handleConnect(asio::error_code error,
                                    asio::ip::tcp::resolver::iterator iterator);
 
-
-
         void handleRead(asio::error_code error, size_t bufferSize);
 
-
-
         void read();
+
+        void handleWrite(ByteBufferPtr data, asio::error_code error, size_t wroteBytes);
 
 
 
