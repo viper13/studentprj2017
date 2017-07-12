@@ -17,7 +17,7 @@ void Session::start()
 {
     asio::async_read(socket_
                      , asio::buffer(buffer_)
-                     , std::bind(&Session::handle_read
+                     , std::bind(&Session::handleRead
                                  , shared_from_this()
                                  , std::placeholders::_1
                                  , std::placeholders::_2));
@@ -28,7 +28,7 @@ asio::ip::tcp::socket &Session::socket()
     return socket_;
 }
 
-void Session::handle_read(asio::error_code error, size_t bufferSize)
+void Session::handleRead(asio::error_code error, size_t bufferSize)
 {
     if(!error)
     {

@@ -12,7 +12,7 @@ Server::Server(int port)
 
 }
 
-void Server::start_accept()
+void Server::startAccept()
 {
     SessionPtr session = Session::getNewSessions();
 
@@ -24,7 +24,7 @@ void Server::start_accept()
             session->start();
         }
 
-        start_accept();
+        startAccept();
     });
 }
 
