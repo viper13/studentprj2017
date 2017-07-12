@@ -12,6 +12,8 @@ public:
 
     void start();
 
+    void write(std::string message);
+
 private:
     void handleResolveEndPoint(asio::error_code error
                                , asio::ip::tcp::resolver::iterator iterator);
@@ -22,6 +24,22 @@ private:
     void read();
     void handleRead(asio::error_code error
                     , size_t bufferSize);
+
+    void handleWrite(ByteBufferPtr data, asio::error_code error
+                     , size_t writedBytes)
+    {
+        if(!error)
+        {
+            LOG_INFO("Message writed");
+        }
+        else
+        {
+            /*LOG_INFO("Failure write data "
+                     << *data
+                     << )*/
+        }
+
+    }
 
     asio::io_service& io_service_;
     asio::ip::tcp::socket socket_;

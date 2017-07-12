@@ -10,23 +10,39 @@ Server::Server(int port)
           , port))
 
 {
-
+    LOG_INFO("Created server for port: " << port);
 }
 
-void Server::start_accept()
+void Server::accept()
 {
     SessionPtr session = Session::getNewSession();
-
     acceptor_.async_accept(session->socket()
-                           , [session, this](asio::error_code error)
-    {
-        if (!error)
-        {
-            sessions_.push_back(session);
-            session->start();
-        }
+                         , std::bind(
+                             &Server::handle_accept
+                             , this
+                             , session
+                             , std::placeholders::_1));
+}
 
-        start_accept();
-    });
+void Server::handle_accept(SessionPtr session, asio::error_code error)
+{
+    if (!error)
+    {
+        asio::ip::tcp::endpoint client_addr = session->socket().remote_endpoint();
+        LOG_INFO("Client connected: " << client_addr.address().to_string()
+                 << ":"
+                 << client_addr.port());
+        sessions_.push_back(session);
+        session -> start();
+    }
+
+    accept();
+}
+
+void Server::start()
+{
+
+    accept();
+
 }
 

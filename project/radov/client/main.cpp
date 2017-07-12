@@ -1,5 +1,6 @@
 #include "worker.h"
 #include "client.h"
+//#include
 
 int main()
 {
@@ -9,6 +10,16 @@ int main()
     clientPtr->start();
 
     Worker::instance()->start();
+
+    std::string message;
+    bool needStop;
+    while (needStop)
+    {
+        LOG_INFO("Enter message: ");
+        std::cin >> message;
+        clientPtr -> write(message);
+        needStop = (message == "stop");
+    }
 
     LOG_INFO("Threads started!!!");
 

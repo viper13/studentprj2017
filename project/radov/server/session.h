@@ -19,9 +19,12 @@ public:
 
     asio::ip::tcp::socket& socket();
 
-private:
-    void handle_read(asio::error_code error, size_t bufferSize);
+    void write(std::string message);
 
+private:
+    void read();
+    void handle_read(asio::error_code error, size_t bufferSize);
+    void handleWrite(ByteBufferPtr data, asio::error_code error, size_t writedBytesCount);
     asio::ip::tcp::socket socket_;
 
     std::vector<char> buffer_;

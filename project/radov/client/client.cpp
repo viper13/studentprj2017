@@ -24,6 +24,18 @@ void Client::start()
                                      ));
 }
 
+void Client::write(std::string message)
+{
+    ByteBuffer buffer(new ByteBuffer(message.begin(), message.end()));
+    asio::async_write(socket_
+                      , asio::buffer(*buffer)
+                      , std::bind(&Client::handleWrite
+                                  , shared_from_this()
+                                  , buffer
+                                  , std::placeholders::_1
+                                  , std::placeholders::_2));
+}
+
 
 
 void Client::handleResolveEndPoint(asio::error_code error
@@ -75,8 +87,10 @@ void Client::handleConnect(asio::error_code error
 
 void Client::read()
 {
+    buffer_.resize(BUFFER_MAX_SIZE);
     asio::async_read(socket_
-                     , asio::buffer(buffer_)
+                     , asio::buffer(BUFFER_MAX_SIZE)
+                     , asio::transfer_at_least(1)
                      , std::bind(&Client::handleRead
                         , shared_from_this()
                         , std::placeholders::_1
