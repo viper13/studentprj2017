@@ -16,7 +16,7 @@ Server::Server(int port)
 
 
 
-void Server::start_accept()
+void Server::startAccept()
 {
     SessionPtr session = Session::getNewSession();
     acceptor_.async_accept( socket_, [session, this]
@@ -28,7 +28,7 @@ void Server::start_accept()
                                              session->start();
                                          }
 
-                                         start_accept();
+                                         startAccept();
                                      } );
 
 }
