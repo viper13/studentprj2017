@@ -23,7 +23,7 @@ void Client::start()
 
 }
 
-void Client::write(std::__cxx11::string message)
+void Client::write(std::string message)
 {
     ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
     asio::async_write(socket_
@@ -32,7 +32,7 @@ void Client::write(std::__cxx11::string message)
                                  , shared_from_this()
                                  , buffer
                                  , std::placeholders::_1
-                                 , std::placeholders::_1));
+                                 , std::placeholders::_2));
 }
 
 void Client::read()
@@ -69,7 +69,7 @@ void Client::handleWrite(ByteBufferPtr data, asio::error_code error, size_t writ
     }
     else
     {
-        LOG_ERROR("Failure to wirte data " << *data << " description " << error.message());
+        LOG_ERR("Failure to wirte data " << *data << " description " << error.message());
     }
 }
 

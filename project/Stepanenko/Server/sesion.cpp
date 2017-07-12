@@ -15,7 +15,7 @@ std::shared_ptr<Session> Session::getNewSession()
 
 void Session::start()
 {
-    read()
+    read();
 }
 
 asio::ip::tcp::socket &Session::socket()
