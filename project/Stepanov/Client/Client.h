@@ -13,6 +13,8 @@ public:
     Client(std::string adress, std::string port);
     void start();
 
+    void write(std::string message);
+
 private:
     asio::io_service& io_service_;
     asio::ip::tcp::socket socket_;
@@ -28,6 +30,8 @@ private:
     void handleConnect(system::error_code err, asio::ip::tcp::resolver::iterator iterator);
     void read();
     void handleRead(system::error_code error, size_t bufferSize);
+    void handleWrite(ByteBufferPtr data, system::error_code error, size_t writedBytes);
+
 
 };
 

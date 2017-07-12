@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <memory>
 
 #define WORKER_THREAD_COUNT 4
 
@@ -14,5 +15,9 @@
 
 
 typedef std::vector<char> ByteBuffer;
+typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
+
+std::ostream& operator<<(std::ostream& stream,const ByteBuffer& buffer);
+
 
 #endif // DEFINE

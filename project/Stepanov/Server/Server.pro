@@ -9,11 +9,14 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
+INCLUDEPATH +=$$PWD/../common
+
 SOURCES += \
     Worker.cpp \
     Server.cpp \
     Session.cpp \
-    Main.cpp
+    Main.cpp \
+    ../common/define.cpp
 
 LIBS += -L"/usr/include/boost" -lboost_system
 # The following define makes your compiler emit warnings if you use
@@ -31,4 +34,4 @@ HEADERS += \
     Worker.h \
     Server.h \
     Session.h \
-    Define.h
+    ../common/Define.h

@@ -1,4 +1,3 @@
-#include <iostream>
 #include <boost/asio.hpp>
 #include "Worker.h"
 #include "Define.h"
@@ -17,6 +16,17 @@ int main()
     Worker::instance()->start();
 
     LOG_INFO("Threads are started, waiting for connection! \n");
+
+    std::string message;
+    bool needStop = false;
+    while(!needStop)
+    {
+        LOG_INFO("Enter message: ");
+        std::cin >> message;
+        clientPtr->write(message);
+        needStop = (message=="stop");
+
+    }
 
     Worker::instance()->join();
 

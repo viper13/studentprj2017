@@ -19,12 +19,18 @@ public:
 
     static std::shared_ptr<Session> getNewSession();
 
+    void write(std::string message);
+
 private:
     asio::ip::tcp::socket socket_;
 
     std::vector<char> buffer_;
 
     void handle_read(system::error_code error, size_t bufferSize);
+
+    void handleWrite(ByteBufferPtr data, system::error_code error, size_t writedSize);
+
+    void read();
 };
 
 typedef std::shared_ptr<Session> SessionPtr;
