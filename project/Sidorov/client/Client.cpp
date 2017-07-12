@@ -30,7 +30,7 @@ void Client::write(std::string message)
                                   , shared_from_this()
                                   , buffer
                                   , std::placeholders::_1
-                                  , std::placeholders::_2))
+                                  , std::placeholders::_2));
 }
 
 void Client::handleResolveEndPoint(asio::error_code error, asio::ip::tcp::resolver::iterator iterator)

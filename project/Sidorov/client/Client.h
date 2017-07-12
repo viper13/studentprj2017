@@ -1,7 +1,7 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include <define.h>
+#include "define.h"
 #include "asio.hpp"
 
 class Client : public std::enable_shared_from_this<Client>

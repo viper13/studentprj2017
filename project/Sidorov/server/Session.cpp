@@ -16,6 +16,7 @@ std::shared_ptr<Session> Session::getNewSession()
 void Session::start()
 {
    read();
+   LOG_INFO("Session started");
 }
 
 asio::ip::tcp::socket &Session::socket()
@@ -39,6 +40,7 @@ void Session::read()
 {
     buffer_.resize(BUFFER_MAX_SIZE);
     asio::async_read(socket_, asio::buffer(buffer_, BUFFER_MAX_SIZE)
+                     , asio::transfer_at_least(1)
                    ,std::bind(&Session::handleRead
                    , shared_from_this()
                    , std::placeholders::_1
