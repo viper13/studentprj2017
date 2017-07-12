@@ -8,8 +8,11 @@ class Server
 {
 public:
     Server(int port);
-    void startAccept();
+    void start();
 private:
+    void accept();
+    void handleAccept(SessionPtr session, asio::error_code error);
+
     asio::io_service& io_service_;
     asio::ip::tcp::acceptor acceptor_;
     asio::ip::tcp::socket socket_;

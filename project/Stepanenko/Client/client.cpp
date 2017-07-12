@@ -23,10 +23,23 @@ void Client::start()
 
 }
 
+void Client::write(std::__cxx11::string message)
+{
+    ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
+    asio::async_write(socket_
+                      , asio::buffer(*buffer)
+                      ,std::bind(&Client::handleWrite
+                                 , shared_from_this()
+                                 , buffer
+                                 , std::placeholders::_1
+                                 , std::placeholders::_1));
+}
+
 void Client::read()
 {
     asio::async_read(socket_
                      , asio::buffer(buffer_, BUFFER_MAX_SIZE)
+                     , asio::transfer_at_least(1)
                      , std::bind(&Client::handleRead
                                  , shared_from_this()
                                  , std::placeholders::_1
@@ -38,13 +51,25 @@ void Client::handleRead(asio::error_code error, size_t buf_size)
     if (!error)
     {
         buffer_.resize(buf_size);
-        LOG_INFO("Message:[" << "" << "]");        ///Change here
+        LOG_INFO("Message: " << buffer_);
         read();
     }
     else
     {
         LOG_ERR("Failure: read error code " << error.value()
                  << " description: " << error.message());
+    }
+}
+
+void Client::handleWrite(ByteBufferPtr data, asio::error_code error, size_t writtedSize)
+{
+    if (!error)
+    {
+        LOG_INFO("Message writted!!!");
+    }
+    else
+    {
+        LOG_ERROR("Failure to wirte data " << *data << " description " << error.message());
     }
 }
 
