@@ -5,14 +5,17 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG += c++11
 
+INCLUDEPATH += $$PWD/../common
+
 TEMPLATE = app
 
 SOURCES += main.cpp \
     Worker.cpp \
-    Client.cpp
+    Client.cpp \
+    ../common/define.cpp
 
 HEADERS += \
     Worker.h \
-    define.h \
-    Client.h
+    Client.h \
+    ../common/define.h
 

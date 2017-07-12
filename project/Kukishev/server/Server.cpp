@@ -9,22 +9,40 @@ Server::Server(int port)
           , asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
 
 {
-
+    LOG_INFO("Created server for porn: " << port);
 }
 
-void Server::startAccept()
+void Server::accept()
 {
+
     SessionPtr session = Session::getNewSessions();
 
-    acceptor_.async_accept(session->socket(), [this, session](asio::error_code error)
-    {
-        if(!error)
-        {
-            sessions_.push_back(session);
-            session->start();
-        }
+    acceptor_.async_accept(session->socket(), std::bind(
+                                                    &Server::handleAccept
+                                                    , this
+                                                    , session
+                                                    , std::placeholders::_1));
+}
 
-        startAccept();
-    });
+void Server::handleAccept(SessionPtr session, asio::error_code error)
+{
+
+    if(!error)
+    {
+        asio::ip::tcp::endpoint  client_addr = session->socket().remote_endpoint();
+        LOG_INFO("Client connected: "
+                 << client_addr.address().to_string()
+                 << ":"
+                 << client_addr.port());
+        sessions_.push_back(session);
+        session->start();
+    }
+
+    accept();
+}
+
+void Server::start()
+{
+    accept();
 }
 

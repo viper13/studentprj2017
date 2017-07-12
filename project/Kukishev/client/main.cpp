@@ -10,6 +10,17 @@ int main(int argc, char *argv[])
 
     LOG_INFO("Threads started!!!");
 
+    std::string message;
+    bool needStop = true;
+    while (!needStop)
+    {
+        LOG_INFO("Enter message: ");
+        std::cin >> message;
+        client->write(message);
+        needStop = (message == "stop");
+
+    }
+
     Worker::instance()->join();
 
     LOG_INFO("Threads FINISHED!!!");

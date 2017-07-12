@@ -22,6 +22,17 @@ void Client::start()
 
 }
 
+void Client::write(std::__cxx11::string message)
+{
+    ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
+    asio::async_write(socket_
+                      , asio::buffer(*buffer)
+                      , std::bind(&Client::handleWrite
+                                  , shared_from_this()
+                                  , std::placeholders::_1
+                                  , std::placeholders::_2));
+}
+
 void Client::handleResolveEndPoint(asio::error_code error, asio::ip::tcp::resolver::iterator iterator)
 {
 
@@ -65,9 +76,10 @@ void Client::handleConnect(asio::error_code error, asio::ip::tcp::resolver::iter
 
 void Client::read()
 {
-
+    buffer_.resize(BUFFER_MAX_SIZE);
     asio::async_read(socket_
                      , asio::buffer(buffer_, BUFFER_MAX_SIZE)
+                     , asio::transfer_at_least(1)
                      , std::bind(&Client::handleRead
                                  , shared_from_this()
                                  , std::placeholders::_1
@@ -87,5 +99,20 @@ void Client::handleRead(std::error_code error, size_t bufferSize)
     {
         LOG_ERR("Failure: read error code " << error.value()
                 << " description: " << error.message());
+    }
+}
+
+void Client::handleWrite(ByteBufferPtr data, asio::error_code error, size_t writeBytes)
+{
+    if(!error)
+    {
+        LOG_INFO("Message writed!");
+    }
+    else
+    {
+        LOG_ERR("Message write data"
+                 << *data
+                 << " description: "
+                 << error.message());
     }
 }
