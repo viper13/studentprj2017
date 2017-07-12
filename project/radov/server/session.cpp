@@ -4,7 +4,7 @@
 Session::Session()
     :socket_(Worker::instance()->io_service())
 {
-    buffer_.resize(BUFFER_MAX_SIZE);
+
 }
 
 std::shared_ptr<Session> Session::getNewSession()
@@ -20,16 +20,22 @@ void Session::start()
     read();
 }
 
+asio::ip::tcp::socket& Session::socket()
+{
+    return socket_;
+}
+
+
 void Session::write(std::string message)
 {
     ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
     asio::async_write(socket_
-                                   ,asio::buffer(*buffer)
-                                   ,std::bind(&Session::handleWrite
-                                              , shared_from_this()
-                                              , buffer
-                                              , std::placeholders::_1
-                                              , std::placeholders::_2));
+                       ,asio::buffer(*buffer)
+                       ,std::bind(&Session::handleWrite
+                                  , shared_from_this()
+                                  , buffer
+                                  , std::placeholders::_1
+                                  , std::placeholders::_2));
 }
 
 void Session::read()
@@ -37,15 +43,15 @@ void Session::read()
     buffer_.resize(BUFFER_MAX_SIZE);
     asio::async_read(socket_
                      , asio::buffer(buffer_)
-                     , std::bind(&Session::handle_read
+                     , asio::transfer_at_least(1)
+                     , std::bind(&Session::handleRead
                         , shared_from_this()
                         , std::placeholders::_1
-                        , std::placeholders::_2
-                     ));
+                        , std::placeholders::_2));
 }
 
 
-void Session::handle_read(asio::error_code error, size_t bufferSize)
+void Session::handleRead(asio::error_code error, size_t bufferSize)
 {
     if(!error)
     {
@@ -59,7 +65,9 @@ void Session::handle_read(asio::error_code error, size_t bufferSize)
     }
     else
     {
-        LOG_ERR("Failure: read error code" << error.value() << " description: "
+        LOG_ERR("Failure: read error code"
+                << error.value()
+                << " description: "
                 << error.message());
     }
 }
@@ -78,10 +86,3 @@ void Session::handleWrite(ByteBufferPtr data, asio::error_code error, size_t wri
         LOG_INFO("Failure write data!" << *data);
     }
 }
-
-asio::ip::tcp::socket& Session::socket()
-{
-    return socket_;
-}
-
-

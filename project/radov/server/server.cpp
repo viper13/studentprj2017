@@ -29,7 +29,8 @@ void Server::handle_accept(SessionPtr session, asio::error_code error)
     if (!error)
     {
         asio::ip::tcp::endpoint client_addr = session->socket().remote_endpoint();
-        LOG_INFO("Client connected: " << client_addr.address().to_string()
+        LOG_INFO("Client connected: "
+                 << client_addr.address().to_string()
                  << ":"
                  << client_addr.port());
         sessions_.push_back(session);

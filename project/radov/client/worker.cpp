@@ -33,7 +33,6 @@ void Worker::join()
     {
         thread->join();
     }
-
     threadPool_.clear();
 }
 

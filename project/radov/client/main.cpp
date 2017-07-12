@@ -11,17 +11,17 @@ int main()
 
     Worker::instance()->start();
 
+    LOG_INFO("Threads started");
+
     std::string message;
-    bool needStop;
-    while (needStop)
+    bool needStop = false;
+    while (!needStop)
     {
         LOG_INFO("Enter message: ");
         std::cin >> message;
         clientPtr -> write(message);
         needStop = (message == "stop");
     }
-
-    LOG_INFO("Threads started!!!");
 
     Worker::instance()->join();
 

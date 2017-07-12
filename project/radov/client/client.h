@@ -25,21 +25,10 @@ private:
     void handleRead(asio::error_code error
                     , size_t bufferSize);
 
-    void handleWrite(ByteBufferPtr data, asio::error_code error
-                     , size_t writedBytes)
-    {
-        if(!error)
-        {
-            LOG_INFO("Message writed");
-        }
-        else
-        {
-            /*LOG_INFO("Failure write data "
-                     << *data
-                     << )*/
-        }
+    void handleWrite(ByteBufferPtr data
+                     , asio::error_code error
+                     , size_t writedBytes);
 
-    }
 
     asio::io_service& io_service_;
     asio::ip::tcp::socket socket_;

@@ -1,5 +1,6 @@
 #include "client.h"
 #include "worker.h"
+//#include "define.h"//TODO
 
 Client::Client(std::string address, std::string port)
     : io_service_(Worker::instance()->io_service())
@@ -26,7 +27,7 @@ void Client::start()
 
 void Client::write(std::string message)
 {
-    ByteBuffer buffer(new ByteBuffer(message.begin(), message.end()));
+    ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
     asio::async_write(socket_
                       , asio::buffer(*buffer)
                       , std::bind(&Client::handleWrite
@@ -71,12 +72,10 @@ void Client::handleConnect(asio::error_code error
     {
         asio::ip::tcp::endpoint endPoint = *iterator;
         socket_.async_connect(endPoint,
-
                               std::bind(&Client::handleConnect
                                         , shared_from_this()
                                         , std::placeholders::_1
-                                        , ++iterator
-                                        ));
+                                        , ++iterator));
     }
     else
     {
@@ -89,13 +88,12 @@ void Client::read()
 {
     buffer_.resize(BUFFER_MAX_SIZE);
     asio::async_read(socket_
-                     , asio::buffer(BUFFER_MAX_SIZE)
+                     , asio::buffer(buffer_,BUFFER_MAX_SIZE)
                      , asio::transfer_at_least(1)
                      , std::bind(&Client::handleRead
                         , shared_from_this()
                         , std::placeholders::_1
-                        , std::placeholders::_2
-                                 ));
+                        , std::placeholders::_2));
 }
 
 void Client::handleRead(asio::error_code error, size_t bufferSize)
@@ -111,5 +109,22 @@ void Client::handleRead(asio::error_code error, size_t bufferSize)
     {
         LOG_ERR("Failure: read error code" << error.value() << " description: "
                 << error.message());
+    }
+}
+
+void Client::handleWrite(ByteBufferPtr data
+                         , asio::error_code error
+                         , size_t writedBytes)
+{
+    if(!error)
+    {
+        LOG_INFO("Message writed");
+    }
+    else
+    {
+        LOG_ERR("Failure write data "
+                 << *data
+                 << " description: "
+                 << error.message());
     }
 }
