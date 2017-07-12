@@ -28,15 +28,16 @@ void Client::write(std::string message)
     ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
     asio::async_write(socket_
                       , asio::buffer(*buffer)
-                      ,std::bind(&Client::handleWrite
-                                 , shared_from_this()
-                                 , buffer
-                                 , std::placeholders::_1
-                                 , std::placeholders::_2));
+                      , std::bind(&Client::handleWrite
+                                  , shared_from_this()
+                                  , buffer
+                                  , std::placeholders::_1
+                                  , std::placeholders::_2));
 }
 
 void Client::read()
 {
+    buffer_.resize(BUFFER_MAX_SIZE);
     asio::async_read(socket_
                      , asio::buffer(buffer_, BUFFER_MAX_SIZE)
                      , asio::transfer_at_least(1)
@@ -65,7 +66,7 @@ void Client::handleWrite(ByteBufferPtr data, asio::error_code error, size_t writ
 {
     if (!error)
     {
-        LOG_INFO("Message writted!!!");
+        LOG_INFO("Message writted!!! " << *data << " with size of " << writtedSize);
     }
     else
     {

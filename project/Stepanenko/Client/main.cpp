@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     LOG_INFO("Thread started!!!");
 
     std::string message;
-    bool needStop = true;
+    bool needStop = false;
     while (!needStop)
     {
         LOG_INFO("Enter message: ");
