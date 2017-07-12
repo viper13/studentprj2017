@@ -6,7 +6,7 @@
 
 
 Server::Server(int port)
-    : io_service_(Worker::instance()->io_service()),
+    : io_service_(Worker::instance()->getIO_service()),
       acceptor_( io_service_,
                  asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port) ),
       socket_ (io_service_)

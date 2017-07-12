@@ -29,7 +29,7 @@ class Session
 
 
 
-        asio::ip::tcp::socket& socket();
+        asio::ip::tcp::socket& getSocket();
 
 
 

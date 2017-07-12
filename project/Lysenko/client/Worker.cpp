@@ -11,7 +11,7 @@ Worker* Worker::instance()
 
 
 
-void Worker::start()
+void Worker::startThreads()
 {
     for (int i = 0; i < WORKER_THREAD_COUNT; ++i)
     {
@@ -34,7 +34,7 @@ void Worker::start()
 
 
 
-void Worker::join()
+void Worker::joinThreads()
 {
     for (ThreadPtr thread : threadPool_)
     {
@@ -46,7 +46,7 @@ void Worker::join()
 
 
 
-asio::io_service& Worker::io_service()
+asio::io_service& Worker::getIO_service()
 {
     return service_;
 }
@@ -57,3 +57,4 @@ Worker::Worker()
 {
 
 }
+

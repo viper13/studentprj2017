@@ -4,7 +4,7 @@
 
 
 Client::Client(std::string adress, std::string port)
-    : io_service_( Worker::instance()->io_service() ),
+    : io_service_( Worker::instance()->getIO_service() ),
       socket_ (io_service_),
       address_ (adress),
       port_ (port),

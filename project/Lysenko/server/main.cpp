@@ -6,9 +6,9 @@ int main(int argc, char *argv[])
     Server server(1122);
     server.start_accept();
 
-    Worker::instance()->start();
+    Worker::instance()->startThreads();
     LOG_INFO("Threads started!!!");
-    Worker::instance()->join();
+    Worker::instance()->joinThreads();
 
     LOG_INFO("Threads FINISHED!!!");
 

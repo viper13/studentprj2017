@@ -4,7 +4,7 @@
 
 
 Session::Session()
-    : socket_(Worker::instance()->io_service())
+    : socket_(Worker::instance()->getIO_service())
 {
     buffer_.resize (BUFFER_MAX_SIZE);
 }
@@ -16,14 +16,14 @@ void Session::start()
     asio::async_read( socket_,
                      asio::buffer (buffer_, BUFFER_MAX_SIZE),
                      std::bind ( &Session::handle_read,
-                                shared_from_this(),
-                                std::placeholders::_1,
-                                std::placeholders::_2 ) );
+                                 shared_from_this(),
+                                 std::placeholders::_1,
+                                 std::placeholders::_2 ) );
 }
 
 
 
-asio::ip::tcp::socket& Session::socket()
+asio::ip::tcp::socket& Session::getSocket()
 {
     return socket_;
 }

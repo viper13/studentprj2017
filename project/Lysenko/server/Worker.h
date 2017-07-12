@@ -18,13 +18,13 @@ class Worker
 
 
 
-        void start();
+        void startThreads();
 
-        void join();
+        void joinThreads();
 
 
 
-        asio::io_service& io_service();
+        asio::io_service& getIO_service();
 
 
 

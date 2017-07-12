@@ -7,9 +7,9 @@ int main(int argc, char *argv[])
     std::shared_ptr<Client> clientPtr(new Client("127.0.0.1", "1122"));
     clientPtr->start();
 
-    Worker::instance()->start();
+    Worker::instance()->startThreads();
     LOG_INFO("Threads started!!!");
-    Worker::instance()->join();
+    Worker::instance()->joinThreads();
 
     LOG_INFO("Threads FINISHED!!!");
 
