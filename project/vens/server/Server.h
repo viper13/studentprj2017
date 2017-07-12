@@ -9,9 +9,12 @@ class Server
 public:
     Server(int port);
 
-    void start_accept();
+    void start();
 
 private:
+    void accept();
+    void handle_accept(SessionPtr session, asio::error_code error);
+
     asio::io_service& io_service_;
     asio::ip::tcp::acceptor acceptor_;
 
