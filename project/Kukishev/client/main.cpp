@@ -1,5 +1,6 @@
 #include "Worker.h"
 #include "Client.h"
+#include "define.h"
 
 int main(int argc, char *argv[])
 {

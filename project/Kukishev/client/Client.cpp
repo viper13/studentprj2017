@@ -1,7 +1,7 @@
 #include "Client.h"
 #include "Worker.h"
 
-Client::Client(std::__cxx11::string address, std::__cxx11::string port)
+Client::Client(std::string address, std::string port)
     : io_service_(Worker::instance()->io_service())
     , socket_(io_service_)
     , address_(address)
@@ -22,13 +22,14 @@ void Client::start()
 
 }
 
-void Client::write(std::__cxx11::string message)
+void Client::write(std::string message)
 {
     ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
     asio::async_write(socket_
                       , asio::buffer(*buffer)
                       , std::bind(&Client::handleWrite
                                   , shared_from_this()
+                                  , buffer
                                   , std::placeholders::_1
                                   , std::placeholders::_2));
 }
@@ -90,8 +91,8 @@ void Client::handleRead(std::error_code error, size_t bufferSize)
 {
     if(!error){
         //process message
-        buffer_.resize(bufferSize);
-        LOG_INFO("Message: [" /*<< buffer_*/ << "]");
+//        buffer_.resize(bufferSize);
+//        LOG_INFO("Message: [" /*<< buffer_*/ << "]");
 
         read();
     }
@@ -102,7 +103,9 @@ void Client::handleRead(std::error_code error, size_t bufferSize)
     }
 }
 
-void Client::handleWrite(ByteBufferPtr data, asio::error_code error, size_t writeBytes)
+void Client::handleWrite(ByteBufferPtr data
+                         , asio::error_code error
+                         , size_t writeBytes)
 {
     if(!error)
     {
