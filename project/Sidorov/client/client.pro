@@ -7,13 +7,15 @@ CONFIG += c++11
 
 TEMPLATE = app
 
-SOURCES += main.cpp \
-    worker.cpp \
-    Client.cpp
+INCLUDEPATH += $$PWD/../common/
 
+SOURCES += main.cpp \
+    Client.cpp \
+    Worker.cpp \
+    ../common/define.cpp
 HEADERS += \
-    worker.h \
-    define.h \
-    Client.h
+    ../common/define.h \
+    Client.h \
+    Worker.h
 
 
