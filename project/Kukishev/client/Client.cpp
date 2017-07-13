@@ -91,8 +91,8 @@ void Client::handleRead(std::error_code error, size_t bufferSize)
 {
     if(!error){
         //process message
-//        buffer_.resize(bufferSize);
-//        LOG_INFO("Message: [" /*<< buffer_*/ << "]");
+        buffer_.resize(bufferSize);
+        LOG_INFO("Message: [" /*<< buffer_*/ << "]");
 
         read();
     }

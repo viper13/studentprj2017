@@ -12,11 +12,11 @@ int main(int argc, char *argv[])
     LOG_INFO("Threads started!!!");
 
     std::string message;
-    bool needStop = true;
+    bool needStop = false;
     while (!needStop)
     {
         LOG_INFO("Enter message: ");
-        std::cin >> message;
+        std::getline(std::cin, message);
         client->write(message);
         needStop = (message == "stop");
 

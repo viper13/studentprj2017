@@ -22,7 +22,7 @@ asio::ip::tcp::socket &Session::socket()
     return socket_;
 }
 
-void Session::write(std::__cxx11::string message)
+void Session::write(std::string message)
 {
     ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
     asio::async_write(socket_
@@ -39,6 +39,7 @@ void Session::read()
     buffer_.resize(BUFFER_MAX_SIZE);
     asio::async_read(socket_
                      , asio::buffer(buffer_)
+                     , asio::transfer_at_least(1)
                      , std::bind(&Session::handleRead
                                  , shared_from_this()
                                  , std::placeholders::_1
