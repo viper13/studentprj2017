@@ -22,7 +22,7 @@ int main()
     while(!needStop)
     {
         LOG_INFO("Enter message: ");
-        std::cin >> message;
+        getline(std::cin,message);
         clientPtr->write(message);
         needStop = (message=="stop");
 

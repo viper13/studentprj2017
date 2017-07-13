@@ -18,6 +18,7 @@ std::shared_ptr<Session> Session::getNewSession()
 
 void Session::write(std::string message)
 {
+    message = "Server said: "+message;
     ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
 
     asio::async_write(  socket_
@@ -58,7 +59,8 @@ void Session::handle_read(system::error_code error, size_t bufferSize)
     else
     {
         LOG_ERR("Failure: read error code " << error.value()
-                << " description: " << error.message()<< std::endl);
+                << " description: " << error.message() <<std::endl);
+        //Error here called by bad closing client programm.
     }
 }
 

@@ -69,7 +69,9 @@ void Client::handleRead(system::error_code error, size_t bufferSize)
 {
     if(!error)
     {
+        buffer_.resize(bufferSize);
 
+        LOG_INFO("Message: " << buffer_);
         read();
     }
     else
@@ -84,7 +86,7 @@ void Client::handleWrite(ByteBufferPtr data, system::error_code error, size_t wr
 {
     if(!error)
     {
-        LOG_INFO("Message writed!");
+        //LOG_INFO("Message writed!");
     }
     else
     {
