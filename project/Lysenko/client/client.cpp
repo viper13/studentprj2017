@@ -36,7 +36,7 @@ void Client::write(std::string message)
                       asio::buffer(*messageBuffer),
                       std::bind( &Client::handleWrite,
                                  shared_from_this(),
-                                 ByteBufferPtr,
+                                 messageBuffer,
                                  std::placeholders::_1,
                                  std::placeholders::_2) );
 }
@@ -125,10 +125,11 @@ void Client::handleWrite(ByteBufferPtr data, asio::error_code error, size_t wrot
 {
     if ( !error )
     {
-        LOG_INFO("Message has been written")
+        LOG_INFO ("Message has been written!!!");
     }
     else
     {
-
+        LOG_ERR( "Failure write data " <<
+                *data << " description: " << error.message() );
     }
 }
