@@ -7,6 +7,7 @@ Client::Client(std::string address, std::string port)
     , address_(address)
     , port_(port)
     , resolver_(io_service_)
+    , nextMsgSize_(0)
 {
     buffer_.resize(BUFFER_MAX_SIZE);
 }
@@ -77,22 +78,42 @@ void Client::handleConnect(asio::error_code error, asio::ip::tcp::resolver::iter
 
 void Client::read()
 {
-    buffer_.resize(BUFFER_MAX_SIZE);
-    asio::async_read(socket_
-                     , asio::buffer(buffer_, BUFFER_MAX_SIZE)
-                     , asio::transfer_at_least(1)
-                     , std::bind(&Client::handleRead
-                                 , shared_from_this()
-                                 , std::placeholders::_1
-                                 , std::placeholders::_2));
+    if(0 == nextMsgSize_)
+    {
+        asio::async_read(socket_
+                         , asio::buffer(&nextMsgSize_, 2)
+                         , asio::transfer_exactly(2)
+                         , std::bind(&Client::handleRead
+                                     , shared_from_this()
+                                     , std::placeholders::_1
+                                     , std::placeholders::_2));
+
+    }
+    else
+    {
+        buffer_.resize(nextMsgSize_);
+        asio::async_read(socket_
+                         , asio::buffer(buffer_, nextMsgSize_)
+                         , asio::transfer_exactly(nextMsgSize_)
+                         , std::bind(&Client::handleRead
+                                     , shared_from_this()
+                                     , std::placeholders::_1
+                                     , std::placeholders::_2));
+        nextMsgSize_ = 0;
+    }
 }
 
 void Client::handleRead(std::error_code error, size_t bufferSize)
 {
     if(!error){
         //process message
-        buffer_.resize(bufferSize);
-        LOG_INFO("Message: [" /*<< buffer_*/ << "]");
+        //buffer_.resize(bufferSize);
+        if(0 == nextMsgSize_)
+        {
+            LOG_INFO("Message: [" << buffer_ << "]");
+        }
+
+        //LOG_INFO("Message: [" << buffer_ << "]");
 
         read();
     }
