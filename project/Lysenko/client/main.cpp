@@ -20,6 +20,8 @@ int main(int argc, char *argv[])
 
         std::cin >> message;
 
+        clientPtr->write(message);
+
         needStop = ( message == "stop" );
     }
 

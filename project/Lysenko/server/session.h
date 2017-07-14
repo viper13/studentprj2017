@@ -2,7 +2,6 @@
 #define SESSION_H
 
 #include <memory>
-#include <functional>
 
 #include <asio.hpp>
 
@@ -41,12 +40,14 @@ class Session
 
         void handleRead(asio::error_code error, size_t bufferSize);
 
-        void handleWrite(ByteBufferPtr data, asio::error_code error, size_t writtenBytesCount);
+        void handleWrite(ByteBufferPtr data,
+                         asio::error_code error,
+                         size_t writtenBytesCount);
 
 
 
-        ByteBuffer buffer_;
         asio::ip::tcp::socket socket_;
+        ByteBuffer buffer_;
 };
 
 #endif // SESSION_H

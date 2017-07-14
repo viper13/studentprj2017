@@ -11,6 +11,14 @@ Session::Session()
 
 
 
+SessionPtr Session::getNewSession()
+{
+    SessionPtr session (new Session());
+    return session;
+}
+
+
+
 void Session::start()
 {
     LOG_INFO("Server started");
@@ -47,19 +55,12 @@ void Session::read()
 {
     buffer_.resize(BUFFER_MAX_SIZE);
     asio::async_read( socket_,
-                     asio::buffer (buffer_, BUFFER_MAX_SIZE),
-                     std::bind ( &Session::handleRead,
-                                 shared_from_this(),
-                                 std::placeholders::_1,
-                                 std::placeholders::_2 ) );
-}
-
-
-
-SessionPtr Session::getNewSession()
-{
-    SessionPtr session (new Session());
-    return session;
+                      asio::buffer (buffer_, BUFFER_MAX_SIZE),
+                      asio::transfer_at_least(1),
+                      std::bind ( &Session::handleRead,
+                                  shared_from_this(),
+                                  std::placeholders::_1,
+                                  std::placeholders::_2 ) );
 }
 
 
@@ -74,25 +75,27 @@ void Session::handleRead(asio::error_code error, size_t bufferSize)
         std::string message (buffer_.begin(), buffer_.end());
         write(message);
 
-        start();
+        read();
     }
     else
     {
-        LOG_ERR("Failure: read error code " << error.value()
-                << " description " << error.message());
+        LOG_ERR( "Failure: read error code " << error.value() <<
+                " description: " << error.message() );
     }
 
 }
 
 
 
-void Session::handleWrite(ByteBufferPtr data, asio::error_code error, size_t writtenBytesCount)
+void Session::handleWrite(ByteBufferPtr data,
+                          asio::error_code error,
+                          size_t writtenBytesCount)
 {
     if ( !error )
     {
         LOG_INFO("Data has been written successfully! Size = " <<
                  data->size() <<
-                 " size wrote = " <<
+                 " size written = " <<
                  writtenBytesCount);
     }
     else

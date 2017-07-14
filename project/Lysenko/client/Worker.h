@@ -35,6 +35,7 @@ class Worker
 
 
         asio::io_service service_;
+
         std::vector<ThreadPtr> threadPool_;
 };
 

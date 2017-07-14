@@ -3,7 +3,7 @@
 
 #include <asio.hpp>
 
-#include <session.h>
+#include "session.h"
 
 class Server
 {
@@ -15,6 +15,8 @@ class Server
 
         void start();
 
+
+
     private:
 
         void acceptConnection();
@@ -23,7 +25,6 @@ class Server
 
         asio::io_service& io_service_;
         asio::ip::tcp::acceptor acceptor_;
-        asio::ip::tcp::socket socket_;
 
         std::vector<SessionPtr> sessions_;
 };
