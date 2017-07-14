@@ -1,5 +1,6 @@
 #include "Client.h"
 #include "Worker.h"
+#include "Helper.h"
 
 Client::Client(std::string address, std::string port)
     : io_service_(Worker::instance()->io_service())
@@ -7,6 +8,7 @@ Client::Client(std::string address, std::string port)
     , address_(address)
     , port_(port)
     , resolver_(io_service_)
+    , messageSize_(0)
 {
 }
 
@@ -15,17 +17,20 @@ void Client::start()
         asio::ip::tcp::resolver::query query(address_, port_) ;
         resolver_.async_resolve(query
                                 , std::bind(&Client::handleResolveEndPoint
-                                    , shared_from_this()
-                                    , std::placeholders::_1
-                                    , std::placeholders::_2));
+                                            , shared_from_this()
+                                            , std::placeholders::_1
+                                            , std::placeholders::_2));
 
 }
 
 void Client::write(std::string message)
 {
     ByteBufferPtr buffer(new ByteBuffer(message.begin(),message.end()));
+    BuffersVector buffers = Helper::addSizeBuffer(buffer);
+
+    BufferSequence sequence = Helper::toBufferSequence(buffers);
     asio::async_write(socket_
-                      , asio::buffer(*buffer)
+                      , sequence
                       , std::bind(&Client::handleWrite
                                   , shared_from_this()
                                   , buffer
@@ -40,9 +45,9 @@ void Client::handleResolveEndPoint(asio::error_code error, asio::ip::tcp::resolv
         asio::ip::tcp::endpoint endPoint = *iterator;
         socket_.async_connect(endPoint
                               , std::bind(&Client::handleConnect
-                              , shared_from_this()
-                              , std::placeholders::_1
-                              , ++iterator));
+                                          , shared_from_this()
+                                          , std::placeholders::_1
+                                          , ++iterator));
     }
     else
     {
@@ -62,9 +67,9 @@ void Client::handleConnect(asio::error_code error, asio::ip::tcp::resolver::iter
         asio::ip::tcp::endpoint endPoint = *iterator;
         socket_.async_connect(endPoint
                               , std::bind(&Client::handleConnect
-                              , shared_from_this()
-                              , std::placeholders::_1
-                              , ++iterator));
+                                          , shared_from_this()
+                                          , std::placeholders::_1
+                                          , ++iterator));
     }
     else
     {
@@ -75,14 +80,28 @@ void Client::handleConnect(asio::error_code error, asio::ip::tcp::resolver::iter
 
 void Client::read()
 {
-    buffer_.resize(BUFFER_MAX_SIZE);
-    asio::async_read(socket_
-                     , asio::buffer(buffer_, BUFFER_MAX_SIZE)
-                     , asio::transfer_at_least(1)
+    if ( 0 == messageSize_)
+    {
+        asio::async_read(socket_
+                     , asio::buffer(&messageSize_, BUFFER_MAX_SIZE)
+                     , asio::transfer_exactly(2)
                      , std::bind(&Client::handleRead
-                        , shared_from_this()
-                        , std::placeholders::_1
-                        , std::placeholders::_2));
+                                 , shared_from_this()
+                                 , std::placeholders::_1
+                                 , std::placeholders::_2));
+    }
+    else
+    {
+        buffer_.resize(messageSize_);
+        asio::async_read(socket_
+                         , asio::buffer(buffer_, messageSize_)
+                         , asio::transfer_exactly(messageSize_)
+                         , std::bind(&Client::handleRead
+                                     , shared_from_this()
+                                     , std::placeholders::_1
+                                     , std::placeholders::_2));
+        messageSize_ = 0;
+    }
 }
 
 void Client::handleRead(asio::error_code error
@@ -90,9 +109,10 @@ void Client::handleRead(asio::error_code error
 {
     if (!error)
     {
-        buffer_.resize(bufferSize);
-        LOG_INFO("Message:" << buffer_);
-
+        if ( 0 == messageSize_)
+        {
+            LOG_INFO("Message:" << buffer_);
+        }
         read();
     }
     else
@@ -112,7 +132,7 @@ void Client::handleWrite(ByteBufferPtr data, asio::error_code error, size_t writ
     {
         LOG_ERR("Failure write data "
                 << *data
-                << " decriptio: "
+                << " decription: "
                 << error.message());
     }
 }

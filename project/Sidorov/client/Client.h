@@ -33,6 +33,7 @@ private:
 
     asio::ip::tcp::resolver resolver_;
     ByteBuffer buffer_;
+    uint16_t messageSize_;
 };
 
 #endif // CLIENT_H
