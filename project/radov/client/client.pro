@@ -11,11 +11,11 @@ INCLUDEPATH += $$PWD/../common/
 
 SOURCES += main.cpp \
     client.cpp \
-    worker.cpp \
-    ../common/define.cpp
+    ../common/define.cpp \
+    ../common/worker.cpp
 
 HEADERS += \
     ../common/define.h \
-    client.h \
-    worker.h
+    ../common/worker.h \
+    client.h
 

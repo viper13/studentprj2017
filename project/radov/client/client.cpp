@@ -1,6 +1,5 @@
 #include "client.h"
 #include "worker.h"
-//#include "define.h"//TODO
 
 Client::Client(std::string address, std::string port)
     : io_service_(Worker::instance()->io_service())
@@ -30,11 +29,13 @@ void Client::write(std::string message)
     ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
     asio::async_write(socket_
                       , asio::buffer(*buffer)
+                      , asio::transfer_at_least(2)
                       , std::bind(&Client::handleWrite
                                   , shared_from_this()
                                   , buffer
                                   , std::placeholders::_1
                                   , std::placeholders::_2));
+
 }
 
 
@@ -90,6 +91,8 @@ void Client::read()
     asio::async_read(socket_
                      , asio::buffer(buffer_,BUFFER_MAX_SIZE)
                      , asio::transfer_at_least(1)
+                     //размер + пакет => повтор
+                     //asio::transfer_exactly(2)
                      , std::bind(&Client::handleRead
                         , shared_from_this()
                         , std::placeholders::_1
@@ -118,7 +121,7 @@ void Client::handleWrite(ByteBufferPtr data
 {
     if(!error)
     {
-        LOG_INFO("Message writed");
+        LOG_INFO("Message writed: " << writedBytes);
     }
     else
     {
