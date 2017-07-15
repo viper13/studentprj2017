@@ -33,7 +33,7 @@ void Session::write(std::string message)
     BufferSequance sequance = Helper::toBufferSequance(buffers);
 
     asio::async_write(socket_
-                      , asio::buffer(sequance)
+                      , sequance
                       , std::bind(&Session::handleWrite
                                   , shared_from_this()
                                   , buffers
@@ -45,8 +45,9 @@ void Session::read()
 {
     if (0 == nextMessageSize_)
     {
+        buffer_.resize(2);
         asio::async_read(socket_
-                         , asio::buffer(&nextMessageSize_, 2)
+                         , asio::buffer(buffer_, 2)
                          , asio::transfer_exactly(2)
                          , std::bind(&Session::handleRead
                                      , shared_from_this()
@@ -55,7 +56,7 @@ void Session::read()
     }
     else
     {
-        buffer_.resize(BUFFER_MAX_SIZE);
+        buffer_.resize(nextMessageSize_);
         asio::async_read(socket_
                          , asio::buffer(buffer_, nextMessageSize_)
                          , asio::transfer_exactly(nextMessageSize_)
@@ -64,22 +65,26 @@ void Session::read()
                                      , std::placeholders::_1
                                      , std::placeholders::_2));
     }
-    nextMessageSize_ = 0;
+
 }
 
 void Session::handleRead(asio::error_code error, size_t /*bufferSize*/)
 {
     if (!error)
     {
-        if (0 == nextMessageSize_)
+        if (0 != nextMessageSize_)
         {
             LOG_INFO("Message:[" << buffer_ << "]");
             std::string message(buffer_.begin(), buffer_.end());
             write(message);
+            nextMessageSize_ = 0;
             read();
         }
         else
         {
+            LOG_INFO("Buffer has [" << (int)buffer_[0] << "][" << (int)buffer_[1] << "]");
+            nextMessageSize_ = (static_cast<uint16_t>(buffer_[0]) << 8)
+                                + static_cast<uint16_t>(buffer_[1]);
             LOG_INFO("Next message size is: " << nextMessageSize_);
             read();
         }

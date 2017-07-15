@@ -9,6 +9,7 @@ BuffersVector Helper::addSizeValue(ByteBufferPtr buffer)
     (*size_buffer)[0] = ((size & 0xff00) << 8);
     (*size_buffer)[1] = (size & 0x00ff);
     LOG_INFO("[" << (int)(*size_buffer)[0] << "][" << (int)(*size_buffer)[1] << "]");
+    result.push_back(size_buffer);
     result.push_back(buffer);
     return result;
 }

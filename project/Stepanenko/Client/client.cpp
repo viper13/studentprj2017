@@ -27,11 +27,11 @@ void Client::start()
 void Client::write(std::string message)
 {
     ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
-    BuffersVector buffers =Helper::addSizeValue(buffer);
+    BuffersVector buffers = Helper::addSizeValue(buffer);
 
     BufferSequance sequance = Helper::toBufferSequance(buffers);
     asio::async_write(socket_
-                      , asio::buffer(sequance)
+                      , sequance
                       , std::bind(&Client::handleWrite
                                   , shared_from_this()
                                   , buffers
@@ -41,10 +41,11 @@ void Client::write(std::string message)
 
 void Client::read()
 {
-    if (0 == next_message_size_)
+    if (0 == nextMessageSize_)
     {
+        buffer_.resize(2);
         asio::async_read(socket_
-                         , asio::buffer(&next_message_size_, 2)
+                         , asio::buffer(buffer_, 2)
                          , asio::transfer_exactly(2)
                          , std::bind(&Client::handleRead
                                      , shared_from_this()
@@ -53,29 +54,34 @@ void Client::read()
     }
     else
     {
-        buffer_.resize(BUFFER_MAX_SIZE);
+        buffer_.resize(nextMessageSize_);
         asio::async_read(socket_
-                         , asio::buffer(buffer_, next_message_size_)
-                         , asio::transfer_exactly(next_message_size_)
+                         , asio::buffer(buffer_, nextMessageSize_)
+                         , asio::transfer_exactly(nextMessageSize_)
                          , std::bind(&Client::handleRead
                                      , shared_from_this()
                                      , std::placeholders::_1
                                      , std::placeholders::_2));
     }
-    next_message_size_ = 0;
+
 }
 
 void Client::handleRead(asio::error_code error, size_t /*buf_size*/)
 {
     if (!error)
     {
-        if (0 == next_message_size_)
+        if (0 != nextMessageSize_)
         {
             LOG_INFO("Message: [" << buffer_ << "]");
+            nextMessageSize_ = 0;
             read();
         }
         else
         {
+            LOG_INFO("Buffer has [" << (int)buffer_[0] << "][" << (int)buffer_[1] << "]");
+            nextMessageSize_ = (static_cast<uint16_t>(buffer_[0]) << 8)
+                                + static_cast<uint16_t>(buffer_[1]);
+            LOG_INFO("Next message size is: " << nextMessageSize_);
             read();
         }
 

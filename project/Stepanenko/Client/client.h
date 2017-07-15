@@ -26,7 +26,7 @@ private:
     std::string port_;
     std::vector<char> buffer_;
     asio::ip::tcp::resolver resolver_;
-    uint16_t next_message_size_;
+    uint16_t nextMessageSize_;
 };
 
 #endif // CLIENT_H
