@@ -3,6 +3,7 @@
 
 #include "define.h"
 #include "asio.hpp"
+#include "helper.h"
 
 class Client : public std::enable_shared_from_this<Client>
 {
@@ -16,8 +17,8 @@ private:
     void handleConnect(asio::error_code error
                        , asio::ip::tcp::resolver::iterator iterator);
     void read();
-    void handleRead(asio::error_code error, size_t buf_size);
-    void handleWrite(ByteBufferPtr data, asio::error_code error, size_t writtedSize);
+    void handleRead(asio::error_code error, size_t);
+    void handleWrite(BuffersVector data, asio::error_code error, size_t writtedSize);
 
     asio::io_service& io_service_;
     asio::ip::tcp::socket socket_;
@@ -25,6 +26,7 @@ private:
     std::string port_;
     std::vector<char> buffer_;
     asio::ip::tcp::resolver resolver_;
+    uint16_t next_message_size_;
 };
 
 #endif // CLIENT_H

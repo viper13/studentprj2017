@@ -2,6 +2,7 @@
 #define SESION_H
 
 #include <define.h>
+#include <helper.h>
 #include <memory>
 #include <asio.hpp>
 
@@ -18,9 +19,10 @@ private:
     void read();
 
     void handleRead(asio::error_code error, size_t bufferSize);
-    void handleWrite(ByteBufferPtr data, asio::error_code error, size_t bufferSize);
+    void handleWrite(BuffersVector data, asio::error_code error, size_t bufferSize);
     asio::ip::tcp::socket socket_;
     std::vector<char> buffer_;
+    uint16_t nextMessageSize_;
 };
 
 typedef std::shared_ptr<Session> SessionPtr;

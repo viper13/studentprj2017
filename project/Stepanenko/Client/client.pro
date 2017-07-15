@@ -10,13 +10,15 @@ INCLUDEPATH += $$PWD/../Common/
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    worker.cpp \
     client.cpp \
-    ../Common/define.cpp
+    ../Common/define.cpp \
+    ../Common/worker.cpp \
+    ../Common/helper.cpp
 
 HEADERS += \
-    worker.h \
     ../Common/define.h \
+    ../Common/worker.h \
+    ../Common/helper.h \
     client.h
 
 
