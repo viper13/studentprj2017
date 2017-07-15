@@ -26,6 +26,7 @@ private:
 
     asio::ip::tcp::socket socket_;
     ByteBuffer buffer_;
+    uint16_t nextMsgSize_;
 };
 
 typedef std::shared_ptr<Session> SessionPtr;

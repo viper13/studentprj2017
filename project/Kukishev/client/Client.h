@@ -31,6 +31,8 @@ private:
     asio::ip::tcp::resolver resolver_;
 
     ByteBuffer buffer_;
+
+    uint16_t nextMsgSize_;
 };
 
 #endif // CLIENT_H

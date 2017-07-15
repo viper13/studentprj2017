@@ -36,15 +36,29 @@ void Session::write(std::string message)
 
 void Session::read()
 {
-    buffer_.resize(BUFFER_MAX_SIZE);
-    asio::async_read(socket_
-                     , asio::buffer(buffer_)
-                     , asio::transfer_at_least(1)
-                     , std::bind(&Session::handleRead
-                                 , shared_from_this()
-                                 , std::placeholders::_1
-                                 , std::placeholders::_2));
+    if(0 == nextMsgSize_)
+    {
+        asio::async_read(socket_
+                         , asio::buffer(&nextMsgSize_, 2)
+                         , asio::transfer_at_least(2)
+                         , std::bind(&Session::handleRead
+                                     , shared_from_this()
+                                     , std::placeholders::_1
+                                     , std::placeholders::_2));
 
+    }
+    else
+    {
+        buffer_.resize(nextMsgSize_);
+        asio::async_read(socket_
+                         , asio::buffer(buffer_, nextMsgSize_)
+                         , asio::transfer_at_least(nextMsgSize_)
+                         , std::bind(&Session::handleRead
+                                     , shared_from_this()
+                                     , std::placeholders::_1
+                                     , std::placeholders::_2));
+        nextMsgSize_ = 0;
+    }
 }
 
 void Session::handleRead(asio::error_code error, size_t bufferSize)
