@@ -13,11 +13,13 @@ SOURCES += main.cpp \
     Worker.cpp \
     Server.cpp \
     Session.cpp \
-    ../common/define.cpp
+    ../common/define.cpp \
+    ../common/Helper.cpp
 
 HEADERS += \
     Worker.h \
     Server.h \
     Session.h \
-    ../common/define.h
+    ../common/define.h \
+    ../common/Helper.h
 

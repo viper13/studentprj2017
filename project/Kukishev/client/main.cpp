@@ -1,6 +1,7 @@
 #include "Worker.h"
 #include "Client.h"
 #include "define.h"
+#include "Helper.h"
 
 int main(int argc, char *argv[])
 {
@@ -25,7 +26,6 @@ int main(int argc, char *argv[])
     Worker::instance()->join();
 
     LOG_INFO("Threads FINISHED!!!");
-
     return 0;
 }
 

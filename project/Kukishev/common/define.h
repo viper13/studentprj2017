@@ -12,7 +12,7 @@
 #define LOG_INFO(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [INF]"<<message<<std::endl;
 #define LOG_ERR(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [ERR]"<<message<<std::endl;
 
-typedef std::vector<char> ByteBuffer;
+typedef std::vector<uint8_t> ByteBuffer;
 typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
 
 std::ostream& operator<<(std::ostream& stream, const ByteBuffer& matrix);

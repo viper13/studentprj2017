@@ -12,10 +12,12 @@ TEMPLATE = app
 SOURCES += main.cpp \
     Worker.cpp \
     Client.cpp \
-    ../common/define.cpp
+    ../common/define.cpp \
+    ../common/Helper.cpp
 
 HEADERS += \
     Worker.h \
     Client.h \
-    ../common/define.h
+    ../common/define.h \
+    ../common/Helper.h
 

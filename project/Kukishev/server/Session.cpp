@@ -1,8 +1,10 @@
 #include "Session.h"
 #include "Worker.h"
+#include "Helper.h"
 
 Session::Session()
     : socket_(Worker::instance()->io_service())
+    , nextMsgSize_(0)
 {
 }
 
@@ -38,9 +40,10 @@ void Session::read()
 {
     if(0 == nextMsgSize_)
     {
+        buffer_.resize(BUFFER_MAX_SIZE);
         asio::async_read(socket_
-                         , asio::buffer(&nextMsgSize_, 2)
-                         , asio::transfer_at_least(2)
+                         , asio::buffer(buffer_)
+                         , asio::transfer_exactly(2)
                          , std::bind(&Session::handleRead
                                      , shared_from_this()
                                      , std::placeholders::_1
@@ -49,15 +52,14 @@ void Session::read()
     }
     else
     {
-        buffer_.resize(nextMsgSize_);
+        //buffer_.resize(BUFFER_MAX_SIZE);
         asio::async_read(socket_
                          , asio::buffer(buffer_, nextMsgSize_)
-                         , asio::transfer_at_least(nextMsgSize_)
+                         , asio::transfer_at_least(1)
                          , std::bind(&Session::handleRead
                                      , shared_from_this()
                                      , std::placeholders::_1
                                      , std::placeholders::_2));
-        nextMsgSize_ = 0;
     }
 }
 
@@ -65,12 +67,23 @@ void Session::handleRead(asio::error_code error, size_t bufferSize)
 {
     if(!error)
     {
-        buffer_.resize(bufferSize);
-        LOG_INFO("Message: "<<buffer_);
 
-        std::string message(buffer_.begin(), buffer_.end());
-        write(message);
+        if(0 == nextMsgSize_)
+        {
+            nextMsgSize_ = Helper::mergeTwoByte(buffer_[0], buffer_[1]);
+            LOG_INFO("Message size: " << nextMsgSize_);
+            buffer_.resize(nextMsgSize_);
+        }
+        else
+        {
+            std::string message(buffer_.begin(), buffer_.end());
 
+            LOG_INFO("Message: "<< message);
+
+            write(message);
+
+            nextMsgSize_ = 0;
+        }
 
         read();
     }
@@ -94,6 +107,7 @@ void Session::handleWrite(ByteBufferPtr data, asio::error_code error, size_t wri
     }
     else
     {
-        LOG_ERR("Failure: write data. " << *data);
+        std::string message((*data).begin(), (*data).end());
+        LOG_ERR("Failure: write data. " << message);
     }
 }
