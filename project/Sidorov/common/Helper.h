@@ -10,7 +10,8 @@ typedef std::vector<asio::const_buffer> BufferSequence;
 class Helper
 {
 public:
-    static BuffersVector addSizeBuffer(ByteBufferPtr buffer);
+    Helper();
+    static BuffersVector addBufferSize(ByteBufferPtr buffer);
     static BufferSequence toBufferSequence(BuffersVector buffers);
 };
 
