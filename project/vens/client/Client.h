@@ -26,9 +26,9 @@ private:
     void handleRead(asio::error_code error
                     , size_t bufferSize);
 
-    void handleWrite(ByteBufferPtr data
+    void handleWrite(BuffersVector data
                      , asio::error_code error
-                     , size_t writedBytes);
+                     , size_t);
 
     asio::io_service& io_service_;
     asio::ip::tcp::socket socket_;
@@ -39,6 +39,7 @@ private:
     asio::ip::tcp::resolver resolver_;
 
     ByteBuffer buffer_;
+    uint16_t nextMessageSize_;
 };
 
 #endif // CLIENT_H
