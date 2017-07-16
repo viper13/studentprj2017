@@ -9,7 +9,7 @@ class ClientsContainer
 public:
     static ClientsContainer* instance();
     void addNewClient(std::string &client);
-    void addClientToChatRoom(std::string &initiator, std::string &userForAdd);
+    bool addClientToChatRoom(std::string &initiator, std::string &userForAdd);
     void removeClientFromChat(std::string &client);
 private:
     ClientsContainer();
