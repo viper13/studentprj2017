@@ -12,6 +12,16 @@
 #define LOG_INFO(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [INF]"<<message<<std::endl;
 #define LOG_ERR(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [ERR]"<<message<<std::endl;
 
+enum class CommandCode: uint8_t
+{
+    LOGIN,
+    LOGOUT,
+    USER_LIST,
+    SEND_MESSAGE,
+    CONNECT_TO_USER,
+    DISCONNECT_TO_USER
+};
+
 typedef std::vector<uint8_t> ByteBuffer;
 typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
 

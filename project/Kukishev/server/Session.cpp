@@ -16,6 +16,7 @@ std::shared_ptr<Session> Session::getNewSessions()
 
 void Session::start()
 {
+    //write("Enter your name: ");
     read();
 }
 
@@ -26,7 +27,7 @@ asio::ip::tcp::socket &Session::socket()
 
 void Session::write(std::string message)
 {
-    ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
+    ByteBufferPtr buffer = Helper::makeBuffer(message);//(new ByteBuffer(message.begin(), message.end()));
     asio::async_write(socket_
                       , asio::buffer(*buffer)
                       , std::bind(&Session::handleWrite
@@ -55,7 +56,7 @@ void Session::read()
         //buffer_.resize(BUFFER_MAX_SIZE);
         asio::async_read(socket_
                          , asio::buffer(buffer_, nextMsgSize_)
-                         , asio::transfer_at_least(1)
+                         , asio::transfer_at_least(nextMsgSize_)
                          , std::bind(&Session::handleRead
                                      , shared_from_this()
                                      , std::placeholders::_1

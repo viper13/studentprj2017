@@ -2,6 +2,7 @@
 #include "Worker.h"
 #include "Helper.h"
 
+
 Client::Client(std::string address, std::string port)
     : io_service_(Worker::instance()->io_service())
     , socket_(io_service_)
@@ -21,7 +22,7 @@ void Client::start()
                                         , shared_from_this()
                                         , std::placeholders::_1
                                         , std::placeholders::_2));
-
+    //write("Enter your name");
 }
 
 void Client::write(std::string message)
@@ -34,6 +35,16 @@ void Client::write(std::string message)
                                   , buffer
                                   , std::placeholders::_1
                                   , std::placeholders::_2));
+}
+
+void Client::setHandler(std::function<void (ByteBufferPtr)> handle)
+{
+    handle_ = handle;
+}
+
+void Client::setConnectHandler(std::function<void (void)> handle)
+{
+    handleConnect_ = handle;
 }
 
 void Client::handleResolveEndPoint(asio::error_code error, asio::ip::tcp::resolver::iterator iterator)
@@ -58,6 +69,10 @@ void Client::handleConnect(asio::error_code error, asio::ip::tcp::resolver::iter
 {
     if(!error)
     {
+        if(handleConnect_ != nullptr)
+        {
+            handleConnect_();
+        }
         read();
     }
     else if(iterator != asio::ip::tcp::resolver::iterator())
@@ -79,27 +94,64 @@ void Client::handleConnect(asio::error_code error, asio::ip::tcp::resolver::iter
 
 void Client::read()
 {
-
-    buffer_.resize(BUFFER_MAX_SIZE);
-    asio::async_read(socket_
-                     , asio::buffer(buffer_, BUFFER_MAX_SIZE)
-                     , asio::transfer_at_least(1)
-                     , std::bind(&Client::handleRead
-                                 , shared_from_this()
-                                 , std::placeholders::_1
-                                 , std::placeholders::_2));
-    nextMsgSize_ = 0;
+    if(0 == nextMsgSize_)
+    {
+        buffer_.resize(2);
+        asio::async_read(socket_
+                         , asio::buffer(buffer_, 2)
+                         , asio::transfer_exactly(2)
+                         , std::bind(&Client::handleRead
+                                     , shared_from_this()
+                                     , std::placeholders::_1
+                                     , std::placeholders::_2));
+    }
+    else
+    {
+        //   buffer_.resize(BUFFER_MAX_SIZE);
+        asio::async_read(socket_
+                         , asio::buffer(buffer_, nextMsgSize_)
+                         , asio::transfer_at_least(nextMsgSize_)
+                         , std::bind(&Client::handleRead
+                                     , shared_from_this()
+                                     , std::placeholders::_1
+                                     , std::placeholders::_2));
+    }
 
 }
 
 void Client::handleRead(std::error_code error, size_t bufferSize)
 {
-    if(!error){
+    if(!error)
+    {
         //process message
-        buffer_.resize(bufferSize);
+        //buffer_.resize(bufferSize);
 
 
-        LOG_INFO("Message: "<< buffer_);
+        //LOG_INFO("Message: "<< buffer_);
+
+        if(0 == nextMsgSize_)
+        {
+            nextMsgSize_ = Helper::mergeTwoByte(buffer_[0], buffer_[1]);
+            LOG_INFO("Message size: " << nextMsgSize_);
+            buffer_.resize(nextMsgSize_);
+        }
+        else
+        {
+            //std::string message(buffer_.begin(), buffer_.end());
+
+            //LOG_INFO("Message: "<< message);
+
+            //write(message);
+
+            if(handle_ != nullptr)
+            {
+                ByteBufferPtr buff = std::make_shared<ByteBuffer>(std::move(buffer_));
+
+                handle_(buff);
+            }
+
+            nextMsgSize_ = 0;
+        }
 
         read();
     }
