@@ -13,6 +13,7 @@ private:
     void accept();
     void handleAccept(SessionPtr session, asio::error_code error);
 
+    int nextSessionId_;
     asio::io_service& io_service_;
     asio::ip::tcp::acceptor acceptor_;
     asio::ip::tcp::socket socket_;

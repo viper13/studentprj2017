@@ -9,6 +9,7 @@ Client::Client(std::string address, std::string port)
     , address_(address)
     , port_(port)
     , resolver_(io_service_)
+    , name_("")
 {
     buffer_.resize(BUFFER_MAX_SIZE);
 }
@@ -37,6 +38,16 @@ void Client::write(std::string message)
                                   , buffers
                                   , std::placeholders::_1
                                   , std::placeholders::_2));
+}
+
+void Client::askName()
+{
+    //Change this function
+    while (name_ == "")
+    {
+        LOG_INFO("Please enter your name: ");
+        getline(std::cin, name_);
+    }
 }
 
 void Client::read()

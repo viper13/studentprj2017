@@ -15,13 +15,19 @@ SOURCES += main.cpp \
     sesion.cpp \
     ../Common/define.cpp \
     ../Common/worker.cpp \
-    ../Common/helper.cpp
+    ../Common/protocol.cpp \
+    ../Common/helper.cpp \
+    chatroom.cpp \
+    clientsContainer.cpp
 
 HEADERS += \
     ../Common/define.h \
     ../Common/worker.h \
     ../Common/helper.h \
+    ../Common/protocol.h \
     server.h \
-    sesion.h
+    sesion.h \
+    chatroom.h \
+    clientsContainer.h
 
 

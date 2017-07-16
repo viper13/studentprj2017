@@ -11,6 +11,7 @@ public:
     Client(std::string address, std::string port);
     void start();
     void write(std::string message);
+    void askName();
 private:
     void handleResolveEndPoint(asio::error_code error
                                , asio::ip::tcp::resolver::iterator iterator);
@@ -27,6 +28,8 @@ private:
     std::vector<char> buffer_;
     asio::ip::tcp::resolver resolver_;
     uint16_t nextMessageSize_;
+    std::string name_;
+    StringBufferPtr userNames_;
 };
 
 #endif // CLIENT_H

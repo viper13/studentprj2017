@@ -2,16 +2,17 @@
 #include "worker.h"
 #include "helper.h"
 
-Session::Session()
+Session::Session(int id)
     : socket_(Worker::instance()->ioService())
     , nextMessageSize_(0)
+    , id_(id)
 {
 
 }
 
-std::shared_ptr<Session> Session::getNewSession()
+std::shared_ptr<Session> Session::getNewSession(int id)
 {
-    SessionPtr session(new Session());
+    SessionPtr session(new Session(id));
     return session;
 }
 
@@ -106,5 +107,10 @@ void Session::handleWrite(BuffersVector data, asio::error_code error, size_t buf
     {
         LOG_ERR("Failure write data." << error.message());
     }
+}
+
+void Session::setUserName(std::string &userName)
+{
+    userName_ = userName;
 }
 

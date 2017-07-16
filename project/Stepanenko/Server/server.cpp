@@ -8,6 +8,7 @@ Server::Server(int port)
     , acceptor_(io_service_
                 , asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
     , socket_(io_service_)
+    , nextSessionId_(0)
 {
     LOG_INFO("Created server for port: " << port);
 }
@@ -19,7 +20,8 @@ void Server::start()
 
 void Server::accept()
 {
-    SessionPtr session = Session::getNewSession();
+    SessionPtr session = Session::getNewSession(nextSessionId_);
+    ++nextSessionId_;
     acceptor_.async_accept(session->socket()
                            , std::bind(&Server::handleAccept
                                        , this
