@@ -18,8 +18,7 @@ int main(int argc, char *argv[])
     {
         LOG_INFO("Enter message: ");
 
-        std::cin >> message;
-
+        std::getline(std::cin, message);
         clientPtr->write(message);
 
         needStop = ( message == "stop" );

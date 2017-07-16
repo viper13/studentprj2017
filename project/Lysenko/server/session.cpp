@@ -1,4 +1,5 @@
 #include "session.h"
+
 #include "Worker.h"
 
 
@@ -22,6 +23,7 @@ SessionPtr Session::getNewSession()
 void Session::start()
 {
     LOG_INFO("Server started");
+
     read();
 }
 
@@ -29,17 +31,20 @@ void Session::start()
 
 void Session::write(std::string message)
 {
-    ByteBufferPtr messageBuffer( new ByteBuffer(message.begin(),
-                                                message.end()) );
+    BuffersVector messageWithSize =
+            BufferConverter::addMessageSize( ByteBufferPtr( new ByteBuffer( message.begin(),
+                                                                            message.end() )
+                                                          ) );
 
-    asio::async_write( getSocket(),
-                       asio::buffer (*messageBuffer),
-                       std::bind (&Session::handleWrite,
-                                  shared_from_this(),
-                                  messageBuffer,
-                                  std::placeholders::_1,
-                                  std::placeholders::_2
-                                 ) );
+    WriteBuffer bufferToSend = BufferConverter::toWriteBuffer(messageWithSize);
+
+    asio::async_write(socket_,
+                      bufferToSend,
+                      std::bind (&Session::handleWrite,
+                                 shared_from_this(),
+                                 messageWithSize,
+                                 std::placeholders::_1,
+                                 std::placeholders::_2) );
 }
 
 
@@ -54,13 +59,14 @@ asio::ip::tcp::socket& Session::getSocket()
 void Session::read()
 {
     buffer_.resize(BUFFER_MAX_SIZE);
+
     asio::async_read( socket_,
                       asio::buffer (buffer_, BUFFER_MAX_SIZE),
-                      asio::transfer_at_least(1),
-                      std::bind ( &Session::handleRead,
-                                  shared_from_this(),
-                                  std::placeholders::_1,
-                                  std::placeholders::_2 ) );
+                      asio::transfer_at_least (1),
+                      std::bind( &Session::handleRead,
+                                 shared_from_this(),
+                                 std::placeholders::_1,
+                                 std::placeholders::_2 ) );
 }
 
 
@@ -87,19 +93,19 @@ void Session::handleRead(asio::error_code error, size_t bufferSize)
 
 
 
-void Session::handleWrite(ByteBufferPtr data,
+void Session::handleWrite(BuffersVector data,
                           asio::error_code error,
                           size_t writtenBytesCount)
 {
     if ( !error )
     {
-        LOG_INFO("Data has been written successfully! Size = " <<
-                 data->size() <<
-                 " size written = " <<
-                 writtenBytesCount);
+        LOG_INFO ("Message [" << data <<
+                  "] has been successfully sent to client! Size = " <<
+                  writtenBytesCount);
     }
     else
     {
-        LOG_ERR("Failure: write data " << *data);
+        LOG_ERR( "Failure write data " <<
+                data << " description: " << error.message() );
     }
 }

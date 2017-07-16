@@ -11,17 +11,12 @@ class Server
 
         Server(int port);
 
-
-
         void start();
-
-
 
     private:
 
         void acceptConnection();
         void handleAccept(SessionPtr session, asio::error_code error);
-
 
         asio::io_service& io_service_;
         asio::ip::tcp::acceptor acceptor_;

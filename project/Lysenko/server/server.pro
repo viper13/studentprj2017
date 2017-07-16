@@ -10,15 +10,17 @@ TEMPLATE = app
 INCLUDEPATH += $$PWD/../common/
 
 SOURCES += main.cpp \
-    Worker.cpp \
     Server.cpp \
     session.cpp \
-    ../common/define.cpp
+    ../common/Worker.cpp \
+    ../common/define.cpp \
+    ../common/bufferconverter.cpp
 
 HEADERS += \
-    Worker.h \
+    ../common/Worker.h \
     ../common/define.h \
     Server.h \
-    session.h
+    session.h \
+    ../common/bufferconverter.h
 
 

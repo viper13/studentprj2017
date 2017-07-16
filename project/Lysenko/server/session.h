@@ -6,6 +6,7 @@
 #include <asio.hpp>
 
 #include "define.h"
+#include "bufferconverter.h"
 
 class Session;
 
@@ -18,33 +19,20 @@ class Session
 
         Session();
 
-
-
         static SessionPtr getNewSession();
 
-
-
         void start();
-
         void write(std::string message);
 
-
-
         asio::ip::tcp::socket& getSocket();
-
-
 
     private:
 
         void read();
-
         void handleRead(asio::error_code error, size_t bufferSize);
-
-        void handleWrite(ByteBufferPtr data,
+        void handleWrite(BuffersVector data,
                          asio::error_code error,
                          size_t writtenBytesCount);
-
-
 
         asio::ip::tcp::socket socket_;
         ByteBuffer buffer_;

@@ -4,6 +4,7 @@
 #include <asio.hpp>
 
 #include "define.h"
+#include "bufferconverter.h"
 
 class Client
         : public std::enable_shared_from_this<Client>
@@ -12,28 +13,19 @@ class Client
 
         Client(std::string adress, std::string port);
 
-
-
         void start();
-
         void write(std::string message);
-
-
 
     private:
 
         void handleResolveEndPoint(asio::error_code error,
                                    asio::ip::tcp::resolver::iterator iterator);
-
         void handleConnect(asio::error_code error,
                                    asio::ip::tcp::resolver::iterator iterator);
-
         void read();
-
         void handleRead(asio::error_code error,
                         size_t bufferSize);
-
-        void handleWrite(ByteBufferPtr data,
+        void handleWrite(BuffersVector data,
                          asio::error_code error,
                          size_t writtenBytesCount);
 
