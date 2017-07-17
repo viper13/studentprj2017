@@ -9,12 +9,6 @@ Session::Session()
 
 }
 
-std::shared_ptr<Session> Session::getNewSession()
-{
-    SessionPtr session(new Session());
-    return session;
-}
-
 void Session::start()
 {
     LOG_INFO("Session started!");
@@ -45,7 +39,6 @@ void Session::read()
 {
     if (0 == nextMessageSize_)
     {
-        LOG_INFO(1);
         asio::async_read(socket_
                          , asio::buffer(&nextMessageSize_, 2)
                          , asio::transfer_exactly(2)
@@ -56,7 +49,6 @@ void Session::read()
     }
     else
     {
-        LOG_INFO(nextMessageSize_);
         buffer_.resize(nextMessageSize_);
         asio::async_read(socket_
                          , asio::buffer(buffer_, nextMessageSize_)
@@ -75,9 +67,10 @@ void Session::handleRead(asio::error_code error, size_t /*bufferSize*/)
     {
         if (0 == nextMessageSize_)
         {
-            LOG_INFO("Message:" << buffer_);
             std::string message(buffer_.begin(), buffer_.end());
             write(message);
+
+            onRead(buffer_);
         }
 
         read();

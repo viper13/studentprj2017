@@ -14,12 +14,16 @@ SOURCES += main.cpp \
     ../common/Helper.cpp \
     Server.cpp \
     Session.cpp \
-    ../common/define.cpp
+    ../common/define.cpp \
+    ChatSession.cpp \
+    ChatManager.cpp
 
 HEADERS += \
     ../common/Worker.h \
     ../common/define.h \
     ../common/Helper.h \
     Server.h \
-    Session.h
+    Session.h \
+    ChatSession.h \
+    ChatManager.h
 
