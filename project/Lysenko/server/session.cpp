@@ -22,9 +22,9 @@ SessionPtr Session::getNewSession()
 
 void Session::start()
 {
-    LOG_INFO("Server started");
+    LOG_INFO("Session started");
 
-    read();
+    readMessageSize();
 }
 
 
@@ -38,13 +38,13 @@ void Session::write(std::string message)
 
     WriteBuffer bufferToSend = BufferConverter::toWriteBuffer(messageWithSize);
 
-    asio::async_write(socket_,
-                      bufferToSend,
-                      std::bind (&Session::handleWrite,
-                                 shared_from_this(),
-                                 messageWithSize,
-                                 std::placeholders::_1,
-                                 std::placeholders::_2) );
+    asio::async_write( socket_,
+                       bufferToSend,
+                       std::bind (&Session::handleWrite,
+                                  shared_from_this(),
+                                  messageWithSize,
+                                  std::placeholders::_1,
+                                  std::placeholders::_2) );
 }
 
 
@@ -56,39 +56,32 @@ asio::ip::tcp::socket& Session::getSocket()
 
 
 
-void Session::read()
+void Session::readMessageSize()
 {
-    buffer_.resize(BUFFER_MAX_SIZE);
+    buffer_.resize(2);
 
     asio::async_read( socket_,
-                      asio::buffer (buffer_, BUFFER_MAX_SIZE),
-                      asio::transfer_at_least (1),
-                      std::bind( &Session::handleRead,
+                      asio::buffer (buffer_, 2),
+                      asio::transfer_exactly (2),
+                      std::bind (&Session::handleReadMsgSize,
                                  shared_from_this(),
                                  std::placeholders::_1,
-                                 std::placeholders::_2 ) );
+                                 std::placeholders::_2) );
 }
 
 
 
-void Session::handleRead(asio::error_code error, size_t bufferSize)
+void Session::readMessage(uint16_t messageSize)
 {
-    if ( !error )
-    {
-        buffer_.resize (bufferSize);
-        LOG_INFO ("Message: " << buffer_);
+    buffer_.resize(messageSize);
 
-        std::string message (buffer_.begin(), buffer_.end());
-        write(message);
-
-        read();
-    }
-    else
-    {
-        LOG_ERR( "Failure: read error code " << error.value() <<
-                " description: " << error.message() );
-    }
-
+    asio::async_read( socket_,
+                      asio::buffer(buffer_, messageSize),
+                      asio::transfer_exactly(messageSize),
+                      std::bind (&Session::handleReadMessage,
+                                 shared_from_this(),
+                                 std::placeholders::_1,
+                                 std::placeholders::_2) );
 }
 
 
@@ -99,13 +92,51 @@ void Session::handleWrite(BuffersVector data,
 {
     if ( !error )
     {
-        LOG_INFO ("Message [" << data <<
-                  "] has been successfully sent to client! Size = " <<
-                  writtenBytesCount);
+        LOG_INFO( "Message  " << *(data[1]) <<
+                  " has been successfully sent to client! total size = " << writtenBytesCount <<
+                  " message size = " << BufferConverter::charsToMessageSize( *(data[0]) ) );
     }
     else
     {
         LOG_ERR( "Failure write data " <<
                 data << " description: " << error.message() );
+    }
+}
+
+
+
+void Session::handleReadMsgSize(asio::error_code error, size_t bufferSize)
+{
+    if ( !error )
+    {
+         uint16_t nextMessageSize = BufferConverter::charsToMessageSize (buffer_);
+         LOG_INFO("Incoming message size = " << nextMessageSize);
+
+         readMessage(nextMessageSize);
+    }
+    else
+    {
+        LOG_ERR( "Failure: read error code " << error.value() <<
+                " description: " << error.message() );
+    }
+}
+
+
+
+void Session::handleReadMessage(asio::error_code error, size_t bufferSize)
+{
+    if ( !error )
+    {
+        LOG_INFO("Successfully read message " << buffer_ << " Size = " <<
+                 bufferSize);
+
+        write( std::string( buffer_.begin(), buffer_.end() ) );
+
+        readMessageSize();
+    }
+    else
+    {
+        LOG_ERR( "Failure: read error code " << error.value() <<
+                " description: " << error.message() );
     }
 }

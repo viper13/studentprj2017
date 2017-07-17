@@ -28,11 +28,13 @@ class Session
 
     private:
 
-        void read();
-        void handleRead(asio::error_code error, size_t bufferSize);
+        void readMessageSize();
+        void readMessage(uint16_t messageSize);
         void handleWrite(BuffersVector data,
                          asio::error_code error,
                          size_t writtenBytesCount);
+        void handleReadMsgSize(asio::error_code error, size_t bufferSize);
+        void handleReadMessage(asio::error_code error, size_t bufferSize);
 
         asio::ip::tcp::socket socket_;
         ByteBuffer buffer_;

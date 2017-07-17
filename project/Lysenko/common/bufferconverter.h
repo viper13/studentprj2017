@@ -16,6 +16,7 @@ class BufferConverter
         static BuffersVector addMessageSize(ByteBufferPtr sourceMessage);
         static WriteBuffer toWriteBuffer(BuffersVector sourceBuffer);
         static WriteBuffer getMessage(ByteBufferPtr sourceMessage);
+        static uint16_t charsToMessageSize(ByteBuffer& sourceBuffer);
 };
 
 #endif // BUFFERCONVERTER_H

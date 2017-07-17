@@ -75,7 +75,7 @@ void Client::handleConnect(asio::error_code error,
 {
     if ( !error )
     {
-        read();
+        readMessageSize();
     }
     else if (iterator != asio::ip::tcp::resolver::iterator())
     {
@@ -96,14 +96,14 @@ void Client::handleConnect(asio::error_code error,
 
 
 
-void Client::read()
+void Client::readMessageSize()
 {
-    buffer_.resize (BUFFER_MAX_SIZE);
+    buffer_.resize(2);
 
     asio::async_read( socket_,
-                      asio::buffer(buffer_, BUFFER_MAX_SIZE),
-                      asio::transfer_at_least(1),
-                      std::bind (&Client::handleRead,
+                      asio::buffer (buffer_, 2),
+                      asio::transfer_exactly (2),
+                      std::bind (&Client::handleReadMsgSize,
                                  shared_from_this(),
                                  std::placeholders::_1,
                                  std::placeholders::_2) );
@@ -111,21 +111,54 @@ void Client::read()
 
 
 
-void Client::handleRead(asio::error_code error,
-                        size_t bufferSize)
+void Client::readMessage(uint16_t messageSize)
+{
+    buffer_.resize(messageSize);
+
+    asio::async_read( socket_,
+                      asio::buffer(buffer_, messageSize),
+                      asio::transfer_exactly(messageSize),
+                      std::bind (&Client::handleReadMessage,
+                                 shared_from_this(),
+                                 std::placeholders::_1,
+                                 std::placeholders::_2) );
+}
+
+
+
+void Client::handleReadMsgSize(asio::error_code error, size_t bufferSize)
 {
     if ( !error )
     {
-        buffer_.resize (bufferSize);
-        LOG_INFO("Message: " << buffer_);
+         uint16_t nextMessageSize = BufferConverter::charsToMessageSize (buffer_);
+         LOG_INFO("Incoming message size = " << nextMessageSize);
 
-        read();
+         readMessage(nextMessageSize);
     }
     else
     {
-        LOG_ERR("Failure: read error code " << error.value() <<
-                " description " << error.message());
+        LOG_ERR( "Failure: read message size error code " << error.value() <<
+                " description: " << error.message() );
     }
+}
+
+
+
+void Client::handleReadMessage(asio::error_code error, size_t bufferSize)
+{
+    if ( !error )
+    {
+        LOG_INFO("Successfully read message " << buffer_ << " Size = " <<
+                 bufferSize);
+
+        readMessageSize();
+    }
+    else
+    {
+        LOG_ERR( "Failure: read message error code " << error.value() <<
+                " description: " << error.message() );
+    }
+
 }
 
 
@@ -136,13 +169,13 @@ void Client::handleWrite(BuffersVector data,
 {
     if ( !error )
     {
-        LOG_INFO ("Message [" << data <<
-                  "] has been successfully written! Size = " <<
-                  writtenBytesCount);
+        LOG_INFO( "Message  " << *(data[1]) <<
+                  " has been successfully written to server! total size = " << writtenBytesCount <<
+                  " message size = " << BufferConverter::charsToMessageSize( *(data[0]) ) );
     }
     else
     {
-        LOG_ERR( "Failure write data " <<
+        LOG_ERR( "Failure: write data " <<
                 data << " description: " << error.message() );
     }
 }

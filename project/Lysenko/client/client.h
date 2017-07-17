@@ -22,9 +22,10 @@ class Client
                                    asio::ip::tcp::resolver::iterator iterator);
         void handleConnect(asio::error_code error,
                                    asio::ip::tcp::resolver::iterator iterator);
-        void read();
-        void handleRead(asio::error_code error,
-                        size_t bufferSize);
+        void readMessageSize();
+        void readMessage(uint16_t messageSize);
+        void handleReadMsgSize(asio::error_code error, size_t bufferSize);
+        void handleReadMessage(asio::error_code error, size_t bufferSize);
         void handleWrite(BuffersVector data,
                          asio::error_code error,
                          size_t writtenBytesCount);
