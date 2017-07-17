@@ -15,6 +15,7 @@ public:
     void start();
     asio::ip::tcp::socket &socket();
     void write(std::string message);
+    std::string getUserName();
 private:
     void read();
 

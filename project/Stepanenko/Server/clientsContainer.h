@@ -14,6 +14,7 @@ public:
 private:
     ClientsContainer();
     std::map<std::string, ChatRoomPtr> chatRooms_;
+    ///TODO: this container should be protected for multithreading work
 };
 
 #endif // CLIENTSCONTAINER_H

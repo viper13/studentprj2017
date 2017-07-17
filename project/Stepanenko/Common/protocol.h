@@ -10,12 +10,15 @@ class Protocol
 {
 public:
     Protocol();
-    std::string userListClientMessageCreate();
-    std::string userListServerMessageCreate(StringBufferPtr names);
-    StringBufferPtr userListServerMessageParse(std::string message);
-    std::string chatMessageClientMessage(std::string user, std::string message);
+    static std::string userListClientMessageCreate();
+    static std::string userListServerMessageCreate(StringBufferPtr names);
+    static StringSetPtr userListServerMessageParse(std::string message);
+    static std::string chatMessageClientMessageCreate(std::string user, std::string message);
+    static std::string chatMessageClientMessageParse(std::string message);
+    enum MessageTypes{USER_LIST=1,START_CHAT, MESSAGE, USER_DISCONNECT, LOG_IN};
+    static MessageTypes messageType;
 private:
-    enum{USER_LIST=1,START_CHAT, MESSAGE, USER_DISCONNECT, LOG_IN};
+
 };
 
 #endif // PROTOCOL_H

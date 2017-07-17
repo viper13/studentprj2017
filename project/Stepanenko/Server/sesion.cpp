@@ -42,6 +42,11 @@ void Session::write(std::string message)
                                   , std::placeholders::_2));
 }
 
+std::string Session::getUserName()
+{
+    return userName_;
+}
+
 void Session::read()
 {
     if (0 == nextMessageSize_)

@@ -7,7 +7,7 @@ Protocol::Protocol()
 
 std::string Protocol::userListClientMessageCreate()
 {
-    char firstSymbol = USER_LIST;
+    char firstSymbol = messageType.USER_LIST;
     std::string result = "";
     result.push_back(firstSymbol);
     return result;
@@ -20,7 +20,7 @@ std::string Protocol::userListClientMessageCreate()
 
 std::string Protocol::userListServerMessageCreate(StringBufferPtr names)
 {
-    char firstSymbol = USER_LIST;
+    char firstSymbol = messageType.USER_LIST;
     std::string result = "";
     result.push_back(firstSymbol);
 
@@ -32,25 +32,30 @@ std::string Protocol::userListServerMessageCreate(StringBufferPtr names)
     return result.substr(0, result.length()-1);
 }
 
-StringBufferPtr Protocol::userListServerMessageParse(std::string message)
+StringSetPtr Protocol::userListServerMessageParse(std::string message)
 {
-    StringBufferPtr result;
+    StringSetPtr result;
     std::stringstream tempStream(message.substr(1, message.length()));
     std::string tempString;
     while(tempStream >> tempString)
     {
-        result->push_back(tempString);
+        result->insert(tempString);
     }
     return result;
 }
 
 
 
-std::string Protocol::chatMessageClientMessage(std::string user, std::string message)
+std::string Protocol::chatMessageClientMessageCreate(std::string user, std::string message)
 {
-    char firstSymbol = MESSAGE;
+    char firstSymbol = messageType.MESSAGE;
     std::stringstream tempStream;
     tempStream << firstSymbol << user << ": " << message;
     return tempStream.str();
+}
+
+std::string Protocol::chatMessageClientMessageParse(std::string message)
+{
+    return message.substr(1, message.length());
 }
 

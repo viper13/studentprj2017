@@ -2,6 +2,7 @@
 #include "worker.h"
 #include "define.h"
 #include "helper.h"
+#include "protocol.h"
 
 Client::Client(std::string address, std::string port)
     : io_service_(Worker::instance()->ioService())
@@ -40,13 +41,54 @@ void Client::write(std::string message)
                                   , std::placeholders::_2));
 }
 
-void Client::askName()
+void Client::askNameAndRegister()
 {
     //Change this function
     while (name_ == "")
     {
         LOG_INFO("Please enter your name: ");
         getline(std::cin, name_);
+        if (userNames_->find(name_) != userNames_->end())
+        {
+            LOG_INFO("Your name should be unique! This name is already used by other person.");
+            name_="";
+        }
+        else
+        {
+
+        }
+    }
+}
+
+void Client::getUsersListFromServer()
+{
+    std::string message = Protocol::userListClientMessageCreate();
+    write(message);
+}
+
+void Client::processInputMessage()
+{
+    int messageType = static_cats<int>(buffer_[0]);
+    std::string message(buffer_.begin(), buffer_.end());
+    switch (messageType)
+    {
+        case Protocol::messageType.USER_LIST:
+        {
+            userNames_ = Protocol::userListServerMessageParse(message);
+            printUsersToConsole();
+            break;
+        }
+        case Protocol::messageType.MESSAGE:
+        {
+            std::string userMessage = Protocol::chatMessageClientMessageParse(message);
+            std::cout << userMessage << std::endl;
+            break;
+        }
+        default:
+        {
+            LOG_ERR("Type of the message is unknown: " << messageType);
+        }
+
     }
 }
 
@@ -83,7 +125,7 @@ void Client::handleRead(asio::error_code error, size_t /*buf_size*/)
     {
         if (0 != nextMessageSize_)
         {
-            LOG_INFO("Message: [" << buffer_ << "]");
+            processInputMessage();
             nextMessageSize_ = 0;
             read();
         }
@@ -116,6 +158,23 @@ void Client::handleWrite(BuffersVector data, asio::error_code error, size_t writ
     }
 }
 
+void Client::printUsersToConsole()
+{
+    if (userNames_->size() == 0)
+    {
+        std::cout << "Server still has no one registered user" << std::endl;
+    }
+    else
+    {
+        std::cout << "Server has next registered users:" << std::endl;
+        for (std::string user : *userNames_)
+        {
+            std::cout << user << ", ";
+        }
+        std::cout << std::endl;
+    }
+}
+
 void Client::handleResolveEndPoint(asio::error_code error, asio::ip::tcp::resolver::iterator iterator)
 {
     if (!error)
@@ -140,6 +199,7 @@ void Client::handleConnect(asio::error_code error
 {
     if(!error)
     {
+        getUsersListFromServer();
         read();
     }
     else if (iterator != asio::ip::tcp::resolver::iterator())
