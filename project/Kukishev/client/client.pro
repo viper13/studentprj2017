@@ -13,13 +13,11 @@ SOURCES += main.cpp \
     Worker.cpp \
     Client.cpp \
     ../common/define.cpp \
-    ../common/Helper.cpp \
-    ClientAPI.cpp
+    ../common/Helper.cpp
 
 HEADERS += \
     Worker.h \
     Client.h \
     ../common/define.h \
-    ../common/Helper.h \
-    ClientAPI.h
+    ../common/Helper.h
 
