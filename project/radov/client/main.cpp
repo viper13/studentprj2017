@@ -1,3 +1,4 @@
+#include <iostream>
 #include "worker.h"
 #include "client.h"
 //#include
@@ -18,7 +19,8 @@ int main()
     while (!needStop)
     {
         LOG_INFO("Enter message: ");
-        std::cin >> message;
+        //std::cin >> message;
+        getline(std::cin, message);
         clientPtr -> write(message);
         needStop = (message == "stop");
     }

@@ -15,8 +15,9 @@
 
 typedef std::vector<char> ByteBuffer;
 typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
+typedef std::vector<ByteBufferPtr> BuffersVector;
 
-std::ostream& operator<<(std::ostream& stream, const ByteBuffer& buffer);
+std::ostream& operator << (std::ostream& stream, const ByteBuffer& buffer);
 
 
 #endif // DEFINE

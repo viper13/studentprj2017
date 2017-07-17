@@ -24,15 +24,17 @@ public:
 private:
     void read();
 
-    void handleRead(asio::error_code error, size_t bufferSize);
+    void handleRead(asio::error_code error, size_t);
 
-    void handleWrite(ByteBufferPtr data
+    void handleWrite(BuffersVector data
                      , asio::error_code error
                      , size_t writedBytesCount);
 
     asio::ip::tcp::socket socket_;
 
     ByteBuffer buffer_;
+
+    uint16_t nextMessageSize_;
 };
 
 typedef std::shared_ptr<Session> SessionPtr;
