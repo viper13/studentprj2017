@@ -13,11 +13,15 @@ SOURCES += main.cpp \
     Worker.cpp \
     Client.cpp \
     ../common/define.cpp \
-    ../common/Helper.cpp
+    ../common/Helper.cpp \
+    ClientChat.cpp \
+    MessageManager.cpp
 
 HEADERS += \
     Worker.h \
     Client.h \
     ../common/define.h \
-    ../common/Helper.h
+    ../common/Helper.h \
+    ClientChat.h \
+    MessageManager.h
 

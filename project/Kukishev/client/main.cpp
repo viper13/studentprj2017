@@ -1,11 +1,11 @@
 #include "Worker.h"
-#include "Client.h"
 #include "define.h"
 #include "Helper.h"
+#include "ClientChat.h"
 
 int main(int argc, char *argv[])
 {
-    std::shared_ptr<Client> client(new Client("127.0.0.1", "1122"));
+    std::shared_ptr<ClientChat> client(new ClientChat("127.0.0.1", "1122"));
 
     client->start();
     Worker::instance()->start();
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     {
         LOG_INFO("Enter message: ");
         std::getline(std::cin, message);
-        client->write(message);
+        client->write(std::make_shared<ByteBuffer>(message.begin(), message.end()));
         needStop = (message == "stop");
 
     }

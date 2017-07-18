@@ -25,9 +25,9 @@ void Client::start()
     //write("Enter your name");
 }
 
-void Client::write(std::string message)
+void Client::write(ByteBufferPtr buffPtr)
 {
-    ByteBufferPtr buffer = Helper::makeBuffer(message);
+    ByteBufferPtr buffer = Helper::makeBuffer(buffPtr);
     asio::async_write(socket_
                       , asio::buffer(*buffer)
                       , std::bind(&Client::handleWrite
@@ -35,16 +35,6 @@ void Client::write(std::string message)
                                   , buffer
                                   , std::placeholders::_1
                                   , std::placeholders::_2));
-}
-
-void Client::setHandler(std::function<void (ByteBufferPtr)> handle)
-{
-    handle_ = handle;
-}
-
-void Client::setConnectHandler(std::function<void (void)> handle)
-{
-    handleConnect_ = handle;
 }
 
 void Client::handleResolveEndPoint(asio::error_code error, asio::ip::tcp::resolver::iterator iterator)
@@ -69,10 +59,7 @@ void Client::handleConnect(asio::error_code error, asio::ip::tcp::resolver::iter
 {
     if(!error)
     {
-        if(handleConnect_ != nullptr)
-        {
-            handleConnect_();
-        }
+        //onRead();
         read();
     }
     else if(iterator != asio::ip::tcp::resolver::iterator())
@@ -143,12 +130,10 @@ void Client::handleRead(std::error_code error, size_t bufferSize)
 
             //write(message);
 
-            if(handle_ != nullptr)
-            {
-                ByteBufferPtr buff = std::make_shared<ByteBuffer>(std::move(buffer_));
 
-                handle_(buff);
-            }
+            ByteBufferPtr buff = std::make_shared<ByteBuffer>(std::move(buffer_));
+
+            onRead(buff);
 
             nextMsgSize_ = 0;
         }

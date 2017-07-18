@@ -19,7 +19,8 @@ enum class CommandCode: uint8_t
     USER_LIST,
     SEND_MESSAGE,
     CONNECT_TO_USER,
-    DISCONNECT_TO_USER
+    DISCONNECT_TO_USER,
+    ANSWER_TO_USER
 };
 
 typedef std::vector<uint8_t> ByteBuffer;
