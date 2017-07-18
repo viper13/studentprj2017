@@ -25,6 +25,8 @@ private:
     asio::io_service service_;
 
     std::vector<std::shared_ptr<std::thread>> threadPool_;
+
+
 };
 
 #endif // WORKER_H

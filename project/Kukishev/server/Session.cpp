@@ -1,7 +1,6 @@
 #include "Session.h"
 #include "Worker.h"
 #include "Helper.h"
-
 Session::Session()
     : socket_(Worker::instance()->io_service())
     , nextMsgSize_(0)
@@ -27,7 +26,7 @@ asio::ip::tcp::socket &Session::socket()
 
 void Session::write(std::string message)
 {
-    ByteBufferPtr buffer = Helper::makeBuffer(message);//(new ByteBuffer(message.begin(), message.end()));
+    ByteBufferPtr buffer = Helper::makeBuffer(ByteBufferPtr( new ByteBuffer(message.begin(), message.end()) ));//(new ByteBuffer(message.begin(), message.end()));
     asio::async_write(socket_
                       , asio::buffer(*buffer)
                       , std::bind(&Session::handleWrite

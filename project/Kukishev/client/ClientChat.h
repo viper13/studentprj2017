@@ -9,7 +9,7 @@ public:
     ClientChat(std::string address, std::string port);
 
     void onRead(ByteBufferPtr bufferPtr);
-    void execute(CommandCode cmd, ByteBufferPtr bufferPtr);
+    void execute(CommandCode cmd, ByteBufferPtr &&bufferPtr);
 
     void printServerAnswer(ByteBufferPtr buffPtr);
 private:

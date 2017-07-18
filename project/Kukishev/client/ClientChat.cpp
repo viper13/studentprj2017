@@ -10,16 +10,13 @@ ClientChat::ClientChat(std::string address, std::string port)
 
 void ClientChat::onRead(ByteBufferPtr bufferPtr)
 {
-
     printServerAnswer(bufferPtr);
-
 }
 
-void ClientChat::execute(CommandCode cmd, ByteBufferPtr bufferPtr)
+void ClientChat::execute(CommandCode cmd, ByteBufferPtr&& bufferPtr)
 {
-    //    Helper::insertCommandCode(bufferPtr, cmd);
-    //    write(bufferPtr);
-    switch (cmd) {
+    switch (cmd)
+    {
     case CommandCode::CONNECT_TO_USER:
     {
         connectToUser(bufferPtr);
@@ -42,7 +39,7 @@ void ClientChat::execute(CommandCode cmd, ByteBufferPtr bufferPtr)
     }
     case CommandCode::SEND_MESSAGE:
     {
-        sendMessage(ByteBufferPtr);
+        sendMessage(bufferPtr);
         break;
     }
     case CommandCode::USER_LIST:
@@ -57,27 +54,38 @@ void ClientChat::execute(CommandCode cmd, ByteBufferPtr bufferPtr)
 
 void ClientChat::login(ByteBufferPtr name)
 {
+    if(name->empty())
+    {
+        std::cout << "Login is empty!" << std::endl;
+        return;
+    }
+
     Helper::insertCommandCode(name, CommandCode::LOGIN);
     write(name);
 }
 
 void ClientChat::logout()
 {
-    ByteBufferPtr buff{};
-    Helper::insertCommandCode(buff, logout());
+    ByteBufferPtr buff = std::make_shared<ByteBuffer>();
+    Helper::insertCommandCode(buff, CommandCode::LOGOUT);
     write(buff);
 }
 
 void ClientChat::sendMessage(ByteBufferPtr message)
 {
+    if(message->empty())
+    {
+        std::cout << "Message is empty!" << std::endl;
+        return;
+    }
+
     Helper::insertCommandCode(message, CommandCode::SEND_MESSAGE);
     write(message);
-
 }
 
 void ClientChat::getUserList()
 {
-    ByteBufferPtr buff{};
+    ByteBufferPtr buff = std::make_shared<ByteBuffer>();
     Helper::insertCommandCode(buff, CommandCode::USER_LIST);
     write(buff);
 
@@ -85,20 +93,25 @@ void ClientChat::getUserList()
 
 void ClientChat::connectToUser(ByteBufferPtr userName)
 {
-    Helper::insertCommandCode(userName, cmd);
+    if(userName->empty())
+    {
+        std::cout << "User's name is empty!" << std::endl;
+        return;
+    }
+
+    Helper::insertCommandCode(userName, CommandCode::CONNECT_TO_USER);
     write(userName);
 
 }
 
 void ClientChat::disconnectFromUser()
 {
-    ByteBufferPtr buff{};
-    Helper::insertCommandCode(buff, cmd);
+    ByteBufferPtr buff = std::make_shared<ByteBuffer>();
+    Helper::insertCommandCode(buff, CommandCode::DISCONNECT_TO_USER);
     write(buff);
-
 }
 
 void ClientChat::printServerAnswer(ByteBufferPtr buffPtr)
 {
-    LOG_INFO("Message: " << *buffPtr);
+    LOG_INFO(*buffPtr);
 }

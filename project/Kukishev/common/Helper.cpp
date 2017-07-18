@@ -24,8 +24,6 @@ ByteBufferPtr Helper::makeBuffer(ByteBufferPtr buffPtr)
 
 uint16_t Helper::mergeTwoByte(uint8_t high, uint8_t low)
 {
-    uint16_t l = static_cast<uint16_t>(low);
-    uint16_t h = static_cast<uint16_t>(high);
     return (high << 8) | low;
 }
 

@@ -6,12 +6,6 @@
 #include <vector>
 #include <memory>
 
-#define WORKER_THREAD_COUNT 4
-#define BUFFER_MAX_SIZE 65535
-
-#define LOG_INFO(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [INF]"<<message<<std::endl;
-#define LOG_ERR(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [ERR]"<<message<<std::endl;
-
 enum class CommandCode: uint8_t
 {
     LOGIN,
@@ -22,6 +16,14 @@ enum class CommandCode: uint8_t
     DISCONNECT_TO_USER,
     ANSWER_TO_USER
 };
+
+#define WORKER_THREAD_COUNT 4
+#define BUFFER_MAX_SIZE 65535
+
+#define LOG_INFO(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [INF]"<<message<<std::endl;
+#define LOG_ERR(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [ERR]"<<message<<std::endl;
+
+
 
 typedef std::vector<uint8_t> ByteBuffer;
 typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
