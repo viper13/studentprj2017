@@ -72,24 +72,7 @@ void Session::handleRead(system::error_code error, size_t bufferSize)
         if (messageSize_!=0)
         {
 
-            std::string message(buffer_.begin(), buffer_.end());
 
-            if(message.find(LOGIN_MESSAGE) != std::string::npos)
-            {
-                idClient = message[2];
-                LOG_INFO("Registered client with id = "<<idClient);
-                write("You succesesfully registered!");
-            }
-            else if(message.find(GET_USER_LIST_MESSAGE) != std::string::npos)
-            {
-                //hasRequestToUserList=true;
-
-            }
-            else if(message.find(CREATE_CHAT_MESSAGE) != std::string::npos)
-            {
-                idTarget=message[2];
-                LOG_INFO("User "<<idClient<<" wish to create chat with " << idTarget<<" !");
-            }
 
 
             messageSize_ = 0;

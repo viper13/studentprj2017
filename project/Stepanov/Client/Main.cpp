@@ -24,7 +24,7 @@ int main()
     {
         getline(std::cin,message);
         clientPtr->processMessage(message);
-        //clientPtr->write(message);
+
     }
 
     Worker::instance()->join();

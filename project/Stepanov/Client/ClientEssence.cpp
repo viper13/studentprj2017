@@ -38,6 +38,20 @@ void ClientEssence::processMessage(std::string message)
             std::cin >> message;
             write(message);
         }
+        else if(message.find("!direct") != std::string::npos)
+        {
+            char idTarget;
+            std::string send;
+            LOG_INFO("Enter id of target");
+            std::cin >> idTarget;
+            LOG_INFO("Enter a message to send");
+            std::cin >> send;
+            message=DIRECT_MESSAGE;
+            message+=idTarget;
+            message+=send;
+            LOG_INFO("message from client "<<message);
+            write(message);
+        }
 }
 
 

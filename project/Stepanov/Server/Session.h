@@ -6,6 +6,7 @@
 #include <memory>
 #include <boost/asio.hpp>
 
+
 using namespace boost;
 
 class Session
@@ -22,9 +23,10 @@ public:
 
     virtual void onRead(ByteBuffer data) = 0;
 
+
 private:
 
-    char idTarget;
+
 
     void read();
     void handleRead(system::error_code error, size_t bufferSize);
@@ -37,6 +39,7 @@ private:
 protected:
     std::vector<char> buffer_;
     char idClient;
+    char idTarget;
 };
 
 typedef std::shared_ptr<Session> SessionPtr;

@@ -76,16 +76,14 @@ void Client::handleRead(system::error_code error, size_t buf_size)
     {
         if (0 != messageSize_)
         {
-            LOG_INFO("Message: [" << buffer_ << "]");
+            LOG_INFO("Message: \n" << buffer_);
             messageSize_ = 0;
             read();
         }
         else
         {
-            LOG_INFO("Buffer has [" << (int)buffer_[0] << "][" << (int)buffer_[1] << "]");
-            messageSize_ = (static_cast<uint16_t>(buffer_[0]) << 8)
-                                + static_cast<uint16_t>(buffer_[1]);
-            LOG_INFO("Next message size is: " << messageSize_);
+            messageSize_ = Helper::getSize(buffer_[0],buffer_[1]);
+            LOG_INFO("Message size is: " << messageSize_);
             read();
         }
 

@@ -5,11 +5,12 @@
 int main(int argc, char *argv[])
 {
     Server server(1122);
-    ChatManager chatManager(server);
+    ChatManager& chatManager = ChatManager::getInstance();
+    chatManager.start(server);
     server.start();
 
     Worker::instance()->start();
-    std::string command;
+
     LOG_INFO(" Threads are started, waiting for connection! \n");
 
     Worker::instance()->join();

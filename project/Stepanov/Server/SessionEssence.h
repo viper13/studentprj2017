@@ -13,6 +13,10 @@ public:
 
     static std::shared_ptr<SessionEssence> getNewSession();
 
+    char getIdClient();
+
+
+
 private:
     void onRead(ByteBuffer data) override;
 };
