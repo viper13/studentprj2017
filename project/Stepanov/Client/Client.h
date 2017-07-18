@@ -2,37 +2,50 @@
 #define CLIENT_H
 
 #include "Define.h"
-#include <boost/asio.hpp>
-
-using namespace boost;
+#include "Helper.h"
 
 
 class Client : public std::enable_shared_from_this<Client>
 {
 public:
-    Client(std::string adress, std::string port);
+    Client(std::string address, std::string port);
     void start();
 
     void write(std::string message);
 
+    virtual void processMessage(std::string message) = 0;
+
+
+
 private:
+
     asio::io_service& io_service_;
     asio::ip::tcp::socket socket_;
 
-    std::string adress_;
+    std::string address_;
     std::string port_;
+
+
 
     asio::ip::tcp::resolver resolver_;
 
-    ByteBuffer buffer_;
+    uint16_t messageSize_;
 
-    void handleResolveEndPoint(system::error_code err, asio::ip::tcp::resolver::iterator iterator);
-    void handleConnect(system::error_code err, asio::ip::tcp::resolver::iterator iterator);
+
+
+    void handleResolveEndPoint(system::error_code error, asio::ip::tcp::resolver::iterator iterator);
+
+    void handleConnect(system::error_code error, asio::ip::tcp::resolver::iterator iterator);
+
     void read();
-    void handleRead(system::error_code error, size_t bufferSize);
-    void handleWrite(ByteBufferPtr data, system::error_code error, size_t writedBytes);
 
+    void handleRead(system::error_code error, size_t);
 
+    void handleWrite(BuffersVector data, system::error_code error, size_t writtedSize);
+protected:
+    std::vector<char> buffer_;
+    char idClient;
+    bool isChatting;
 };
 
 #endif // CLIENT_H

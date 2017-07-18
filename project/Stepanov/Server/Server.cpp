@@ -19,9 +19,15 @@ void Server::start()
     accept();
 }
 
+void Server::subscribe(std::function<void (SessionEssencePtr)> callBack)
+{
+    onConnectionFun.push_back(callBack);
+    LOG_INFO("SUBScRIBE WORKED");
+}
+
 void Server::accept()
 {
-    SessionPtr session = Session::getNewSession();
+    SessionEssencePtr session = SessionEssence::getNewSession();
 
     acceptor_.async_accept(session->socket()
                            , std::bind(&Server::handleAccept
@@ -30,7 +36,7 @@ void Server::accept()
                                         , std::placeholders::_1));
 }
 
-void Server::handleAccept(SessionPtr session, system::error_code error)
+void Server::handleAccept(SessionEssencePtr session, system::error_code error)
 {
     {
         if (!error)
@@ -38,11 +44,23 @@ void Server::handleAccept(SessionPtr session, system::error_code error)
             asio::ip::tcp::endpoint client_addr = session->socket().remote_endpoint();
             sessions_.push_back(session);
             session->start();
-            LOG_INFO("Connection successful from "<<client_addr.address().to_string()<<":"
-                     <<client_addr.port()<< "! Now we have " << sessions_.capacity()<<" connections!");
+            for(std::function<void(SessionEssencePtr)> callBackFun:onConnectionFun)
+            {
+                callBackFun(session);
+                LOG_INFO("CALLBACK WoRKDER");
+            }
         }
+
 
         accept();
     }
 }
+
+
+
+
+
+
+
+
 

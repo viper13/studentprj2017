@@ -1,35 +1,15 @@
 #include "Session.h"
 #include "Worker.h"
-
-using namespace boost;
+#include "Helper.h"
 
 Session::Session()
     : socket_(Worker::instance()->io_service())
+    , messageSize_(0)
+    , idClient(0)
+    , idTarget(0)
 {
 
 }
-
-std::shared_ptr<Session> Session::getNewSession()
-{
-    std::shared_ptr<Session> result(new Session());
-
-    return result;
-}
-
-void Session::write(std::string message)
-{
-    message = "Server said: "+message;
-    ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
-
-    asio::async_write(  socket_
-                      , asio::buffer(*buffer)
-                      , std::bind(&Session::handleWrite
-                                  , shared_from_this()
-                                  , buffer
-                                  , std::placeholders::_1
-                                  , std::placeholders::_2));
-}
-
 
 
 void Session::start()
@@ -42,53 +22,103 @@ asio::ip::tcp::socket &Session::socket()
     return socket_;
 }
 
-void Session::handle_read(system::error_code error, size_t bufferSize)
+void Session::write(std::string message)
 {
-    if (!error)
-    {
+    ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
+    BuffersVector buffers =Helper::addSize(buffer);
 
-        buffer_.resize(bufferSize);
+    EndBuffer endBuffer = Helper::makeEndBuffer(buffers);
 
-        LOG_INFO("Message: " << buffer_);
-        std::string message(buffer_.begin(), buffer_.end());
-
-        write(message);
-
-        read();
-    }
-    else
-    {
-        LOG_ERR("Failure: read error code " << error.value()
-                << " description: " << error.message() <<std::endl);
-        //Error here called by bad closing client programm.
-    }
-}
-
-void Session::handleWrite(ByteBufferPtr data,system::error_code error,size_t writedSize)
-{
-    if(!error)
-    {
-        LOG_INFO("Data writed successful! size ="
-                 << data->size()
-                 << "writed size="
-                 << writedSize);
-    }
-    else
-    {
-        LOG_ERR("Failure to write data" << *data);
-    }
+    asio::async_write(socket_
+                      , endBuffer
+                      , std::bind(&Session::handleWrite
+                                  , shared_from_this()
+                                  , buffers
+                                  , std::placeholders::_1
+                                  , std::placeholders::_2));
 }
 
 void Session::read()
 {
-    buffer_.resize(BUFFER_MAX_SIZE);
-    asio::async_read(  socket_
-                     , asio::buffer(buffer_, BUFFER_MAX_SIZE)
-                     , asio::transfer_at_least(1)
-                     , std::bind(&Session::handle_read
-                                 , shared_from_this()
-                                 , std::placeholders::_1
-                                 , std::placeholders::_2));
+    if (0 == messageSize_)
+    {
+        buffer_.resize(2);
+        asio::async_read(socket_
+                         , asio::buffer(buffer_, 2)
+                         , asio::transfer_exactly(2)
+                         , std::bind(&Session::handleRead
+                                     , shared_from_this()
+                                     , std::placeholders::_1
+                                     , std::placeholders::_2));
+    }
+    else
+    {
+        buffer_.resize(messageSize_);
+        asio::async_read(socket_
+                         , asio::buffer(buffer_, messageSize_)
+                         , asio::transfer_exactly(messageSize_)
+                         , std::bind(&Session::handleRead
+                                     , shared_from_this()
+                                     , std::placeholders::_1
+                                     , std::placeholders::_2));
+    }
+
+}
+
+void Session::handleRead(system::error_code error, size_t bufferSize)
+{
+    if (!error)
+    {
+        if (messageSize_!=0)
+        {
+
+            std::string message(buffer_.begin(), buffer_.end());
+
+            if(message.find(LOGIN_MESSAGE) != std::string::npos)
+            {
+                idClient = message[2];
+                LOG_INFO("Registered client with id = "<<idClient);
+                write("You succesesfully registered!");
+            }
+            else if(message.find(GET_USER_LIST_MESSAGE) != std::string::npos)
+            {
+                //hasRequestToUserList=true;
+
+            }
+            else if(message.find(CREATE_CHAT_MESSAGE) != std::string::npos)
+            {
+                idTarget=message[2];
+                LOG_INFO("User "<<idClient<<" wish to create chat with " << idTarget<<" !");
+            }
 
 
+            messageSize_ = 0;
+            onRead(buffer_);
+            read();
+        }
+        else
+        {
+            messageSize_=Helper::getSize(static_cast<uint16_t>(buffer_[0]),static_cast<uint16_t>(buffer_[1]));
+
+            LOG_INFO("Data size = " << messageSize_);
+
+            read();
+        }
+    }
+    else
+    {
+        LOG_ERR("Failure: read error code " << error.value()
+                 << " description: " << error.message());
+    }
+}
+
+void Session::handleWrite(BuffersVector data, system::error_code error, size_t bufferSize)
+{
+    if(!error)
+    {
+    }
+    else
+    {
+        LOG_ERR("Failure write data." << error.message());
+    }
 }

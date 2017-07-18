@@ -1,130 +1,150 @@
 #include "Client.h"
 #include "Worker.h"
+#include "Define.h"
+#include "Helper.h"
 
-Client::Client(std::string adress, std::string port)
+Client::Client(std::string address, std::string port)
     : io_service_(Worker::instance()->io_service())
     , socket_(io_service_)
-    , adress_(adress)
+    , address_(address)
     , port_(port)
     , resolver_(io_service_)
+    , idClient(0)
 {
 
 }
 
 void Client::start()
 {
-    do
-    {
-        asio::ip::tcp::resolver::query querry(adress_, port_);
+    asio::ip::tcp::resolver::query query(address_, port_);
+    resolver_.async_resolve(query
+                            , std::bind(&Client::handleResolveEndPoint
+                                        , shared_from_this()
+                                        , std::placeholders::_1
+                                        , std::placeholders::_2));
 
-        resolver_.async_resolve(  querry
-                                , std::bind(&Client::handleResolveEndPoint
-                                            , shared_from_this()
-                                            , std::placeholders::_1
-                                            , std::placeholders::_2));
-
-
-    }
-    while(false);
-
-
-}
-
-void Client::handleConnect(  system::error_code error
-                           , asio::ip::tcp::resolver::iterator iterator)
-{
-    if(!error)
-    {
-       read();
-    }
-    else if(iterator != asio::ip::tcp::resolver::iterator())
-    {
-        asio::ip::tcp::endpoint endPoint = *iterator;
-        socket_.async_connect(  endPoint
-                              , std::bind(&Client::handleConnect
-                                          , shared_from_this()
-                                          , std::placeholders::_1
-                                          , ++iterator));
-    }
-    else
-    {
-        LOG_ERR("Failure: read error code " << error.value()
-                << " description: " << error.message()<< std::endl);
-    }
-}
-
-void Client::read()
-{
-    buffer_.resize(BUFFER_MAX_SIZE);
-    asio::async_read(socket_
-                     , asio::buffer(buffer_,BUFFER_MAX_SIZE)
-                     , asio::transfer_at_least(1)
-                     , std::bind(&Client::handleRead
-                                 , shared_from_this()
-                                 , std::placeholders::_1
-                                 , std::placeholders::_2));
-}
-
-void Client::handleRead(system::error_code error, size_t bufferSize)
-{
-    if(!error)
-    {
-        buffer_.resize(bufferSize);
-
-        LOG_INFO("Message: " << buffer_);
-        read();
-    }
-    else
-    {
-        LOG_ERR("Failure: read error code " << error.value()
-                << " description: " << error.message() << std::endl);
-    }
-
-}
-
-void Client::handleWrite(ByteBufferPtr data, system::error_code error, size_t writedBytes)
-{
-    if(!error)
-    {
-        //LOG_INFO("Message writed!");
-    }
-    else
-    {
-        LOG_ERR("Failure to write data: "<< error.message());
-    }
 }
 
 void Client::write(std::string message)
 {
-    ByteBufferPtr buffer(new ByteBuffer(message.begin(),message.end()));
+    ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
+    BuffersVector buffers = Helper::addSize(buffer);
+
+    EndBuffer endBuffer = Helper::makeEndBuffer(buffers);
     asio::async_write(socket_
-                      , asio::buffer(*buffer)
+                      , endBuffer
                       , std::bind(&Client::handleWrite
                                   , shared_from_this()
-                                  , buffer
+                                  , buffers
                                   , std::placeholders::_1
                                   , std::placeholders::_2));
 }
 
-void Client::handleResolveEndPoint(system::error_code error
-                                   , asio::ip::tcp::resolver::iterator iterator)
+
+
+
+void Client::read()
+{
+    if (0 == messageSize_)
+    {
+        buffer_.resize(2);
+        asio::async_read(socket_
+                         , asio::buffer(buffer_, 2)
+                         , asio::transfer_exactly(2)
+                         , std::bind(&Client::handleRead
+                                     , shared_from_this()
+                                     , std::placeholders::_1
+                                     , std::placeholders::_2));
+    }
+    else
+    {
+        buffer_.resize(messageSize_);
+        asio::async_read(socket_
+                         , asio::buffer(buffer_, messageSize_)
+                         , asio::transfer_exactly(messageSize_)
+                         , std::bind(&Client::handleRead
+                                     , shared_from_this()
+                                     , std::placeholders::_1
+                                     , std::placeholders::_2));
+    }
+
+}
+
+void Client::handleRead(system::error_code error, size_t buf_size)
 {
     if (!error)
     {
-        asio::ip::tcp::endpoint endPoint = *iterator;
-
-        socket_.async_connect(endPoint
-                              , std::bind(&Client::handleConnect
-                                          , shared_from_this()
-                                          , std::placeholders::_1
-                                          , ++iterator));
-
+        if (0 != messageSize_)
+        {
+            LOG_INFO("Message: [" << buffer_ << "]");
+            messageSize_ = 0;
+            read();
+        }
+        else
+        {
+            LOG_INFO("Buffer has [" << (int)buffer_[0] << "][" << (int)buffer_[1] << "]");
+            messageSize_ = (static_cast<uint16_t>(buffer_[0]) << 8)
+                                + static_cast<uint16_t>(buffer_[1]);
+            LOG_INFO("Next message size is: " << messageSize_);
+            read();
+        }
 
     }
     else
     {
-        LOG_ERR("Failure to resolve host address : "
-                << adress_ << " : "<< port_<< std::endl);
+        LOG_ERR("Failure: read error code " << error.value()
+                 << " description: " << error.message());
+    }
+}
 
+void Client::handleWrite(BuffersVector data, system::error_code error, size_t writtedSize)
+{
+    if (!error)
+    {
+        LOG_INFO("Message writted!!!");
+    }
+    else
+    {
+        LOG_ERR("Failure to wirte data  with error " << error.message());
+    }
+}
+
+void Client::handleResolveEndPoint(system::error_code error, asio::ip::tcp::resolver::iterator iterator)
+{
+    if (!error)
+    {
+        asio::ip::tcp::endpoint endPoint = *iterator;
+        socket_.async_connect(endPoint
+                              , std::bind(&Client::handleConnect
+                                         , shared_from_this()
+                                         , std::placeholders::_1
+                                         , ++iterator));
+    }
+    else
+    {
+        LOG_ERR("Failure to resolve host: " << address_
+                << ":" << port_ );
+    }
+
+}
+
+void Client::handleConnect(system::error_code error, asio::ip::tcp::resolver::iterator iterator)
+{
+    if(!error)
+    {
+        read();
+    }
+    else if (iterator != asio::ip::tcp::resolver::iterator())
+    {
+        asio::ip::tcp::endpoint endPoint = *iterator;
+        socket_.async_connect(endPoint
+                              , std::bind(&Client::handleConnect
+                                         , shared_from_this()
+                                         , std::placeholders::_1
+                                         , ++iterator));
+    }
+    else
+    {
+        LOG_ERR("Failure to connect: " << address_ << ":" << port_);
     }
 }

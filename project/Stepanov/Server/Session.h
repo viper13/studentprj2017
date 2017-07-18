@@ -1,9 +1,10 @@
-#ifndef SESSION_H
-#define SESSION_H
+#ifndef SESION_H
+#define SESION_H
 
+#include <Define.h>
+#include <Helper.h>
 #include <memory>
 #include <boost/asio.hpp>
-#include <Define.h>
 
 using namespace boost;
 
@@ -13,26 +14,31 @@ class Session
 public:
     Session();
 
-    asio::ip::tcp::socket& socket();
-
     void start();
 
-    static std::shared_ptr<Session> getNewSession();
+    asio::ip::tcp::socket &socket();
 
     void write(std::string message);
 
+    virtual void onRead(ByteBuffer data) = 0;
+
 private:
-    asio::ip::tcp::socket socket_;
 
-    std::vector<char> buffer_;
-
-    void handle_read(system::error_code error, size_t bufferSize);
-
-    void handleWrite(ByteBufferPtr data, system::error_code error, size_t writedSize);
+    char idTarget;
 
     void read();
+    void handleRead(system::error_code error, size_t bufferSize);
+
+    void handleWrite(BuffersVector data, system::error_code error, size_t bufferSize);
+
+    asio::ip::tcp::socket socket_;
+
+    uint16_t messageSize_;
+protected:
+    std::vector<char> buffer_;
+    char idClient;
 };
 
 typedef std::shared_ptr<Session> SessionPtr;
 
-#endif // SESSION_H
+#endif // SESION_H

@@ -16,7 +16,10 @@ SOURCES += \
     Server.cpp \
     Session.cpp \
     Main.cpp \
-    ../common/define.cpp
+    ../common/define.cpp \
+    ../common/Helper.cpp \
+    SessionEssence.cpp \
+    ChatManager.cpp
 
 LIBS += -L"/usr/include/boost" -lboost_system
 # The following define makes your compiler emit warnings if you use
@@ -34,4 +37,8 @@ HEADERS += \
     Worker.h \
     Server.h \
     Session.h \
-    ../common/Define.h
+    ../common/Define.h \
+    ../common/Helper.h \
+    ../common/Helper.h \
+    SessionEssence.h \
+    ChatManager.h
