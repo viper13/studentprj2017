@@ -1,20 +1,31 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include <asio.hpp>
+#include "BufferConverter.h"
 
-#include "define.h"
-#include "bufferconverter.h"
-
-class Client
-        : public std::enable_shared_from_this<Client>
+class MessageClient
+        : public std::enable_shared_from_this<MessageClient>
 {
     public:
 
-        Client(std::string adress, std::string port);
+        MessageClient(std::string address, std::string port);
 
         void start();
         void write(std::string message);
+
+        virtual ~MessageClient() = default;
+
+    protected:
+
+        asio::io_service& io_service_;
+        asio::ip::tcp::socket socket_;
+
+        std::string address_;
+        std::string port_;
+
+        asio::ip::tcp::resolver resolver_;
+
+        ByteBuffer buffer_;
 
     private:
 
@@ -29,18 +40,6 @@ class Client
         void handleWrite(BuffersVector data,
                          asio::error_code error,
                          size_t writtenBytesCount);
-
-
-
-        asio::io_service& io_service_;
-        asio::ip::tcp::socket socket_;
-
-        std::string address_;
-        std::string port_;
-
-        asio::ip::tcp::resolver resolver_;
-
-        ByteBuffer buffer_;
 };
 
 #endif // CLIENT_H

@@ -12,6 +12,11 @@
 #define LOG_INFO(message) std::cout << __FILE__ << " : " << __FUNCTION__ << " : " << __LINE__ << " [INF] " << message << std::endl;
 #define LOG_ERR(message) std::cout << __FILE__ << " : " << __FUNCTION__ << " : " << __LINE__ << " [ERR] " << message << std::endl;
 
+enum class Operations : uint16_t
+{
+    logIn = 0
+};
+
 typedef std::vector<char> ByteBuffer;
 typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
 typedef std::vector<ByteBufferPtr> BuffersVector;

@@ -1,12 +1,12 @@
-#include "client.h"
+#include "MessageClient.h"
 
 #include "Worker.h"
 
 
-Client::Client(std::string adress, std::string port)
+MessageClient::MessageClient(std::string address, std::string port)
     : io_service_( Worker::instance()->getIO_service() ),
       socket_ (io_service_),
-      address_ (adress),
+      address_ (address),
       port_ (port),
       resolver_ (io_service_)
 {
@@ -15,12 +15,12 @@ Client::Client(std::string adress, std::string port)
 
 
 
-void Client::start()
+void MessageClient::start()
 {
     asio::ip::tcp::resolver::query query(address_, port_);
 
     resolver_.async_resolve( query,
-                             std::bind (&Client::handleResolveEndPoint,
+                             std::bind (&MessageClient::handleResolveEndPoint,
                              shared_from_this(),
                              std::placeholders::_1,
                              std::placeholders::_2) );
@@ -28,7 +28,7 @@ void Client::start()
 
 
 
-void Client::write(std::string message)
+void MessageClient::write(std::string message)
 {
     BuffersVector messageWithSize =
             BufferConverter::addMessageSize( ByteBufferPtr( new ByteBuffer( message.begin(),
@@ -39,7 +39,7 @@ void Client::write(std::string message)
 
     asio::async_write(socket_,
                       bufferToSend,
-                      std::bind (&Client::handleWrite,
+                      std::bind (&MessageClient::handleWrite,
                                  shared_from_this(),
                                  messageWithSize,
                                  std::placeholders::_1,
@@ -48,7 +48,7 @@ void Client::write(std::string message)
 
 
 
-void Client::handleResolveEndPoint(asio::error_code error,
+void MessageClient::handleResolveEndPoint(asio::error_code error,
                                    asio::ip::tcp::resolver::iterator iterator)
 {
     if ( !error )
@@ -56,7 +56,7 @@ void Client::handleResolveEndPoint(asio::error_code error,
         asio::ip::tcp::endpoint endPoint = *iterator;
 
         socket_.async_connect( endPoint,
-                               std::bind (&Client::handleConnect,
+                               std::bind (&MessageClient::handleConnect,
                                           shared_from_this(),
                                           std::placeholders::_1,
                                           ++iterator) );
@@ -70,7 +70,7 @@ void Client::handleResolveEndPoint(asio::error_code error,
 
 
 
-void Client::handleConnect(asio::error_code error,
+void MessageClient::handleConnect(asio::error_code error,
                            asio::ip::tcp::resolver::iterator iterator)
 {
     if ( !error )
@@ -82,7 +82,7 @@ void Client::handleConnect(asio::error_code error,
         asio::ip::tcp::endpoint endPoint = *iterator;
 
         socket_.async_connect( endPoint,
-                               std::bind (&Client::handleConnect,
+                               std::bind (&MessageClient::handleConnect,
                                           shared_from_this(),
                                           std::placeholders::_1,
                                           ++iterator) );
@@ -96,14 +96,14 @@ void Client::handleConnect(asio::error_code error,
 
 
 
-void Client::readMessageSize()
+void MessageClient::readMessageSize()
 {
     buffer_.resize(2);
 
     asio::async_read( socket_,
                       asio::buffer (buffer_, 2),
                       asio::transfer_exactly (2),
-                      std::bind (&Client::handleReadMsgSize,
+                      std::bind (&MessageClient::handleReadMsgSize,
                                  shared_from_this(),
                                  std::placeholders::_1,
                                  std::placeholders::_2) );
@@ -111,14 +111,14 @@ void Client::readMessageSize()
 
 
 
-void Client::readMessage(uint16_t messageSize)
+void MessageClient::readMessage(uint16_t messageSize)
 {
     buffer_.resize(messageSize);
 
     asio::async_read( socket_,
                       asio::buffer(buffer_, messageSize),
                       asio::transfer_exactly(messageSize),
-                      std::bind (&Client::handleReadMessage,
+                      std::bind (&MessageClient::handleReadMessage,
                                  shared_from_this(),
                                  std::placeholders::_1,
                                  std::placeholders::_2) );
@@ -126,7 +126,7 @@ void Client::readMessage(uint16_t messageSize)
 
 
 
-void Client::handleReadMsgSize(asio::error_code error, size_t bufferSize)
+void MessageClient::handleReadMsgSize(asio::error_code error, size_t bufferSize)
 {
     if ( !error )
     {
@@ -144,7 +144,7 @@ void Client::handleReadMsgSize(asio::error_code error, size_t bufferSize)
 
 
 
-void Client::handleReadMessage(asio::error_code error, size_t bufferSize)
+void MessageClient::handleReadMessage(asio::error_code error, size_t bufferSize)
 {
     if ( !error )
     {
@@ -163,7 +163,7 @@ void Client::handleReadMessage(asio::error_code error, size_t bufferSize)
 
 
 
-void Client::handleWrite(BuffersVector data,
+void MessageClient::handleWrite(BuffersVector data,
                          asio::error_code error,
                          size_t writtenBytesCount)
 {

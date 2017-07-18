@@ -10,14 +10,16 @@ TEMPLATE = app
 INCLUDEPATH += $$PWD/../common/
 
 SOURCES += main.cpp \
-    client.cpp \
     ../common/Worker.cpp \
     ../common/define.cpp \
-    ../common/bufferconverter.cpp
+    MessageClient.cpp \
+    CommandClient.cpp \
+    ../common/BufferConverter.cpp
 
 HEADERS += \
-    client.h \
     ../common/Worker.h \
     ../common/define.h \
-    ../common/bufferconverter.h
+    MessageClient.h \
+    CommandClient.h \
+    ../common/BufferConverter.h
 
