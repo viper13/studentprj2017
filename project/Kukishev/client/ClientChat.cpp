@@ -15,44 +15,86 @@ void ClientChat::onRead(ByteBufferPtr bufferPtr)
 
 }
 
-void ClientChat::setHandleRead(std::function<void (ByteBufferPtr)> handle)
-{
-    readHandle_ = handle;
-}
-
 void ClientChat::execute(CommandCode cmd, ByteBufferPtr bufferPtr)
 {
-    Helper::insertCommandCode(bufferPtr, cmd);
-    write(bufferPtr);
+    //    Helper::insertCommandCode(bufferPtr, cmd);
+    //    write(bufferPtr);
+    switch (cmd) {
+    case CommandCode::CONNECT_TO_USER:
+    {
+        connectToUser(bufferPtr);
+        break;
+    }
+    case CommandCode::DISCONNECT_TO_USER:
+    {
+        disconnectFromUser();
+        break;
+    }
+    case CommandCode::LOGIN:
+    {
+        login(bufferPtr);
+        break;
+    }
+    case CommandCode::LOGOUT:
+    {
+        logout();
+        break;
+    }
+    case CommandCode::SEND_MESSAGE:
+    {
+        sendMessage(ByteBufferPtr);
+        break;
+    }
+    case CommandCode::USER_LIST:
+    {
+        getUserList();
+        break;
+    }
+    default:
+        break;
+    }
 }
 
-void ClientChat::login(std::__cxx11::string name)
+void ClientChat::login(ByteBufferPtr name)
 {
-
+    Helper::insertCommandCode(name, CommandCode::LOGIN);
+    write(name);
 }
 
 void ClientChat::logout()
 {
-
+    ByteBufferPtr buff{};
+    Helper::insertCommandCode(buff, logout());
+    write(buff);
 }
 
-void ClientChat::sendMessage(std::__cxx11::string message)
+void ClientChat::sendMessage(ByteBufferPtr message)
 {
+    Helper::insertCommandCode(message, CommandCode::SEND_MESSAGE);
+    write(message);
 
 }
 
 void ClientChat::getUserList()
 {
+    ByteBufferPtr buff{};
+    Helper::insertCommandCode(buff, CommandCode::USER_LIST);
+    write(buff);
 
 }
 
-void ClientChat::connectToUser(std::__cxx11::string userName)
+void ClientChat::connectToUser(ByteBufferPtr userName)
 {
+    Helper::insertCommandCode(userName, cmd);
+    write(userName);
 
 }
 
-void ClientChat::disconnectToUser()
+void ClientChat::disconnectFromUser()
 {
+    ByteBufferPtr buff{};
+    Helper::insertCommandCode(buff, cmd);
+    write(buff);
 
 }
 

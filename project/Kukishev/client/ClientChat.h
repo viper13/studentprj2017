@@ -14,12 +14,12 @@ public:
     void printServerAnswer(ByteBufferPtr buffPtr);
 private:
 
-    void login(std::string name);
+    void login(ByteBufferPtr name);
     void logout();
-    void sendMessage(std::string message);
+    void sendMessage(ByteBufferPtr message);
     void getUserList();
-    void connectToUser(std::string userName);
-    void disconnectToUser();
+    void connectToUser(ByteBufferPtr userName);
+    void disconnectFromUser();
 
     std::string name;
 };
