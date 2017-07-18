@@ -84,7 +84,7 @@ bool ChatClient::isLoggedIn()
 
 void ChatClient::processInputMessage()
 {
-    int messageType = static_cast<int>(buffer_[0]);
+    uint8_t messageType = static_cast<uint8_t>(buffer_[0]);
     std::string message(buffer_.begin(), buffer_.end());
     switch (messageType)
     {

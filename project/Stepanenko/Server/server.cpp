@@ -8,8 +8,6 @@ Server::Server(int port)
     : io_service_(Worker::instance()->ioService())
     , acceptor_(io_service_
                 , asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
-    , socket_(io_service_)
-    , nextSessionId_(0)
 {
     LOG_INFO("Created server for port: " << port);
 }
@@ -21,8 +19,7 @@ void Server::start()
 
 void Server::accept()
 {
-    SessionPtr session = ChatSession::getNewSession(nextSessionId_);
-    ++nextSessionId_;
+    ChatSessionPtr session = ChatSession::getNewSession();
     acceptor_.async_accept(session->socket()
                            , std::bind(&Server::handleAccept
                                        , this
@@ -42,6 +39,11 @@ void Server::handleAccept(SessionPtr session, asio::error_code error)
 
         sessions_.push_back(session);
         session->start();
+
+        for (std::function<void(ChatSessionPtr)> cb : onConnectedCbs)
+        {
+            cb(session);
+        }
     }
 
     accept();
