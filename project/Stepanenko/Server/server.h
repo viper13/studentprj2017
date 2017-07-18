@@ -10,7 +10,7 @@ class Server
 public:
     Server(int port);
     void start();
-     void subscribe(std::function<void(ChatSessionPtr)> cb);
+    void subscribe(std::function<void(ChatSessionPtr)> cb);
 private:
     void accept();
     void handleAccept(SessionPtr session, asio::error_code error);

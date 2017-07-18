@@ -10,7 +10,7 @@ class Session
         : public std::enable_shared_from_this<Session>
 {
 public:
-    Session( std::function<void()> cb);
+    Session();
     void start();
     asio::ip::tcp::socket &socket();
     void write(std::string message);
