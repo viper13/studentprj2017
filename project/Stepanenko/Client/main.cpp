@@ -1,31 +1,14 @@
 #include <iostream>
 #include <asio.hpp>
-#include "worker.h"
-#include "client.h"
-
+#include "messageManager.h"
 
 int main(int argc, char *argv[])
 {
-    std::shared_ptr<Client> clientPtr(new Client("127.0.0.1", "1122"));
-
-    clientPtr->start();
-
-    Worker::instance()->start();
-    LOG_INFO("Thread started!!!");
-
-    std::string message;
-    bool needStop = false;
-    while (!needStop)
-    {
-        LOG_INFO("Enter message: ");
-        getline(std::cin, message);
-        clientPtr->write(message);
-        needStop = (message == "stop");
-    }
-
-    Worker::instance()->join();
-    LOG_INFO("Thread finished!");
-
+    MessageManager *manager = new MessageManager();
+    manager->initializeSession();
+    manager->comunicateWithUser();
+    manager->closeSession();
+    delete manager;
     return 0;
 }
 

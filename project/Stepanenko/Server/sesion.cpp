@@ -2,10 +2,11 @@
 #include "worker.h"
 #include "helper.h"
 
-Session::Session(int id)
+Session::Session(int id, std::function<void()> cb)
     : socket_(Worker::instance()->ioService())
     , nextMessageSize_(0)
     , id_(id)
+    , onConnectdCb_(cb)
 {
 
 }
@@ -80,9 +81,9 @@ void Session::handleRead(asio::error_code error, size_t /*bufferSize*/)
     {
         if (0 != nextMessageSize_)
         {
-            LOG_INFO("Message:[" << buffer_ << "]");
             std::string message(buffer_.begin(), buffer_.end());
             write(message);
+            onRead(buffer_);
             nextMessageSize_ = 0;
             read();
         }

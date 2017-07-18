@@ -3,6 +3,7 @@
 
 #include <asio.hpp>
 #include <sesion.h>
+#include "chatSession.h"
 
 class Server
 {
@@ -18,6 +19,8 @@ private:
     asio::ip::tcp::acceptor acceptor_;
     asio::ip::tcp::socket socket_;
     std::vector<SessionPtr> sessions_;
+
+    std::vector<std::function<void()>> onConnectedCbs_;
 };
 
 #endif // SERVER_H

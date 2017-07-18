@@ -2,6 +2,7 @@
 
 #include "define.h"
 #include "worker.h"
+#include "chatSession.h"
 
 Server::Server(int port)
     : io_service_(Worker::instance()->ioService())
@@ -20,7 +21,7 @@ void Server::start()
 
 void Server::accept()
 {
-    SessionPtr session = Session::getNewSession(nextSessionId_);
+    SessionPtr session = ChatSession::getNewSession(nextSessionId_);
     ++nextSessionId_;
     acceptor_.async_accept(session->socket()
                            , std::bind(&Server::handleAccept

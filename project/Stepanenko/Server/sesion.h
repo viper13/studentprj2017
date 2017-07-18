@@ -10,12 +10,13 @@ class Session
         : public std::enable_shared_from_this<Session>
 {
 public:
-    Session(int id);
+    Session(int id, std::function<void()> cb);
     static std::shared_ptr<Session> getNewSession(int id);
     void start();
     asio::ip::tcp::socket &socket();
     void write(std::string message);
     std::string getUserName();
+    virtual void onRead(ByteBuffer data) = 0;
 private:
     void read();
 
@@ -27,6 +28,7 @@ private:
     asio::ip::tcp::socket socket_;
     std::vector<char> buffer_;
     uint16_t nextMessageSize_;
+    std::function<void()> onConnectedCb_;
 };
 
 typedef std::shared_ptr<Session> SessionPtr;

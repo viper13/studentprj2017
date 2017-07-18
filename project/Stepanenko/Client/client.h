@@ -11,11 +11,10 @@ public:
     Client(std::string address, std::string port);
     void start();
     void write(std::string message);
-    void askNameAndRegister();
-    void getUsersListFromServer();
+    void stop();
 
 private:
-    void processInputMessage();
+    virtual void processInputMessage() = 0;
     void handleResolveEndPoint(asio::error_code error
                                , asio::ip::tcp::resolver::iterator iterator);
     void handleConnect(asio::error_code error
@@ -23,17 +22,15 @@ private:
     void read();
     void handleRead(asio::error_code error, size_t);
     void handleWrite(BuffersVector data, asio::error_code error, size_t writtedSize);
-    void printUsersToConsole();
-
     asio::io_service& io_service_;
-    asio::ip::tcp::socket socket_;
     std::string address_;
     std::string port_;
-    std::vector<char> buffer_;
     asio::ip::tcp::resolver resolver_;
     uint16_t nextMessageSize_;
-    std::string name_;
-    StringSetPtr userNames_;
+    asio::ip::tcp::socket socket_;
+
+protected:
+    std::vector<char> buffer_;
 };
 
 #endif // CLIENT_H

@@ -14,13 +14,17 @@ SOURCES += main.cpp \
     ../Common/define.cpp \
     ../Common/worker.cpp \
     ../Common/protocol.cpp \
-    ../Common/helper.cpp
+    ../Common/helper.cpp \
+    chatClient.cpp \
+    messageManager.cpp
 
 HEADERS += \
     ../Common/define.h \
     ../Common/worker.h \
     ../Common/helper.h \
     ../Common/protocol.h \
-    client.h
+    client.h \
+    chatClient.h \
+    messageManager.h
 
 

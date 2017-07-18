@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     ../Common/helper.cpp \
     chatroom.cpp \
     clientsContainer.cpp \
-    sessionscCntainer.cpp
+    sessionscCntainer.cpp \
+    chatSession.cpp
 
 HEADERS += \
     ../Common/define.h \
@@ -30,6 +31,7 @@ HEADERS += \
     sesion.h \
     chatroom.h \
     clientsContainer.h \
-    sessionsContainer.h
+    sessionsContainer.h \
+    chatSession.h
 
 

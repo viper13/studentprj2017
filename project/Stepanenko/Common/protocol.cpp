@@ -5,9 +5,14 @@ Protocol::Protocol()
 
 }
 
+std::string Protocol::typeRemover(std::string message)
+{
+    return message.substr(1, message.length());
+}
+
 std::string Protocol::userListClientMessageCreate()
 {
-    char firstSymbol = messageType.USER_LIST;
+    char firstSymbol = USER_LIST;
     std::string result = "";
     result.push_back(firstSymbol);
     return result;
@@ -20,16 +25,16 @@ std::string Protocol::userListClientMessageCreate()
 
 std::string Protocol::userListServerMessageCreate(StringBufferPtr names)
 {
-    char firstSymbol = messageType.USER_LIST;
+    char firstSymbol = USER_LIST;
     std::string result = "";
     result.push_back(firstSymbol);
 
-    for (string name : *names)
+    for (std::string name : *names)
     {
-        result.push_back(name);
-        result.push_back(" ");
+        result += name;
+        result += " ";
     }
-    return result.substr(0, result.length()-1);
+    return (result.substr(0, result.length()-1));
 }
 
 StringSetPtr Protocol::userListServerMessageParse(std::string message)
@@ -48,7 +53,7 @@ StringSetPtr Protocol::userListServerMessageParse(std::string message)
 
 std::string Protocol::chatMessageClientMessageCreate(std::string user, std::string message)
 {
-    char firstSymbol = messageType.MESSAGE;
+    char firstSymbol = MESSAGE;
     std::stringstream tempStream;
     tempStream << firstSymbol << user << ": " << message;
     return tempStream.str();
@@ -57,5 +62,29 @@ std::string Protocol::chatMessageClientMessageCreate(std::string user, std::stri
 std::string Protocol::chatMessageClientMessageParse(std::string message)
 {
     return message.substr(1, message.length());
+}
+
+std::string Protocol::logInClientMessageCreate(std::string name)
+{
+    return typeAdder(LOG_IN, name);
+}
+
+std::string Protocol::logInServerMessageCreate(std::string status)
+{
+    return typeAdder(LOG_IN, status);
+}
+
+std::string Protocol::disconnectClientMessageCreate()
+{
+    return typeAdder(USER_DISCONNECT, "");
+}
+
+std::string Protocol::typeAdder(uint8_t type, std::string message)
+{
+    char firstSymbol = type;
+    std::string result = "";
+    result.push_back(firstSymbol);
+    result += message;
+    return result;
 }
 
