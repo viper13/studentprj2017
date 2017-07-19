@@ -13,7 +13,7 @@ public:
     static std::string typeRemover(std::string message);
 
     static std::string userListClientMessageCreate();
-    static std::string userListServerMessageCreate(StringBufferPtr names);
+    static std::string userListServerMessageCreate(std::set<std::string> names);
     static StringSetPtr userListServerMessageParse(std::string message);
 
     static std::string chatMessageClientMessageCreate(std::string user, std::string message);
@@ -22,7 +22,11 @@ public:
     static std::string logInClientMessageCreate(std::string name);
     static std::string logInServerMessageCreate(std::string status);
 
+    static std::string startChatClientMessageCreate(std::string name);
+    static std::string startChatServerMessageCreate(std::string status);
+
     static std::string disconnectClientMessageCreate();
+    static std::string disconnectServerMessageCreate(std::string status);
 
     static const uint8_t USER_LIST = 1;
     static const uint8_t START_CHAT = 2;

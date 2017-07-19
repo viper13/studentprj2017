@@ -62,7 +62,7 @@ void ChatClient::sendChatMessage(std::string message)
 
 void ChatClient::connectToUser(std::string user)
 {
-    std::string message = Protocol::logInClientMessageCreate(user);
+    std::string message = Protocol::startChatClientMessageCreate(user);
     write(message);
 }
 

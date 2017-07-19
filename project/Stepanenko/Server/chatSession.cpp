@@ -6,7 +6,7 @@ ChatSession::ChatSession()
     thisSessionPtr_ = ChatSessionPtr(this);
 }
 
-std::shared_ptr<Session> ChatSession::getNewSession()
+std::shared_ptr<ChatSession> ChatSession::getNewSession()
 {
     ChatSessionPtr session(new ChatSession());
     return session;
@@ -21,7 +21,7 @@ void ChatSession::onRead(ByteBuffer data)
     }
 }
 
-void ChatSession::subscribe(std::function<void (ChatSessionPtr, std::string)> cb)
+void ChatSession::subscribe(std::function<void(std::shared_ptr<ChatSession>, std::string)> cb)
 {
     onReadCbs.push_back(cb);
 }

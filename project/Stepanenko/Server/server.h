@@ -13,13 +13,13 @@ public:
     void subscribe(std::function<void(ChatSessionPtr)> cb);
 private:
     void accept();
-    void handleAccept(SessionPtr session, asio::error_code error);
+    void handleAccept(ChatSessionPtr session, asio::error_code error);
 
     asio::io_service& io_service_;
     asio::ip::tcp::acceptor acceptor_;
     std::vector<SessionPtr> sessions_;
 
-    std::vector<std::function<void()>> onConnectedCbs_;
+    std::vector<std::function<void(ChatSessionPtr)>> onConnectedCbs_;
 };
 
 #endif // SERVER_H

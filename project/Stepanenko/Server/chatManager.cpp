@@ -29,34 +29,79 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
     {
         case Protocol::USER_LIST:
         {
+            std::set<std::string> names;
+            std::map<std::string, ChatSessionPtr>::iterator parser;
+            for (parser = sessions_.begin(); parser != sessions_.end(); ++parser)
+            {
+                names.insert(parser->first);
+            }
+            std::string namesMessage = Protocol::userListServerMessageCreate(names);
+            session->write(namesMessage);
             break;
         }
         case Protocol::LOG_IN:
         {
             std::string userName = Protocol::typeRemover(message);
 
-            //if userName is unique
-            session->setUserName(userName);
-            sessions_.insert(userName, session);
-            chatRooms_->addNewClient(userName);
-            messageToSend = Protocol::logInServerMessageCreate("OK");
-
-
-            //else
-            messageToSend = Protocol::logInServerMessageCreate("BAD");
-
+            std::map<std::string, ChatSessionPtr>::iterator it;
+            it = sessions_.find(userName);
+            if (it == sessions_.end())
+            {
+                session->setUserName(userName);
+                sessions_.at(userName) = session;
+                chatRooms_->addNewClient(userName);
+                messageToSend = Protocol::logInServerMessageCreate("OK");
+            }
+            else
+            {
+                messageToSend = Protocol::logInServerMessageCreate("BAD");
+            }
             session->write(messageToSend);
             break;
         }
         case Protocol::START_CHAT:
         {
+            std::string initiator = session->getUserName();
+            std::string remoteUser = Protocol::typeRemover(message);
+            bool result = chatRooms_->addClientToChatRoom(initiator, remoteUser);
+            if (result)
+            {
+                messageToSend = Protocol::startChatServerMessageCreate("OK");
+            }
+            else
+            {
+                messageToSend = Protocol::startChatServerMessageCreate("BAD");
+            }
+            session->write(messageToSend);
             break;
         }
         case Protocol::MESSAGE:
         {
+            std::string currentUser = session->getUserName();
+            StringSetPtr users = chatRooms_->getUsersFromRoom(currentUser);
+            for (std::string user : *users)
+            {
+                if (user != currentUser)
+                {
+                    sessions_.at(user)->write(message);
+                }
+            }
             break;
         }
         case Protocol::USER_DISCONNECT:
+        {
+            std::string currentUser = session->getUserName();
+            chatRooms_->removeUser(currentUser);
+            std::map<std::string, ChatSessionPtr>::iterator it = sessions_.find(currentUser);
+            sessions_.erase(it);
+            messageToSend = Protocol::disconnectServerMessageCreate("OK");
+            session->write(messageToSend);
+            break;
+        }
+        default:
+        {
+            LOG_ERR("TYPE OF MESSAGE IS UNKNOWN!");
+        }
     }
 }
 

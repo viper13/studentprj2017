@@ -9,7 +9,7 @@ ClientsContainer *ClientsContainer::instance()
 void ClientsContainer::addNewClient(std::string &client)
 {
     ChatRoomPtr room(new ChatRoom(client));
-    chatRooms_.insert(client, room);
+    chatRooms_.at(client) = room;
 }
 
 bool ClientsContainer::addClientToChatRoom(std::string &initiator, std::string &userForAdd)
@@ -47,6 +47,19 @@ void ClientsContainer::removeClientFromChat(std::string &client)
     clientChatRoom->removeUser(client);
     ChatRoomPtr newEmptyRoom(new ChatRoom(client));
     chatRooms_.at(client) = newEmptyRoom;
+}
+
+StringSetPtr ClientsContainer::getUsersFromRoom(std::string &client)
+{
+    ChatRoomPtr clientChatRoom = chatRooms_.at(client);
+    return clientChatRoom->getUsers();
+}
+
+void ClientsContainer::removeUser(std::string &client)
+{
+    removeClientFromChat(client);
+    std::map<std::string, ChatRoomPtr>::iterator it = chatRooms_.find(client);
+    chatRooms_.erase(it);
 }
 
 ClientsContainer::ClientsContainer()

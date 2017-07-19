@@ -23,13 +23,13 @@ std::string Protocol::userListClientMessageCreate()
 // so reading will be much more simpler.
 // Of course, names should not contain spaces inside themselfs.
 
-std::string Protocol::userListServerMessageCreate(StringBufferPtr names)
+std::string Protocol::userListServerMessageCreate(std::set<std::string> names)
 {
     char firstSymbol = USER_LIST;
     std::string result = "";
     result.push_back(firstSymbol);
 
-    for (std::string name : *names)
+    for (std::string name : names)
     {
         result += name;
         result += " ";
@@ -74,9 +74,24 @@ std::string Protocol::logInServerMessageCreate(std::string status)
     return typeAdder(LOG_IN, status);
 }
 
+std::string Protocol::startChatClientMessageCreate(std::string name)
+{
+    return typeAdder(START_CHAT, name);
+}
+
+std::string Protocol::startChatServerMessageCreate(std::string status)
+{
+    return typeAdder(START_CHAT, status);
+}
+
 std::string Protocol::disconnectClientMessageCreate()
 {
     return typeAdder(USER_DISCONNECT, "");
+}
+
+std::string Protocol::disconnectServerMessageCreate(std::string status)
+{
+    return typeAdder(USER_DISCONNECT, status);
 }
 
 std::string Protocol::typeAdder(uint8_t type, std::string message)

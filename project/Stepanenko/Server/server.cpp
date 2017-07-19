@@ -27,7 +27,7 @@ void Server::accept()
                                        , std::placeholders::_1));
 }
 
-void Server::handleAccept(SessionPtr session, asio::error_code error)
+void Server::handleAccept(ChatSessionPtr session, asio::error_code error)
 {
     if (!error)
     {
@@ -40,12 +40,17 @@ void Server::handleAccept(SessionPtr session, asio::error_code error)
         sessions_.push_back(session);
         session->start();
 
-        for (std::function<void(ChatSessionPtr)> cb : onConnectedCbs)
+        for (std::function<void(ChatSessionPtr)> cb : onConnectedCbs_)
         {
             cb(session);
         }
     }
 
     accept();
+}
+
+void Server::subscribe(std::function<void (ChatSessionPtr)> cb)
+{
+    onConnectedCbs_.push_back(cb);
 }
 
