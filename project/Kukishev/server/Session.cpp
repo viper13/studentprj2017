@@ -7,12 +7,6 @@ Session::Session()
 {
 }
 
-std::shared_ptr<Session> Session::getNewSessions()
-{
-    SessionPtr session(new Session());
-    return session;
-}
-
 void Session::start()
 {
     //write("Enter your name: ");
@@ -80,8 +74,8 @@ void Session::handleRead(asio::error_code error, size_t bufferSize)
 
             LOG_INFO("Message: "<< message);
 
-            write(message);
-
+            //write(message);
+            onRead(buffer_);
             nextMsgSize_ = 0;
         }
 

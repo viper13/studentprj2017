@@ -1,12 +1,11 @@
 #include "Server.h"
-
 #include "define.h"
 #include "Worker.h"
 
 Server::Server(int port)
     : io_service_(Worker::instance()->io_service())
     , acceptor_( io_service_
-          , asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
+                 , asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
 
 {
     LOG_INFO("Created server for porn: " << port);
@@ -15,16 +14,16 @@ Server::Server(int port)
 void Server::accept()
 {
 
-    SessionPtr session = Session::getNewSessions();
+    SessionChatPtr session = SessionChat::getNewSessions();
 
     acceptor_.async_accept(session->socket(), std::bind(
-                                                    &Server::handleAccept
-                                                    , this
-                                                    , session
-                                                    , std::placeholders::_1));
+                               &Server::handleAccept
+                               , this
+                               , session
+                               , std::placeholders::_1));
 }
 
-void Server::handleAccept(SessionPtr session, asio::error_code error)
+void Server::handleAccept(SessionChatPtr session, asio::error_code error)
 {
 
     if(!error)
@@ -36,6 +35,11 @@ void Server::handleAccept(SessionPtr session, asio::error_code error)
                  << client_addr.port());
         sessions_.push_back(session);
         session->start();
+
+        for (std::function<void(SessionChatPtr)> cb : onConnectedCbs)
+        {
+            cb(session);
+        }
     }
 
     accept();
@@ -44,5 +48,10 @@ void Server::handleAccept(SessionPtr session, asio::error_code error)
 void Server::start()
 {
     accept();
+}
+
+void Server::subscribe(std::function<void (SessionChatPtr)> cb)
+{
+    onConnectedCbs.emplace_back(cb);
 }
 
