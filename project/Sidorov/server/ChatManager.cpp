@@ -11,10 +11,17 @@ ChatManager::ChatManager(Server &server)
 void ChatManager::onConnected(ChatSessionPtr session)
 {
     LOG_INFO("Connected session.");
+    session->setHandleRead(std::bind(&ChatManager::processCommand
+                                , this
+                                , std::placeholders::_1
+                                , std::placeholders::_2));
     sessions_.push_back(session);
 }
 
-void ChatManager::getClientMessage()
+void ChatManager::processCommand(ChatSessionPtr chatSession, ByteBufferPtr bufferPtr)
 {
-    //read()
+    CodeCommand code = static_cast<CodeCommand>(bufferPtr->at(0));
+    //LOG_INFO("Your code command = " << code);
+    ByteBufferPtr data ( Helper::eraseCodeCommand(bufferPtr));
 }
+

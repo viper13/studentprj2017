@@ -1,6 +1,13 @@
 #include "Helper.h"
 
-
+ByteBufferPtr Helper::eraseCodeCommand(ByteBufferPtr bufferPtr)
+{
+    uint8_t code = bufferPtr->at(0);
+    std::string s(bufferPtr->data());
+    s.erase(s.begin());
+    ByteBufferPtr ptr(new ByteBuffer(s.begin(),s.end()));
+    return ptr;
+}
 
 void Helper::addCodeCommand(CodeCommand code, ByteBufferPtr bufferPtr)
 {
@@ -78,3 +85,5 @@ std::pair<CodeCommand, ByteBufferPtr> Helper::getCodeAndData(const std::string &
 
         return std::make_pair(commandCode, buff);
 }
+
+

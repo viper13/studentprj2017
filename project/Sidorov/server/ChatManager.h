@@ -3,6 +3,8 @@
 
 #include "Server.h"
 #include "ChatSession.h"
+#include "define.h"
+#include "Helper.h"
 
 class ChatManager
 {
@@ -11,7 +13,7 @@ public:
 
     void onConnected(ChatSessionPtr session);
 
-    void getClientMessage();
+    void processCommand(std::shared_ptr<ChatSession> chatSession, ByteBufferPtr bufferPtr);
 private:
 
     std::vector<ChatSessionPtr> sessions_;

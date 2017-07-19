@@ -15,6 +15,7 @@ public:
     static BufferSequence toBufferSequence(BuffersVector buffers);
     static std::vector<std::string> splitCommandAndData(const std::string &s);
     static std::pair<CodeCommand, ByteBufferPtr> getCodeAndData(const std::string &str);
+    static ByteBufferPtr eraseCodeCommand(ByteBufferPtr bufferPtr);
 };
 
 #endif // HELPER_H
