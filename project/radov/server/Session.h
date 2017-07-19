@@ -13,13 +13,13 @@ class Session
 public:
     Session();
 
-    static std::shared_ptr<Session> getNewSession();
-
     void start();
 
     asio::ip::tcp::socket& socket();
 
     void write(std::string message);
+
+    virtual void onRead(ByteBuffer data) = 0;
 
 private:
     void read();
@@ -35,6 +35,8 @@ private:
     ByteBuffer buffer_;
 
     uint16_t nextMessageSize_;
+
+    //std::function<void()> onConnectCb;
 };
 
 typedef std::shared_ptr<Session> SessionPtr;

@@ -1,4 +1,4 @@
-#include "server.h"
+#include "Server.h"
 
 #include "define.h"
 #include "worker.h"
@@ -15,7 +15,7 @@ Server::Server(int port)
 
 void Server::accept()
 {
-    SessionPtr session = Session::getNewSession();
+    ChatSessionPtr session = ChatSession::getNewSession();
     acceptor_.async_accept(session->socket()
                          , std::bind(
                              &Server::handle_accept
@@ -24,7 +24,7 @@ void Server::accept()
                              , std::placeholders::_1));
 }
 
-void Server::handle_accept(SessionPtr session, asio::error_code error)
+void Server::handle_accept(ChatSessionPtr session, asio::error_code error)
 {
     if (!error)
     {
@@ -35,6 +35,11 @@ void Server::handle_accept(SessionPtr session, asio::error_code error)
                  << client_addr.port());
         sessions_.push_back(session);
         session -> start();
+
+        for (std::function<void(ChatSessionPtr)> cb : onConnectedCbs)
+        {
+            cb(session);
+        }
     }
 
     accept();
@@ -45,5 +50,10 @@ void Server::start()
 
     accept();
 
+}
+
+void Server::subscribe(std::function<void (ChatSessionPtr)> cb)
+{
+    onConnectedCbs.push_back(cb);
 }
 

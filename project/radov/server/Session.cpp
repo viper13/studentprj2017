@@ -1,4 +1,4 @@
-#include "session.h"
+#include "Session.h"
 #include "worker.h"
 #include "helper.h"
 
@@ -7,13 +7,6 @@ Session::Session()
     , nextMessageSize_(0)
 {
 
-}
-
-std::shared_ptr<Session> Session::getNewSession()
-{
-    SessionPtr session(new Session());
-
-    return session;
 }
 
 void Session::start()
@@ -59,7 +52,6 @@ void Session::read()
        }
        else
        {
-           LOG_INFO(nextMessageSize_);
            buffer_.resize(nextMessageSize_);
            asio::async_read(socket_
                             , asio::buffer(buffer_, nextMessageSize_)
@@ -79,9 +71,10 @@ void Session::handleRead(asio::error_code error, size_t /*bufferSize*/)
     {
         if (0 == nextMessageSize_)
                 {
-                    LOG_INFO("Message:" << buffer_);
                     std::string message(buffer_.begin(), buffer_.end());
                     write(message);
+
+                    onRead(buffer_);
                 }
 
                 read();

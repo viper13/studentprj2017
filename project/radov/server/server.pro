@@ -10,17 +10,21 @@ TEMPLATE = app
 INCLUDEPATH += $$PWD/../common/
 
 SOURCES += main.cpp \
-    session.cpp \
-    server.cpp \
     ../common/define.cpp \
     ../common/worker.cpp \
-    ../common/helper.cpp
+    ../common/helper.cpp \
+    ChatSession.cpp \
+    ChatManager.cpp \
+    Server.cpp \
+    Session.cpp
 
 HEADERS += \
-    session.h \
-    server.h \
     ../common/define.h \
     ../common/worker.h\
-    ../common/helper.h
+    ../common/helper.h \
+    ChatSession.h \
+    ChatManager.h \
+    Server.h \
+    Session.h
 
 
