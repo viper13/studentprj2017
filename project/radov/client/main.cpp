@@ -1,6 +1,6 @@
 #include <iostream>
 #include "worker.h"
-#include "client.h"
+#include "Client.h"
 //#include
 
 int main()
