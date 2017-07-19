@@ -3,29 +3,15 @@
 #include "Worker.h"
 #include "Client.h"
 #include "define.h"
+#include "MessageManager.h"
 
 int main(int argc, char *argv[])
 {
-    std::shared_ptr<Client> clientPtr(new Client("localhost", "1133"));
-
-    clientPtr->start();
-    Worker::instance()->start();
-
-    LOG_INFO("Thread started!!!");
-
-    std::string message;
-    bool needStop = false;
-    while (!needStop)
-    {
-        LOG_INFO("Enter message:");
-        std::cin >> message;
-        clientPtr->write(message);
-        needStop = (message == "stop");
-    }
-
-    Worker::instance()->join();
-
-    LOG_INFO("Thread finished!");
+    MessageManager* manager = new MessageManager();
+    manager->initializeSession();
+    manager->printHelp();
+    manager->inputMessage();
+    manager->closeSession();
 
     return 0;
 }

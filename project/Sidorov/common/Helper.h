@@ -10,9 +10,11 @@ typedef std::vector<asio::const_buffer> BufferSequence;
 class Helper
 {
 public:
-    Helper();
+    static void addCodeCommand(CodeCommand code, ByteBufferPtr bufferPtr);
     static BuffersVector addBufferSize(ByteBufferPtr buffer);
     static BufferSequence toBufferSequence(BuffersVector buffers);
+    static std::vector<std::string> splitCommandAndData(const std::string &s);
+    static std::pair<CodeCommand, ByteBufferPtr> getCodeAndData(const std::string &str);
 };
 
 #endif // HELPER_H

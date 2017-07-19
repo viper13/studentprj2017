@@ -1,8 +1,10 @@
 #include "Helper.h"
 
-Helper::Helper()
-{
 
+
+void Helper::addCodeCommand(CodeCommand code, ByteBufferPtr bufferPtr)
+{
+   bufferPtr->emplace(bufferPtr->begin(), static_cast<uint8_t>(code));
 }
 
 BuffersVector Helper::addBufferSize(ByteBufferPtr buffer)
@@ -29,4 +31,50 @@ BufferSequence Helper::toBufferSequence(BuffersVector buffers)
         result.push_back(asio::buffer(*buffer));
     }
     return result;
+}
+
+std::vector<std::string> Helper::splitCommandAndData(const std::string &s)
+{
+    std::vector<std::string> tokens;
+    tokens.push_back(s.substr(0,s.find(' ')));
+    tokens.push_back(s.substr(s.find(' ')+1));
+    return tokens;
+}
+
+std::pair<CodeCommand, ByteBufferPtr> Helper::getCodeAndData(const std::string &str)
+{
+    std::istringstream ist(str);
+
+        std::string codeStr;
+        ist >> codeStr;
+
+        int code;
+
+        try{
+            code = std::stoi(codeStr);
+        }
+        catch(const std::invalid_argument& exp)
+        {
+            std::cout << "Wrong number of command!" << std::endl;
+            return std::pair<CodeCommand, ByteBufferPtr>();
+        }
+
+        if(code < static_cast<int>(CodeCommand::LOGIN) || code > static_cast<int>(CodeCommand::DISCONNECT_FROM_USER))
+        {
+            std::cout << "Wrong number of command!" << std::endl;
+            return std::pair<CodeCommand, ByteBufferPtr>();
+        }
+
+
+        CodeCommand commandCode = static_cast<CodeCommand>(code);
+
+        std::string data;
+        ist >> data;
+
+        ByteBufferPtr buff = std::make_shared<ByteBuffer>();
+
+        if(!data.empty())
+            buff = std::make_shared<ByteBuffer>(data.begin(), data.end());
+
+        return std::make_pair(commandCode, buff);
 }

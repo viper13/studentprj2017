@@ -1,9 +1,12 @@
 #include "Worker.h"
 #include "Server.h"
+#include "ChatManager.h"
 
 int main(int argc, char *argv[])
 {
     Server server(1133);
+
+    ChatManager chatManager(server);
 
     server.start();
 

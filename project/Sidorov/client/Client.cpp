@@ -22,17 +22,17 @@ void Client::start()
 
 }
 
-void Client::write(std::string message)
+void Client::write(ByteBufferPtr bufferPtr)
 {
-    ByteBufferPtr buffer(new ByteBuffer(message.begin(),message.end()));
-    BuffersVector buffers = Helper::addBufferSize(buffer);
+    //ByteBufferPtr bufferPtr(new ByteBuffer(buffer));
+    BuffersVector buffers = Helper::addBufferSize(bufferPtr);
     BufferSequence sequance = Helper::toBufferSequence(buffers);
 
     asio::async_write(socket_
                       , sequance
                       , std::bind(&Client::handleWrite
                                   , shared_from_this()
-                                  , buffer
+                                  , buffers
                                   , std::placeholders::_1
                                   , std::placeholders::_2));
 }
@@ -99,6 +99,7 @@ void Client::handleRead(asio::error_code error
     {
         LOG_INFO("Message: " << buffer_);
         read();
+        onRead(buffer_);
     }
     else
     {
@@ -107,7 +108,7 @@ void Client::handleRead(asio::error_code error
     }
 }
 
-void Client::handleWrite(ByteBufferPtr data, asio::error_code error, size_t writedBytes)
+void Client::handleWrite(BuffersVector data, asio::error_code error, size_t writedBytes)
 {
     if (!error)
     {
@@ -115,7 +116,6 @@ void Client::handleWrite(ByteBufferPtr data, asio::error_code error, size_t writ
     }
     else
     {
-        LOG_ERR("Failure write data " << *data
-                << " decription: "<< error.message());
+        LOG_ERR("Failure write data " << error.message());
     }
 }

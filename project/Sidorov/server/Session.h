@@ -11,19 +11,20 @@ class Session
 public:
     Session();
 
-    static std::shared_ptr<Session> getNewSession();
-
     void start();
 
     asio::ip::tcp::socket& socket();
 
     void write(std::string message);
+
+    virtual void onRead(ByteBuffer data) = 0;
 private:
     void read();
 
     void handleRead(asio::error_code error, size_t bufferSize);
 
-    void handleWrite(ByteBufferPtr data, asio::error_code error, size_t writedBytes);
+    void handleWrite(BuffersVector data, asio::error_code error, size_t writedBytes);
+
     asio::ip::tcp::socket socket_;
     ByteBuffer buffer_;
     uint16_t nextMessageSize_;

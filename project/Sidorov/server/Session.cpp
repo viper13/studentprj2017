@@ -9,16 +9,10 @@ Session::Session()
     buffer_.reserve(BUFFER_MAX_SIZE);
 }
 
-std::shared_ptr<Session> Session::getNewSession()
-{
-    SessionPtr session(new Session());
-    return session;
-}
-
 void Session::start()
 {
-   read();
    LOG_INFO("Session started");
+   read();
 }
 
 asio::ip::tcp::socket &Session::socket()
@@ -36,23 +30,23 @@ void Session::write(std::string message)
                       , sequence
                       , std::bind(&Session::handleWrite
                                   , shared_from_this()
-                                  , buffer
+                                  , buffers
                                   , std::placeholders::_1
                                   , std::placeholders::_2));
 }
 
-void Session::handleWrite(ByteBufferPtr data,asio::error_code error, size_t writedBytesCount)
+void Session::handleWrite(BuffersVector data,asio::error_code error, size_t writedBytesCount)
 {
     if (!error)
     {
         LOG_INFO("Data writed successful! size = "
-                 << data->size()
-                 << " writed size ="
+                 << data.size()
+                 << " writed size = "
                  << writedBytesCount);
     }
     else
     {
-        LOG_ERR("Failure: write data " << *data);
+        LOG_ERR("Failure: write data!");
     }
 }
 
@@ -91,8 +85,8 @@ void Session::handleRead(asio::error_code error, size_t bufferSize)
             LOG_INFO("Message: " << buffer_);
             std::string message(buffer_.begin(), buffer_.end());
             write(message);
-            nextMessageSize_=0;
-            read();
+
+            onRead(buffer_);
         }
         else
         {
@@ -105,6 +99,7 @@ void Session::handleRead(asio::error_code error, size_t bufferSize)
             LOG_INFO("Message size is: " << nextMessageSize_);
             read();
         }
+        read();
     }
     else
     {

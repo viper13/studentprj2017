@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <functional>
 
 #define WORKER_THREAD_COUNT 4
 #define BUFFER_MAX_SIZE 65535
@@ -14,6 +15,17 @@
 
 typedef std::vector<char> ByteBuffer;
 typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
+typedef std::vector<ByteBufferPtr> BuffersVector;
+
+enum class CodeCommand: uint8_t
+{
+    LOGIN = 0,
+    LOGOUT = 1,
+    USER_LIST = 2,
+    SEND_MESSAGE = 3,
+    CONNECT_TO_USER = 4,
+    DISCONNECT_FROM_USER = 5
+};
 
 std::ostream& operator <<(std::ostream& stream, const ByteBuffer& buffer);
 
