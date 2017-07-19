@@ -13,3 +13,8 @@ void ChatManager::onConnected(ChatSessionPtr session)
     LOG_INFO("Connected session.");
     sessions_.push_back(session);
 }
+
+void ChatManager::getClientMessage()
+{
+    //read()
+}

@@ -19,12 +19,13 @@ typedef std::vector<ByteBufferPtr> BuffersVector;
 
 enum class CodeCommand: uint8_t
 {
-    LOGIN = 0,
-    LOGOUT = 1,
-    USER_LIST = 2,
-    SEND_MESSAGE = 3,
-    CONNECT_TO_USER = 4,
-    DISCONNECT_FROM_USER = 5
+    NONE = 0,
+    LOGIN = 1,
+    LOGOUT = 2,
+    USER_LIST = 3,
+    SEND_MESSAGE = 4,
+    CONNECT_TO_USER = 5,
+    DISCONNECT_FROM_USER = 6
 };
 
 std::ostream& operator <<(std::ostream& stream, const ByteBuffer& buffer);

@@ -11,6 +11,7 @@ public:
     static std::shared_ptr<ChatSession> getNewSession();
 
     void onRead(ByteBuffer data) override;
+
 };
 
 typedef std::shared_ptr<ChatSession> ChatSessionPtr;

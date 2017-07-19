@@ -11,10 +11,7 @@ ChatClient::ChatClient(std::string address, std::string port)
 
 void ChatClient::onRead(ByteBuffer data)
 {
-    if ( readHandle_ != nullptr)
-    {
-        //readHandle_(data);
-    }
+
 }
 
 void ChatClient::execute(CodeCommand code, ByteBufferPtr bufferPtr)
@@ -70,7 +67,7 @@ void ChatClient::login(ByteBufferPtr name)
 
 void ChatClient::logout()
 {
-    ByteBufferPtr bufferPtr {};
+    ByteBufferPtr bufferPtr = std::make_shared<ByteBuffer>();
     Helper::addCodeCommand(CodeCommand::LOGOUT,bufferPtr);
     write(bufferPtr);
 }
@@ -88,7 +85,7 @@ void ChatClient::sendMessage(ByteBufferPtr message)
 
 void ChatClient::getUserList()
 {
-    ByteBufferPtr bufferPtr {};
+    ByteBufferPtr bufferPtr = std::make_shared<ByteBuffer>();
     Helper::addCodeCommand(CodeCommand::USER_LIST,bufferPtr);
     write(bufferPtr);
 }
@@ -106,7 +103,7 @@ void ChatClient::connectToUser(ByteBufferPtr userName)
 
 void ChatClient::disconnectFromUser()
 {
-    ByteBufferPtr bufferPtr {};
+    ByteBufferPtr bufferPtr = std::make_shared<ByteBuffer>();
     Helper::addCodeCommand(CodeCommand::DISCONNECT_FROM_USER,bufferPtr);
     write(bufferPtr);
 }

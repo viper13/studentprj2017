@@ -14,5 +14,5 @@ std::shared_ptr<ChatSession> ChatSession::getNewSession()
 
 void ChatSession::onRead(ByteBuffer data)
 {
-    LOG_INFO(data);
+    //LOG_INFO(data);
 }

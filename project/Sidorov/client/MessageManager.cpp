@@ -46,10 +46,10 @@ void MessageManager::inputMessage()
 void MessageManager::printHelp()
 {
     std::cout << "Use next numbers for command:" << std::endl
-              << "0 LOGIN [name]" << std::endl
-              << "1 LOGOUT" << std::endl
-              << "2 USER_LIST" << std::endl
-              << "3 SEND_MESSAGE [message]" << std::endl
-              << "4 CONNECT_TO_USER [user's name]" << std::endl
-              << "5 DISCONNECT_TO_USER" << std::endl;
+              << "1 LOGIN [name]" << std::endl
+              << "2 LOGOUT" << std::endl
+              << "3 USER_LIST" << std::endl
+              << "4 SEND_MESSAGE [message]" << std::endl
+              << "5 CONNECT_TO_USER [user's name]" << std::endl
+              << "6 DISCONNECT_TO_USER" << std::endl;
 }

@@ -11,6 +11,7 @@ public:
 
     void onConnected(ChatSessionPtr session);
 
+    void getClientMessage();
 private:
 
     std::vector<ChatSessionPtr> sessions_;
