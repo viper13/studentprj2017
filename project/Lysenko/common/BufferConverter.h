@@ -14,10 +14,10 @@ class BufferConverter
     public:
 
         static BuffersVector addMessageSize(ByteBufferPtr sourceMessage);
-        static BuffersVector getOperationMessage(Operations operationCode);
-        static ByteBuffer uint16ToBuffer(uint16_t number);
         static WriteBuffer toWriteBuffer(BuffersVector sourceBuffer);
-        static uint16_t charsToMessageSize(ByteBuffer& sourceBuffer);
+        static ByteBuffer uint16ToBuffer(uint16_t number);
+        static uint16_t bufferToUint16(ByteBuffer& sourceBuffer);
+        static ByteBuffer addOpCode(Operation op, std::string sourceString);
 };
 
 #endif // BUFFERCONVERTER_H

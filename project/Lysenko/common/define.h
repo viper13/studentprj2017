@@ -12,9 +12,10 @@
 #define LOG_INFO(message) std::cout << __FILE__ << " : " << __FUNCTION__ << " : " << __LINE__ << " [INF] " << message << std::endl;
 #define LOG_ERR(message) std::cout << __FILE__ << " : " << __FUNCTION__ << " : " << __LINE__ << " [ERR] " << message << std::endl;
 
-enum class Operations : uint16_t
+enum class Operation : uint8_t
 {
-    logIn = 0
+    None = 0,
+    logIn = 1
 };
 
 typedef std::vector<char> ByteBuffer;

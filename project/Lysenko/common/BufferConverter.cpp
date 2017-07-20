@@ -19,25 +19,6 @@ BuffersVector BufferConverter::addMessageSize(ByteBufferPtr sourceMessage)
 
 
 
-BuffersVector BufferConverter::getOperationMessage(uint16_t operationCode)
-{
-    BuffersVector result (0);
-
-    ByteBufferPtr tempBuffer( new ByteBuffer (2) );
-    (*tempBuffer)[0] = ( (*tempBuffer)[1] = 0 );
-
-    result.push_back( tempBuffer );
-
-    tempBuffer = std::make_shared<ByteBuffer>(
-                BufferConverter::uint16ToBuffer( operationCode ) );
-
-    result.push_back( tempBuffer );
-
-    return result;
-}
-
-
-
 ByteBuffer BufferConverter::uint16ToBuffer(uint16_t number)
 {
     ByteBuffer result(2);
@@ -63,7 +44,7 @@ WriteBuffer BufferConverter::toWriteBuffer(BuffersVector sourceBuffer)
 
 
 
-uint16_t BufferConverter::charsToMessageSize(ByteBuffer& sourceBuffer)
+uint16_t BufferConverter::bufferToUint16(ByteBuffer& sourceBuffer)
 {
     uint16_t result = (sourceBuffer[0] << 8) + sourceBuffer[1];
 
@@ -73,4 +54,9 @@ uint16_t BufferConverter::charsToMessageSize(ByteBuffer& sourceBuffer)
     }*/
 
     return result;
+}
+
+ByteBuffer BufferConverter::addOpCode(Operation op, std::string sourceString) // TODO
+{
+
 }

@@ -130,7 +130,7 @@ void MessageClient::handleReadMsgSize(asio::error_code error, size_t bufferSize)
 {
     if ( !error )
     {
-         uint16_t nextMessageSize = BufferConverter::charsToMessageSize (buffer_);
+         uint16_t nextMessageSize = BufferConverter::bufferToUint16 (buffer_);
          LOG_INFO("Incoming message size = " << nextMessageSize);
 
          readMessage(nextMessageSize);
@@ -171,7 +171,7 @@ void MessageClient::handleWrite(BuffersVector data,
     {
         LOG_INFO( "Message  " << *(data[1]) <<
                   " has been successfully written to server! total size = " << writtenBytesCount <<
-                  " message size = " << BufferConverter::charsToMessageSize( *(data[0]) ) );
+                  " message size = " << BufferConverter::bufferToUint16( *(data[0]) ) );
     }
     else
     {

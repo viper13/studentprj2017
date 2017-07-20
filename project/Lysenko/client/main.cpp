@@ -1,10 +1,11 @@
 #include "Worker.h"
-#include "MessageClient.h"
+#include "CommandClient.h"
 #include "define.h"
 
 int main(int argc, char *argv[])
 {
-
+    std::string str("Name");
+    std::cout << Operation::logIn + str;
 //    std::shared_ptr<MessageClient> clientPtr(new MessageClient("127.0.0.1", "1122"));
 //    clientPtr->start();
 
