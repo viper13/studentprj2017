@@ -19,6 +19,9 @@ public:
     void write(ByteBufferPtr message);
 
     virtual void onRead(ByteBuffer buffer) = 0;
+    virtual void onDisconected() = 0;
+
+    virtual ~Session() {}
 private:
     void read();
 

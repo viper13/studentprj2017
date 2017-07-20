@@ -119,7 +119,7 @@ void Client::handleRead(std::error_code error, size_t bufferSize)
         if(0 == nextMsgSize_)
         {
             nextMsgSize_ = Helper::mergeTwoByte(buffer_[0], buffer_[1]);
-            LOG_INFO("Message size: " << nextMsgSize_);
+            //LOG_INFO("Message size: " << nextMsgSize_);
             buffer_.resize(nextMsgSize_);
         }
         else
@@ -153,7 +153,7 @@ void Client::handleWrite(ByteBufferPtr data
 {
     if(!error)
     {
-        LOG_INFO("Message writed!");
+        //LOG_INFO("Message writed!");
     }
     else
     {

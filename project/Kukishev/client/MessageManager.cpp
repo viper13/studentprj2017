@@ -16,9 +16,10 @@ void MessageManager::start()
     std::string message;
     bool isExit = false;
 
+    std::cout << std::endl;
     while (!isExit)
     {
-        LOG_INFO("Enter message: ");
+        //LOG_INFO("Enter message: ");
         std::getline(std::cin, message);
 
         if ( (isExit = (message == "stop")) )
@@ -30,11 +31,11 @@ void MessageManager::start()
             continue;
 
         clientChatPtr_->execute(pairCodeData.first, std::move(pairCodeData.second));
-
     }
 
     Worker::instance()->join();
 }
+
 
 void MessageManager::printHelp()
 {
@@ -42,9 +43,11 @@ void MessageManager::printHelp()
               << "0 LOGIN [name]" << std::endl
               << "1 LOGOUT" << std::endl
               << "2 USER_LIST" << std::endl
-              << "3 SEND_MESSAGE [message]" << std::endl
+              << "3 SEND_MESSAGE [name][message]" << std::endl
               << "4 CONNECT_TO_USER [user's name]" << std::endl
-              << "5 DISCONNECT_TO_USER" << std::endl;
+              << "5 DISCONNECT_TO_USER [user's name]" << std::endl
+              << "6 CONFIRM_TO_START_CHAT [name]" << std::endl
+              << "7 SHOW_QUEUE_USERS" << std::endl;
 }
 
 std::pair<CommandCode, ByteBufferPtr> MessageManager::getCodeAndData(const std::string &str)
@@ -65,7 +68,7 @@ std::pair<CommandCode, ByteBufferPtr> MessageManager::getCodeAndData(const std::
         return std::pair<CommandCode, ByteBufferPtr>();
     }
 
-    if(code < static_cast<int>(CommandCode::LOGIN) || code > static_cast<int>(CommandCode::DISCONNECT_TO_USER))
+    if(code < static_cast<int>(CommandCode::LOGIN) || code > static_cast<int>(CommandCode::SHOW_QUEUE_USERS))
     {
         std::cout << "Wrong number of command!" << std::endl;
         return std::pair<CommandCode, ByteBufferPtr>();
@@ -75,7 +78,13 @@ std::pair<CommandCode, ByteBufferPtr> MessageManager::getCodeAndData(const std::
     CommandCode commandCode = static_cast<CommandCode>(code);
 
     std::string data;
-    ist >> data;
+    std::string s;
+    ist >> s;
+    data = s;
+    while(ist >> s)
+    {
+        data+=" "+s;
+    }
 
     ByteBufferPtr buff = std::make_shared<ByteBuffer>();
 

@@ -85,6 +85,7 @@ void Session::handleRead(asio::error_code error, size_t bufferSize)
     {
         LOG_ERR("Failure: read error code " << error.value()
                 << " description: " << error.message());
+        onDisconected();
     }
 }
 

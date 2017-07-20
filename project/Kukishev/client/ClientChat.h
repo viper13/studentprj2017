@@ -8,10 +8,13 @@ class ClientChat : public Client
 public:
     ClientChat(std::string address, std::string port);
 
-    void onRead(ByteBufferPtr bufferPtr);
+    virtual void onRead(ByteBufferPtr bufferPtr) override;
     void execute(CommandCode cmd, ByteBufferPtr &&bufferPtr);
 
     void printServerAnswer(ByteBufferPtr buffPtr);
+    bool isContainUserWhoWantChat(const std::string& name);
+    bool isEmptyQueueForChat();
+    void printQueueChat();
 private:
 
     void login(ByteBufferPtr name);
@@ -19,8 +22,11 @@ private:
     void sendMessage(ByteBufferPtr message);
     void getUserList();
     void connectToUser(ByteBufferPtr userName);
-    void disconnectFromUser();
+    void disconnectFromUser(ByteBufferPtr userName);
+    void answerOnRequestToConnect(ByteBufferPtr userNameAndAnswer);
+    void confirmToStarChat(ByteBufferPtr userName);
 
+    std::vector<std::string> usersWantToChat;
     std::string name;
 };
 

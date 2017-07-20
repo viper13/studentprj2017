@@ -38,7 +38,8 @@ ByteBuffer Helper::stringToBuffer(const std::string &str)
     return ByteBuffer(str.begin(), str.end());
 }
 
-std::string Helper::bufferToString(ByteBufferPtr buffPtr, uint posFrom)
+std::string Helper::bufferToString(ByteBufferPtr buffPtr, uint posFrom, uint posTo)
 {
-    return std::string(buffPtr->begin()+posFrom, buffPtr->end());
+    return std::string(buffPtr->begin()+posFrom, buffPtr->end() - posTo);
 }
+
