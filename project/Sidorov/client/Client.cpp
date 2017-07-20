@@ -92,7 +92,7 @@ void Client::read()
         }
         else
         {
-            //   buffer_.resize(BUFFER_MAX_SIZE);
+            //buffer_.resize(BUFFER_MAX_SIZE);
             asio::async_read(socket_
                              , asio::buffer(buffer_, nextMessageSize_)
                              , asio::transfer_at_least(nextMessageSize_)
