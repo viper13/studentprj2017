@@ -6,6 +6,7 @@ ChatClient::ChatClient(std::string address, std::string port)
     , name_("")
     , loggedIn_(false)
     , inChat_(false)
+    , userNames_(new std::set<std::string>())
 {
 
 }
@@ -125,7 +126,7 @@ void ChatClient::processInputMessage()
             }
             else
             {
-                std::cout << "You logged in successfuly!" << std::endl;
+                std::cout << "You can't start chat with this user!" << std::endl;
             }
             break;
         }

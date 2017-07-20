@@ -3,6 +3,7 @@
 #include "protocol.h"
 
 ChatManager::ChatManager(Server &server)
+    : chatRooms_(ClientsContainer::instance())
 {
     server.subscribe(std::bind(
                          &ChatManager::onConnected
@@ -48,7 +49,7 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
             if (it == sessions_.end())
             {
                 session->setUserName(userName);
-                sessions_.at(userName) = session;
+                sessions_[userName] = session;
                 chatRooms_->addNewClient(userName);
                 messageToSend = Protocol::logInServerMessageCreate("OK");
             }
@@ -63,16 +64,24 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
         {
             std::string initiator = session->getUserName();
             std::string remoteUser = Protocol::typeRemover(message);
-            bool result = chatRooms_->addClientToChatRoom(initiator, remoteUser);
-            if (result)
+            std::map<std::string, ChatSessionPtr>::iterator it;
+            it = sessions_.find(remoteUser);
+            if (it != sessions_.end())
             {
-                messageToSend = Protocol::startChatServerMessageCreate("OK");
+                bool result = chatRooms_->addClientToChatRoom(initiator, remoteUser);
+                if (result)
+                {
+                    messageToSend = Protocol::startChatServerMessageCreate("OK");
+                    session->write(messageToSend);
+                    sessions_.at(remoteUser)->write(messageToSend);
+                }
+                else
+                {
+                    messageToSend = Protocol::startChatServerMessageCreate("BAD");
+                    session->write(messageToSend);
+                }
             }
-            else
-            {
-                messageToSend = Protocol::startChatServerMessageCreate("BAD");
-            }
-            session->write(messageToSend);
+
             break;
         }
         case Protocol::MESSAGE:

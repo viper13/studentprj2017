@@ -23,12 +23,11 @@ void MessageManager::comunicateWithUser()
     std::cout << "Use COMMAND to control client" << std::endl;
     std::cout << "Use COMMAND HELP for help" << std::endl;
     std::string message;
-    std::stringstream tempStream;
     std::string firstWord, secondWord, thirdWord;
     while(true)
     {
         getline(std::cin, message);
-        tempStream.str(message);
+        std::stringstream tempStream(message);
         tempStream >> firstWord;
         if (firstWord == "COMMAND")
         {

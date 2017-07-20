@@ -3,7 +3,7 @@
 ChatSession::ChatSession()
     :Session()
 {
-    thisSessionPtr_ = ChatSessionPtr(this);
+
 }
 
 std::shared_ptr<ChatSession> ChatSession::getNewSession()
@@ -17,7 +17,7 @@ void ChatSession::onRead(ByteBuffer data)
     std::string message(data.begin(), data.end());
     for (std::function<void(ChatSessionPtr, std::string)> cb : onReadCbs)
     {
-        cb(thisSessionPtr_, message);
+        cb(std::static_pointer_cast<ChatSession>(shared_from_this()), message); //HERE THINK OF THIS!!!
     }
 }
 

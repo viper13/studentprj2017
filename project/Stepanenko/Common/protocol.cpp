@@ -34,12 +34,12 @@ std::string Protocol::userListServerMessageCreate(std::set<std::string> names)
         result += name;
         result += " ";
     }
-    return (result.substr(0, result.length()-1));
+    return result;
 }
 
 StringSetPtr Protocol::userListServerMessageParse(std::string message)
 {
-    StringSetPtr result;
+    StringSetPtr result = StringSetPtr(new std::set<std::string>());
     std::stringstream tempStream(message.substr(1, message.length()));
     std::string tempString;
     while(tempStream >> tempString)

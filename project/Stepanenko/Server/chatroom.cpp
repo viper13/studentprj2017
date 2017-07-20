@@ -2,6 +2,7 @@
 
 ChatRoom::ChatRoom(std::string name)
     : isEmpty_(true)
+    , users_(new std::set<std::string>())
 {
     users_->insert(name);
 }

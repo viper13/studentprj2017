@@ -8,15 +8,16 @@ ClientsContainer *ClientsContainer::instance()
 
 void ClientsContainer::addNewClient(std::string &client)
 {
-    ChatRoomPtr room(new ChatRoom(client));
-    chatRooms_.at(client) = room;
+    ChatRoomPtr room = ChatRoom::getNewChatRoom(client);
+    chatRooms_[client] = room;
 }
 
 bool ClientsContainer::addClientToChatRoom(std::string &initiator, std::string &userForAdd)
 {
     //Protection from not existet user
     std::map<std::string, ChatRoomPtr>::iterator it = chatRooms_.find(userForAdd);
-    if (it == chatRooms_.end())
+    std::map<std::string, ChatRoomPtr>::iterator it2 = chatRooms_.find(initiator);
+    if (it == chatRooms_.end() || it2 == chatRooms_.end())
     {
         return false;
     }
@@ -43,10 +44,14 @@ bool ClientsContainer::addClientToChatRoom(std::string &initiator, std::string &
 
 void ClientsContainer::removeClientFromChat(std::string &client)
 {
-    ChatRoomPtr clientChatRoom = chatRooms_.at(client);
-    clientChatRoom->removeUser(client);
-    ChatRoomPtr newEmptyRoom(new ChatRoom(client));
-    chatRooms_.at(client) = newEmptyRoom;
+    std::map<std::string, ChatRoomPtr>::iterator it = chatRooms_.find(client);
+    if (it != chatRooms_.end())
+    {
+        ChatRoomPtr clientChatRoom = chatRooms_.at(client);
+        clientChatRoom->removeUser(client);
+        ChatRoomPtr newEmptyRoom = ChatRoom::getNewChatRoom(client);
+        chatRooms_.at(client) = newEmptyRoom;
+    }
 }
 
 StringSetPtr ClientsContainer::getUsersFromRoom(std::string &client)

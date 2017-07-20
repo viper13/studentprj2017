@@ -11,7 +11,6 @@ public:
     void onRead(ByteBuffer data) override;
     void subscribe(std::function<void(std::shared_ptr<ChatSession>, std::string)> cb);
 private:
-    std::shared_ptr<ChatSession> thisSessionPtr_;
     std::vector<std::function<void(std::shared_ptr<ChatSession>, std::string)>> onReadCbs;
 };
 typedef std::shared_ptr<ChatSession> ChatSessionPtr;

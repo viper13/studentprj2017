@@ -1,6 +1,7 @@
 #include <iostream>
 #include <asio.hpp>
 #include "messageManager.h"
+#include "worker.h"
 
 int main(int argc, char *argv[])
 {
