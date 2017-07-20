@@ -3,6 +3,7 @@
 
 #include "Server.h"
 #include "SessionEssence.h"
+#include "ChatRoom.h"
 
 class ChatManager
 {
@@ -11,8 +12,6 @@ public:
 
 
     static ChatManager &getInstance();
-
-   // Server& server_;
 
     void onConnected(SessionEssencePtr session);
 
@@ -24,13 +23,23 @@ public:
 
     void sendMessage(char idClient, char idTarget, std::string message);
 
+    void sendChatMessage(char idRoom, std::string message, char idClient);
+
+    void requestMessage(char idClient, char idTarget, std::string message);
+
+    void createChat();
+
+    void addUserToChatRoom(char idClient, char idRoom);
+
     std::string message_;
 
-private:
     std::vector<SessionEssencePtr> sessions_;
+
+private:
+
+    std::vector<ChatRoomPtr> chatRooms_;
     static ChatManager * p_instance;
     ChatManager();
-    //ChatManager(Server& server);
     ChatManager(const ChatManager&);
     ChatManager& operator =(ChatManager&);
 

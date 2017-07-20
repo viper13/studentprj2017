@@ -15,6 +15,10 @@ public:
 
     char getIdClient();
 
+    bool hasRequest;
+    bool inChat;
+
+    std::string message_;
 
 
 private:

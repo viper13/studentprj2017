@@ -40,9 +40,6 @@ void Client::write(std::string message)
                                   , std::placeholders::_2));
 }
 
-
-
-
 void Client::read()
 {
     if (0 == messageSize_)
@@ -78,6 +75,7 @@ void Client::handleRead(system::error_code error, size_t buf_size)
         {
             LOG_INFO("Message: \n" << buffer_);
             messageSize_ = 0;
+            onRead(buffer_);
             read();
         }
         else

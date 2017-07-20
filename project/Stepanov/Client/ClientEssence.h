@@ -11,6 +11,10 @@ public:
 
     void processMessage(std::string message) override;
 
+    void onRead(ByteBuffer data) override;
+
+    bool hasRequest;
+    bool inChat;
 
 
 

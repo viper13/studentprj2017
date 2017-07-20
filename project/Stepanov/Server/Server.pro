@@ -19,7 +19,8 @@ SOURCES += \
     ../common/define.cpp \
     ../common/Helper.cpp \
     SessionEssence.cpp \
-    ChatManager.cpp
+    ChatManager.cpp \
+    ChatRoom.cpp
 
 LIBS += -L"/usr/include/boost" -lboost_system
 # The following define makes your compiler emit warnings if you use
@@ -41,4 +42,5 @@ HEADERS += \
     ../common/Helper.h \
     ../common/Helper.h \
     SessionEssence.h \
-    ChatManager.h
+    ChatManager.h \
+    ChatRoom.h

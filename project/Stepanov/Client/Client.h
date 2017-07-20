@@ -15,6 +15,8 @@ public:
 
     virtual void processMessage(std::string message) = 0;
 
+    virtual void onRead(ByteBuffer data) = 0;
+
 
 
 private:
@@ -46,6 +48,7 @@ protected:
     std::vector<char> buffer_;
     char idClient;
     bool isChatting;
+
 };
 
 #endif // CLIENT_H

@@ -19,6 +19,11 @@
 #define ERROR_MESSAGE "$e"
 #define WAIT_FOR_NEXT_MESSAGE "$w"
 #define DIRECT_MESSAGE "$d"
+#define REQUEST_TO_CREATE_CHAT_MESSAGE "$r"
+#define YES_MESSAGE "$y"
+#define NO_MESSAGE "$n"
+#define CHAT_MESSAGE "$C"
+#define ADD_USER_TO_CHAT_MESSAGE "$A"
 
 
 #define LOG_INFO(message) std::cout<<"\n [INFO]"<<message<<std::endl;
