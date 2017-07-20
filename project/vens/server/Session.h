@@ -19,6 +19,7 @@ public:
 
     virtual void onRead(ByteBuffer data) = 0;
 
+    virtual ~Session();
 private:
     void read();
 

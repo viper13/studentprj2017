@@ -35,6 +35,14 @@ void Session::write(std::string message)
                                   , std::placeholders::_2));
 }
 
+Session::~Session()
+{
+    if (socket_.is_open())
+    {
+        LOG_ERR("You need to close socket!!!");
+    }
+}
+
 void Session::read()
 {
     if (0 == nextMessageSize_)
