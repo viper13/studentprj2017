@@ -32,3 +32,13 @@ void Helper::insertCommandCode(ByteBufferPtr buffPtr, CommandCode code)
     buffPtr->emplace(buffPtr->begin(), static_cast<uint8_t>(code));
 
 }
+
+ByteBuffer Helper::stringToBuffer(const std::string &str)
+{
+    return ByteBuffer(str.begin(), str.end());
+}
+
+std::string Helper::bufferToString(ByteBufferPtr buffPtr, uint posFrom)
+{
+    return std::string(buffPtr->begin()+posFrom, buffPtr->end());
+}

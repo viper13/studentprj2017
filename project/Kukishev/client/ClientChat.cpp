@@ -10,7 +10,24 @@ ClientChat::ClientChat(std::string address, std::string port)
 
 void ClientChat::onRead(ByteBufferPtr bufferPtr)
 {
-    printServerAnswer(bufferPtr);
+    //printServerAnswer(bufferPtr);
+    CommandCode cCode = static_cast<CommandCode>((*bufferPtr)[0]);
+    switch (cCode) {
+    case CommandCode::LOGIN:
+    {
+        if( static_cast<bool>((*bufferPtr)[1]) )
+        {
+            std::cout << "Welcome!" << std::endl;
+        }
+        else
+        {
+            std::cout << "Oops! Something wrong: " << Helper::bufferToString(bufferPtr, 1) << std::endl;
+        }
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 void ClientChat::execute(CommandCode cmd, ByteBufferPtr&& bufferPtr)

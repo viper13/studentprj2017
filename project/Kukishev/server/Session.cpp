@@ -18,9 +18,9 @@ asio::ip::tcp::socket &Session::socket()
     return socket_;
 }
 
-void Session::write(std::string message)
+void Session::write(ByteBufferPtr message)
 {
-    ByteBufferPtr buffer = Helper::makeBuffer(ByteBufferPtr( new ByteBuffer(message.begin(), message.end()) ));//(new ByteBuffer(message.begin(), message.end()));
+    ByteBufferPtr buffer = Helper::makeBuffer(message);//(new ByteBuffer(message.begin(), message.end()));
     asio::async_write(socket_
                       , asio::buffer(*buffer)
                       , std::bind(&Session::handleWrite
@@ -70,9 +70,9 @@ void Session::handleRead(asio::error_code error, size_t bufferSize)
         }
         else
         {
-            std::string message(buffer_.begin(), buffer_.end());
+            //std::string message(buffer_.begin(), buffer_.end());
 
-            LOG_INFO("Message: "<< message);
+            //LOG_INFO("Message: "<< message);
 
             //write(message);
             onRead(buffer_);
@@ -95,7 +95,8 @@ void Session::handleWrite(ByteBufferPtr data, asio::error_code error, size_t wri
         LOG_INFO("Data writed succesful! size = "
                  << data->size()
                  << " writed size = "
-                 << writedBytesCount);
+                 << writedBytesCount
+                 << " " << *data);
 
 
     }

@@ -14,7 +14,7 @@ Server::Server(int port)
 void Server::accept()
 {
 
-    SessionChatPtr session = SessionChat::getNewSessions();
+    ChatSessionPtr session = ChatSession::getNewSessions();
 
     acceptor_.async_accept(session->socket(), std::bind(
                                &Server::handleAccept
@@ -23,7 +23,7 @@ void Server::accept()
                                , std::placeholders::_1));
 }
 
-void Server::handleAccept(SessionChatPtr session, asio::error_code error)
+void Server::handleAccept(ChatSessionPtr session, asio::error_code error)
 {
 
     if(!error)
@@ -36,7 +36,7 @@ void Server::handleAccept(SessionChatPtr session, asio::error_code error)
         sessions_.push_back(session);
         session->start();
 
-        for (std::function<void(SessionChatPtr)> cb : onConnectedCbs)
+        for (std::function<void(ChatSessionPtr)> cb : onConnectedCbs)
         {
             cb(session);
         }
@@ -50,7 +50,7 @@ void Server::start()
     accept();
 }
 
-void Server::subscribe(std::function<void (SessionChatPtr)> cb)
+void Server::subscribe(std::function<void (ChatSessionPtr)> cb)
 {
     onConnectedCbs.emplace_back(cb);
 }
