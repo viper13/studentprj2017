@@ -79,27 +79,53 @@ void Client::handleConnect(asio::error_code error, asio::ip::tcp::resolver::iter
 
 void Client::read()
 {
-    buffer_.resize(BUFFER_MAX_SIZE);
-    buffer_.resize(BUFFER_MAX_SIZE);
-        asio::async_read(socket_
-                         , asio::buffer(buffer_, BUFFER_MAX_SIZE)
-                         , asio::transfer_at_least(1)
-                         , std::bind(&Client::handleRead
-                                     , shared_from_this()
-                                     , std::placeholders::_1
-                                     , std::placeholders::_2));
-        messageSize_ = 0;
-
+    if(0 == nextMessageSize_)
+        {
+            buffer_.resize(2);
+            asio::async_read(socket_
+                             , asio::buffer(buffer_, 2)
+                             , asio::transfer_exactly(2)
+                             , std::bind(&Client::handleRead
+                                         , shared_from_this()
+                                         , std::placeholders::_1
+                                         , std::placeholders::_2));
+        }
+        else
+        {
+            //   buffer_.resize(BUFFER_MAX_SIZE);
+            asio::async_read(socket_
+                             , asio::buffer(buffer_, nextMessageSize_)
+                             , asio::transfer_at_least(nextMessageSize_)
+                             , std::bind(&Client::handleRead
+                                         , shared_from_this()
+                                         , std::placeholders::_1
+                                         , std::placeholders::_2));
+        }
 }
 
-void Client::handleRead(asio::error_code error
-                        , size_t bufferSize)
+void Client::handleRead(std::error_code error, size_t bufferSize)
 {
-    if (!error)
+    if(!error)
     {
-        LOG_INFO("Message: " << buffer_);
+        if(0 == nextMessageSize_)
+        {
+            uint16_t firstByte = (uint16_t)buffer_[0];
+            uint16_t secondByte = (uint16_t)buffer_[1];
+            nextMessageSize_ = (static_cast<uint16_t>(buffer_[0]))
+                    + static_cast<uint16_t>(buffer_[1]);
+            LOG_INFO("Message size is: " << nextMessageSize_);
+            buffer_.resize(nextMessageSize_);
+        }
+        else
+        {
+            ByteBufferPtr buff = std::make_shared<ByteBuffer>(std::move(buffer_));
+
+            onRead(buff);
+
+            nextMessageSize_ = 0;
+        }
+
         read();
-        onRead(buffer_);
     }
     else
     {

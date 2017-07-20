@@ -15,6 +15,12 @@ public:
 
     void processCommand(std::shared_ptr<ChatSession> chatSession, ByteBufferPtr bufferPtr);
 private:
+    void execute(CodeCommand code, ByteBufferPtr bufferPtr, ChatSessionPtr chatSessionPtr);
+    void sendMessageToUsersExceptOne(ChatSessionPtr currentChatSessionPtr, ByteBufferPtr bufferPtr);
+    std::string login(ByteBufferPtr userNamePtr, ChatSessionPtr currentChatSessionPtr);
+    std::string getUserList();
+    std::string logout(ChatSessionPtr currentChatSessionPtr);
+
 
     std::vector<ChatSessionPtr> sessions_;
 };

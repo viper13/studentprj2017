@@ -20,9 +20,9 @@ asio::ip::tcp::socket &Session::socket()
     return socket_;
 }
 
-void Session::write(std::string message)
+void Session::write(ByteBufferPtr buffer)
 {
-    ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
+    //ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
     BuffersVector buffers = Helper::addBufferSize(buffer);
 
     BufferSequence sequence = Helper::toBufferSequence(buffers);
@@ -84,16 +84,18 @@ void Session::handleRead(asio::error_code error, size_t bufferSize)
         {
             LOG_INFO("Message: " << buffer_);
             std::string message(buffer_.begin(), buffer_.end());
-            write(message);
+
+            //write(buffer_);
 
             onRead(buffer_);
+            nextMessageSize_=0;//here
         }
         else
         {
             uint16_t firstByte = (uint16_t)buffer_[0];
             uint16_t secondByte = (uint16_t)buffer_[1];
 
-            LOG_INFO("First byte is [" << firstByte << "] Second byte is [" << secondByte <<']');
+            //LOG_INFO("First byte is [" << firstByte << "] Second byte is [" << secondByte <<']');
             nextMessageSize_ = (static_cast<uint16_t>(buffer_[0]))
                     + static_cast<uint16_t>(buffer_[1]);
             LOG_INFO("Message size is: " << nextMessageSize_);

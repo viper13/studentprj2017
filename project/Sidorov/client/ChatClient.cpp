@@ -9,9 +9,9 @@ ChatClient::ChatClient(std::string address, std::string port)
 }
 
 
-void ChatClient::onRead(ByteBuffer data)
+void ChatClient::onRead(ByteBufferPtr data)
 {
-
+    LOG_INFO(*data);
 }
 
 void ChatClient::execute(CodeCommand code, ByteBufferPtr bufferPtr)

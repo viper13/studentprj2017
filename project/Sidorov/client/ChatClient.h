@@ -12,9 +12,8 @@ class ChatClient : public Client
 
 public:
     ChatClient(std::string address, std::string port);
-    void onRead(ByteBuffer data) override;
+    void onRead(ByteBufferPtr data) override;
     void execute (CodeCommand code, ByteBufferPtr bufferPtr);
-
 private:
     void login(ByteBufferPtr name);
     void logout();

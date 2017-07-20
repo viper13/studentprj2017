@@ -15,7 +15,7 @@ public:
 
     asio::ip::tcp::socket& socket();
 
-    void write(std::string message);
+    void write(ByteBufferPtr buffer);
 
     virtual void onRead(ByteBuffer data) = 0;
 private:

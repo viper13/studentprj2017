@@ -12,7 +12,7 @@ public:
     void start();
     void write(ByteBufferPtr bufferPtr);
 
-    virtual void onRead(ByteBuffer data) = 0;
+    virtual void onRead(ByteBufferPtr data) = 0;
     private:
     void handleResolveEndPoint(asio::error_code error
                                , asio::ip::tcp::resolver::iterator iterator);
@@ -32,7 +32,7 @@ public:
 
     asio::ip::tcp::resolver resolver_;
     ByteBuffer buffer_;
-    uint16_t messageSize_;
+    uint16_t nextMessageSize_;
 };
 
 #endif // CLIENT_H
