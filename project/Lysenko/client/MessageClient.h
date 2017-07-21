@@ -11,11 +11,12 @@ class MessageClient
         MessageClient(std::string address, std::string port);
 
         void start();
-        void write(std::string message);
 
         virtual ~MessageClient() = default;
 
     protected:
+
+        void write(std::string message);
 
         asio::io_service& io_service_;
         asio::ip::tcp::socket socket_;

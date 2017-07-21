@@ -6,25 +6,28 @@
 #include <asio.hpp>
 
 #include "define.h"
-#include "bufferconverter.h"
+#include "BufferConverter.h"
 
-class Session;
+class MessageSession;
 
-typedef std::shared_ptr<Session> SessionPtr;
-
-class Session
-        : public std::enable_shared_from_this<Session>
+class MessageSession
+        : public std::enable_shared_from_this<MessageSession>
 {
     public:
 
-        Session();
-
-        static SessionPtr getNewSession();
+        MessageSession();
 
         void start();
         void write(std::string message);
 
         asio::ip::tcp::socket& getSocket();
+
+    protected:
+
+        virtual void onRead(ByteBuffer message) = 0;
+
+        asio::ip::tcp::socket socket_;
+        ByteBuffer buffer_;
 
     private:
 
@@ -35,9 +38,6 @@ class Session
                          size_t writtenBytesCount);
         void handleReadMsgSize(asio::error_code error, size_t bufferSize);
         void handleReadMessage(asio::error_code error, size_t bufferSize);
-
-        asio::ip::tcp::socket socket_;
-        ByteBuffer buffer_;
 };
 
 #endif // SESSION_H

@@ -19,6 +19,15 @@ BuffersVector BufferConverter::addMessageSize(ByteBufferPtr sourceMessage)
 
 
 
+std::string BufferConverter::addOpCode(Operation op, std::string sourceString)
+{
+    sourceString.insert( sourceString.begin(), static_cast<char>(op));
+
+    return sourceString;
+}
+
+
+
 ByteBuffer BufferConverter::uint16ToBuffer(uint16_t number)
 {
     ByteBuffer result(2);
@@ -54,9 +63,4 @@ uint16_t BufferConverter::bufferToUint16(ByteBuffer& sourceBuffer)
     }*/
 
     return result;
-}
-
-ByteBuffer BufferConverter::addOpCode(Operation op, std::string sourceString) // TODO
-{
-
 }

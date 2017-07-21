@@ -12,7 +12,14 @@ class CommandClient
 
         void logIn(std::string userName);
 
+        std::string getUserName();
+        void setUserName(std::string newUserName);
+
         virtual ~CommandClient() = default;
+
+    private:
+
+        std::string userName_;
 };
 
 #endif // COMMANDCLIENT_H

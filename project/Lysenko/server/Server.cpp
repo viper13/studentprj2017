@@ -17,13 +17,13 @@ Server::Server(int port)
 
 void Server::acceptConnection()
 {
-    SessionPtr session = Session::getNewSession();
+    SessionPtr session = CommandSession::getNewSession();
 
     acceptor_.async_accept( session->getSocket(),
-                            std::bind(&Server::handleAccept,
-                                      this,
-                                      session,
-                                      std::placeholders::_1) );
+                            std::bind (&Server::handleAccept,
+                                       this,
+                                       session,
+                                       std::placeholders::_1) );
 }
 
 

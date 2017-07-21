@@ -1,10 +1,10 @@
-#include "session.h"
+#include "MessageSession.h"
 
 #include "Worker.h"
 
 
 
-Session::Session()
+MessageSession::MessageSession()
     : socket_(Worker::instance()->getIO_service())
 {
 
@@ -12,24 +12,16 @@ Session::Session()
 
 
 
-SessionPtr Session::getNewSession()
+void MessageSession::start()
 {
-    SessionPtr session (new Session());
-    return session;
-}
-
-
-
-void Session::start()
-{
-    LOG_INFO("Session started");
+    LOG_INFO("New session started");
 
     readMessageSize();
 }
 
 
 
-void Session::write(std::string message)
+void MessageSession::write(std::string message)
 {
     BuffersVector messageWithSize =
             BufferConverter::addMessageSize( ByteBufferPtr( new ByteBuffer( message.begin(),
@@ -40,7 +32,7 @@ void Session::write(std::string message)
 
     asio::async_write( socket_,
                        bufferToSend,
-                       std::bind (&Session::handleWrite,
+                       std::bind (&MessageSession::handleWrite,
                                   shared_from_this(),
                                   messageWithSize,
                                   std::placeholders::_1,
@@ -49,21 +41,21 @@ void Session::write(std::string message)
 
 
 
-asio::ip::tcp::socket& Session::getSocket()
+asio::ip::tcp::socket& MessageSession::getSocket()
 {
     return socket_;
 }
 
 
 
-void Session::readMessageSize()
+void MessageSession::readMessageSize()
 {
     buffer_.resize(2);
 
     asio::async_read( socket_,
                       asio::buffer (buffer_, 2),
                       asio::transfer_exactly (2),
-                      std::bind (&Session::handleReadMsgSize,
+                      std::bind (&MessageSession::handleReadMsgSize,
                                  shared_from_this(),
                                  std::placeholders::_1,
                                  std::placeholders::_2) );
@@ -71,14 +63,14 @@ void Session::readMessageSize()
 
 
 
-void Session::readMessage(uint16_t messageSize)
+void MessageSession::readMessage(uint16_t messageSize)
 {
     buffer_.resize(messageSize);
 
     asio::async_read( socket_,
                       asio::buffer(buffer_, messageSize),
                       asio::transfer_exactly(messageSize),
-                      std::bind (&Session::handleReadMessage,
+                      std::bind (&MessageSession::handleReadMessage,
                                  shared_from_this(),
                                  std::placeholders::_1,
                                  std::placeholders::_2) );
@@ -86,7 +78,7 @@ void Session::readMessage(uint16_t messageSize)
 
 
 
-void Session::handleWrite(BuffersVector data,
+void MessageSession::handleWrite(BuffersVector data,
                           asio::error_code error,
                           size_t writtenBytesCount)
 {
@@ -94,7 +86,7 @@ void Session::handleWrite(BuffersVector data,
     {
         LOG_INFO( "Message  " << *(data[1]) <<
                   " has been successfully sent to client! total size = " << writtenBytesCount <<
-                  " message size = " << BufferConverter::charsToMessageSize( *(data[0]) ) );
+                  " message size = " << BufferConverter::bufferToUint16( *(data[0]) ) );
     }
     else
     {
@@ -105,11 +97,11 @@ void Session::handleWrite(BuffersVector data,
 
 
 
-void Session::handleReadMsgSize(asio::error_code error, size_t bufferSize)
+void MessageSession::handleReadMsgSize(asio::error_code error, size_t bufferSize)
 {
     if ( !error )
     {
-         uint16_t nextMessageSize = BufferConverter::charsToMessageSize (buffer_);
+         uint16_t nextMessageSize = BufferConverter::bufferToUint16 (buffer_);
          LOG_INFO("Incoming message size = " << nextMessageSize);
 
          readMessage(nextMessageSize);
@@ -123,14 +115,14 @@ void Session::handleReadMsgSize(asio::error_code error, size_t bufferSize)
 
 
 
-void Session::handleReadMessage(asio::error_code error, size_t bufferSize)
+void MessageSession::handleReadMessage(asio::error_code error, size_t bufferSize)
 {
     if ( !error )
     {
         LOG_INFO("Successfully read message " << buffer_ << " Size = " <<
                  bufferSize);
 
-        write( std::string( buffer_.begin(), buffer_.end() ) );
+        onRead(buffer_);
 
         readMessageSize();
     }

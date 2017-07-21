@@ -11,16 +11,20 @@ INCLUDEPATH += $$PWD/../common/
 
 SOURCES += main.cpp \
     Server.cpp \
-    session.cpp \
     ../common/Worker.cpp \
     ../common/define.cpp \
-    ../common/bufferconverter.cpp
+    ../common/BufferConverter.cpp \
+    MessageSession.cpp \
+    CommandSession.cpp \
+    ChatManager.cpp
 
 HEADERS += \
     ../common/Worker.h \
     ../common/define.h \
     Server.h \
-    session.h \
-    ../common/bufferconverter.h
+    ../common/BufferConverter.h \
+    MessageSession.h \
+    CommandSession.h \
+    ChatManager.h
 
 
