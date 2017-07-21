@@ -6,7 +6,7 @@
 class Helper
 {
 public:
-    Helper() = delete;
+    Helper();
     static ByteBufferPtr makeBuffer(ByteBufferPtr message);
     static uint16_t mergeTwoByte(uint8_t high, uint8_t low);
     static void insertCommandCode(ByteBufferPtr buffPtr, CommandCode code);
