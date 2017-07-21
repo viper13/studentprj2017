@@ -1,4 +1,4 @@
-#include "worker.h"
+#include "Worker.h"
 #include "define.h"
 
 Worker *Worker::instance()
@@ -11,10 +11,13 @@ void Worker::start()
 {
     for (int i = 0; i < WORKER_THREAD_COUNT; ++i)
     {
+
         std::shared_ptr<std::thread> thread(new std::thread([this]()
         {
+
             try
             {
+
                 service_.run();
             }
             catch (std::exception ex)
@@ -33,6 +36,7 @@ void Worker::join()
     {
         thread->join();
     }
+
     threadPool_.clear();
 }
 
@@ -45,4 +49,3 @@ Worker::Worker()
 {
 
 }
-

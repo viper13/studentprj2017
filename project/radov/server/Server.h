@@ -2,7 +2,8 @@
 #define SERVER_H
 
 #include <asio.hpp>
-#include "ChatSession.h"
+#include "SessionManager.h"
+
 
 class Server
 {
@@ -11,20 +12,26 @@ public:
 
     void start();
 
-    void subscribe(std::function<void(ChatSessionPtr)> cb);
+    void subscribe(std::function<void(SessionManagerPtr)> callBack);
+
 
 private:
-    void accept();
+     asio::io_service& io_service_;
 
-    void handle_accept(ChatSessionPtr session, asio::error_code error);
+     asio::ip::tcp::acceptor acceptor_;
 
-    asio::io_service& io_service_;
+     bool hasRequest;
 
-    asio::ip::tcp::acceptor acceptor_;
+     std::vector<SessionManagerPtr> sessions_;
 
-    std::vector<ChatSessionPtr> sessions_;
+     void accept();
+     void handleAccept(SessionManagerPtr session, asio::error_code error);
 
-    std::vector<std::function<void(ChatSessionPtr)>> onConnectedCbs;
+     std::vector<std::function<void(SessionManagerPtr)>>onConnectionFun;
+
+
+
+
 };
 
 #endif // SERVER_H
