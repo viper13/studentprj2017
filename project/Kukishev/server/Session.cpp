@@ -10,7 +10,8 @@ Session::Session()
 void Session::start()
 {
     //write("Enter your name: ");
-    read();
+        isStop = false;
+        read();
 }
 
 asio::ip::tcp::socket &Session::socket()
@@ -28,6 +29,11 @@ void Session::write(ByteBufferPtr message)
                                   , buffer
                                   , std::placeholders::_1
                                   , std::placeholders::_2));
+}
+
+void Session::stop()
+{
+    isStop = true;
 }
 
 void Session::read()
@@ -79,7 +85,8 @@ void Session::handleRead(asio::error_code error, size_t bufferSize)
             nextMsgSize_ = 0;
         }
 
-        read();
+        if(!isStop)
+            read();
     }
     else
     {
@@ -98,8 +105,6 @@ void Session::handleWrite(ByteBufferPtr data, asio::error_code error, size_t wri
                  << " writed size = "
                  << writedBytesCount
                  << " " << *data);
-
-
     }
     else
     {

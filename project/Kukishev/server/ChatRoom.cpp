@@ -1,7 +1,7 @@
 #include "ChatRoom.h"
 
 ChatRoom::ChatRoom()
-    : usersChat()
+    : users_()
 {
 
 }
@@ -9,29 +9,64 @@ ChatRoom::ChatRoom()
 
 void ChatRoom::addUser(const std::string &name, ChatSessionPtr session)
 {
-    usersChat.insert(std::pair<std::string, ChatSessionPtr>(name, session));
+    users_.insert(std::pair<std::string, ChatSessionPtr>(name, session));
 }
 
 void ChatRoom::removeUser(const std::string &name)
 {
-    usersChat.erase(name);
+    users_.erase(name);
 }
+
 
 void ChatRoom::clear()
 {
-    usersChat.clear();
+    users_.clear();
 }
 
-bool ChatRoom::isUserContain(const std::string &name)
+bool ChatRoom::isUserContain(const std::string &name) const
 {
-    return usersChat.find(name) != usersChat.end();
+    return users_.find(name) != users_.end();
 }
 
 void ChatRoom::sendMessage(const std::string &text, const std::string& from)
 {
-    for(std::pair<std::string, ChatSessionPtr> pair: usersChat)
+    for(std::pair<std::string, ChatSessionPtr> pair: users_)
     {
         if(pair.first != from)
             pair.second->sendMessageToClient(text);
     }
+}
+
+std::vector<std::string> ChatRoom::getUsersName() const
+{
+    std::vector<std::string> retval;
+    for (auto const& element : users_)
+    {
+        retval.push_back(element.first);
+    }
+
+    return retval;
+}
+
+std::vector<std::string> ChatRoom::getUsersNameExcept(std::string name) const
+{
+    std::vector<std::string> retval;
+    for (auto const& element : users_)
+    {
+        if(element.first != name)
+            retval.push_back(element.first);
+    }
+
+    return retval;
+
+}
+
+size_t ChatRoom::getCountUsers() const
+{
+    return users_.size();
+}
+
+std::map<std::string, ChatSessionPtr> ChatRoom::getUsers() const
+{
+    return users_;
 }

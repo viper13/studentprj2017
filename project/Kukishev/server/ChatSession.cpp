@@ -24,7 +24,7 @@ void ChatSession::onRead(ByteBuffer buffer)
 
 void ChatSession::onDisconected()
 {
-
+    disconectedHandle_(getPtrFromThis());
 }
 
 std::shared_ptr<ChatSession> ChatSession::getPtrFromThis()

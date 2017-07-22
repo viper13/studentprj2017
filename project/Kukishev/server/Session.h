@@ -22,6 +22,9 @@ public:
     virtual void onDisconected() = 0;
 
     virtual ~Session() {}
+
+    void stop();
+
 private:
     void read();
 
@@ -31,6 +34,7 @@ private:
     asio::ip::tcp::socket socket_;
     ByteBuffer buffer_;
     uint16_t nextMsgSize_;
+    bool isStop = false;
 };
 
 typedef std::shared_ptr<Session> SessionPtr;

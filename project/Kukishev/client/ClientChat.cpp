@@ -12,7 +12,6 @@ ClientChat::ClientChat(std::string address, std::string port)
 
 void ClientChat::onRead(ByteBufferPtr bufferPtr)
 {
-    //printServerAnswer(bufferPtr);
     CommandCode cCode = static_cast<CommandCode>((*bufferPtr)[0]);
     switch (cCode) {
     case CommandCode::LOGIN:
@@ -81,7 +80,7 @@ void ClientChat::execute(CommandCode cmd, ByteBufferPtr&& bufferPtr)
     }
     case CommandCode::DISCONNECT_FROM_USER:
     {
-        disconnectFromUser(bufferPtr);
+        disconnectFromUser();
         break;
     }
     case CommandCode::LOGIN:
@@ -171,10 +170,11 @@ void ClientChat::connectToUser(ByteBufferPtr userName)
 
 }
 
-void ClientChat::disconnectFromUser(ByteBufferPtr userName)
+void ClientChat::disconnectFromUser()
 {
-    Helper::insertCommandCode(userName, CommandCode::DISCONNECT_FROM_USER);
-    write(userName);
+    ByteBufferPtr buff = std::make_shared<ByteBuffer>();
+    Helper::insertCommandCode(buff, CommandCode::DISCONNECT_FROM_USER);
+    write(buff);
 }
 
 void ClientChat::answerOnRequestToConnect(ByteBufferPtr userNameAndAnswer)
