@@ -19,7 +19,6 @@ void Client::start()
                                             , shared_from_this()
                                             , std::placeholders::_1
                                             , std::placeholders::_2));
-
 }
 
 void Client::write(ByteBufferPtr bufferPtr)
@@ -92,7 +91,7 @@ void Client::read()
         }
         else
         {
-            //buffer_.resize(BUFFER_MAX_SIZE);
+            buffer_.resize(nextMessageSize_);
             asio::async_read(socket_
                              , asio::buffer(buffer_, nextMessageSize_)
                              , asio::transfer_at_least(nextMessageSize_)
@@ -118,6 +117,7 @@ void Client::handleRead(std::error_code error, size_t bufferSize)
         }
         else
         {
+            //LOG_INFO("Message: " << buffer_);
             ByteBufferPtr buff = std::make_shared<ByteBuffer>(std::move(buffer_));
 
             onRead(buff);
@@ -125,7 +125,7 @@ void Client::handleRead(std::error_code error, size_t bufferSize)
             nextMessageSize_ = 0;
         }
 
-        read();
+       read();
     }
     else
     {

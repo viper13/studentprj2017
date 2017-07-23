@@ -3,13 +3,10 @@
 
 #include "Session.h"
 
+class ChatRoom;
+
 class ChatSession : public Session
 {
-    std::function<void (std::shared_ptr<ChatSession>, ByteBufferPtr)> handleRead_;
-    std::string userName_;
-    bool isLogged;
-    bool isinChat;
-    std::shared_ptr<ChatSession> getPointer();
 public:
     ChatSession();
 
@@ -24,6 +21,21 @@ public:
     void setUserName(std::string newName);
     void setisLogged(bool newState);
     void setisInChat(bool newState);
+
+    int findChatPos(std::shared_ptr<ChatRoom> chatRoom);
+    void execute(CodeCommand code, ByteBufferPtr data);
+    void sendMessageToClient(const std::string &text);
+    std::vector<std::shared_ptr<ChatRoom> > chatRoomsSession;
+private:
+
+    std::function<void (std::shared_ptr<ChatSession>, ByteBufferPtr)> handleRead_;
+    std::string userName_;
+
+    bool isLogged;
+    bool isinChat;
+
+    std::shared_ptr<ChatSession> getPointer();
+
 };
 
 typedef std::shared_ptr<ChatSession> ChatSessionPtr;

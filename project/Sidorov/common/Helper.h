@@ -17,6 +17,7 @@ public:
     static std::pair<CodeCommand, ByteBufferPtr> getCodeAndData(const std::string &str);
     static void eraseCodeCommand(ByteBufferPtr bufferPtr);
     static std::string bufferToString(ByteBufferPtr bufferPtr);
+    static ByteBuffer stringToBuffer(const std::string &str);
 };
 
 #endif // HELPER_H

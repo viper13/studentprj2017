@@ -10,6 +10,11 @@ std::string Helper::bufferToString(ByteBufferPtr bufferPtr)
     return std::string(bufferPtr->begin(), bufferPtr->end());
 }
 
+ByteBuffer Helper::stringToBuffer(const std::string &str)
+{
+    return ByteBuffer(str.begin(), str.end());
+}
+
 void Helper::addCodeCommand(CodeCommand code, ByteBufferPtr bufferPtr)
 {
    bufferPtr->emplace(bufferPtr->begin(), static_cast<uint8_t>(code));
@@ -67,7 +72,7 @@ std::pair<CodeCommand, ByteBufferPtr> Helper::getCodeAndData(const std::string &
             return std::pair<CodeCommand, ByteBufferPtr>();
         }
 
-        if(code < static_cast<int>(CodeCommand::LOGIN) || code > static_cast<int>(CodeCommand::DISCONNECT_FROM_USER))
+        if(code < static_cast<int>(CodeCommand::LOGIN) || code > static_cast<int>(CodeCommand::ANSWER_ON_REQUEST))
         {
             std::cout << "Wrong number of command!" << std::endl;
             return std::pair<CodeCommand, ByteBufferPtr>();
@@ -77,12 +82,17 @@ std::pair<CodeCommand, ByteBufferPtr> Helper::getCodeAndData(const std::string &
         CodeCommand commandCode = static_cast<CodeCommand>(code);
 
         std::string data;
-        ist >> data;
-
+        std::string s;
+        ist >> s;
+        data = s;
+        while(ist >> s)
+        {
+            data+=" "+s;
+        }
         ByteBufferPtr buff = std::make_shared<ByteBuffer>();
 
-        if(!data.empty())
-            buff = std::make_shared<ByteBuffer>(data.begin(), data.end());
+            if(!data.empty())
+                buff = std::make_shared<ByteBuffer>(data.begin(), data.end());
 
         return std::make_pair(commandCode, buff);
 }

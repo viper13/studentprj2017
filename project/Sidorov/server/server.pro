@@ -16,7 +16,8 @@ SOURCES += main.cpp \
     ../common/define.cpp \
     ../common/Helper.cpp \
     ChatSession.cpp \
-    ChatManager.cpp
+    ChatManager.cpp \
+    ChatRoom.cpp
 
 HEADERS += \
     ../common/Worker.h \
@@ -25,5 +26,6 @@ HEADERS += \
     Session.h \
     ../common/Helper.h \
     ChatSession.h \
-    ChatManager.h
+    ChatManager.h \
+    ChatRoom.h
 

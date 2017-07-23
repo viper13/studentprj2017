@@ -51,5 +51,7 @@ void MessageManager::printHelp()
               << "3 USER_LIST" << std::endl
               << "4 SEND_MESSAGE [message]" << std::endl
               << "5 CONNECT_TO_USER [user's name]" << std::endl
-              << "6 DISCONNECT_TO_USER" << std::endl;
+              << "6 DISCONNECT_TO_USER" << std::endl
+              << "7 ACCEPT_TO_CHAT [username]" << std::endl
+              << "8 SEE_REQUESTS" << std::endl;
 }

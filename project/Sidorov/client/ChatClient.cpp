@@ -11,7 +11,40 @@ ChatClient::ChatClient(std::string address, std::string port)
 
 void ChatClient::onRead(ByteBufferPtr data)
 {
-    LOG_INFO(*data);
+    CodeCommand code = static_cast<CodeCommand>(data->at(0));
+    Helper::eraseCodeCommand(data);
+    switch (code)
+    {
+        case CodeCommand::CONNECT_TO_USER:
+        {
+            std::string userName = Helper::bufferToString(data);
+            if(isContainRequest(userName))
+            {
+                break;
+            }
+            LOG_INFO(userName << " wants to chat with you" << "\n"
+                              << "Use command ACCEPT_TO_CHAT [name]" << "\n" );
+            usersWantToChat.push_back(userName);
+            break;
+        }
+        case CodeCommand::SEND_MESSAGE:
+        {
+            LOG_INFO(*data);
+            break;
+        }
+        case CodeCommand::ACCEPT_TO_CHAT:
+        {
+            std::string message = Helper::bufferToString(data);
+            std::string name = message.substr(message.find("to ")+3);
+            usersWantToChat.erase(std::find(usersWantToChat.begin()
+                                              , usersWantToChat.end()
+                                              , name));
+            //LOG_INFO(*data);
+        }
+    default:
+        LOG_INFO(*data);
+        break;
+    }
 }
 
 void ChatClient::execute(CodeCommand code, ByteBufferPtr bufferPtr)
@@ -25,7 +58,7 @@ void ChatClient::execute(CodeCommand code, ByteBufferPtr bufferPtr)
         }
         case CodeCommand::DISCONNECT_FROM_USER:
         {
-            disconnectFromUser();
+            disconnectFromUser(bufferPtr);
             break;
         }
         case CodeCommand::LOGIN:
@@ -48,17 +81,39 @@ void ChatClient::execute(CodeCommand code, ByteBufferPtr bufferPtr)
             getUserList();
             break;
         }
+        case CodeCommand::SEE_REQUESTS:
+        {
+            seeRequests();
+            break;
+        }
+        case CodeCommand::ACCEPT_TO_CHAT:
+        {
+            acceptToChat(bufferPtr);
+            break;
+        }
         default:
             break;
         }
 
 }
 
+bool ChatClient::isContainRequest(const std::string &name)
+{
+    for (int i=0; i<usersWantToChat.size(); i++)
+    {
+        if (usersWantToChat.at(i) == name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void ChatClient::login(ByteBufferPtr name)
 {
     if ( 0 == name->size())
     {
-        LOG_ERR("Input your Login");
+        LOG_INFO("Input your Login");
         return;
     }
     Helper::addCodeCommand(CodeCommand::LOGIN,name);
@@ -101,11 +156,36 @@ void ChatClient::connectToUser(ByteBufferPtr userName)
     write(userName);
 }
 
-void ChatClient::disconnectFromUser()
+void ChatClient::disconnectFromUser(ByteBufferPtr bufferPtr)
 {
-    ByteBufferPtr bufferPtr = std::make_shared<ByteBuffer>();
     Helper::addCodeCommand(CodeCommand::DISCONNECT_FROM_USER,bufferPtr);
     write(bufferPtr);
+}
+
+void ChatClient::acceptToChat(ByteBufferPtr userName)
+{
+    Helper::addCodeCommand(CodeCommand::ACCEPT_TO_CHAT, userName);
+    write(userName);
+}
+
+void ChatClient::seeRequests()
+{
+    std::string requests;
+    if (!usersWantToChat.empty())
+    {
+        requests = "Your requests to chat: ";
+        for (std::string name : usersWantToChat)
+        {
+            requests += name;
+            requests += ", ";
+        }
+        LOG_INFO(requests);
+    }
+    else
+    {
+        requests = "You don't have requests to chat";
+        LOG_INFO(requests);
+    }
 }
 
 

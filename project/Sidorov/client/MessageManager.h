@@ -14,8 +14,8 @@ public:
     MessageManager();
     void printHelp();
     void initializeSession();
-    void closeSession();
     void inputMessage();
+    void closeSession();
 
 };
 

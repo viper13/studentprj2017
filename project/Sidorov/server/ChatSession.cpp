@@ -1,4 +1,6 @@
 #include "ChatSession.h"
+#include "ChatRoom.h"
+#include "Helper.h"
 
 std::shared_ptr<ChatSession> ChatSession::getPointer()
 {
@@ -60,3 +62,25 @@ void ChatSession::setisInChat(bool newState)
     isinChat = newState;
 }
 
+int ChatSession::findChatPos(std::shared_ptr<ChatRoom> chatRoom)
+{
+    for (int i=0; i<chatRoomsSession.size(); i++)
+    {
+        if (chatRoomsSession[i] == chatRoom)
+        {
+            return i;
+        }
+    }
+}
+
+void ChatSession::execute(CodeCommand code, ByteBufferPtr data)
+{
+    Helper::addCodeCommand(code,data);
+    write(data);
+}
+
+void ChatSession::sendMessageToClient(const std::string &text)
+{
+    execute(CodeCommand::SEND_MESSAGE
+            , std::make_shared<ByteBuffer>(Helper::stringToBuffer(text)));
+}
