@@ -19,6 +19,7 @@ public:
     bool inChat;
 
     std::string message_;
+    int currentRoom;
 
 
 private:

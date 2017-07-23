@@ -77,6 +77,7 @@ void ClientEssence::processMessage(std::string message)
             LOG_INFO("You accepted chat request!");
             inChat=true;
             message=YES_MESSAGE;
+            message+=std::to_string(currentRoom);
             write(message);
         }
         else if(message.find("!help") != std::string::npos)
@@ -94,10 +95,8 @@ void ClientEssence::onRead(ByteBuffer data)
     std::string message(buffer_.begin(), buffer_.end());
     if(message.find(REQUEST_TO_CREATE_CHAT_MESSAGE)!=std::string::npos)
     {
-        std::string write(buffer_.begin()+2,buffer_.end());
+        currentRoom=message[2]-'0';
         LOG_INFO("Type !yes to create chat!\n");
         hasRequest = true;
     }
 }
-
-

@@ -69,9 +69,11 @@ void ChatManager::sendMessage(char idClient, char idTarget,std::string message)
     }
 }
 
-void ChatManager::sendChatMessage(char idRoom, std::string message,char idClient)
+void ChatManager::sendChatMessage(int idRoom, std::string message,char idClient)
 {
-    for(ChatRoomPtr crp:chatRooms_)
+    message.erase(message.begin(),message.begin()+2);
+    chatRooms_.at(idRoom)->sendMessage(message,idClient);
+    /*for(ChatRoomPtr crp:chatRooms_)
     {
         if(crp->idRoom_==idRoom)
         {
@@ -79,10 +81,10 @@ void ChatManager::sendChatMessage(char idRoom, std::string message,char idClient
             crp->sendMessage(send,idClient);
             LOG_INFO("Chat manager trying to send chat message");
         }
-    }
+    }*/
 }
 
-void ChatManager::requestMessage(char idClient, char idTarget, std::string message)
+void ChatManager::requestMessage(char idClient, char idTarget, std::string message,int room)
 {
     LOG_INFO("message on manager"<<message<<idClient<<idTarget);
     for(SessionEssencePtr sep: sessions_)
@@ -90,6 +92,7 @@ void ChatManager::requestMessage(char idClient, char idTarget, std::string messa
         if(sep->getIdClient()==idTarget)
         {
             message_=REQUEST_TO_CREATE_CHAT_MESSAGE;
+            message_+=std::to_string(room);
             message_ += "User ";
             message_+=idClient;
             message_+=" wish to create chat with you! \n";
@@ -104,19 +107,23 @@ void ChatManager::requestMessage(char idClient, char idTarget, std::string messa
 
 void ChatManager::createChat()
 {
-    chatRooms_.push_back(ChatRoom::getNewChatRoom());
+    chatRooms_.push_back(ChatRoom::getNewChatRoom(nextIdRoom));
+    nextIdRoom++;
 }
 
-void ChatManager::addUserToChatRoom(char idClient, char idRoom)
+void ChatManager::addUserToChatRoom(char idClient, int idRoom)
 {
-    for(ChatRoomPtr crp:chatRooms_)
+    chatRooms_.at(idRoom)->addPerson(idClient);
+   /* for(ChatRoomPtr crp:chatRooms_)
     {
         if(crp->idRoom_==idRoom)
         {
             crp->addPerson(idClient);
             LOG_INFO("Chat manager trying to add person to a chat room");
         }
-    }
+    }*/
 }
 
-ChatManager::ChatManager(){}
+ChatManager::ChatManager(){
+    nextIdRoom=0;
+}

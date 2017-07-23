@@ -6,8 +6,8 @@
 class ChatRoom : public std::enable_shared_from_this<ChatRoom>
 {
 public:
-    ChatRoom();
-    static std::shared_ptr<ChatRoom> getNewChatRoom();
+    ChatRoom(int idRoom);
+    static std::shared_ptr<ChatRoom> getNewChatRoom(int idRoom);
 
     std::vector<SessionEssencePtr> users_;
 
@@ -19,7 +19,7 @@ public:
 
     void sendMessage(std::string message, char idWriter);
 
-    char idRoom_;
+    int idRoom_;
 };
 typedef std::shared_ptr<ChatRoom> ChatRoomPtr;
 #endif // CHATROOM_H

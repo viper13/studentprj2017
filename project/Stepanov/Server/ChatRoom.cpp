@@ -1,13 +1,14 @@
 #include "ChatRoom.h"
 #include "ChatManager.h"
-ChatRoom::ChatRoom()
+ChatRoom::ChatRoom(int idRoom)
 {
-    idRoom_='1';
+    idRoom_=idRoom;
+    LOG_INFO("Createdd room with id"<<idRoom_);
 }
 ChatManager& chatManager = ChatManager::getInstance();
-std::shared_ptr<ChatRoom> ChatRoom::getNewChatRoom()
+std::shared_ptr<ChatRoom> ChatRoom::getNewChatRoom(int idRoom)
 {
-    ChatRoomPtr chatRoom = std::make_shared<ChatRoom>();
+    ChatRoomPtr chatRoom = std::make_shared<ChatRoom>(idRoom);
     return chatRoom;
 }
 

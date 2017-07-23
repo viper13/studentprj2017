@@ -38,9 +38,10 @@ void SessionEssence::onRead(ByteBuffer data)
         idTarget=message[2];
         LOG_INFO("User "<<idClient<<" wish to create chat with " << idTarget<<" !");
         hasRequest=true;
-        c.requestMessage(idClient,idTarget,REQUEST_TO_CREATE_CHAT_MESSAGE);
+        currentRoom=c.nextIdRoom;
+        c.requestMessage(idClient,idTarget,REQUEST_TO_CREATE_CHAT_MESSAGE,currentRoom);
         c.createChat();
-        c.addUserToChatRoom(idClient,'1');
+        c.addUserToChatRoom(idClient,currentRoom);
 
     }
     else if(message.find(DIRECT_MESSAGE) != std::string::npos)
@@ -52,18 +53,18 @@ void SessionEssence::onRead(ByteBuffer data)
     }
     else if((message.find(YES_MESSAGE) != std::string::npos)&&(hasRequest))
     {
-        c.addUserToChatRoom(idClient,'1');
+        currentRoom=message[2]-'0';
+        c.addUserToChatRoom(idClient,currentRoom);
     }
     else if(message.find(CHAT_MESSAGE) != std::string::npos)
     {
-        c.sendChatMessage('1',message,idClient);
+        c.sendChatMessage(currentRoom,message,idClient);
     }
     else if(message.find(ADD_USER_TO_CHAT_MESSAGE) != std::string::npos)
     {
         idTarget=message[2];
-        c.requestMessage(idClient,idTarget,REQUEST_TO_CREATE_CHAT_MESSAGE);
+        c.requestMessage(idClient,idTarget,REQUEST_TO_CREATE_CHAT_MESSAGE,currentRoom);
         LOG_INFO("Session trying to send request");
     }
 
 }
-

@@ -15,7 +15,7 @@ public:
 
     bool hasRequest;
     bool inChat;
-
+    int currentRoom;
 
 
 };
