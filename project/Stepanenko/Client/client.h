@@ -12,6 +12,7 @@ public:
     void start();
     void write(std::string message);
     void stop();
+    std::string getMessage();
 
 private:
     virtual void processInputMessage() = 0;
@@ -28,8 +29,6 @@ private:
     asio::ip::tcp::resolver resolver_;
     uint16_t nextMessageSize_;
     asio::ip::tcp::socket socket_;
-
-protected:
     std::vector<char> buffer_;
 };
 

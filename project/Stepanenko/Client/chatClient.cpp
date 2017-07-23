@@ -13,14 +13,14 @@ ChatClient::ChatClient(std::string address, std::string port)
 
 void ChatClient::askNameAndRegister()
 {
-    while (name_ == "")
+    while (name_.empty())
     {
         LOG_INFO("Please enter your name: ");
         std::cin >> name_;
         if (userNames_->find(name_) != userNames_->end())
         {
             LOG_INFO("Your name should be unique! This name is already used by other person.");
-            name_="";
+            name_.clear();
         }
         else
         {
@@ -85,8 +85,8 @@ bool ChatClient::isLoggedIn()
 
 void ChatClient::processInputMessage()
 {
-    uint8_t messageType = static_cast<uint8_t>(buffer_[0]);
-    std::string message(buffer_.begin(), buffer_.end());
+    std::string message = getMessage();
+    uint8_t messageType = static_cast<uint8_t>(message[0]);
     switch (messageType)
     {
         case Protocol::USER_LIST:

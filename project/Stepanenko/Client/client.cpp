@@ -45,6 +45,12 @@ void Client::stop()
     socket_.close();
 }
 
+std::string Client::getMessage()
+{
+    std::string message(buffer_.begin(), buffer_.end());
+    return message;
+}
+
 void Client::read()
 {
     if (0 == nextMessageSize_)
