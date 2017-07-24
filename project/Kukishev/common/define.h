@@ -32,5 +32,16 @@ typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
 
 std::ostream& operator<<(std::ostream& stream, const ByteBuffer& matrix);
 
+
+struct NewUser
+{
+    int id;
+    std::string name;
+    std::string nick;
+};
+
+std::ostream& operator<<(std::ostream& stream, const NewUser& user);
+
+
 #endif // DEFINE
 

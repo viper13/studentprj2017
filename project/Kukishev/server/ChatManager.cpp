@@ -1,5 +1,6 @@
 #include "ChatManager.h"
 #include "Helper.h"
+#include "DataBaseManager.h"
 
 ChatManager::ChatManager(Server& server)
 {
@@ -18,11 +19,15 @@ void ChatManager::onConnected(ChatSessionPtr session)
                                      , this
                                      , std::placeholders::_1
                                      , std::placeholders::_2));
+
     session->setDisconectedHandle(std::bind(&ChatManager::disconectedSession
                                             , this
                                             , std::placeholders::_1));
 
     session->getUser().isConnected_ = true;
+
+    std::vector<NewUser> users;
+    DataBaseManager::getUsersList(users);
 }
 
 void ChatManager::login(ChatSessionPtr session, const std::string &name)

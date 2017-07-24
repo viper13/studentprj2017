@@ -36,3 +36,14 @@ std::string Helper::bufferToString(ByteBufferPtr buffPtr, uint posFrom, uint pos
     return std::string(buffPtr->begin()+posFrom, buffPtr->end() - posTo);
 }
 
+//bool Helper::parceFromPostgres(const pqxx::tuple &data, NewUser &user)
+//{
+//    user.id = data["id"].as<int>();
+//    user.name = data["name"].as<std::string>();
+//    user.nick = data["nick"].as<std::string>();
+
+//    LOG_INFO("Parced user: " << user);
+
+//    return true;
+//}
+
