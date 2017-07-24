@@ -55,4 +55,13 @@ typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
 std::ostream& operator<<(std::ostream& stream,const ByteBuffer& buffer);
 
 
+struct User
+{
+    int id_;
+    std::string name_;
+    std::string nick_;
+};
+
+std::ostream& operator<<(std::ostream& stream,const User& buffer);
+
 #endif // DEFINE

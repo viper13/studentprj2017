@@ -1,4 +1,5 @@
 #include "ChatManager.h"
+#include "DataDaseManager.h"
 
 ChatManager& ChatManager::getInstance()
 {
@@ -12,6 +13,11 @@ void ChatManager::onConnected(SessionManagerPtr session)
     LOG_INFO("onConnected from CHATMANAGER");
     sessions_.push_back(session);
     LOG_INFO("Sessions size = " << sessions_.size());
+
+    std::vector<User> users;
+    DataBaseManager::getUsersList(users);
+
+
 }
 
 void ChatManager::getUserList(char idClient)

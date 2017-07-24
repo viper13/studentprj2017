@@ -32,3 +32,14 @@ Helper::Helper()
 {
 
 }
+
+bool Helper::parseFromPostgres(const pqxx::tuple &data, User &user)
+{
+    user.id_ = data["id"].as<int>();
+    user.name_ = data["name"].as<std::string>();
+    user.nick_ = data["nick"].as<std::string>();
+
+    LOG_INFO("Parse:" << user);
+
+    return true;
+}

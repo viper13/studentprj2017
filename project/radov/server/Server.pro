@@ -11,6 +11,10 @@ TEMPLATE = app
 
 INCLUDEPATH +=$$PWD/../common
 
+LIBS += -lpqxx
+
+#LIBS += -I"/usr/include/pqxx"
+
 SOURCES += \
     Server.cpp \
     Session.cpp \
@@ -20,7 +24,8 @@ SOURCES += \
     ../common/Helper.cpp \
     ChatManager.cpp \
     ChatRoom.cpp \
-    SessionManager.cpp
+    SessionManager.cpp \
+    DataDaseManager.cpp
 
 HEADERS += \
     Server.h \
@@ -28,10 +33,12 @@ HEADERS += \
     ChatManager.h \
     ChatRoom.h \
     ../common/Worker.h \
-    ../common/Define.h \
+    ../common/define.h \
     ../common/Helper.h \
-    ../common/Helper.h \
-    SessionManager.h
+    SessionManager.h \
+    DataDaseManager.h
+
+OTHER_FILES += ../dump_db.sql
 
 
 #DEFINES += QT_DEPRECATED_WARNINGS
