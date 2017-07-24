@@ -9,15 +9,12 @@ class Client : public std::enable_shared_from_this<Client>
 {
 public:
     Client(std::string address, std::string port);
-    void start();
 
+    void start();
     void write(std::string message);
 
     virtual void processMessage(std::string message) = 0;
-
     virtual void onRead(ByteBuffer data) = 0;
-
-
 
 private:
 
@@ -27,23 +24,15 @@ private:
     std::string address_;
     std::string port_;
 
-
-
     asio::ip::tcp::resolver resolver_;
-
     uint16_t messageSize_;
 
-
-
     void handleResolveEndPoint(asio::error_code error, asio::ip::tcp::resolver::iterator iterator);
-
     void handleConnect(asio::error_code error, asio::ip::tcp::resolver::iterator iterator);
-
     void read();
-
     void handleRead(asio::error_code error, size_t);
-
     void handleWrite(BuffersVector data, asio::error_code error, size_t writtedSize);
+
 protected:
     std::vector<char> buffer_;
     char idClient;

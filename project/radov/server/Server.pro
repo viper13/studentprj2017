@@ -3,7 +3,7 @@ QT -= gui
 
 CONFIG += c++11
 
-TARGET = cerver
+TARGET = server
 CONFIG += console
 CONFIG -= app_bundle
 

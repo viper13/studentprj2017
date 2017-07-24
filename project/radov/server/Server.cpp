@@ -5,12 +5,12 @@
 
 
 Server::Server(int port)
-    : io_service_(Worker::instance()->io_service())
+    : io_service_(Worker::instance() -> io_service())
     , acceptor_( io_service_
                 , asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
 
 {
-    LOG_INFO("Created server for port: "<<port);
+    LOG_INFO("Created server for port: " << port);
 }
 
 void Server::start()
@@ -28,7 +28,7 @@ void Server::accept()
 {
     SessionManagerPtr session = SessionManager::getNewSession();
 
-    acceptor_.async_accept(session->socket()
+    acceptor_.async_accept(session -> socket()
                            , std::bind(&Server::handleAccept
                                         , this
                                         , session
@@ -40,17 +40,14 @@ void Server::handleAccept(SessionManagerPtr session, asio::error_code error)
     {
         if (!error)
         {
-            asio::ip::tcp::endpoint client_addr = session->socket().remote_endpoint();
+            asio::ip::tcp::endpoint client_addr = session -> socket().remote_endpoint();
             sessions_.push_back(session);
-            session->start();
+            session -> start();
             for(std::function<void(SessionManagerPtr)> callBackFun:onConnectionFun)
             {
                 callBackFun(session);
-                //LOG_INFO("CALLBACK WoRKDER");
             }
         }
-
-
         accept();
     }
 }

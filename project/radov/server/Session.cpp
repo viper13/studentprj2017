@@ -3,7 +3,7 @@
 #include "Helper.h"
 
 Session::Session()
-    : socket_(Worker::instance()->io_service())
+    : socket_(Worker::instance() -> io_service())
     , messageSize_(0)
     , idClient(0)
     , idTarget(0)
@@ -69,19 +69,16 @@ void Session::handleRead(asio::error_code error, size_t /*bufferSize*/)
 {
     if (!error)
     {
-        if (messageSize_!=0)
+        if (messageSize_ != 0)
         {
-
-
-
-
             messageSize_ = 0;
             onRead(buffer_);
             read();
         }
         else
         {
-            messageSize_=Helper::getSize(static_cast<uint16_t>(buffer_[0]),static_cast<uint16_t>(buffer_[1]));
+            messageSize_ = Helper::getSize(static_cast<uint16_t>(buffer_[0])
+                                         , static_cast<uint16_t>(buffer_[1]));
 
             LOG_INFO("Data size = " << messageSize_);
 

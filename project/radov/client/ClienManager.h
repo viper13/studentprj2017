@@ -10,13 +10,12 @@ public:
     ClientManager(std::string address, std::string port);
 
     void processMessage(std::string message) override;
-
     void onRead(ByteBuffer data) override;
 
     bool hasRequest;
     bool inChat;
 
-
+    int currentRoom;
 
 };
 

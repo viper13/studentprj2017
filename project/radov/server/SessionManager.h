@@ -4,22 +4,18 @@
 #include "Session.h"
 #include "define.h"
 
-
-
 class SessionManager : public Session
 {
 public:
     SessionManager();
-
     static std::shared_ptr<SessionManager> getNewSession();
-
     char getIdClient();
-
     bool hasRequest;
     bool inChat;
 
     std::string message_;
 
+    int currentRoom;
 
 private:
     void onRead(ByteBuffer data) override;
