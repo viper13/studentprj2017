@@ -10,6 +10,7 @@ Client::Client(std::string address, std::string port)
     , port_(port)
     , resolver_(io_service_)
     , idClient(0)
+    , messageSize_ (0)
 {
 
 }

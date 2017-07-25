@@ -28,11 +28,6 @@ uint16_t Helper::getSize(uint16_t left, uint16_t right)
     return ((left << 8) + right);
 }
 
-Helper::Helper()
-{
-
-}
-
 bool Helper::parseFromPostgres(const pqxx::tuple &data, User &user)
 {
     user.id_ = data["id"].as<int>();

@@ -9,6 +9,8 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
+LIBS += -lpqxx
+
 INCLUDEPATH +=$$PWD/../common
 
 SOURCES += \

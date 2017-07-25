@@ -1,5 +1,5 @@
 #include "ChatManager.h"
-#include "DataDaseManager.h"
+#include "DataBaseManager.h"
 
 ChatManager& ChatManager::getInstance()
 {
@@ -51,7 +51,6 @@ void ChatManager::debug()
 {
     LOG_INFO("Sessions size = " << sessions_.size());
     LOG_INFO("Sessions capacity = " << sessions_.capacity());
-
 }
 
 void ChatManager::sendMessage(char idClient, char idTarget, std::string message)
@@ -68,8 +67,6 @@ void ChatManager::sendMessage(char idClient, char idTarget, std::string message)
             message_ += "--\n";
             sep -> write(message_);
             LOG_INFO("Writing to destination " << message_);
-
-
         }
     }
 }
