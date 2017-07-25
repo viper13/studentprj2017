@@ -1,8 +1,6 @@
 #ifndef SESSION_H
 #define SESSION_H
 
-#include <memory>
-
 #include <asio.hpp>
 
 #include "define.h"
@@ -24,10 +22,9 @@ class MessageSession
 
     protected:
 
-        virtual void onRead(ByteBuffer message) = 0;
+        virtual void onRead(const ByteBuffer& buffer) = 0;
 
         asio::ip::tcp::socket socket_;
-        ByteBuffer buffer_;
 
     private:
 
@@ -38,6 +35,8 @@ class MessageSession
                          size_t writtenBytesCount);
         void handleReadMsgSize(asio::error_code error, size_t bufferSize);
         void handleReadMessage(asio::error_code error, size_t bufferSize);
+
+        ByteBuffer buffer_;
 };
 
 #endif // SESSION_H

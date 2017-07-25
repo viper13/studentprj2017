@@ -1,8 +1,6 @@
 #include "Server.h"
 #include "Worker.h"
 
-#include "define.h"
-
 
 
 Server::Server(int port)
@@ -10,7 +8,16 @@ Server::Server(int port)
       acceptor_( io_service_,
                  asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port) )
 {
+    onConnectedCallback_ = [] (SessionPtr) { };
+
     LOG_INFO("Created server for port: " << port);
+}
+
+
+
+void Server::setCallback(std::function<void (SessionPtr)> onConnectedCallback)
+{
+    onConnectedCallback_ = onConnectedCallback;
 }
 
 
@@ -41,6 +48,7 @@ void Server::handleAccept(SessionPtr session, asio::error_code error)
                   clientAddress.port() );
 
         sessions_.push_back (session);
+        onConnectedCallback_(session);
         session->start();
     }
 
@@ -49,7 +57,7 @@ void Server::handleAccept(SessionPtr session, asio::error_code error)
 
 
 
-void Server::start()
+void Server::start ()
 {
     acceptConnection();
 }

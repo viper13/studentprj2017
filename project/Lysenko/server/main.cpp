@@ -1,9 +1,12 @@
+#include "ChatManager.h"
 #include "Worker.h"
-#include "Server.h"
 
 int main(int argc, char *argv[])
 {
-    Server server(1122);
+    Server server (1122);
+
+    ChatManager chatManager (server);
+
     server.start();
 
     Worker::instance()->startThreads();

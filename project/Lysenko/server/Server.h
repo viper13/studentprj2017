@@ -11,7 +11,8 @@ class Server
 
         Server(int port);
 
-        void start();
+        void start ();
+        void setCallback(std::function< void(SessionPtr) > onConnectedCallback);
 
     private:
 
@@ -22,6 +23,8 @@ class Server
         asio::ip::tcp::acceptor acceptor_;
 
         std::vector<SessionPtr> sessions_;
+
+        std::function< void(SessionPtr) > onConnectedCallback_;
 };
 
 #endif // SERVER_H

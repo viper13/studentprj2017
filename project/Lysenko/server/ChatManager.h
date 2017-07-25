@@ -3,17 +3,21 @@
 
 #include <map>
 
-#include "define.h"
+#include "Server.h"
 
 class ChatManager
 {
     public:
 
-        ChatManager();
+        ChatManager(Server& server);
+
+        void onConnected(SessionPtr newSession);
+
+        void onRead(SessionPtr session, std::string message);
 
     private:
 
-        std::map<std::string, SessionPtr> userList;
+        std::map<std::string, SessionPtr> registeredUsers_;
 };
 
 #endif // CHATMANAGER_H

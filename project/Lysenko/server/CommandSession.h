@@ -14,11 +14,15 @@ class CommandSession
 
         CommandSession();
 
+        void setCallback( std::function< void(SessionPtr, std::string) > onReadCallback );
+
         static SessionPtr getNewSession();
 
-    protected:
+    private:
 
-        void onRead(ByteBuffer message) override;
+        void onRead(const ByteBuffer& buffer) override;
+
+        std::function< void(SessionPtr, std::string) > onReadCallback_;
 };
 
 #endif // COMMANDSESSION_H
