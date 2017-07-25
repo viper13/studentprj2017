@@ -2,6 +2,8 @@
 #include "clientsContainer.h"
 #include "protocol.h"
 
+#include "databaseManager.h"
+
 ChatManager::ChatManager(Server &server)
     : chatRooms_(ClientsContainer::instance())
 {
@@ -20,6 +22,8 @@ void ChatManager::onConnected(ChatSessionPtr session)
                            , this
                            , std::placeholders::_1
                            , std::placeholders::_2));
+    std::vector<User> users;
+    DataBaseManager::getUsersList(users);
 }
 
 void ChatManager::onRead(ChatSessionPtr session, std::string message)
@@ -83,6 +87,24 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
             }
 
             break;
+        }
+        case Protocol::STOP_CHAT:
+        {
+            std::string currentUser = session->getUserName();
+            StringSetPtr users = chatRooms_->getUsersFromRoom(currentUser);
+            std::string messageToSend = Protocol::stopChatServerMessageCreate("OK");
+            if (users->size() == 2)
+            {
+                for (std::string user : *users)
+                {
+                    sessions_.at(user)->write(messageToSend);
+                }
+            }
+            else
+            {
+                session->write(messageToSend);
+            }
+            chatRooms_->removeUser(currentUser);
         }
         case Protocol::MESSAGE:
         {

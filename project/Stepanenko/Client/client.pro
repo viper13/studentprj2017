@@ -7,6 +7,8 @@ CONFIG += c++11
 
 INCLUDEPATH += $$PWD/../Common/
 
+LIBS += -lpqxx
+
 TEMPLATE = app
 
 SOURCES += main.cpp \

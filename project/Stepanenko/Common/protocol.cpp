@@ -94,6 +94,16 @@ std::string Protocol::disconnectServerMessageCreate(std::string status)
     return typeAdder(USER_DISCONNECT, status);
 }
 
+std::string Protocol::stopChatClientMessageCreate()
+{
+    return typeAdder(STOP_CHAT, "");
+}
+
+std::string Protocol::stopChatServerMessageCreate(std::string status)
+{
+    return typeAdder(STOP_CHAT, status);
+}
+
 std::string Protocol::typeAdder(uint8_t type, std::string message)
 {
     char firstSymbol = type;

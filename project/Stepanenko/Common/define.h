@@ -27,7 +27,14 @@ std::ostream& operator<<(std::ostream& stream, const ByteBuffer& buffer);
 #define LOG_INFO(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [INF]"<<message<<std::endl;
 #define LOG_ERR(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [ERR]"<<message<<std::endl;
 
+struct User
+{
+    int id_;
+    std::string name_;
+    std::string nick_;
+};
 
+std::ostream& operator<<(std::ostream& stream, const User& buffer);
 
 #endif // DEFINE
 

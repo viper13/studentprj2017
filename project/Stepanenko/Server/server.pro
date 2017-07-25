@@ -8,6 +8,8 @@ CONFIG += c++11
 
 INCLUDEPATH += $$PWD/../Common/
 
+LIBS += -lpqxx
+
 TEMPLATE = app
 
 SOURCES += main.cpp \
@@ -20,7 +22,8 @@ SOURCES += main.cpp \
     chatroom.cpp \
     clientsContainer.cpp \
     chatSession.cpp \
-    chatManager.cpp
+    chatManager.cpp \
+    databaseManager.cpp
 
 HEADERS += \
     ../Common/define.h \
@@ -32,6 +35,8 @@ HEADERS += \
     chatroom.h \
     clientsContainer.h \
     chatSession.h \
-    chatManager.h
+    chatManager.h \
+    databaseManager.h
 
+OTHER_FILES += ../dump_db
 

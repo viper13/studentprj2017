@@ -45,6 +45,17 @@ void MessageManager::comunicateWithUser()
                 tempStream >> thirdWord;
                 chatClient_->connectToUser(thirdWord);
             }
+            else if (secondWord == "STOP_CHAT")
+            {
+                if (chatClient_->isInChat())
+                {
+                    chatClient_->stopChat();
+                }
+                else
+                {
+                    std::cout << "You are not currently in chat, you can't leave it!" << std::endl;
+                }
+            }
             else if (secondWord == "DISCONNECT")
             {
                 chatClient_->disconnect();
@@ -88,6 +99,7 @@ void MessageManager::showHelp()
     std::cout << "COMMAND HELP - this output" << std::endl;
     std::cout << "COMMAND SERVER_USERS - send request to server for updating local users" << std::endl;
     std::cout << "COMMAND START_CHAT USER - begin chat with choosen user" << std::endl;
+    std::cout << "COMMAND STOP_CHAT - stop current chat with" << std::endl;
     std::cout << "COMMAND DISCONNECT - disconnect from server by choosen username" << std::endl;
     std::cout << "COMMAND EXIT - exit from program" << std::endl;
     std::cout << "----------------------------------------------------------------------" << std::endl << std::endl;

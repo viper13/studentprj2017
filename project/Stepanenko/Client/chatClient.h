@@ -12,6 +12,7 @@ public:
     void printUsersToConsole();
     void sendChatMessage(std::string message);
     void connectToUser(std::string user);
+    void stopChat();
     void disconnect();
     bool isInChat();
     bool isLoggedIn();

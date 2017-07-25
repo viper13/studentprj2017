@@ -67,6 +67,12 @@ void ChatClient::connectToUser(std::string user)
     write(message);
 }
 
+void ChatClient::stopChat()
+{
+     std::string message = Protocol::stopChatClientMessageCreate();
+     write(message);
+}
+
 void ChatClient::disconnect()
 {
     std::string message = Protocol::disconnectClientMessageCreate();
@@ -142,6 +148,20 @@ void ChatClient::processInputMessage()
             else
             {
                 std::cout << "Your logout is failed! Try again later." << std::endl;
+            }
+            break;
+        }
+        case Protocol::STOP_CHAT:
+        {
+            std::string status = Protocol::typeRemover(message);
+            if (status == "OK")
+            {
+                inChat_ = false;
+                std::cout << "You left successfuly!" << std::endl;
+            }
+            else
+            {
+                std::cout << "You can't leave the chat. Try again later." << std::endl;
             }
             break;
         }

@@ -28,11 +28,15 @@ public:
     static std::string disconnectClientMessageCreate();
     static std::string disconnectServerMessageCreate(std::string status);
 
+    static std::string stopChatClientMessageCreate();
+    static std::string stopChatServerMessageCreate(std::string status);
+
     static const uint8_t USER_LIST = 1;
     static const uint8_t START_CHAT = 2;
     static const uint8_t MESSAGE = 3;
     static const uint8_t USER_DISCONNECT = 4;
     static const uint8_t LOG_IN = 5;
+    static const uint8_t STOP_CHAT = 6;
 
 private:
     static std::string typeAdder(uint8_t type, std::string message);
