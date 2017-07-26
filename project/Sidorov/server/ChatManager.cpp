@@ -1,4 +1,5 @@
 #include "ChatManager.h"
+#include "DataBaseManager.h"
 
 ChatManager::ChatManager(Server &server)
 {
@@ -16,6 +17,9 @@ void ChatManager::onConnected(ChatSessionPtr session)
                                 , std::placeholders::_1
                                 , std::placeholders::_2));
     sessions_.push_back(session);
+
+    std::vector<User> users;
+    DataBaseManager::getUsersList(users);
 }
 
 
@@ -145,6 +149,11 @@ std::string ChatManager::logout(ChatSessionPtr currentChatSessionPtr)
     {
         std::string exceptUserName = currentChatSessionPtr->getUserName();
         std::string messageForUsers = "User: " + exceptUserName + " was loged out.";
+
+        if(!currentChatSessionPtr->chatRoomsSession.empty())
+        {
+            currentChatSessionPtr->disconnectedFromAll();
+        }
 
         ByteBufferPtr messagePtr(new ByteBuffer(messageForUsers.begin(),messageForUsers.end()));
 

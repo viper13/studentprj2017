@@ -24,7 +24,6 @@ public:
     void disconnectedFromUser(ChatSessionPtr session, ByteBufferPtr userName);
     void sendMessage(ChatSessionPtr session, ByteBufferPtr messageText);
     void acceptToChat(ChatSessionPtr session, ByteBufferPtr userName);
-
 private:
 
     ChatSessionPtr findSession(const std::string& name);

@@ -28,3 +28,8 @@ void ChatRoom::sendMessage(const std::string &text, const std::string& from)
             pair.second->sendMessageToClient(text);
     }
 }
+
+std::map<std::string, ChatSessionPtr> ChatRoom::getChat()
+{
+    return usersChat;
+}

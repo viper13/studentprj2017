@@ -84,3 +84,28 @@ void ChatSession::sendMessageToClient(const std::string &text)
     execute(CodeCommand::SEND_MESSAGE
             , std::make_shared<ByteBuffer>(Helper::stringToBuffer(text)));
 }
+
+void ChatSession::disconnectedFromAll()
+{
+    if(!chatRoomsSession.empty())
+    {
+        for (std::shared_ptr<ChatRoom> room : chatRoomsSession)
+        {
+            if (room->isUserContain(this->getUserName()))
+            {
+                std::shared_ptr<std::map<std::string, ChatSessionPtr>> thisRoom(new std::map<std::string, ChatSessionPtr>(room->getChat()));
+                for (auto it = thisRoom->begin(); it != thisRoom->end(); ++it)
+                {
+                    if (it->first != this->getUserName())
+                    {
+                        ChatSessionPtr anotherSession = it->second;
+                        anotherSession->chatRoomsSession.erase(std::find(anotherSession->chatRoomsSession.begin()
+                                                                         , anotherSession->chatRoomsSession.end()
+                                                                         , room));
+                    }
+                }
+                chatRoomsSession.erase(std::find(chatRoomsSession.begin(),chatRoomsSession.end(), room));
+            }
+        }
+    }
+}

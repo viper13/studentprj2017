@@ -26,8 +26,8 @@ public:
     void execute(CodeCommand code, ByteBufferPtr data);
     void sendMessageToClient(const std::string &text);
     std::vector<std::shared_ptr<ChatRoom> > chatRoomsSession;
+    void disconnectedFromAll();
 private:
-
     std::function<void (std::shared_ptr<ChatSession>, ByteBufferPtr)> handleRead_;
     std::string userName_;
 

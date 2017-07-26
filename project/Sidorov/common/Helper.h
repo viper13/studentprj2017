@@ -1,6 +1,7 @@
 #ifndef HELPER_H
 #define HELPER_H
 
+#include <pqxx/pqxx>
 #include <asio.hpp>
 #include <define.h>
 
@@ -18,6 +19,8 @@ public:
     static void eraseCodeCommand(ByteBufferPtr bufferPtr);
     static std::string bufferToString(ByteBufferPtr bufferPtr);
     static ByteBuffer stringToBuffer(const std::string &str);
+
+    static bool parseDromPostgres(const pqxx::tuple& data, User& user);
 };
 
 #endif // HELPER_H

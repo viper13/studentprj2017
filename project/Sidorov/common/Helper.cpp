@@ -15,6 +15,17 @@ ByteBuffer Helper::stringToBuffer(const std::string &str)
     return ByteBuffer(str.begin(), str.end());
 }
 
+bool Helper::parseDromPostgres(const pqxx::tuple &data, User &user)
+{
+    user.id_ = data["id"].as<int>();
+    user.name_ = data["name"].as<std::string>();
+    user.nick_ = data["nick"].as<std::string>();
+
+    LOG_INFO("Parsed user: " << user);
+
+    return true;
+}
+
 void Helper::addCodeCommand(CodeCommand code, ByteBufferPtr bufferPtr)
 {
    bufferPtr->emplace(bufferPtr->begin(), static_cast<uint8_t>(code));

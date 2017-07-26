@@ -33,5 +33,15 @@ enum class CodeCommand: uint8_t
 
 std::ostream& operator <<(std::ostream& stream, const ByteBuffer& buffer);
 
+struct User
+{
+    int id_;
+    std::string name_;
+    std::string nick_;
+};
+
+
+std::ostream& operator <<(std::ostream& stream, const User& user);
+
 #endif // DEFINE
 
