@@ -13,7 +13,13 @@ public:
 
     void onConnected(SessionEssencePtr session);
 
+    bool authFunction(std::string login);
+
+    void registerNewUser(std::string login, std::string nick);
+    bool loginIntoUser(std::string login , std::string pass);
+
     void getUserList(char idClient);
+    void getUserList(std::string loginClient);
 
     void start(Server& server);
 
@@ -22,12 +28,15 @@ public:
     void sendMessage(char idClient, char idTarget, std::string message);
 
     void sendChatMessage(int idRoom, std::string message, char idClient);
+    void sendChatMessage(int idRoom, std::string message, std::string loginClient);
 
     void requestMessage(char idClient, char idTarget, std::string message, int room);
+    void requestMessage(std::string loginClient, std::string loginTarget, std::string message, int room);
 
     void createChat();
 
     void addUserToChatRoom(char idClient, int idRoom);
+    void addUserToChatRoom(std::string loginClient, int idRoom);
 
     std::string message_;
 

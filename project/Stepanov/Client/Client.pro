@@ -19,6 +19,7 @@ SOURCES += \
     ../common/Helper.cpp \
     ClientEssence.cpp
 LIBS += -L"/usr/include/boost" -lboost_system
+LIBS += -lpqxx
 # The following dzefine makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the

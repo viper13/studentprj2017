@@ -1,5 +1,5 @@
 #include "ChatManager.h"
-
+#include "DataBaseManager.h"
 
 ChatManager& ChatManager::getInstance()
 {
@@ -13,6 +13,37 @@ void ChatManager::onConnected(SessionEssencePtr session)
     LOG_INFO("onConnected from CHATMANAGER");
     sessions_.push_back(session);
     LOG_INFO("Sessions size = "<<sessions_.size());
+    std::vector<User> users;
+    DataBaseManager::getUsersList(users);
+}
+
+bool ChatManager::authFunction(std::string login)
+{
+    if(DataBaseManager::checkUser(login))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void ChatManager::registerNewUser(std::string login,std::string nick)
+{
+    DataBaseManager::registerNewUser(login,nick);
+}
+
+bool ChatManager::loginIntoUser(std::string login, std::string pass)
+{
+    if(DataBaseManager::loginIntoUser(login,pass))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void ChatManager::getUserList(char idClient)
@@ -32,6 +63,24 @@ void ChatManager::getUserList(char idClient)
         }
     }
 
+}
+
+void ChatManager::getUserList(std::string loginClient)
+{
+    LOG_INFO(sessions_.size());
+    std::string userList;
+    for (SessionEssencePtr sep: sessions_)
+    {
+        userList+=sep->getLogin();
+        userList+=" -\n";
+    }
+    for(SessionEssencePtr sep: sessions_)
+    {
+        if(sep->getLogin()==loginClient)
+        {
+            sep->write(userList);
+        }
+    }
 }
 
 void ChatManager::start(Server &server)
@@ -63,8 +112,6 @@ void ChatManager::sendMessage(char idClient, char idTarget,std::string message)
             message_+="--\n";
             sep->write(message_);
             LOG_INFO("Writing to destination "<<message_);
-
-
         }
     }
 }
@@ -73,15 +120,12 @@ void ChatManager::sendChatMessage(int idRoom, std::string message,char idClient)
 {
     message.erase(message.begin(),message.begin()+2);
     chatRooms_.at(idRoom)->sendMessage(message,idClient);
-    /*for(ChatRoomPtr crp:chatRooms_)
-    {
-        if(crp->idRoom_==idRoom)
-        {
-            std::string send(message.begin()+2,message.end());
-            crp->sendMessage(send,idClient);
-            LOG_INFO("Chat manager trying to send chat message");
-        }
-    }*/
+}
+
+void ChatManager::sendChatMessage(int idRoom, std::string message, std::string loginClient)
+{
+    message.erase(message.begin(),message.begin()+2);
+    chatRooms_.at(idRoom)->sendMessage(message,loginClient);
 }
 
 void ChatManager::requestMessage(char idClient, char idTarget, std::string message,int room)
@@ -105,6 +149,25 @@ void ChatManager::requestMessage(char idClient, char idTarget, std::string messa
     }
 }
 
+void ChatManager::requestMessage(std::string loginClient, std::string loginTarget, std::string message, int room)
+{
+    LOG_INFO("message on manager"<<message<<loginClient<<loginTarget);
+    for(SessionEssencePtr sep: sessions_)
+    {
+        if(sep->getLogin()==loginTarget)
+        {
+            message_=REQUEST_TO_CREATE_CHAT_MESSAGE;
+            message_+=std::to_string(room);
+            message_ += "User ";
+            message_+=loginClient;
+            message_+=" wish to create chat with you! \n";
+            sep->write(message_);
+            sep->hasRequest=true;
+            LOG_INFO("Writing to destination "<<message_);
+        }
+    }
+}
+
 void ChatManager::createChat()
 {
     chatRooms_.push_back(ChatRoom::getNewChatRoom(nextIdRoom));
@@ -114,14 +177,11 @@ void ChatManager::createChat()
 void ChatManager::addUserToChatRoom(char idClient, int idRoom)
 {
     chatRooms_.at(idRoom)->addPerson(idClient);
-   /* for(ChatRoomPtr crp:chatRooms_)
-    {
-        if(crp->idRoom_==idRoom)
-        {
-            crp->addPerson(idClient);
-            LOG_INFO("Chat manager trying to add person to a chat room");
-        }
-    }*/
+}
+
+void ChatManager::addUserToChatRoom(std::string loginClient, int idRoom)
+{
+    chatRooms_.at(idRoom)->addPerson(loginClient);
 }
 
 ChatManager::ChatManager(){

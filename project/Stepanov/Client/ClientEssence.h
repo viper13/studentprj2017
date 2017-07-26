@@ -15,6 +15,8 @@ public:
 
     bool hasRequest;
     bool inChat;
+    bool isLogin;
+    bool isRegister;
     int currentRoom;
 
 

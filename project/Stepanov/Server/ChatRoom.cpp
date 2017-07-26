@@ -26,10 +26,36 @@ void ChatRoom::addPerson(char idClient)
     }
 }
 
+void ChatRoom::addPerson(std::string loginClient)
+{
+    for(SessionEssencePtr sep:chatManager.sessions_)
+    {
+        if(sep->getLogin()==loginClient)
+        {
+            users_.push_back(sep);
+            sep->inChat=true;
+            LOG_INFO("User " << sep->getIdClient()<< " connected to chat with id "
+                     << idRoom_);
+        }
+    }
+}
+
 void ChatRoom::sendMessage(std::string message,char idWriter)
 {
     message_="Message from client ";
     message_+=idWriter;
+    message_+=" : ";
+    message_+=message;
+    for(SessionEssencePtr sep:users_)
+    {
+        sep->write(message_);
+    }
+}
+
+void ChatRoom::sendMessage(std::string message, std::string loginWriter)
+{
+    message_="Message from client ";
+    message_+=loginWriter;
     message_+=" : ";
     message_+=message;
     for(SessionEssencePtr sep:users_)

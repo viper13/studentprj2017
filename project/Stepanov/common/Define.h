@@ -24,6 +24,8 @@
 #define NO_MESSAGE "$n"
 #define CHAT_MESSAGE "$C"
 #define ADD_USER_TO_CHAT_MESSAGE "$A"
+#define CREATE_NEW_USER "$2"
+#define LOGIN_INTO_ACCOUNT "$1"
 
 
 #define LOG_INFO(message) std::cout<<"\n [INFO]"<<message<<std::endl;
@@ -35,8 +37,14 @@ typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
 
 using namespace boost;
 
+struct User
+{
+    int id_;
+    std::string name;
+    std::string nick;
+};
 
-
+std::ostream& operator<<(std::ostream& stream,const User& user);
 std::ostream& operator<<(std::ostream& stream,const ByteBuffer& buffer);
 
 

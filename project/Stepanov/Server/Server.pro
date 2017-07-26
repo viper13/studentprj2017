@@ -20,9 +20,11 @@ SOURCES += \
     ../common/Helper.cpp \
     SessionEssence.cpp \
     ChatManager.cpp \
-    ChatRoom.cpp
+    ChatRoom.cpp \
+    DataBaseManager.cpp
 
 LIBS += -L"/usr/include/boost" -lboost_system
+LIBS += -lpqxx
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -43,4 +45,7 @@ HEADERS += \
     ../common/Helper.h \
     SessionEssence.h \
     ChatManager.h \
-    ChatRoom.h
+    ChatRoom.h \
+    DataBaseManager.h
+OTHER_FILES +=\
+    dump.sql

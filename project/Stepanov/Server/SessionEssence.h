@@ -22,8 +22,14 @@ public:
     int currentRoom;
 
 
+    std::string getLogin() const;
+
+    std::string getTargetLogin() const;
+
 private:
     void onRead(ByteBuffer data) override;
+    std::string login;
+    std::string targetLogin;
 };
 
 typedef std::shared_ptr<SessionEssence> SessionEssencePtr;

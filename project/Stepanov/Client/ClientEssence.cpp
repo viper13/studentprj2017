@@ -2,14 +2,16 @@
 #include "Client.h"
 
 
-
 ClientEssence::ClientEssence(std::string address, std::string port)
     : Client(address,port)
     , hasRequest(false)
     , inChat(false)
+    , isLogin(false)
+    , isRegister(false)
 {
 
 }
+
 
 void ClientEssence::processMessage(std::string message)
 {
@@ -29,13 +31,26 @@ void ClientEssence::processMessage(std::string message)
                 write(message);
             }
         }
+        if(isRegister)
+        {
+            message=CREATE_NEW_USER+message;
+            write(message);
+            isLogin=false;
+        }
+        if(isLogin)
+        {
+            message=LOGIN_INTO_ACCOUNT+message;
+            write(message);
+            isLogin=false;
+        }
 
         if(message.find("!register") != std::string::npos)
         {
             LOG_INFO("Enter your id(1 character)");
             std::cin >> message;
+            login = message;
             idClient=message[0];
-            message = LOGIN_MESSAGE+message;
+            message = LOGIN_MESSAGE+login;
             write(message);
             LOG_INFO(" Type !help to see commands");
         }
@@ -98,5 +113,17 @@ void ClientEssence::onRead(ByteBuffer data)
         currentRoom=message[2]-'0';
         LOG_INFO("Type !yes to create chat!\n");
         hasRequest = true;
+    }
+    else if(message.find(CREATE_NEW_USER) != std::string::npos)
+    {
+        message.erase(message.begin(),message.begin()+2);
+        LOG_INFO(message);
+        isRegister=true;
+    }
+    else if(message.find(LOGIN_INTO_ACCOUNT) != std::string::npos)
+    {
+        message.erase(message.begin(),message.begin()+2);
+        LOG_INFO(message);
+        isLogin=true;
     }
 }
