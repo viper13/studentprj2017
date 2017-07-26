@@ -33,6 +33,7 @@ bool DataBaseManager::getUsersList(std::vector<NewUser> &users)
             parceFromPostgres(row, user);
             users.emplace_back(user);
         }
+        txn.commit();
     }
     catch(const std::exception& e)
     {
