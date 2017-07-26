@@ -14,6 +14,7 @@ public:
     static BuffersVector addSizeValue(ByteBufferPtr buffer);
     static BufferSequance toBufferSequance(BuffersVector buffers);
     static bool paceFromPostgres(const pqxx::tuple &data, User& user);
+    static std::string getChatRoomName(const std::string &user1, const std::string &user2);
     Helper();
 };
 

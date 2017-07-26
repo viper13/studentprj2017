@@ -33,6 +33,18 @@ bool Helper::paceFromPostgres(const pqxx::tuple &data, User &user)
     return true;
 }
 
+std::string Helper::getChatRoomName(const std::string &user1, const std::string &user2)
+{
+    if (user1.compare(user2) > 0)
+    {
+        return (user1 + user2);
+    }
+    else
+    {
+        return (user2 + user1);
+    }
+}
+
 Helper::Helper()
 {
 

@@ -55,7 +55,15 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
                 session->setUserName(userName);
                 sessions_[userName] = session;
                 chatRooms_->addNewClient(userName);
-                messageToSend = Protocol::logInServerMessageCreate("OK");
+                bool result = DataBaseManager::synchronizeUser(userName);
+                if (result)
+                {
+                    messageToSend = Protocol::logInServerMessageCreate("OK");
+                }
+                else
+                {
+                    messageToSend = Protocol::logInServerMessageCreate("BAD");
+                }
             }
             else
             {

@@ -29,6 +29,32 @@ bool DataBaseManager::getUsersList(std::vector<User> &users)
     return is_success;
 }
 
+
+/*  Function check if user with given userName exists in database, and if not
+ * then first add it to DB, and only after getting userId
+*/
+bool DataBaseManager::synchronizeUser(const std::string &userName)
+{
+    ConnectionPtr connection = getConnection();
+    bool is_success = true;
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("SELECT id FROM users where name = " + txn.quote(userName));
+        if (0 == result.size())
+        {
+            txn.exec("INSERT INTO users(name) VALUES (" + txn.quote(userName) + ")"); //This should be new function
+            txn.commit();
+        }
+    }
+    catch (const std::exception &e)
+    {
+        LOG_ERR("Failure to synchronize user: " << e.what());
+        is_success = false;
+    }
+    return is_success;
+}
+
 ConnectionPtr DataBaseManager::getConnection()
 {
     std::stringstream ss;

@@ -13,6 +13,7 @@ ChatClient::ChatClient(std::string address, std::string port)
 
 void ChatClient::askNameAndRegister()
 {
+    name_.clear();
     while (name_.empty())
     {
         LOG_INFO("Please enter your name: ");
@@ -144,6 +145,7 @@ void ChatClient::processInputMessage()
                 loggedIn_ = false;
                 inChat_ = false;
                 std::cout << "You logged out successfuly!" << std::endl;
+                askNameAndRegister();
             }
             else
             {

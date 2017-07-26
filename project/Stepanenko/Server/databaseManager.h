@@ -12,6 +12,7 @@ class DataBaseManager
 {
 public:
     static bool getUsersList(std::vector<User> &users);
+    static bool synchronizeUser(const std::string &userName);
 
 private:
     static ConnectionPtr getConnection();
