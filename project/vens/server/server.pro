@@ -9,6 +9,8 @@ TEMPLATE = app
 
 INCLUDEPATH += $$PWD/../common/
 
+LIBS += -lpqxx
+
 SOURCES += main.cpp \
     ../common/Worker.cpp \
     ../common/Helper.cpp \
@@ -16,7 +18,8 @@ SOURCES += main.cpp \
     Session.cpp \
     ../common/define.cpp \
     ChatSession.cpp \
-    ChatManager.cpp
+    ChatManager.cpp \
+    DataBaseManager.cpp
 
 HEADERS += \
     ../common/Worker.h \
@@ -25,5 +28,7 @@ HEADERS += \
     Server.h \
     Session.h \
     ChatSession.h \
-    ChatManager.h
+    ChatManager.h \
+    DataBaseManager.h
 
+OTHER_FILES += $$PWD/../dump_db.sql

@@ -1,4 +1,5 @@
 #include "ChatManager.h"
+#include "DataBaseManager.h"
 
 ChatManager::ChatManager(Server &server)
 {
@@ -12,4 +13,7 @@ void ChatManager::onConnected(ChatSessionPtr session)
 {
     LOG_INFO("Connected session.");
     sessions_.push_back(session);
+
+    std::vector<User> users;
+    DataBaseManager::getUsersList(users);
 }

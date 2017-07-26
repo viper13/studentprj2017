@@ -6,3 +6,11 @@ std::ostream& operator<<(std::ostream& stream, const ByteBuffer& buffer)
     stream << "[" << str << "]";
     return stream;
 }
+
+std::ostream &operator<<(std::ostream &stream, const User &user)
+{
+    stream << "USER{id: " << user.id_
+           << " name: [" << user.name_
+           << "] nick: [" << user.nick_ << "]}";
+    return stream;
+}
