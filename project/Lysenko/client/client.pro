@@ -23,3 +23,4 @@ HEADERS += \
     CommandClient.h \
     ../common/BufferConverter.h
 
+LIBS += -lpqxx

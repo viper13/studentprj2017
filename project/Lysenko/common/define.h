@@ -26,5 +26,14 @@ typedef std::vector<ByteBufferPtr> BuffersVector;
 std::ostream& operator<<(std::ostream& stream, const ByteBuffer& buffer);
 std::ostream& operator<<(std::ostream& stream, const BuffersVector& buffersVector);
 
+struct User
+{
+    int id_;
+    std::string name_;
+    std::string nick_;
+};
+
+std::ostream& operator<<(std::ostream& stream, const User& user);
+
 #endif // DEFINE
 
