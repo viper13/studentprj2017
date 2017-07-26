@@ -12,7 +12,7 @@ INCLUDEPATH += $$PWD/../common
 LIBS += -lpqxx
 
 SOURCES += main.cpp \
-    Worker.cpp \
+    ../common/Worker.cpp \
     Server.cpp \
     Session.cpp \
     ../common/define.cpp \
@@ -24,7 +24,7 @@ SOURCES += main.cpp \
     DataBaseManager.cpp
 
 HEADERS += \
-    Worker.h \
+    ../common/Worker.h \
     Server.h \
     Session.h \
     ../common/define.h \

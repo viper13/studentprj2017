@@ -2,7 +2,7 @@
 #define HELPER_H
 
 #include "define.h"
-#include "pqxx/pqxx"
+//#include "pqxx/pqxx"
 
 class Helper
 {
