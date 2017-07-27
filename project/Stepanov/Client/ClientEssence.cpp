@@ -35,7 +35,7 @@ void ClientEssence::processMessage(std::string message)
         {
             message=CREATE_NEW_USER+message;
             write(message);
-            isLogin=false;
+            isRegister=false;
         }
         if(isLogin)
         {
@@ -103,6 +103,20 @@ void ClientEssence::processMessage(std::string message)
                       << "!direct -- to write direct message to user\n"
                       << "!create -- to create a chat\n";
         }
+        else if(message.find("!history") != std::string::npos)
+        {
+            message=GET_CHAT_HISTORY;
+            write(message);
+        }
+        else if(message.find("!enter") != std::string::npos)
+        {
+            message=ENTER_CHAT_MESSAGE;
+            LOG_INFO("Enter id room to enter!");
+            std::cin >> currentRoom;
+            message+=std::to_string(currentRoom);
+            inChat=true;
+            write(message);
+        }
 }
 
 void ClientEssence::onRead(ByteBuffer data)
@@ -125,5 +139,12 @@ void ClientEssence::onRead(ByteBuffer data)
         message.erase(message.begin(),message.begin()+2);
         LOG_INFO(message);
         isLogin=true;
+    }
+    else if(message.find(CHAT_MESSAGE) != std::string::npos)
+    {
+        //message.erase(message.begin(),message.begin()+2);
+        //int fromRoom;
+        //fromRoom = stoi(roomId);
+        //LOG_INFO("----=-=-=-=-=-=--="<<roomId);
     }
 }

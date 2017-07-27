@@ -54,7 +54,8 @@ void ChatRoom::sendMessage(std::string message,char idWriter)
 
 void ChatRoom::sendMessage(std::string message, std::string loginWriter)
 {
-    message_="Message from client ";
+    message_=CHAT_MESSAGE;
+    message_+=" From client ";
     message_+=loginWriter;
     message_+=" : ";
     message_+=message;

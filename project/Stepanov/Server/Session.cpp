@@ -83,7 +83,7 @@ void Session::handleRead(system::error_code error, size_t bufferSize)
         {
             messageSize_=Helper::getSize(static_cast<uint16_t>(buffer_[0]),static_cast<uint16_t>(buffer_[1]));
 
-            LOG_INFO("Data size = " << messageSize_);
+            //LOG_INFO("Data size = " << messageSize_);
 
             read();
         }

@@ -73,7 +73,7 @@ void Client::handleRead(system::error_code error, size_t buf_size)
     {
         if (0 != messageSize_)
         {
-            LOG_INFO("Message: \n" << buffer_);
+            LOG_INFO("Message: " << buffer_);
             messageSize_ = 0;
             onRead(buffer_);
             read();
@@ -81,7 +81,7 @@ void Client::handleRead(system::error_code error, size_t buf_size)
         else
         {
             messageSize_ = Helper::getSize(buffer_[0],buffer_[1]);
-            LOG_INFO("Message size is: " << messageSize_);
+            //LOG_INFO("Message size is: " << messageSize_);
             read();
         }
 
@@ -97,7 +97,7 @@ void Client::handleWrite(BuffersVector data, system::error_code error, size_t wr
 {
     if (!error)
     {
-        LOG_INFO("Message writted!!!");
+        //LOG_INFO("Message writted!!!");
     }
     else
     {

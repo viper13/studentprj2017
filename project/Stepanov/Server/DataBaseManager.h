@@ -17,6 +17,16 @@ public:
     static bool registerNewUser(std::string name,std::string nick);
     static bool loginIntoUser(std::string name,std::string nick);
 
+    static int getUserId(std::string name);
+    static std::string getUserName(int id);
+
+    static int registerChat(std::string name);
+    static void addUserToChat(std::string userName, int idRoom);
+
+    static void registerChatMessage(std::string message, int idRoom, std::string userName);
+
+    static std::string getMessagesHistory(int idRoom);
+
 private:
     static ConnectionPtr getConnection();
 

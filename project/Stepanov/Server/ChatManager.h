@@ -33,10 +33,14 @@ public:
     void requestMessage(char idClient, char idTarget, std::string message, int room);
     void requestMessage(std::string loginClient, std::string loginTarget, std::string message, int room);
 
-    void createChat();
+    int createChat();
 
     void addUserToChatRoom(char idClient, int idRoom);
     void addUserToChatRoom(std::string loginClient, int idRoom);
+
+    void sendMessagesHistory(int idRoom, std::string userLogin);
+
+    void enterChat(int idRoom,std::string userLogin);
 
     std::string message_;
 

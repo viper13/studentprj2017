@@ -46,25 +46,6 @@ bool ChatManager::loginIntoUser(std::string login, std::string pass)
     }
 }
 
-void ChatManager::getUserList(char idClient)
-{
-    LOG_INFO(sessions_.size());
-    std::string userList;
-    for (SessionEssencePtr sep: sessions_)
-    {
-        userList+=sep->getIdClient();
-        userList+=" -\n";
-    }
-    for(SessionEssencePtr sep: sessions_)
-    {
-        if(sep->getIdClient()==idClient)
-        {
-            sep->write(userList);
-        }
-    }
-
-}
-
 void ChatManager::getUserList(std::string loginClient)
 {
     LOG_INFO(sessions_.size());
@@ -95,7 +76,6 @@ void ChatManager::debug()
 {
     LOG_INFO("Sessions size = "<<sessions_.size());
     LOG_INFO("Sessions capacity = "<<sessions_.capacity());
-
 }
 
 void ChatManager::sendMessage(char idClient, char idTarget,std::string message)
@@ -116,35 +96,15 @@ void ChatManager::sendMessage(char idClient, char idTarget,std::string message)
     }
 }
 
-void ChatManager::sendChatMessage(int idRoom, std::string message,char idClient)
-{
-    message.erase(message.begin(),message.begin()+2);
-    chatRooms_.at(idRoom)->sendMessage(message,idClient);
-}
-
 void ChatManager::sendChatMessage(int idRoom, std::string message, std::string loginClient)
 {
     message.erase(message.begin(),message.begin()+2);
-    chatRooms_.at(idRoom)->sendMessage(message,loginClient);
-}
-
-void ChatManager::requestMessage(char idClient, char idTarget, std::string message,int room)
-{
-    LOG_INFO("message on manager"<<message<<idClient<<idTarget);
-    for(SessionEssencePtr sep: sessions_)
+    for(ChatRoomPtr crp:chatRooms_)
     {
-        if(sep->getIdClient()==idTarget)
+        if(crp->idRoom_==idRoom)
         {
-            message_=REQUEST_TO_CREATE_CHAT_MESSAGE;
-            message_+=std::to_string(room);
-            message_ += "User ";
-            message_+=idClient;
-            message_+=" wish to create chat with you! \n";
-            sep->write(message_);
-            sep->hasRequest=true;
-            LOG_INFO("Writing to destination "<<message_);
-
-
+            crp->sendMessage(message,loginClient);
+            DataBaseManager::registerChatMessage(message,idRoom,loginClient);
         }
     }
 }
@@ -168,20 +128,60 @@ void ChatManager::requestMessage(std::string loginClient, std::string loginTarge
     }
 }
 
-void ChatManager::createChat()
+int ChatManager::createChat()
 {
-    chatRooms_.push_back(ChatRoom::getNewChatRoom(nextIdRoom));
-    nextIdRoom++;
-}
-
-void ChatManager::addUserToChatRoom(char idClient, int idRoom)
-{
-    chatRooms_.at(idRoom)->addPerson(idClient);
+   /* chatRooms_.push_back(ChatRoom::getNewChatRoom(nextIdRoom));
+    nextIdRoom++;*/
+    //----------------------------------------------------------------
+    int idChat;
+    std::string chatName = "No chat name";
+    idChat=DataBaseManager::registerChat(chatName);
+    chatRooms_.push_back(ChatRoom::getNewChatRoom(idChat));
+    return idChat;
 }
 
 void ChatManager::addUserToChatRoom(std::string loginClient, int idRoom)
 {
-    chatRooms_.at(idRoom)->addPerson(loginClient);
+    for(ChatRoomPtr crp:chatRooms_)
+    {
+        if(crp->idRoom_==idRoom)
+        {
+            crp->addPerson(loginClient);
+        }
+    }
+    DataBaseManager::addUserToChat(loginClient,idRoom);
+}
+
+void ChatManager::sendMessagesHistory(int idRoom, std::string userLogin)
+{
+    for(SessionEssencePtr sep: sessions_)
+    {
+        if(sep->getLogin()==userLogin)
+        {
+            sep->write(DataBaseManager::getMessagesHistory(idRoom));
+        }
+    }
+}
+
+void ChatManager::enterChat(int idRoom, std::string userLogin)
+{
+    for(ChatRoomPtr crp:chatRooms_)
+    {
+        if(crp->idRoom_==idRoom)
+        {
+            crp->addPerson(userLogin);
+            return;
+        }
+    }
+    chatRooms_.push_back(ChatRoom::getNewChatRoom(idRoom));
+    for(ChatRoomPtr crp:chatRooms_)
+    {
+        if(crp->idRoom_==idRoom)
+        {
+            crp->addPerson(userLogin);
+            return;
+        }
+    }
 }
 
 ChatManager::ChatManager(){

@@ -39,10 +39,6 @@ void SessionEssence::onRead(ByteBuffer data)
             write(message);
         }
         LOG_INFO("Login is"<<login);
-        /*idClient = message[2];
-        LOG_INFO("Registered client with id = "<<idClient);
-        write("You succesesfully registered!");*/
-
     }
     else if(message.find(LOGIN_INTO_ACCOUNT) != std::string::npos)
     {
@@ -68,7 +64,6 @@ void SessionEssence::onRead(ByteBuffer data)
     }
     else if(message.find(GET_USER_LIST_MESSAGE) != std::string::npos)
     {
-       // c.getUserList(idClient);
         c.getUserList(login);
     }
     else if(message.find(CREATE_CHAT_MESSAGE) != std::string::npos)
@@ -77,12 +72,10 @@ void SessionEssence::onRead(ByteBuffer data)
         message.erase(message.begin(),message.begin()+2);
         targetLogin=message;
         LOG_INFO("User "<<idClient<<" wish to create chat with " << idTarget<<" !");
+        currentRoom = c.createChat();
+        availableRooms.push_back(currentRoom);
         hasRequest=true;
-        currentRoom=c.nextIdRoom;
-        //c.requestMessage(idClient,idTarget,REQUEST_TO_CREATE_CHAT_MESSAGE,currentRoom);
         c.requestMessage(login,targetLogin,REQUEST_TO_CREATE_CHAT_MESSAGE,currentRoom);
-        c.createChat();
-        //c.addUserToChatRoom(idClient,currentRoom);
         c.addUserToChatRoom(login,currentRoom);
 
     }
@@ -96,12 +89,11 @@ void SessionEssence::onRead(ByteBuffer data)
     else if((message.find(YES_MESSAGE) != std::string::npos)&&(hasRequest))
     {
         currentRoom=message[2]-'0';
-        //c.addUserToChatRoom(idClient,currentRoom);
+        availableRooms.push_back(currentRoom);
         c.addUserToChatRoom(login,currentRoom);
     }
     else if(message.find(CHAT_MESSAGE) != std::string::npos)
     {
-        //c.sendChatMessage(currentRoom,message,idClient);
         c.sendChatMessage(currentRoom,message,login);
     }
     else if(message.find(ADD_USER_TO_CHAT_MESSAGE) != std::string::npos)
@@ -109,9 +101,18 @@ void SessionEssence::onRead(ByteBuffer data)
         idTarget=message[2];
         message.erase(message.begin()+2,message.end());
         targetLogin=message;
-        //c.requestMessage(idClient,idTarget,REQUEST_TO_CREATE_CHAT_MESSAGE,currentRoom);
         c.requestMessage(login,targetLogin,REQUEST_TO_CREATE_CHAT_MESSAGE,currentRoom);
         LOG_INFO("Session trying to send request");
+    }
+    else if(message.find(GET_CHAT_HISTORY) != std::string::npos)
+    {
+        c.sendMessagesHistory(currentRoom,login);
+    }
+    else if(message.find(ENTER_CHAT_MESSAGE) != std::string::npos)
+    {
+        message.erase(message.begin(),message.begin()+2);
+        currentRoom = atoi(message.c_str());
+        c.enterChat(currentRoom,login);
     }
 
 }

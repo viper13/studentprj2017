@@ -26,6 +26,8 @@
 #define ADD_USER_TO_CHAT_MESSAGE "$A"
 #define CREATE_NEW_USER "$2"
 #define LOGIN_INTO_ACCOUNT "$1"
+#define GET_CHAT_HISTORY "$H"
+#define ENTER_CHAT_MESSAGE "$E"
 
 
 #define LOG_INFO(message) std::cout<<"\n [INFO]"<<message<<std::endl;

@@ -19,6 +19,7 @@ CREATE TABLE messages
 (
     id SERIAL PRIMARY KEY,
     chat_id integer references chats(id),
+    user_id integer references users(id),
     message text
 );
 CREATE TABLE users_by_chats

@@ -19,8 +19,6 @@ public:
     bool inChat;
 
     std::string message_;
-    int currentRoom;
-
 
     std::string getLogin() const;
 
@@ -30,6 +28,8 @@ private:
     void onRead(ByteBuffer data) override;
     std::string login;
     std::string targetLogin;
+    int currentRoom;
+    std::vector<int> availableRooms;
 };
 
 typedef std::shared_ptr<SessionEssence> SessionEssencePtr;
