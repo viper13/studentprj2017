@@ -57,13 +57,13 @@ BufferSequence Helper::toBufferSequence(BuffersVector buffers)
     return result;
 }
 
-std::vector<std::string> Helper::splitCommandAndData(const std::string &s)
-{
-    std::vector<std::string> tokens;
-    tokens.push_back(s.substr(0,s.find(' ')));
-    tokens.push_back(s.substr(s.find(' ')+1));
-    return tokens;
-}
+//std::vector<std::string> Helper::splitCommandAndData(const std::string &s)
+//{
+//    std::vector<std::string> tokens;
+//    tokens.push_back(s.substr(0,s.find(' ')));
+//    tokens.push_back(s.substr(s.find(' ')+1));
+//    return tokens;
+//}
 
 std::pair<CodeCommand, ByteBufferPtr> Helper::getCodeAndData(const std::string &str)
 {
@@ -83,7 +83,7 @@ std::pair<CodeCommand, ByteBufferPtr> Helper::getCodeAndData(const std::string &
             return std::pair<CodeCommand, ByteBufferPtr>();
         }
 
-        if(code < static_cast<int>(CodeCommand::LOGIN) || code > static_cast<int>(CodeCommand::ANSWER_ON_REQUEST))
+        if(code < static_cast<int>(CodeCommand::REGISTRATION) || code > static_cast<int>(CodeCommand::ANSWER_ON_REQUEST))
         {
             std::cout << "Wrong number of command!" << std::endl;
             return std::pair<CodeCommand, ByteBufferPtr>();

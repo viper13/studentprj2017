@@ -16,7 +16,7 @@ bool DataBaseManager::getUsersList(std::vector<User> &users)
         for (const pqxx::tuple& row : result)
         {
             User user;
-            Helper::parseDromPostgres(row, user);
+            Helper::parseFromPostgres(row, user);
             users.push_back(user);
         }
         txn.commit();
@@ -64,23 +64,56 @@ ConnectionPtr DataBaseManager::getConnection()
     return connection;
 }
 
-bool DataBaseManager::registerUser(const std::string &userName)
+std::pair<bool, std::string> DataBaseManager::registerUser(const std::string &userName)
 {
     ConnectionPtr connection = getConnection();
     bool is_sucess = true;
+    std::string message;
     try
     {
         pqxx::work txn(*connection);
         pqxx::result result = txn.exec("SELECT id FROM users WHERE name = " + txn.quote(userName));
         if ( 0 == result.size() )
         {
-            LOG_INFO("ZERO");
+            txn.exec("INSERT INTO users(name,nick) VALUES ("+ txn.quote(userName)
+                                                            +","+ txn.quote("")+")");
+            txn.commit();
+            message = "You registered succesfull\n NOW USE COMMAND LOGIN(2) TO LOG IN";
         }
-        else LOG_INFO("ONE");
+        else
+        {
+            message = "Your username is already registered";
+        }
     }
     catch(const std::exception& e)
     {
-
+        LOG_ERR("Failure to register user: " << e.what());
+        is_sucess = false;
     }
-    return is_sucess;
+
+    return std::make_pair(is_sucess,message);
+}
+
+std::pair<bool, bool> DataBaseManager::isUserContain(const std::string &userName)
+{
+    ConnectionPtr connection = getConnection();
+    bool is_sucess = true;
+    bool is_containe = false;
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("SELECT id FROM users WHERE name = " + txn.quote(userName));
+        if ( 0 == result.size() )
+        {
+            is_containe = false;
+        }
+        else is_containe = true;
+    }
+    catch(const std::exception& e)
+    {
+        LOG_ERR("Failure to log in user: " << e.what());
+        is_sucess = false;
+    }
+
+    return std::make_pair(is_sucess, is_containe);
 }

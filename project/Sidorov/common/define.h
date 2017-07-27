@@ -38,6 +38,9 @@ struct User
     int id_;
     std::string name_;
     std::string nick_;
+    bool operator==(const User &rhs) const {
+            return rhs.name_ == name_;
+        }
 };
 
 

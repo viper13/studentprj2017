@@ -18,8 +18,8 @@ void ChatManager::onConnected(ChatSessionPtr session)
                                 , std::placeholders::_2));
     sessions_.push_back(session);
 
-    std::vector<User> users;
-    DataBaseManager::getUsersList(users);
+//    std::vector<User> users;
+//    DataBaseManager::getUsersList(users);
 }
 
 
@@ -67,7 +67,10 @@ void ChatManager::execute(CodeCommand code, ByteBufferPtr bufferPtr, ChatSession
         }
         case CodeCommand::REGISTRATION:
         {
-            registration(bufferPtr, chatSessionPtr);
+            responce = registration(bufferPtr, chatSessionPtr);
+            ByteBufferPtr responcePtr(new ByteBuffer(responce.begin(),responce.end()));
+            chatSessionPtr->write(responcePtr);
+            break;
         }
         case CodeCommand::LOGIN:
         {
@@ -95,7 +98,7 @@ void ChatManager::execute(CodeCommand code, ByteBufferPtr bufferPtr, ChatSession
             responce = getUserList(chatSessionPtr);
             LOG_INFO(responce);
             ByteBufferPtr responcePtr(new ByteBuffer(responce.begin(),responce.end()));
-            chatSessionPtr->execute(CodeCommand::USER_LIST, responcePtr);
+            chatSessionPtr->write (responcePtr);
             break;
         }
         case CodeCommand::ACCEPT_TO_CHAT:
@@ -122,31 +125,51 @@ void ChatManager::sendMessageToUsersExceptOne(ChatSessionPtr currentChatSessionP
 
 std::string ChatManager::registration(ByteBufferPtr userNamePtr, ChatSessionPtr currentChatSessionPtr)
 {
-
+    std::string userName(userNamePtr->begin(),userNamePtr->end());
+    std::pair<bool,std::string> baseResponce = DataBaseManager::registerUser(userName);
+    if (baseResponce.first)
+    {
+        return baseResponce.second;
+    }
+    else
+    {
+        return "Failure to register";
+    }
 }
 
 
-std::string ChatManager::login(ByteBufferPtr userNamePtr, ChatSessionPtr currentChatSessionPtr)
+std::string ChatManager::login(ByteBufferPtr userNamePtr, ChatSessionPtr currentChatSessionPtr) //new
 {
     std::string userName(userNamePtr->begin(),userNamePtr->end());
     std::string responce;
-    for (ChatSessionPtr session : sessions_)
-    {
-        if (session->getUserName() == userName && session->getUserName()!="" )
-        {
-            responce = "Your username already used by another user";
-            return responce;
-        }
-    }
     if (currentChatSessionPtr->getisLogged())
     {
         responce = "You are already loged in";
         return responce;
     }
-    currentChatSessionPtr->setUserName(userName);
-    currentChatSessionPtr->setisLogged(true);
+    for (ChatSessionPtr session : sessions_)
+    {
+        if (session->getUserName() == userName && session->getUserName()!="" )
+        {
+            responce = "User with this username is loged in";
+            return responce;
+        }
+    }
+    std::pair<bool,bool> baseResponce = DataBaseManager::isUserContain(userName);
+    if(baseResponce.first)
+    {
+        if (baseResponce.second)
+        {
+            currentChatSessionPtr->setUserName(userName);
+            currentChatSessionPtr->setisLogged(true);
 
-    responce = "Welcome, " + userName;
+            responce = "Welcome, " + userName;
+        }
+        else
+        {
+           responce = "Your are not registered user";
+        }
+    }
     return responce;
 }
 
@@ -299,8 +322,25 @@ void ChatManager::acceptToChat(ChatSessionPtr session, ByteBufferPtr userName)
     }
 }
 
+void ChatManager::eraseOnlineUsers(std::vector<User> &users, std::vector<User> online)
+{
+    for (User onlineUser : online )
+    {
+          auto result = std::find(users.begin(),users.end(), onlineUser);
+          if (result != users.end())
+          {
+              users.erase(std::find(users.begin(),users.end(),onlineUser));
+          }
+    }
+
+}
+
+
+
 std::string ChatManager::getUserList(ChatSessionPtr currentSessionPtr)
 {
+    std::vector<User> users;
+    DataBaseManager::getUsersList(users);
     std::string responce;
     if(!currentSessionPtr->getisLogged())
         {
@@ -308,24 +348,48 @@ std::string ChatManager::getUserList(ChatSessionPtr currentSessionPtr)
             return responce;
         }
 
-    responce = "Users online: ";
-    std::string online;
-    for (ChatSessionPtr session : sessions_)
+    std::string respOnline = "Users online:";
+    std::string respOffline = "Users offline:";
+    std::string online, offline;
+    std::vector<User> usersOnline, usersOffline;
+    for (User user : users)
     {
-        if( session->getUserName() != "" && currentSessionPtr != session)
+        for (std::shared_ptr<ChatSession> session : sessions_)
         {
-            online += session->getUserName();
-            online += ', ';
+            if (user.name_ == session->getUserName())
+            {
+                if(currentSessionPtr->getUserName()!= user.name_)
+                {
+                    online += "\n";
+                    online += "name: " + user.name_;
+                    usersOnline.push_back(user);
+                }
+            }
         }
     }
+    eraseOnlineUsers(users, usersOnline);
+    for (User user : users)
+    {
+        if (user.name_ != currentSessionPtr->getUserName())
+        {
+            offline += "\n";
+            offline += "name: " + user.name_;
+            usersOffline.push_back(user);
+        }
+    }
+
     if (online == "")
     {
-        return "There are not users online";
+        responce = "There are not users online\n" + respOffline + offline;
+        return responce;
     }
-    else
+    if (offline == "")
     {
-        return responce + online;
+        responce = respOnline + online + "\nThere are not users offline\n";
+        return responce;
     }
+    responce = "\n" + respOnline + online +"\n" + respOffline + offline;
+    return responce;
 }
 
 

@@ -25,6 +25,8 @@ public:
     void disconnectedFromUser(ChatSessionPtr session, ByteBufferPtr userName);
     void sendMessage(ChatSessionPtr session, ByteBufferPtr messageText);
     void acceptToChat(ChatSessionPtr session, ByteBufferPtr userName);
+
+    void eraseOnlineUsers(std::vector<User> &users, std::vector<User> online);
 private:
 
     ChatSessionPtr findSession(const std::string& name);

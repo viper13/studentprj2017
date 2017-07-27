@@ -61,6 +61,11 @@ void ChatClient::execute(CodeCommand code, ByteBufferPtr bufferPtr)
             disconnectFromUser(bufferPtr);
             break;
         }
+        case CodeCommand::REGISTRATION:
+        {
+            registration(bufferPtr);
+            break;
+        }
         case CodeCommand::LOGIN:
         {
             login(bufferPtr);
@@ -113,7 +118,7 @@ void ChatClient::registration(ByteBufferPtr name)
 {
     if ( 0 == name->size())
     {
-        LOG_INFO("Input your Login");
+        LOG_INFO("Input your UserName");
         return;
     }
     Helper::addCodeCommand(CodeCommand::REGISTRATION,name);

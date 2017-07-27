@@ -9,6 +9,8 @@ TEMPLATE = app
 
 INCLUDEPATH += $$PWD/../common/
 
+LIBS += -lpqxx
+
 SOURCES += main.cpp \
     Client.cpp \
     ../common/Worker.cpp \

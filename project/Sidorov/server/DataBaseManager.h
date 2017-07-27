@@ -10,7 +10,8 @@ class DataBaseManager
 {
 public:
     static bool getUsersList(std::vector<User>& users);   
-    static bool registerUser(const std::string& userName);
+    static std::pair<bool,std::string> registerUser(const std::string& userName);
+    static std::pair<bool,bool> isUserContain(const std::string& userName);
 
 private:
     static ConnectionPtr getConnection();

@@ -19,7 +19,6 @@ public:
     static void eraseCodeCommand(ByteBufferPtr bufferPtr);
     static std::string bufferToString(ByteBufferPtr bufferPtr);
     static ByteBuffer stringToBuffer(const std::string &str);
-
     static bool parseFromPostgres(const pqxx::tuple& data, User& user);
 };
 
