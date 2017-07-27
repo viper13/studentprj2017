@@ -109,6 +109,17 @@ bool ChatClient::isContainRequest(const std::string &name)
     return false;
 }
 
+void ChatClient::registration(ByteBufferPtr name)
+{
+    if ( 0 == name->size())
+    {
+        LOG_INFO("Input your Login");
+        return;
+    }
+    Helper::addCodeCommand(CodeCommand::REGISTRATION,name);
+    write(name);
+}
+
 void ChatClient::login(ByteBufferPtr name)
 {
     if ( 0 == name->size())

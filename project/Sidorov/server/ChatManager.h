@@ -17,6 +17,7 @@ public:
     void execute(CodeCommand code, ByteBufferPtr bufferPtr, ChatSessionPtr chatSessionPtr);
 
     void sendMessageToUsersExceptOne(ChatSessionPtr currentChatSessionPtr, ByteBufferPtr bufferPtr);
+    std::string registration(ByteBufferPtr userNamePtr, ChatSessionPtr currentChatSessionPtr);
     std::string login(ByteBufferPtr userNamePtr, ChatSessionPtr currentChatSessionPtr);
     std::string getUserList(ChatSessionPtr currentSessionPtr);
     std::string logout(ChatSessionPtr currentChatSessionPtr);

@@ -9,7 +9,8 @@ typedef std::shared_ptr<pqxx::connection> ConnectionPtr;
 class DataBaseManager
 {
 public:
-    static bool getUsersList(std::vector<User>& users);
+    static bool getUsersList(std::vector<User>& users);   
+    static bool registerUser(const std::string& userName);
 
 private:
     static ConnectionPtr getConnection();

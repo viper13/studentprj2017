@@ -20,7 +20,7 @@ public:
     static std::string bufferToString(ByteBufferPtr bufferPtr);
     static ByteBuffer stringToBuffer(const std::string &str);
 
-    static bool parseDromPostgres(const pqxx::tuple& data, User& user);
+    static bool parseFromPostgres(const pqxx::tuple& data, User& user);
 };
 
 #endif // HELPER_H

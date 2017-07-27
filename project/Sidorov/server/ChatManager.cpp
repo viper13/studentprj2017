@@ -65,6 +65,10 @@ void ChatManager::execute(CodeCommand code, ByteBufferPtr bufferPtr, ChatSession
             disconnectedFromUser(chatSessionPtr,bufferPtr);
             break;
         }
+        case CodeCommand::REGISTRATION:
+        {
+            registration(bufferPtr, chatSessionPtr);
+        }
         case CodeCommand::LOGIN:
         {
             responce = login(bufferPtr, chatSessionPtr);
@@ -114,6 +118,11 @@ void ChatManager::sendMessageToUsersExceptOne(ChatSessionPtr currentChatSessionP
         }
         else continue;
     }
+}
+
+std::string ChatManager::registration(ByteBufferPtr userNamePtr, ChatSessionPtr currentChatSessionPtr)
+{
+
 }
 
 

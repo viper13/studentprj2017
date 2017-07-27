@@ -63,3 +63,24 @@ ConnectionPtr DataBaseManager::getConnection()
     }
     return connection;
 }
+
+bool DataBaseManager::registerUser(const std::string &userName)
+{
+    ConnectionPtr connection = getConnection();
+    bool is_sucess = true;
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("SELECT id FROM users WHERE name = " + txn.quote(userName));
+        if ( 0 == result.size() )
+        {
+            LOG_INFO("ZERO");
+        }
+        else LOG_INFO("ONE");
+    }
+    catch(const std::exception& e)
+    {
+
+    }
+    return is_sucess;
+}

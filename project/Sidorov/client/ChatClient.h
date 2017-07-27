@@ -14,6 +14,7 @@ public:
     bool isContainRequest(const std::string& name);
 private:
 
+    void registration(ByteBufferPtr name);
     void login(ByteBufferPtr name);
     void logout();
     void sendMessage(ByteBufferPtr message);

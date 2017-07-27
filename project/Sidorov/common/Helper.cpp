@@ -15,7 +15,7 @@ ByteBuffer Helper::stringToBuffer(const std::string &str)
     return ByteBuffer(str.begin(), str.end());
 }
 
-bool Helper::parseDromPostgres(const pqxx::tuple &data, User &user)
+bool Helper::parseFromPostgres(const pqxx::tuple &data, User &user)
 {
     user.id_ = data["id"].as<int>();
     user.name_ = data["name"].as<std::string>();
