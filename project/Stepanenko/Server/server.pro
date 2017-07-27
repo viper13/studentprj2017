@@ -20,7 +20,6 @@ SOURCES += main.cpp \
     ../Common/protocol.cpp \
     ../Common/helper.cpp \
     chatroom.cpp \
-    clientsContainer.cpp \
     chatSession.cpp \
     chatManager.cpp \
     databaseManager.cpp
@@ -33,7 +32,6 @@ HEADERS += \
     server.h \
     sesion.h \
     chatroom.h \
-    clientsContainer.h \
     chatSession.h \
     chatManager.h \
     databaseManager.h

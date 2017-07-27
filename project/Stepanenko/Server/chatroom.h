@@ -2,19 +2,24 @@
 #define CHATROOM_H
 
 #include "define.h"
+#include "helper.h"
 
 class ChatRoom
         : public std::enable_shared_from_this<ChatRoom>
 {
 public:
-    ChatRoom(std::string name);
-    static std::shared_ptr<ChatRoom> getNewChatRoom(std::string name);
-    bool isEmpty();
-    void addUser(std::string user);
-    void removeUser(std::string user);
+    ChatRoom(const std::string &chatRoomName);
+    ChatRoom(const std::string &user1, const std::string &user2);
+    static std::shared_ptr<ChatRoom> getNewChatRoom(const std::string &chatRoomName);
+    static std::shared_ptr<ChatRoom> getNewChatRoom(const std::string &user1, const std::string &user2);
+    void addUser(const std::string &user);
     StringSetPtr getUsers();
+    std::string getChatRoomName();
+    void setChatRoomId(const int &id);
+    int getChatRoomId();
 private:
-    bool isEmpty_;
+    std::string chatRoomName_;
+    int chatRoomId_;
     StringSetPtr users_;
 };
 

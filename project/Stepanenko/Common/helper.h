@@ -3,7 +3,6 @@
 
 #include <asio.hpp>
 #include <define.h>
-#include <helper.h>
 #include <pqxx/pqxx>
 
 typedef std::vector<ByteBufferPtr> BuffersVector;

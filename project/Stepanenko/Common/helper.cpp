@@ -8,7 +8,6 @@ BuffersVector Helper::addSizeValue(ByteBufferPtr buffer)
     uint16_t size = buffer->size();
     (*size_buffer)[0] = ((size & 0xff00) << 8);
     (*size_buffer)[1] = (size & 0x00ff);
-    LOG_INFO("[" << (int)(*size_buffer)[0] << "][" << (int)(*size_buffer)[1] << "]");
     result.push_back(size_buffer);
     result.push_back(buffer);
     return result;
@@ -29,7 +28,6 @@ bool Helper::paceFromPostgres(const pqxx::tuple &data, User &user)
     user.id_ = data["id"].as<int>();
     user.name_ = data["name"].as<std::string>();
     user.nick_ = data["nick"].as<std::string>();
-    LOG_INFO(user);
     return true;
 }
 

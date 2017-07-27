@@ -79,10 +79,8 @@ void Session::handleRead(asio::error_code error, size_t /*bufferSize*/)
         }
         else
         {
-            LOG_INFO("Buffer has [" << (int)buffer_[0] << "][" << (int)buffer_[1] << "]");
             nextMessageSize_ = (static_cast<uint16_t>(buffer_[0]) << 8)
                                 + static_cast<uint16_t>(buffer_[1]);
-            LOG_INFO("Next message size is: " << nextMessageSize_);
             read();
         }
     }

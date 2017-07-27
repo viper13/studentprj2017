@@ -145,7 +145,6 @@ void ChatClient::processInputMessage()
                 loggedIn_ = false;
                 inChat_ = false;
                 std::cout << "You logged out successfuly!" << std::endl;
-                askNameAndRegister();
             }
             else
             {

@@ -1,40 +1,60 @@
 #include "chatroom.h"
 
-ChatRoom::ChatRoom(std::string name)
-    : isEmpty_(true)
-    , users_(new std::set<std::string>())
+/*    This constructor is made for creation chat room for any number of users
+ * (more then two).
+*/
+ChatRoom::ChatRoom(const std::string &chatRoomName)
+    : users_(new std::set<std::string>())
 {
-    users_->insert(name);
+    chatRoomName_ = chatRoomName;
 }
 
-std::shared_ptr<ChatRoom> ChatRoom::getNewChatRoom(std::string name)
+/*    This constructor is made for creation chat room for only
+ * two users. Name of chat room is generating from their names.
+*/
+ChatRoom::ChatRoom(const std::string &user1, const std::string &user2)
+    : users_(new std::set<std::string>())
 {
-    ChatRoomPtr chatRoom(new ChatRoom(name));
-    return chatRoom;
+    chatRoomName_ = Helper::getChatRoomName(user1, user2);
+    addUser(user1);
+    addUser(user2);
 }
 
-bool ChatRoom::isEmpty()
+std::shared_ptr<ChatRoom> ChatRoom::getNewChatRoom(const std::string &chatRoomName)
 {
-    return isEmpty_;
+    ChatRoomPtr chat(new ChatRoom(chatRoomName));
+    return chat;
 }
 
-void ChatRoom::addUser(std::string user)
+std::shared_ptr<ChatRoom> ChatRoom::getNewChatRoom(const std::string &user1, const std::string &user2)
 {
-    isEmpty_ = false;
+    ChatRoomPtr chat(new ChatRoom(user1, user2));
+    return chat;
+}
+
+void ChatRoom::addUser(const std::string &user)
+{
     users_->insert(user);
 }
 
-void ChatRoom::removeUser(std::string user)
-{
-    users_->erase(user);
-    if (users_->size() == 1)
-    {
-        isEmpty_ = true;
-    }
-}
 
 StringSetPtr ChatRoom::getUsers()
 {
     return users_;
+}
+
+std::string ChatRoom::getChatRoomName()
+{
+    return chatRoomName_;
+}
+
+void ChatRoom::setChatRoomId(const int &id)
+{
+    chatRoomId_ = id;
+}
+
+int ChatRoom::getChatRoomId()
+{
+    return chatRoomId_;
 }
 

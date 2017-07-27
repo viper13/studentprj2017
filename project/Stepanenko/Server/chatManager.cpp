@@ -1,12 +1,13 @@
 #include "chatManager.h"
-#include "clientsContainer.h"
 #include "protocol.h"
 
 #include "databaseManager.h"
 
 ChatManager::ChatManager(Server &server)
-    : chatRooms_(ClientsContainer::instance())
 {
+
+    //TODO:: get all users add chats from DB
+    DataBaseManager::getRegisteredChats(chats_);
     server.subscribe(std::bind(
                          &ChatManager::onConnected
                          , this
@@ -34,106 +35,34 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
     {
         case Protocol::USER_LIST:
         {
-            std::set<std::string> names;
-            std::map<std::string, ChatSessionPtr>::iterator parser;
-            for (parser = sessions_.begin(); parser != sessions_.end(); ++parser)
-            {
-                names.insert(parser->first);
-            }
-            std::string namesMessage = Protocol::userListServerMessageCreate(names);
-            session->write(namesMessage);
+            messageToSend = userListDispatcher(session, message);
+            session->write(messageToSend);
             break;
         }
         case Protocol::LOG_IN:
         {
-            std::string userName = Protocol::typeRemover(message);
-
-            std::map<std::string, ChatSessionPtr>::iterator it;
-            it = sessions_.find(userName);
-            if (it == sessions_.end())
-            {
-                session->setUserName(userName);
-                sessions_[userName] = session;
-                chatRooms_->addNewClient(userName);
-                bool result = DataBaseManager::synchronizeUser(userName);
-                if (result)
-                {
-                    messageToSend = Protocol::logInServerMessageCreate("OK");
-                }
-                else
-                {
-                    messageToSend = Protocol::logInServerMessageCreate("BAD");
-                }
-            }
-            else
-            {
-                messageToSend = Protocol::logInServerMessageCreate("BAD");
-            }
+            messageToSend = logInDispatcher(session, message);
             session->write(messageToSend);
             break;
         }
         case Protocol::START_CHAT:
         {
-            std::string initiator = session->getUserName();
-            std::string remoteUser = Protocol::typeRemover(message);
-            std::map<std::string, ChatSessionPtr>::iterator it;
-            it = sessions_.find(remoteUser);
-            if (it != sessions_.end())
-            {
-                bool result = chatRooms_->addClientToChatRoom(initiator, remoteUser);
-                if (result)
-                {
-                    messageToSend = Protocol::startChatServerMessageCreate("OK");
-                    session->write(messageToSend);
-                    sessions_.at(remoteUser)->write(messageToSend);
-                }
-                else
-                {
-                    messageToSend = Protocol::startChatServerMessageCreate("BAD");
-                    session->write(messageToSend);
-                }
-            }
-
+            messageToSend = startChatDispatcher(session, message);
+            session->write(messageToSend);
             break;
         }
-        case Protocol::STOP_CHAT:
+        case Protocol::STOP_CHAT: //Do we realy need this??
         {
-            std::string currentUser = session->getUserName();
-            StringSetPtr users = chatRooms_->getUsersFromRoom(currentUser);
-            std::string messageToSend = Protocol::stopChatServerMessageCreate("OK");
-            if (users->size() == 2)
-            {
-                for (std::string user : *users)
-                {
-                    sessions_.at(user)->write(messageToSend);
-                }
-            }
-            else
-            {
-                session->write(messageToSend);
-            }
-            chatRooms_->removeUser(currentUser);
+            break;
         }
         case Protocol::MESSAGE:
         {
-            std::string currentUser = session->getUserName();
-            StringSetPtr users = chatRooms_->getUsersFromRoom(currentUser);
-            for (std::string user : *users)
-            {
-                if (user != currentUser)
-                {
-                    sessions_.at(user)->write(message);
-                }
-            }
+            messageDispatcher(session, message);
             break;
         }
         case Protocol::USER_DISCONNECT:
         {
-            std::string currentUser = session->getUserName();
-            chatRooms_->removeUser(currentUser);
-            std::map<std::string, ChatSessionPtr>::iterator it = sessions_.find(currentUser);
-            sessions_.erase(it);
-            messageToSend = Protocol::disconnectServerMessageCreate("OK");
+            messageToSend = disconnectDispatcher(session, message);
             session->write(messageToSend);
             break;
         }
@@ -142,6 +71,105 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
             LOG_ERR("TYPE OF MESSAGE IS UNKNOWN!");
         }
     }
+}
+
+std::string ChatManager::userListDispatcher(ChatSessionPtr session, std::string message)
+{
+    //think of this, may be you shold not return this list to user by his request
+    std::set<std::string> names;
+    std::map<std::string, ChatSessionPtr>::iterator parser;
+    for (parser = sessions_.begin(); parser != sessions_.end(); ++parser)
+    {
+        names.insert(parser->first);
+    }
+    std::string namesMessage = Protocol::userListServerMessageCreate(names);
+    return namesMessage;
+}
+
+std::string ChatManager::logInDispatcher(ChatSessionPtr session, std::string message)
+{
+    std::string userName = Protocol::typeRemover(message);
+    std::string messageToSend;
+    std::map<std::string, ChatSessionPtr>::iterator it;
+    it = sessions_.find(userName);
+    if (it == sessions_.end())
+    {
+        session->setUserName(userName);
+        sessions_[userName] = session;
+        int result = DataBaseManager::synchronizeUser(userName);
+        if (result >= 0)
+        {
+            session->setUserId(result);
+            messageToSend = Protocol::logInServerMessageCreate("OK");
+        }
+        else
+        {
+            messageToSend = Protocol::logInServerMessageCreate("BAD");
+        }
+    }
+    else
+    {
+        messageToSend = Protocol::logInServerMessageCreate("BAD");
+    }
+    return messageToSend;
+}
+
+std::string ChatManager::startChatDispatcher(ChatSessionPtr session, std::string message)
+{
+    std::string messageToSend;
+    std::string initiator = session->getUserName();
+    std::string remoteUser = Protocol::typeRemover(message);
+
+    std::set<std::string> users;
+    bool result = DataBaseManager::getUsersSet(users);
+    if (!result || users.find(remoteUser) == users.end())
+    {
+        messageToSend = Protocol::startChatServerMessageCreate("BAD");
+        return messageToSend;
+    }
+
+    std::string chatName = Helper::getChatRoomName(initiator, remoteUser);
+    if (chats_.find(chatName) != chats_.end())
+    {
+        session->setChatRoom(chats_[chatName]);
+    }
+    else
+    {
+        ChatRoomPtr room = ChatRoom::getNewChatRoom(initiator, remoteUser);
+        int id = DataBaseManager::synchronizeChatRoom(initiator, remoteUser);
+        room->setChatRoomId(id);
+        chats_[chatName] = room;
+        session->setChatRoom(chats_[chatName]);
+    }
+    messageToSend = Protocol::startChatServerMessageCreate("OK");
+    return messageToSend;
+}
+
+void ChatManager::messageDispatcher(ChatSessionPtr session, std::string message)
+{
+    std::string messageForDB = Protocol::typeRemover(message);
+    int userId = session->getUserId();
+    int chatRoomId = session->getChatRoom()->getChatRoomId();
+    bool result = DataBaseManager::saveMessage(messageForDB, userId, chatRoomId);
+
+    std::string currentUser = session->getUserName();
+    StringSetPtr users = session->getChatRoom()->getUsers();
+    for (std::string user : *users)
+    {
+        if (user != currentUser && sessions_.find(user) != sessions_.end())
+        {
+            sessions_.at(user)->write(message);
+        }
+    }
+}
+
+std::string ChatManager::disconnectDispatcher(ChatSessionPtr session, std::string message)
+{
+    std::string currentUser = session->getUserName();
+    std::map<std::string, ChatSessionPtr>::iterator it = sessions_.find(currentUser);
+    sessions_.erase(it);
+    std::string messageToSend = Protocol::disconnectServerMessageCreate("OK");
+    return messageToSend;
 }
 
 

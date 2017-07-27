@@ -3,8 +3,8 @@
 
 #include "server.h"
 #include "chatSession.h"
+#include "chatroom.h"
 
-class ClientsContainer;
 class ChatManager
 {
 public:
@@ -13,10 +13,13 @@ public:
     void onRead(ChatSessionPtr session, std::string message);
 
 private:
-
-    std::map<std::string, ChatSessionPtr> sessions_; //we should protect this
-    std::shared_ptr<ClientsContainer> chatRooms_;
-
+    std::string userListDispatcher(ChatSessionPtr session, std::string message);
+    std::string logInDispatcher(ChatSessionPtr session, std::string message);
+    std::string startChatDispatcher(ChatSessionPtr session, std::string message);
+    void messageDispatcher(ChatSessionPtr session, std::string message);
+    std::string disconnectDispatcher(ChatSessionPtr session, std::string message);
+    std::map<std::string, ChatSessionPtr> sessions_;
+    std::map<std::string, ChatRoomPtr> chats_;
 };
 
 #endif // CHATMANAGER_H
