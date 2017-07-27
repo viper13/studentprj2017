@@ -13,15 +13,41 @@ ClientManager::ClientManager(std::string address, std::string port)
 
 void ClientManager::processMessage(std::string message)
 {
+    while(idClient == '\0')
+    {
+        while(message.empty() || message.length() > 1)
+        {
+            LOG_INFO("Enter your id(1 character)");
+            std::cin >> message;
+        }
+
+        idClient = message[0];
+        message = LOGIN_MESSAGE + message;
+        write(message);
+        LOG_INFO("LOGIN_MESSAGE+message: " << message);
+        LOG_INFO(" Type -help to see commands");
+    }
 
     if(inChat)
     {
         if(message.find("-add") != std::string::npos)
         {
-            LOG_INFO("Enter id of target:");
+            LOG_INFO("Enter id of target: ");
             std::cin >> message;
             message = ADD_USER_TO_CHAT_MESSAGE + message;
             write(message);
+        }
+        else if(message.find("-leave") != std::string::npos)
+        {
+                    write("You leaved chatroom");
+                    inChat = false;
+        }
+        else if(message.find("-help") != std::string::npos)
+        {
+            //LOG_INFO("HELP:");
+            std::cout << "-list   -- get online user list \n"
+                      << "-add    -- add user to current chat \n"
+                      << "-leave  -- exit from current chat \n";
         }
         else
         {
@@ -29,29 +55,30 @@ void ClientManager::processMessage(std::string message)
             write(message);
         }
     }
-
-    if(message.find("-login") != std::string::npos)
+    else
     {
-        LOG_INFO("Enter your id(1 character)");
-        std::cin >> message;
-        idClient = message[0];
-        message = LOGIN_MESSAGE + message;
-        write(message);
-        LOG_INFO("LOGIN_MESSAGE+message: " << message);
-        LOG_INFO(" Type -help to see commands");
+        if(message.find("-create") != std::string::npos)
+        {
+            LOG_INFO("Enter id of target to create chat");
+            std::cin >> message;
+            message = CREATE_CHAT_MESSAGE + message;
+            write(message);
+            inChat = true;
+        }
+        else if(message.find("-help") != std::string::npos)
+        {
+            LOG_INFO("HELP:");
+            std::cout << "-list   -- get online user list \n"
+                      << "-server -- write direct message to server [DEBUG MODE]\n"
+                      << "-direct -- write direct message to user\n"
+                      << "-create -- create a chat\n";
+        }
     }
-    else if(message.find("-list") != std::string::npos)
+
+    if(message.find("-list") != std::string::npos)
     {
         message = GET_USER_LIST_MESSAGE;
         write(message);
-    }
-    else if(message.find("-create") != std::string::npos)
-    {
-        LOG_INFO("Enter id of target to create chat");
-        std::cin >> message;
-        message = CREATE_CHAT_MESSAGE+message;
-        write(message);
-        inChat = true;
     }
     else if(message.find("-server") != std::string::npos)
     {
@@ -81,14 +108,7 @@ void ClientManager::processMessage(std::string message)
         message += std::to_string(currentRoom);
         write(message);
     }
-    else if(message.find("-help") != std::string::npos)
-    {
-        LOG_INFO("HELP:");
-        std::cout << "-list -- for online user list \n"
-                  << "-server -- to write direct message to server\n"
-                  << "-direct -- to write direct message to user\n"
-                  << "-create -- to create a chat\n";
-    }
+
 }
 
 void ClientManager::onRead(ByteBuffer /*data*/)
@@ -101,5 +121,4 @@ void ClientManager::onRead(ByteBuffer /*data*/)
         hasRequest = true;
     }
 }
-
 

@@ -1,5 +1,6 @@
 #include "ChatRoom.h"
 #include "ChatManager.h"
+#include "DataBaseManager.h"
 
 ChatRoom::ChatRoom(int idRoom)
 {
@@ -27,6 +28,8 @@ void ChatRoom::addPerson(char idClient)
                      << sep -> getIdClient()
                      << " connected to chat with id "
                      << idRoom_);
+
+        DataBaseManager::usersByChats(idRoom_, std::string(1, sep -> getIdClient()));
         }
     }
 }
@@ -40,5 +43,12 @@ void ChatRoom::sendMessage(std::string message, char idWriter)
     for(SessionManagerPtr sep:users_)
     {
         sep -> write(message_);
+    }
+
+    if(!message_.empty())
+    {
+        DataBaseManager::addMessage(idRoom_
+                                    , std::string(1, idWriter)
+                                    , message);
     }
 }

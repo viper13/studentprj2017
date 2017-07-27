@@ -26,24 +26,30 @@ void SessionManager::onRead(ByteBuffer /*data*/)
     std::string message(buffer_.begin(), buffer_.end());
 
     if(message.find(LOGIN_MESSAGE) != std::string::npos)
-    {
-        //idClient is char, but we need std::string login type TODO
-        idClient = message[2];
-
-        bool result = DataBaseManager::userExists(std::string(1, idClient));//TODO
-
-        if (result)
         {
-            write("Welcome, " + std::string(1, idClient));
-        }
-        else
-        {
-            DataBaseManager::addUser(std::string(1, idClient), std::string(1, idClient));//TODO
-            write("ADDED USER");
-        }
-        LOG_INFO("Registered client with id = " << idClient);
+            idClient = message[2];
 
-    }
+            bool result = DataBaseManager::userExists(std::string(1, idClient));
+
+            if (result)
+            {
+                write("Welcome, " + std::string(1, idClient));
+            }
+            else
+            {
+                bool addUserSuccess = DataBaseManager::addUser(std::string(1, idClient), std::string(1, idClient));
+
+                if(!addUserSuccess)
+                {
+                    write("DB: add user error, try later");
+                }
+                else
+                {
+                    write("ADDed new USER");
+                }
+            }
+
+        }
     else if(message.find(GET_USER_LIST_MESSAGE) != std::string::npos)
     {
         c.getUserList(idClient);
@@ -62,7 +68,7 @@ void SessionManager::onRead(ByteBuffer /*data*/)
                          , idTarget
                          , REQUEST_TO_CREATE_CHAT_MESSAGE
                          , currentRoom);
-        c.createChat();
+        c.createChat(idClient, idTarget);
         c.addUserToChatRoom(idClient,currentRoom);
 
     }
@@ -83,6 +89,7 @@ void SessionManager::onRead(ByteBuffer /*data*/)
     else if(message.find(CHAT_MESSAGE) != std::string::npos)
     {
         c.sendChatMessage(currentRoom, message, idClient);
+
     }
     else if(message.find(ADD_USER_TO_CHAT_MESSAGE) != std::string::npos)
     {

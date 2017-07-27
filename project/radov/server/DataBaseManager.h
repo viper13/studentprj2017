@@ -15,6 +15,13 @@ public:
 
     static bool addUser(std::string name, std::string nick);
 
+    static bool addChat(int& chatId, std::string name);
+
+    static bool usersByChats(int chatId, std::string userName);
+
+    static bool addMessage(int chatId, std::string userName, std::string message);
+
+
 private:
     static ConnectionPtr getConnection();
 

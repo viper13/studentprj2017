@@ -21,8 +21,10 @@ CREATE TABLE messages
 (
     id SERIAL PRIMARY KEY,
     chat_id integer NOT NULL,
+    user_id integer NOT NULL,
     message text NOT NULL,--sizeless data type
-    FOREIGN KEY (chat_id) REFERENCES chats(id)
+    FOREIGN KEY (chat_id) REFERENCES chats(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE users_by_chats

@@ -96,10 +96,12 @@ void ChatManager::requestMessage(char idClient, char idTarget, std::string messa
     }
 }
 
-void ChatManager::createChat()
+void ChatManager::createChat(char idClient, char idTarget)
 {
+    std::string chatName =  std::string(1, idClient)
+            + " + " + std::string(1, idTarget);
+    DataBaseManager::addChat(nextIdRoom, chatName);
     chatRooms_.push_back(ChatRoom::getNewChatRoom(nextIdRoom));
-    nextIdRoom++;
 }
 
 void ChatManager::addUserToChatRoom(char idClient, int idRoom)
@@ -109,5 +111,5 @@ void ChatManager::addUserToChatRoom(char idClient, int idRoom)
 
 ChatManager::ChatManager()
 {
-    nextIdRoom = 0;
+
 }

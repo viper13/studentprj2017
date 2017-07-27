@@ -14,12 +14,11 @@ int main()
 
     std::string message;
     bool stop = false;
-    LOG_INFO("Type -login");
 
     while(!stop)
     {
-        getline(std::cin,message);
         clientPtr -> processMessage(message);
+        getline(std::cin,message);
     }
 
     Worker::instance() -> join();
