@@ -113,6 +113,11 @@ void ClientChat::execute(CommandCode cmd, ByteBufferPtr&& bufferPtr)
         confirmToStarChat(bufferPtr);
         break;
     }
+    case CommandCode::SING_UP:
+    {
+        singUp(bufferPtr);
+        break;
+    }
     default:
         break;
     }
@@ -206,6 +211,18 @@ void ClientChat::confirmToStarChat(ByteBufferPtr userName)
     usersWantToChat.erase(usersWantToChat.begin()+ind);
     userName->emplace(userName->begin(), static_cast<uint8_t>(1));
     execute(CommandCode::ANSWER_ON_REQUEST_TO_CONNECT, std::move(userName));
+}
+
+void ClientChat::singUp(ByteBufferPtr userName)
+{
+    if(userName->empty())
+    {
+        std::cout << "User's name is empty!" << std::endl;
+        return;
+    }
+
+    Helper::insertCommandCode(userName, CommandCode::SING_UP);
+    write(userName);
 }
 
 void ClientChat::printServerAnswer(ByteBufferPtr buffPtr)

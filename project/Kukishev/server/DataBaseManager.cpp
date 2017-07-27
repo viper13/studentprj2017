@@ -3,7 +3,6 @@
 #include <map>
 #include "Helper.h"
 
-
 bool parceFromPostgres(const pqxx::tuple &data, NewUser &user)
 {
     user.id = data["id"].as<int>();
@@ -44,6 +43,64 @@ bool DataBaseManager::getUsersList(std::vector<NewUser> &users)
     return is_success;
 }
 
+bool DataBaseManager::sendQuery(const std::string &str)
+{
+    ConnectionPtr connection = getConnection();
+    bool is_success = true;
+
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result r = txn.exec(str.c_str());
+
+        txn.commit();
+    }
+    catch(const std::exception& e)
+    {
+        LOG_ERR("Failure make query : "<<e.what());
+        is_success = false;
+    }
+
+    return is_success;
+}
+
+bool DataBaseManager::isContainUser(const std::string &str)
+{
+    ConnectionPtr connection = getConnection();
+    bool is_success = true;
+
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result r = txn.exec("SELECT COUNT (name) FROM users WHERE name ='"+str+"'");
+
+//        for (int rownum=0; rownum < r.size(); ++rownum)
+//        {
+//            const pqxx::result::tuple row = r[rownum];
+
+//            for (int colnum=0; colnum < row.size(); ++colnum)
+//            {
+//                const pqxx::result::field fld = row[colnum];
+
+//                std::cout << fld.c_str() << '\t';
+//            }
+
+//            std::cout << std::endl;
+//        }
+        is_success = r[0][0].as<bool>();
+        txn.commit();
+    }
+    catch(const std::exception& e)
+    {
+        LOG_ERR("Failure make query : "<<e.what());
+        is_success = false;
+    }
+
+    return is_success;
+}
+
+
+
 ConnectionPtr DataBaseManager::getConnection()
 {
     std::stringstream ss;
@@ -80,3 +137,4 @@ ConnectionPtr DataBaseManager::getConnection()
 
     return connectionPtr;
 }
+

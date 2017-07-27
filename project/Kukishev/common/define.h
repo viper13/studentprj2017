@@ -16,6 +16,7 @@ enum class CommandCode: uint8_t
     DISCONNECT_FROM_USER,
     CONFIRM_TO_START_CHAT,
     SHOW_QUEUE_USERS,
+    SING_UP,
     ANSWER_ON_REQUEST_TO_CONNECT
 };
 

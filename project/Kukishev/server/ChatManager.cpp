@@ -40,6 +40,14 @@ void ChatManager::login(ChatSessionPtr session, const std::string &name)
         return;
     }
 
+    if(!DataBaseManager::isContainUser(name))
+    {
+        ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("There isn't the same name"));
+        buff->emplace(buff->begin(), static_cast<uint8_t>(0));
+        session->execute(CommandCode::LOGIN, buff);
+        return;
+    }
+
     if(usersChatRooms_.find(name) != usersChatRooms_.end())
     {
         ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("Some user had already logined with same name"));
@@ -47,6 +55,8 @@ void ChatManager::login(ChatSessionPtr session, const std::string &name)
         session->execute(CommandCode::LOGIN, buff);
         return;
     }
+
+
 
     User& user = session->getUser();
     user.isLogin_ = true;
@@ -58,6 +68,8 @@ void ChatManager::login(ChatSessionPtr session, const std::string &name)
 
     ByteBufferPtr buff = std::make_shared<ByteBuffer>();
     buff->emplace_back(static_cast<uint8_t>(1));
+
+
 
     session->execute(CommandCode::LOGIN, buff);
 }
@@ -180,8 +192,6 @@ void ChatManager::sendMessage(ChatSessionPtr session, const std::string &text)
 {
     std::string name = session->getUser().name_;
 
-
-
     if(usersChatRooms_.at(name)->getCountUsers() <= 1)
     {
         ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("You hadn't connect to other user"));
@@ -190,6 +200,21 @@ void ChatManager::sendMessage(ChatSessionPtr session, const std::string &text)
     }
 
     usersChatRooms_.at(session->getUser().name_)->sendMessage(name + ": " + text, session->getUser().name_);
+}
+
+void ChatManager::singUp(ChatSessionPtr session, const std::string &text)
+{
+    bool isContain = DataBaseManager::isContainUser(text);
+
+    if(isContain)
+    {
+        session->sendMessageToClient("The user is contain already");
+    }
+
+    if(DataBaseManager::sendQuery("INSERT INTO users(id, name, nick) VALUES (DEFAULT, '"+text+"', '0') RETURNING id;"))
+        session->sendMessageToClient("DONE!");
+    else
+        session->sendMessageToClient("Something wrong!");
 }
 
 void ChatManager::readSessionBuffer(std::shared_ptr<ChatSession> session, ByteBufferPtr buffPtr)
@@ -234,7 +259,11 @@ void ChatManager::readSessionBuffer(std::shared_ptr<ChatSession> session, ByteBu
         disconnectedFromUser(session);
         break;
     }
-
+    case CommandCode::SING_UP:
+    {
+        singUp(session, Helper::bufferToString(buffPtr, 1));
+        break;
+    }
     }
 }
 

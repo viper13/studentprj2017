@@ -4,13 +4,14 @@
 Session::Session()
     : socket_(Worker::instance()->io_service())
     , nextMsgSize_(0)
+    , isStop(false)
 {
 }
 
 void Session::start()
 {
     //write("Enter your name: ");
-        isStop = false;
+        //isStop = false;
         read();
 }
 

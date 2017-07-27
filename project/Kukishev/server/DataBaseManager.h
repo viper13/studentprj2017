@@ -11,6 +11,8 @@ class DataBaseManager
 {
 public:
     static bool getUsersList(std::vector<NewUser>& users);
+    static bool sendQuery(const std::string& str);
+    static bool isContainUser(const std::string& str);
 private:
     static ConnectionPtr getConnection();
 
