@@ -180,6 +180,31 @@ bool DataBaseManager::saveMessage(const std::string &message, const int &userId,
     return resultToReturn;
 }
 
+bool DataBaseManager::getHistoryForChat(const int &chatId, std::vector<std::string> &messages)
+{
+    ConnectionPtr connection = getConnection();
+    bool resultToReturn = true;
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("SELECT message from messages "
+                                       "WHERE chat_id = " + txn.quote(chatId) +
+                                       " ORDER BY id DESC "
+                                       "LIMIT 10");
+        txn.commit();
+        for (const pqxx::tuple& row : result)
+        {
+            messages.push_back(row["message"].as<std::string>());
+        }
+    }
+    catch (const std::exception &e)
+    {
+        LOG_ERR("Failure to get chat history from DB: " << e.what());
+        resultToReturn = false;
+    }
+    return resultToReturn;
+}
+
 ConnectionPtr DataBaseManager::getConnection()
 {
     std::stringstream ss;

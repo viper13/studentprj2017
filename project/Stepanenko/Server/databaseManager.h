@@ -18,6 +18,7 @@ public:
     static bool getRegisteredChats(std::map<std::string, ChatRoomPtr> &chats);
     static int synchronizeChatRoom(const std::string &user1, const std::string &user2);
     static bool saveMessage(const std::string &message, const int &userId, const int &chatId);
+    static bool getHistoryForChat(const int &chatId, std::vector<std::string> &messages);
 
 private:
     static ConnectionPtr getConnection();

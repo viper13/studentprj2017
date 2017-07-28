@@ -142,6 +142,17 @@ std::string ChatManager::startChatDispatcher(ChatSessionPtr session, std::string
         session->setChatRoom(chats_[chatName]);
     }
     messageToSend = Protocol::startChatServerMessageCreate("OK");
+
+    //TODO: Send chat-room history.
+    std::vector<std::string> messages;
+    result = DataBaseManager::getHistoryForChat(session->getChatRoom()->getChatRoomId(), messages);
+    if (result && messages.size() > 0)
+    {
+        for (int i = messages.size() - 1; i >= 0; --i)
+        {
+            session->write(Protocol::chatMessageClientMessageCreate("HISTORY", messages[i]));
+        }
+    }
     return messageToSend;
 }
 
