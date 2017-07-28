@@ -68,8 +68,8 @@ int DataBaseManager::synchronizeUser(const std::string &userName)
                               + txn.quote(userName) + ", "
                               + txn.quote(" ")
                               + ") Returning id");
-            txn.commit();
         }
+        txn.commit();
         resultToReturn = result[0]["id"].as<int>();
     }
     catch (const std::exception &e)
@@ -101,13 +101,14 @@ bool DataBaseManager::getRegisteredChats(std::map<std::string, ChatRoomPtr> &cha
         }
 
         //Now we have to add users to them
-        result = txn.exec("SELECT chats.name as chat, users.name"
-                          "FROM ((USERS"
-                          "JOIN users_by_chats"
-                          "ON users_by_chats.user_id = users.id)"
-                          "JOIN chats"
+        pqxx::work txn2(*connection);
+        result = txn2.exec("SELECT chats.name as chat, users.name "
+                          "FROM ((USERS "
+                          "JOIN users_by_chats "
+                          "ON users_by_chats.user_id = users.id) "
+                          "JOIN chats "
                           "ON users_by_chats.chat_id = chats.id)");
-        txn.commit();
+        txn2.commit();
         for (const pqxx::tuple& row : result)
         {
             std::string chatName = row["chat"].as<std::string>();
@@ -139,14 +140,15 @@ int DataBaseManager::synchronizeChatRoom(const std::string &user1, const std::st
         resultToReturn = result[0]["id"].as<int>();
         int user1Id = DataBaseManager::synchronizeUser(user1);
         int user2Id = DataBaseManager::synchronizeUser(user2);
-        txn.exec("INSERT INTO users_by_chats (chat_id, user_id) VALUES ("
+
+        pqxx::work txn2(*connection);
+        txn2.exec("INSERT INTO users_by_chats (chat_id, user_id) VALUES ("
                         + txn.quote(resultToReturn) + ", "
                         + txn.quote(user1Id) + ")");
-        txn.commit();
-        txn.exec("INSERT INTO users_by_chats (chat_id, user_id) VALUES ("
+        txn2.exec("INSERT INTO users_by_chats (chat_id, user_id) VALUES ("
                         + txn.quote(resultToReturn) + ", "
                         + txn.quote(user2Id) + ")");
-        txn.commit();
+        txn2.commit();
     }
     catch (const std::exception &e)
     {
