@@ -90,10 +90,8 @@ void Client::handleRead(asio::error_code error, size_t /*buf_size*/)
         }
         else
         {
-            LOG_INFO("Buffer has [" << (int)buffer_[0] << "][" << (int)buffer_[1] << "]");
             nextMessageSize_ = (static_cast<uint16_t>(buffer_[0]) << 8)
                                 + static_cast<uint16_t>(buffer_[1]);
-            LOG_INFO("Next message size is: " << nextMessageSize_);
             read();
         }
 
@@ -109,7 +107,7 @@ void Client::handleWrite(BuffersVector data, asio::error_code error, size_t writ
 {
     if (!error)
     {
-        LOG_INFO("Message writted!!!");
+        //NOP
     }
     else
     {
