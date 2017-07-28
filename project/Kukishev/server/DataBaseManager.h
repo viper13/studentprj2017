@@ -13,6 +13,9 @@ public:
     static bool getUsersList(std::vector<NewUser>& users);
     static bool sendQuery(const std::string& str);
     static bool isContainUser(const std::string& str);
+    static uint32_t getUserId(const std::string& str);
+    static std::string getUserNameById(uint32_t id);
+    static std::vector<NewUser> getUsersRequestToFriend(uint32_t id);
 private:
     static ConnectionPtr getConnection();
 

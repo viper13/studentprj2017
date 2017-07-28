@@ -105,7 +105,7 @@ void ClientChat::execute(CommandCode cmd, ByteBufferPtr&& bufferPtr)
     }
     case CommandCode::SHOW_QUEUE_USERS:
     {
-        printQueueChat();
+        getQueueUsers();
         break;
     }
     case CommandCode::CONFIRM_TO_START_CHAT:
@@ -223,6 +223,13 @@ void ClientChat::singUp(ByteBufferPtr userName)
 
     Helper::insertCommandCode(userName, CommandCode::SING_UP);
     write(userName);
+}
+
+void ClientChat::getQueueUsers()
+{
+    ByteBufferPtr buff = std::make_shared<ByteBuffer>();
+    Helper::insertCommandCode(buff, CommandCode::SHOW_QUEUE_USERS);
+    write(buff);
 }
 
 void ClientChat::printServerAnswer(ByteBufferPtr buffPtr)

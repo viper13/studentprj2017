@@ -121,33 +121,40 @@ void ChatManager::getUserList(ChatSessionPtr session)
 
 void ChatManager::connectToUser(ChatSessionPtr session, const std::string &name)
 {
-    std::string userName = session->getUser().name_;
+    std::string sessionName = session->getUser().name_;
 
-    if( usersChatRooms_.at(userName)->getCountUsers() >= 2)
-    {
-        ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("You had already connect to other user!"));
-        session->execute(CommandCode::SEND_MESSAGE, buff);
-        return;
-    }
+    //    if( usersChatRooms_.at(userName)->getCountUsers() >= 2)
+    //    {
+    //        ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("You had already connect to other user!"));
+    //        session->execute(CommandCode::SEND_MESSAGE, buff);
+    //        return;
+    //    }
 
-    if( usersChatRooms_.at(name)->getCountUsers() >= 2)
-    {
-        ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("The user " + name + " had already connect to other user!"));
-        session->execute(CommandCode::SEND_MESSAGE, buff);
-        return;
-    }
+    //    if( usersChatRooms_.at(name)->getCountUsers() >= 2)
+    //    {
+    //        ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("The user " + name + " had already connect to other user!"));
+    //        session->execute(CommandCode::SEND_MESSAGE, buff);
+    //        return;
+    //    }
 
-    ChatSessionPtr userSession = findSession(name);
-
-    if(!userSession)
+    if(!DataBaseManager::isContainUser(name))
     {
         ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("There isn't the user with same name!"));
         session->execute(CommandCode::CONNECT_TO_USER, buff);
         return;
     }
 
-    ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer(userName));
-    userSession->execute(CommandCode::CONNECT_TO_USER, buff);
+    uint32_t sessionId = DataBaseManager::getUserId(sessionName);
+    uint32_t userId = DataBaseManager::getUserId(name);
+
+    DataBaseManager::sendQuery("INSERT INTO users_friend_request(user_id_from, user_id_to) VALUES ("
+                               + std::to_string(sessionId)
+                               + ","
+                               + std::to_string(userId)
+                               + ");");
+
+    ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer(sessionName));
+    //userSession->execute(CommandCode::CONNECT_TO_USER, buff);
     return;
 }
 
@@ -184,6 +191,8 @@ void ChatManager::answerOnRequestConnect(ChatSessionPtr session, const std::stri
         return;
     }
 
+
+
     usersChatRooms_.at(session->getUser().name_)->addUser(name, userSession);
     usersChatRooms_.at(name)->addUser(session->getUser().name_, session);
 }
@@ -215,6 +224,21 @@ void ChatManager::singUp(ChatSessionPtr session, const std::string &text)
         session->sendMessageToClient("DONE!");
     else
         session->sendMessageToClient("Something wrong!");
+}
+
+void ChatManager::usersRequestFriend(ChatSessionPtr session)
+{
+    std::string sessionName = session->getUser().name_;
+
+    auto users = DataBaseManager::getUsersRequestToFriend(DataBaseManager::getUserId(sessionName));
+
+    for(auto &user: users)
+    {
+        user.name = DataBaseManager::getUserNameById(user.id);
+    //    std::cout << user << std::endl;
+    }
+
+
 }
 
 void ChatManager::readSessionBuffer(std::shared_ptr<ChatSession> session, ByteBufferPtr buffPtr)
@@ -263,6 +287,10 @@ void ChatManager::readSessionBuffer(std::shared_ptr<ChatSession> session, ByteBu
     {
         singUp(session, Helper::bufferToString(buffPtr, 1));
         break;
+    }
+    case CommandCode::SHOW_QUEUE_USERS:
+    {
+        usersRequestFriend(session);
     }
     }
 }

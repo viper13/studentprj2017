@@ -74,20 +74,20 @@ bool DataBaseManager::isContainUser(const std::string &str)
         pqxx::work txn(*connection);
         pqxx::result r = txn.exec("SELECT COUNT (name) FROM users WHERE name ='"+str+"'");
 
-//        for (int rownum=0; rownum < r.size(); ++rownum)
-//        {
-//            const pqxx::result::tuple row = r[rownum];
+        //        for (int rownum=0; rownum < r.size(); ++rownum)
+        //        {
+        //            const pqxx::result::tuple row = r[rownum];
 
-//            for (int colnum=0; colnum < row.size(); ++colnum)
-//            {
-//                const pqxx::result::field fld = row[colnum];
+        //            for (int colnum=0; colnum < row.size(); ++colnum)
+        //            {
+        //                const pqxx::result::field fld = row[colnum];
 
-//                std::cout << fld.c_str() << '\t';
-//            }
+        //                std::cout << fld.c_str() << '\t';
+        //            }
 
-//            std::cout << std::endl;
-//        }
-        is_success = r[0][0].as<bool>();
+        //            std::cout << std::endl;
+        //        }
+        is_success = static_cast<bool>(r[0][0].as<bool>() > 0? 1: 0);
         txn.commit();
     }
     catch(const std::exception& e)
@@ -99,7 +99,89 @@ bool DataBaseManager::isContainUser(const std::string &str)
     return is_success;
 }
 
+uint32_t DataBaseManager::getUserId(const std::string &str)
+{
+    ConnectionPtr connection = getConnection();
+    uint32_t id = 0;
 
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result r = txn.exec("SELECT (id) FROM users WHERE name ='"+str+"'");
+
+        id = r[0][0].as<uint32_t>();
+        txn.commit();
+    }
+    catch(const std::exception& e)
+    {
+        LOG_ERR("Failure make query : "<<e.what());
+        //is_success = false;
+    }
+
+    return id;
+}
+
+std::string DataBaseManager::getUserNameById(uint32_t id)
+{
+    ConnectionPtr connection = getConnection();
+    std::string name;
+
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result r = txn.exec("SELECT name FROM users WHERE id = " + std::to_string(id) + ";");
+
+        name = r[0][0].as<std::string>();
+
+        txn.commit();
+    }
+    catch(const std::exception& e)
+    {
+        LOG_ERR("Failure make query : "<<e.what());
+
+    }
+
+    return name;
+}
+
+std::vector<NewUser> DataBaseManager::getUsersRequestToFriend(uint32_t id)
+{
+    ConnectionPtr connection = getConnection();
+    bool is_success = true;
+    std::vector<NewUser> users;
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result r = txn.exec("SELECT user_id_to FROM users_friend_request WHERE user_id_from = "
+                                  + std::to_string(id)
+                                  + ";");
+
+        for (int rownum=0; rownum < r.size(); ++rownum)
+        {
+            const pqxx::result::tuple row = r[rownum];
+
+            for (int colnum=0; colnum < row.size(); ++colnum)
+            {
+                const pqxx::result::field fld = row[colnum];
+                NewUser user;
+                user.id = fld.as<int>();
+                //user.name = getUserNameById(user.id);
+                users.emplace_back(user);
+                //std::cout << fld.c_str() << '\t';
+            }
+
+            std::cout << std::endl;
+        }
+        txn.commit();
+    }
+    catch(const std::exception& e)
+    {
+        LOG_ERR("Failure get users list : "<<e.what());
+        is_success = false;
+    }
+
+    return users;
+}
 
 ConnectionPtr DataBaseManager::getConnection()
 {
