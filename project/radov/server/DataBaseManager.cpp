@@ -47,7 +47,6 @@ bool DataBaseManager::userExists(std::string name)
     {
         LOG_INFO("Failure check user exists: " << e.what());
     }
-
     return exists;
 }
 
@@ -68,7 +67,7 @@ bool DataBaseManager::addUser(std::string name, std::string nick)
     catch(const std::exception& e)
     {
         LOG_INFO("Failure add user: " << e.what());
-        is_success= false;
+        is_success = false;
     }
 
     return is_success;
@@ -82,7 +81,9 @@ bool DataBaseManager::addChat(int &chatId, std::string name)
     try
     {
         pqxx::work txn(*connection);
-        pqxx::result result = txn.exec("INSERT INTO chats (id,name) VALUES (DEFAULT,'" + name +"') RETURNING id;");
+        pqxx::result result = txn.exec("INSERT INTO chats (id,name)"
+                                       " VALUES (DEFAULT,'" + name +"')"
+                                       " RETURNING id;");
         txn.commit();
 
         chatId = result[0][0].as<int>();
@@ -116,7 +117,7 @@ bool DataBaseManager::usersByChats(int chatId, std::string userName)
     catch(const std::exception& e)
     {
         LOG_INFO("Failure add users_by_chats: " << e.what());
-        is_success= false;
+        is_success = false;
     }
 
     return is_success;
@@ -137,7 +138,8 @@ bool DataBaseManager::addMessage(int chatId, std::string userName
         txn.exec("INSERT INTO messages (id, chat_id, user_id, message)"
                  "VALUES (DEFAULT,'" + chatId_ +"',"
                  "(SELECT id FROM users WHERE "
-                 "name = '" + userName + "'),'" + message +"')");
+                 "name = '" + userName + "'),'" + message + "')");
+
         txn.commit();
     }
     catch(const std::exception& e)

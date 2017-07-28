@@ -2,7 +2,7 @@
 #define CHATROOM_H
 
 #include "define.h"
-#include "SessionManager.h"
+#include "SessionWrapper.h"
 
 class ChatRoom : public std::enable_shared_from_this<ChatRoom>
 {
@@ -17,6 +17,8 @@ public:
     void removePerson(SessionManagerPtr session);
 
     void sendMessage(std::string message, char idWriter);
+
+private:
     int idRoom_;
 };
 

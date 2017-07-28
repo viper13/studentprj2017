@@ -2,7 +2,7 @@
 #define SERVER_H
 
 #include <asio.hpp>
-#include "SessionManager.h"
+#include "SessionWrapper.h"
 
 class Server
 {

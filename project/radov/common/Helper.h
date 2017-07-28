@@ -13,7 +13,6 @@ public:
     static BuffersVector addSize(ByteBufferPtr buffer);
     static EndBuffer makeEndBuffer(BuffersVector buffers);
     static uint16_t getSize(uint16_t left, uint16_t right);
-    //Helper();//COMMENT IT
     static bool parseFromPostgres(const pqxx::tuple& data, User& user);
 };
 

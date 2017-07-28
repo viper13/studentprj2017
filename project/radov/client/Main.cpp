@@ -12,14 +12,7 @@ int main()
     clientPtr -> start();
     Worker::instance() -> start();
 
-    std::string message;
-    bool stop = false;
-
-    while(!stop)
-    {
-        clientPtr -> processMessage(message);
-        getline(std::cin,message);
-    }
+    clientPtr -> processMessage();
 
     Worker::instance() -> join();
 

@@ -26,7 +26,7 @@ void Server::subscribe(std::function<void (SessionManagerPtr)> callBack)
 
 void Server::accept()
 {
-    SessionManagerPtr session = SessionManager::getNewSession();
+    SessionManagerPtr session = SessionWrapper::getNewSession();
 
     acceptor_.async_accept(session -> socket()
                            , std::bind(&Server::handleAccept

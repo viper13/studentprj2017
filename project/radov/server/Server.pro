@@ -24,8 +24,8 @@ SOURCES += \
     ../common/Helper.cpp \
     ChatManager.cpp \
     ChatRoom.cpp \
-    SessionManager.cpp \
-    DataBaseManager.cpp
+    DataBaseManager.cpp \
+    SessionWrapper.cpp
 
 HEADERS += \
     Server.h \
@@ -35,8 +35,8 @@ HEADERS += \
     ../common/Worker.h \
     ../common/define.h \
     ../common/Helper.h \
-    SessionManager.h \
-    DataBaseManager.h
+    DataBaseManager.h \
+    SessionWrapper.h
 
 OTHER_FILES += ../dump_db.sql
 

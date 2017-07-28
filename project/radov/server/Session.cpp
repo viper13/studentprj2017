@@ -25,7 +25,7 @@ asio::ip::tcp::socket &Session::socket()
 void Session::write(std::string message)
 {
     ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
-    BuffersVector buffers =Helper::addSize(buffer);
+    BuffersVector buffers = Helper::addSize(buffer);
 
     EndBuffer endBuffer = Helper::makeEndBuffer(buffers);
 

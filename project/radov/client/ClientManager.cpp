@@ -7,14 +7,14 @@ ClientManager::ClientManager(std::string address, std::string port)
     : Client(address,port)
     , hasRequest(false)
     , inChat(false)
+    , stop(false)
 {
 
 }
 
-void ClientManager::processMessage(std::string message)
+void ClientManager::userLogin()
 {
-    while(idClient == '\0')
-    {
+
         while(message.empty() || message.length() > 1)
         {
             LOG_INFO("Enter your id(1 character)");
@@ -26,55 +26,59 @@ void ClientManager::processMessage(std::string message)
         write(message);
         LOG_INFO("LOGIN_MESSAGE+message: " << message);
         LOG_INFO(" Type -help to see commands");
-    }
 
-    if(inChat)
+}
+
+void ClientManager::chatCommandSet(std::string message)
+{
+    if(message.find("-add") != std::string::npos)
     {
-        if(message.find("-add") != std::string::npos)
-        {
-            LOG_INFO("Enter id of target: ");
-            std::cin >> message;
-            message = ADD_USER_TO_CHAT_MESSAGE + message;
-            write(message);
-        }
-        else if(message.find("-leave") != std::string::npos)
-        {
-                    write("You leaved chatroom");
-                    inChat = false;
-        }
-        else if(message.find("-help") != std::string::npos)
-        {
-            //LOG_INFO("HELP:");
-            std::cout << "-list   -- get online user list \n"
-                      << "-add    -- add user to current chat \n"
-                      << "-leave  -- exit from current chat \n";
-        }
-        else
-        {
-            message = CHAT_MESSAGE + message;
-            write(message);
-        }
+        LOG_INFO("Enter id of target: ");
+        std::cin >> message;
+        message = ADD_USER_TO_CHAT_MESSAGE + message;
+        write(message);
+    }
+    else if(message.find("-leave") != std::string::npos)
+    {
+                write("You leaved chatroom");
+                inChat = false;
+    }
+    else if(message.find("-help") != std::string::npos)
+    {
+        //LOG_INFO("HELP:");
+        std::cout << "-list   -- get online user list \n"
+                  << "-add    -- add user to current chat \n"
+                  << "-leave  -- exit from current chat \n";
     }
     else
     {
-        if(message.find("-create") != std::string::npos)
-        {
-            LOG_INFO("Enter id of target to create chat");
-            std::cin >> message;
-            message = CREATE_CHAT_MESSAGE + message;
-            write(message);
-            inChat = true;
-        }
-        else if(message.find("-help") != std::string::npos)
-        {
-            LOG_INFO("HELP:");
-            std::cout << "-list   -- get online user list \n"
-                      << "-server -- write direct message to server [DEBUG MODE]\n"
-                      << "-direct -- write direct message to user\n"
-                      << "-create -- create a chat\n";
-        }
+        message = CHAT_MESSAGE + message;
+        write(message);
     }
+}
 
+void ClientManager::nonChatCommandSet(std::string message)
+{
+    if(message.find("-create") != std::string::npos)
+    {
+        LOG_INFO("Enter id of target to create chat");
+        std::cin >> message;
+        message = CREATE_CHAT_MESSAGE + message;
+        write(message);
+        inChat = true;
+    }
+    else if(message.find("-help") != std::string::npos)
+    {
+        LOG_INFO("HELP:");
+        std::cout << "-list   -- get online user list \n"
+                  << "-server -- write direct message to server [DEBUG MODE]\n"
+                  << "-direct -- write direct message to user\n"
+                  << "-create -- create a chat\n";
+    }
+}
+
+void ClientManager::defaultCommandSet(std::string message)
+{
     if(message.find("-list") != std::string::npos)
     {
         message = GET_USER_LIST_MESSAGE;
@@ -108,7 +112,30 @@ void ClientManager::processMessage(std::string message)
         message += std::to_string(currentRoom);
         write(message);
     }
+}
 
+
+void ClientManager::processMessage()
+{
+    while(!stop)
+    {
+        while(idClient == '\0')
+        {
+            ClientManager::userLogin();
+        }
+        std::getline(std::cin, message);
+
+        if(inChat)
+        {
+            ClientManager::chatCommandSet(message);
+        }
+        else
+        {
+            ClientManager::nonChatCommandSet(message);
+        }
+
+        ClientManager::defaultCommandSet(message);
+    }
 }
 
 void ClientManager::onRead(ByteBuffer /*data*/)

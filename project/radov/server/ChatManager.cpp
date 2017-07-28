@@ -16,8 +16,6 @@ void ChatManager::onConnected(SessionManagerPtr session)
 
     std::vector<User> users;
     DataBaseManager::getUsersList(users);
-
-
 }
 
 void ChatManager::getUserList(char idClient)
@@ -36,7 +34,6 @@ void ChatManager::getUserList(char idClient)
             sep -> write(userList);
         }
     }
-
 }
 
 void ChatManager::start(Server& server)
@@ -47,18 +44,13 @@ void ChatManager::start(Server& server)
                          , std::placeholders::_1));
 }
 
-void ChatManager::debug()
-{
-    LOG_INFO("Sessions size = " << sessions_.size());
-    LOG_INFO("Sessions capacity = " << sessions_.capacity());
-}
 
 void ChatManager::sendMessage(char idClient, char idTarget, std::string message)
 {
     LOG_INFO("message on manager" << message << idClient << idTarget);
     for(SessionManagerPtr sep: sessions_)
     {
-        if(sep->getIdClient() == idTarget)
+        if(sep -> getIdClient() == idTarget)
         {
             message_ = "User ";
             message_ += idClient;
@@ -73,24 +65,24 @@ void ChatManager::sendMessage(char idClient, char idTarget, std::string message)
 
 void ChatManager::sendChatMessage(int idRoom, std::string message,char idClient)
 {
-    message.erase(message.begin(),message.begin()+2);
-    chatRooms_.at(idRoom)->sendMessage(message,idClient);
+    message.erase(message.begin(), message.begin() + 2);
+    chatRooms_.at(idRoom) -> sendMessage(message, idClient);
 }
 
 void ChatManager::requestMessage(char idClient, char idTarget, std::string message,int room)
 {
-    LOG_INFO("message on manager"<<message<<idClient<<idTarget);
+    LOG_INFO("message on manager" << message << idClient << idTarget);
     for(SessionManagerPtr sep: sessions_)
     {
-        if(sep->getIdClient()==idTarget)
+        if(sep -> getIdClient() == idTarget)
         {
-            message_=REQUEST_TO_CREATE_CHAT_MESSAGE;
-            message_+=std::to_string(room);
+            message_ = REQUEST_TO_CREATE_CHAT_MESSAGE;
+            message_ += std::to_string(room);
             message_ += "User ";
-            message_+=idClient;
-            message_+=" wish to create chat with you! \n";
-            sep->write(message_);
-            sep->hasRequest=true;
+            message_ += idClient;
+            message_ += " wish to create chat with you! \n";
+            sep -> write(message_);
+            sep -> hasRequest = true;
             LOG_INFO("Writing to destination "<<message_);
         }
     }
@@ -106,7 +98,7 @@ void ChatManager::createChat(char idClient, char idTarget)
 
 void ChatManager::addUserToChatRoom(char idClient, int idRoom)
 {
-    chatRooms_.at(idRoom)->addPerson(idClient);
+    chatRooms_.at(idRoom) -> addPerson(idClient);
 }
 
 ChatManager::ChatManager()

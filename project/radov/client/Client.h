@@ -13,7 +13,7 @@ public:
     void start();
     void write(std::string message);
 
-    virtual void processMessage(std::string message) = 0;
+    virtual void processMessage() = 0;
     virtual void onRead(ByteBuffer data) = 0;
 
 private:

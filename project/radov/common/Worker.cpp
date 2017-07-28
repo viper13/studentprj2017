@@ -14,10 +14,8 @@ void Worker::start()
 
         std::shared_ptr<std::thread> thread(new std::thread([this]()
         {
-
             try
             {
-
                 service_.run();
             }
             catch (std::exception ex)
