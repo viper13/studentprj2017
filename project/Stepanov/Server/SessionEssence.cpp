@@ -77,7 +77,9 @@ void SessionEssence::onRead(ByteBuffer data)
         hasRequest=true;
         c.requestMessage(login,targetLogin,REQUEST_TO_CREATE_CHAT_MESSAGE,currentRoom);
         c.addUserToChatRoom(login,currentRoom);
-
+        message=CREATE_CHAT_MESSAGE;
+        message+=std::to_string(currentRoom);
+        write(message);
     }
     else if(message.find(DIRECT_MESSAGE) != std::string::npos)
     {
@@ -119,7 +121,6 @@ void SessionEssence::onRead(ByteBuffer data)
     {
         std::string answer;
         answer = GET_ROOM_LIST_MESSAGE;
-        answer +="\n ";
         for(int i:availableRooms)
         {
             answer+=std::to_string(i);
@@ -132,6 +133,11 @@ void SessionEssence::onRead(ByteBuffer data)
         message.erase(message.begin(),message.begin()+2);
         currentRoom = atoi(message.c_str());
         write("You room changed to"+message);
+    }
+    else if(message.find(EXIT_MESSAGE) != std::string::npos)
+    {
+        c.removeUser(login);
+        LOG_INFO("Removed user "<<login);
     }
 
 }

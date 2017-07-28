@@ -184,6 +184,18 @@ void ChatManager::enterChat(int idRoom, std::string userLogin)
     }
 }
 
+void ChatManager::removeUser(std::string userLogin)
+{
+    for (uint var = 0; var < sessions_.capacity(); var++)
+    {
+        if(sessions_.at(var)->getLogin()==userLogin)
+        {
+            LOG_INFO("Erased "<<var);
+            sessions_.erase(sessions_.begin()+var);
+        }
+    }
+}
+
 ChatManager::ChatManager(){
     nextIdRoom=0;
 }

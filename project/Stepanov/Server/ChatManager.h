@@ -42,6 +42,8 @@ public:
 
     void enterChat(int idRoom,std::string userLogin);
 
+    void removeUser(std::string userLogin);
+
     std::string message_;
 
     std::vector<SessionEssencePtr> sessions_;

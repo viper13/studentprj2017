@@ -17,14 +17,16 @@ int main()
     Worker::instance()->start();
 
     std::string message;
-    bool stop = false;
     LOG_INFO("Welcome to chat! Write !register to start using chat!");
 
-    while(!stop)
+    while(true)
     {
         getline(std::cin,message);
         clientPtr->processMessage(message);
-
+        if(message=="!exit")
+        {
+            break;
+        }
     }
 
     Worker::instance()->join();

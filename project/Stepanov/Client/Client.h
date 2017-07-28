@@ -17,6 +17,8 @@ public:
 
     virtual void onRead(ByteBuffer data) = 0;
 
+    void closeConnection();
+
 
 
 private:

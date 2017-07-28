@@ -102,6 +102,9 @@ void ClientEssence::processMessage(std::string message)
             std::cout << "!list -- to see who is online \n"
                       << "!server -- to write direct message to server\n"
                       << "!direct -- to write direct message to user\n"
+                      << "!enter  -- to enter chat room\n"
+                      << "!roomlist -- to get list of available rooms\n"
+                      << "!room   -- change current room\n"
                       << "!create -- to create a chat\n";
         }
         else if(message.find("!history") != std::string::npos)
@@ -130,6 +133,20 @@ void ClientEssence::processMessage(std::string message)
             message = SET_ROOM_MESSAGE+std::to_string(currentRoom);
             write(message);
         }
+        else if(message.find("!read") != std::string::npos)
+        {
+            for(std::string mess: unReadMessages_)
+            {
+                LOG_INFO(" Unread : "<<mess);
+            }
+            unReadMessages_.clear();
+        }
+        else if(message.find("!exit") != std::string::npos)
+        {
+            message=EXIT_MESSAGE;
+            write(message);
+            closeConnection();
+        }
 
 }
 
@@ -157,9 +174,33 @@ void ClientEssence::onRead(ByteBuffer data)
     }
     else if(message.find(CHAT_MESSAGE) != std::string::npos)
     {
-        //message.erase(message.begin(),message.begin()+2);
-        //int fromRoom;
-        //fromRoom = stoi(roomId);
-        //LOG_INFO("----=-=-=-=-=-=--="<<roomId);
+        message.erase(message.begin(),message.begin()+2);
+        int idRoom;
+        idRoom = message[0] - '0';//remake
+        if(idRoom == currentRoom)
+        {
+            LOG_INFO("message from chat "<<idRoom);
+            LOG_INFO(message);
+        }
+        else
+        {
+            unReadMessages_.push_back(message);
+            LOG_INFO("unreadMessage capacity "<<unReadMessages_.capacity());
+        }
+
+    }
+    else if(message.find(CREATE_CHAT_MESSAGE) != std::string::npos)
+    {
+        message.erase(message.begin(),message.begin()+2);
+        currentRoom = atoi(message.c_str());
+    }
+    else if(message.find(GET_ROOM_LIST_MESSAGE) != std::string::npos)
+    {
+        message.erase(message.begin(),message.begin()+2);
+        LOG_INFO("Available rooms id: \n"<<message);
+    }
+    else
+    {
+        LOG_INFO(message);
     }
 }

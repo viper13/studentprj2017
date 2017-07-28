@@ -13,12 +13,9 @@ public:
 
     std::string message_;
 
-    void addPerson(char idClient);
     void addPerson(std::string loginClient);
     void getChatUserList();
-    void removePerson(SessionEssencePtr session);
-
-    void sendMessage(std::string message, char idWriter);
+    void removePerson(std::string loginClient);
     void sendMessage(std::string message, std::string loginWriter);
 
     int idRoom_;

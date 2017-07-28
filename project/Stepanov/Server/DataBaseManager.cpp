@@ -196,24 +196,23 @@ std::string DataBaseManager::getMessagesHistory(int idRoom)
     ConnectionPtr connection = getConnection();
     try
     {
-        std::string resultString = "Hisrory: \n";
-        int tempInt;
         std::string tempStr;
         pqxx::work txn(*connection);
-        pqxx::result result = txn.exec("SELECT user_id,message FROM messages WHERE chat_id="+std::to_string(idRoom)+";");
+        pqxx::result result = txn.exec("SELECT name,message "
+                                       "FROM users INNER JOIN messages ON users.id=messages.user_id"
+                                       " WHERE chat_id="+std::to_string(idRoom)+" ORDER BY messages.id DESC "
+                                                                                " LIMIT 10;");
         txn.commit();
         LOG_INFO(result.size()<<"++++++++++++++++++++++++");
         for(const pqxx::tuple& row : result)
         {
-            tempInt = row["user_id"].as<int>();
-            tempStr = row["message"].as<std::string>();
-            resultString += " user ";
-            resultString += getUserName(tempInt);
-            resultString += " write ";
-            resultString += tempStr;
-            resultString += "\n";
+            tempStr += "User ";
+            tempStr += row["name"].as<std::string>();
+            tempStr += " write:\n";
+            tempStr += row["message"].as<std::string>();
+            tempStr += "\n";
         }
-        return resultString;
+        return tempStr;
         LOG_INFO("messagesHistory otrabotal");
     }
     catch (std::exception& e)

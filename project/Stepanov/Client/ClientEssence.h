@@ -19,6 +19,10 @@ public:
     bool isRegister;
     int currentRoom;
 
+private:
+
+    std::vector<std::string>unReadMessages_;
+
 
 };
 
