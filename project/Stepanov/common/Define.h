@@ -28,6 +28,8 @@
 #define LOGIN_INTO_ACCOUNT "$1"
 #define GET_CHAT_HISTORY "$H"
 #define ENTER_CHAT_MESSAGE "$E"
+#define GET_ROOM_LIST_MESSAGE "$L"
+#define SET_ROOM_MESSAGE "$S"
 
 
 #define LOG_INFO(message) std::cout<<"\n [INFO]"<<message<<std::endl;

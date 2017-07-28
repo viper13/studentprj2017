@@ -23,6 +23,7 @@ void ClientEssence::processMessage(std::string message)
                 LOG_INFO("Enter id of target:");
                 std::cin >>message;
                 message=ADD_USER_TO_CHAT_MESSAGE+message;
+                LOG_INFO(message<<"eeeeee");
                 write(message);
             }
             else
@@ -117,6 +118,19 @@ void ClientEssence::processMessage(std::string message)
             inChat=true;
             write(message);
         }
+        else if(message.find("!roomlist") != std::string::npos)
+        {
+            message = GET_ROOM_LIST_MESSAGE;
+            write(message);
+        }
+        else if(message.find("!room") != std::string::npos)
+        {
+            LOG_INFO("Enter id of room to enter");
+            std::cin >> currentRoom;
+            message = SET_ROOM_MESSAGE+std::to_string(currentRoom);
+            write(message);
+        }
+
 }
 
 void ClientEssence::onRead(ByteBuffer data)
@@ -124,7 +138,8 @@ void ClientEssence::onRead(ByteBuffer data)
     std::string message(buffer_.begin(), buffer_.end());
     if(message.find(REQUEST_TO_CREATE_CHAT_MESSAGE)!=std::string::npos)
     {
-        currentRoom=message[2]-'0';
+        message.erase(message.begin(),message.begin()+2);
+        currentRoom=atoi(message.c_str());
         LOG_INFO("Type !yes to create chat!\n");
         hasRequest = true;
     }

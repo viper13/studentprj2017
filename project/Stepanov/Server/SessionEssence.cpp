@@ -98,9 +98,9 @@ void SessionEssence::onRead(ByteBuffer data)
     }
     else if(message.find(ADD_USER_TO_CHAT_MESSAGE) != std::string::npos)
     {
-        idTarget=message[2];
-        message.erase(message.begin()+2,message.end());
+        message.erase(message.begin(),message.begin()+2);
         targetLogin=message;
+        LOG_INFO("-----===="<<login<<targetLogin<<currentRoom);
         c.requestMessage(login,targetLogin,REQUEST_TO_CREATE_CHAT_MESSAGE,currentRoom);
         LOG_INFO("Session trying to send request");
     }
@@ -113,6 +113,25 @@ void SessionEssence::onRead(ByteBuffer data)
         message.erase(message.begin(),message.begin()+2);
         currentRoom = atoi(message.c_str());
         c.enterChat(currentRoom,login);
+        availableRooms.push_back(currentRoom);
+    }
+    else if(message.find(GET_ROOM_LIST_MESSAGE) != std::string::npos)
+    {
+        std::string answer;
+        answer = GET_ROOM_LIST_MESSAGE;
+        answer +="\n ";
+        for(int i:availableRooms)
+        {
+            answer+=std::to_string(i);
+            answer+="\n ";
+        }
+        write(answer);
+    }
+    else if(message.find(SET_ROOM_MESSAGE) != std::string::npos)
+    {
+        message.erase(message.begin(),message.begin()+2);
+        currentRoom = atoi(message.c_str());
+        write("You room changed to"+message);
     }
 
 }
