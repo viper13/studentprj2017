@@ -152,7 +152,7 @@ std::vector<NewUser> DataBaseManager::getUsersRequestToFriend(uint32_t id)
     try
     {
         pqxx::work txn(*connection);
-        pqxx::result r = txn.exec("SELECT user_id_to FROM users_friend_request WHERE user_id_from = "
+        pqxx::result r = txn.exec("SELECT user_id_from FROM users_friend_request WHERE user_id_to = "
                                   + std::to_string(id)
                                   + ";");
 
@@ -165,9 +165,7 @@ std::vector<NewUser> DataBaseManager::getUsersRequestToFriend(uint32_t id)
                 const pqxx::result::field fld = row[colnum];
                 NewUser user;
                 user.id = fld.as<int>();
-                //user.name = getUserNameById(user.id);
                 users.emplace_back(user);
-                //std::cout << fld.c_str() << '\t';
             }
 
             std::cout << std::endl;

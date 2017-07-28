@@ -47,17 +47,23 @@ void ClientChat::onRead(ByteBufferPtr bufferPtr)
         std::string userName = Helper::bufferToString(bufferPtr, 2);
         if(static_cast<bool>( (*bufferPtr)[0]))
         {
-            std::cout << "User " + userName + " had confirmed your request to start chat" << std::endl;
+            USER_INFO("User " + userName + " had confirmed your request to start chat");
         }
         else
         {
-            std::cout << "User " + userName + " hadn't confirmed your request to start chat" << std::endl;
+           USER_INFO("User " + userName + " hadn't confirmed your request to start chat");
         }
         break;
     }
     case CommandCode::SEND_MESSAGE:
     {
         std::cout << Helper::bufferToString(bufferPtr, 1) << std::endl;
+        break;
+    }
+    case CommandCode::SHOW_QUEUE_USERS:
+    {
+        std::cout << Helper::bufferToString(bufferPtr, 1) << std::endl;
+        break;
     }
     default:
         break;

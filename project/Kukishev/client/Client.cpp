@@ -11,7 +11,7 @@ Client::Client(std::string address, std::string port)
     , resolver_(io_service_)
     , nextMsgSize_(0)
 {
-    buffer_.resize(BUFFER_MAX_SIZE);
+    buffer_.resize(2);
 }
 
 void Client::start()
@@ -22,7 +22,6 @@ void Client::start()
                                         , shared_from_this()
                                         , std::placeholders::_1
                                         , std::placeholders::_2));
-    //write("Enter your name");
 }
 
 void Client::write(ByteBufferPtr buffPtr)
@@ -59,7 +58,6 @@ void Client::handleConnect(asio::error_code error, asio::ip::tcp::resolver::iter
 {
     if(!error)
     {
-        //onRead();
         read();
     }
     else if(iterator != asio::ip::tcp::resolver::iterator())
@@ -83,7 +81,6 @@ void Client::read()
 {
     if(0 == nextMsgSize_)
     {
-        buffer_.resize(2);
         asio::async_read(socket_
                          , asio::buffer(buffer_, 2)
                          , asio::transfer_exactly(2)
@@ -94,7 +91,6 @@ void Client::read()
     }
     else
     {
-        //   buffer_.resize(BUFFER_MAX_SIZE);
         asio::async_read(socket_
                          , asio::buffer(buffer_, nextMsgSize_)
                          , asio::transfer_at_least(nextMsgSize_)
@@ -110,32 +106,21 @@ void Client::handleRead(std::error_code error, size_t bufferSize)
 {
     if(!error)
     {
-        //process message
-        //buffer_.resize(bufferSize);
-
-
-        //LOG_INFO("Message: "<< buffer_);
-
         if(0 == nextMsgSize_)
         {
             nextMsgSize_ = Helper::mergeTwoByte(buffer_[0], buffer_[1]);
-            //LOG_INFO("Message size: " << nextMsgSize_);
             buffer_.resize(nextMsgSize_);
         }
         else
         {
-            //std::string message(buffer_.begin(), buffer_.end());
-
-            //LOG_INFO("Message: "<< message);
-
-            //write(message);
-
 
             ByteBufferPtr buff = std::make_shared<ByteBuffer>(std::move(buffer_));
 
             onRead(buff);
 
             nextMsgSize_ = 0;
+
+            buffer_.resize(2);
         }
 
         read();
@@ -153,7 +138,6 @@ void Client::handleWrite(ByteBufferPtr data
 {
     if(!error)
     {
-        //LOG_INFO("Message writed!");
     }
     else
     {
