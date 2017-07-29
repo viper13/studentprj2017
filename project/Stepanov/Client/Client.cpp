@@ -9,7 +9,6 @@ Client::Client(std::string address, std::string port)
     , address_(address)
     , port_(port)
     , resolver_(io_service_)
-    , idClient(0)
 {
 
 }

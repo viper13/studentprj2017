@@ -5,8 +5,6 @@
 Session::Session()
     : socket_(Worker::instance()->io_service())
     , messageSize_(0)
-    , idClient(0)
-    , idTarget(0)
 {
 
 }

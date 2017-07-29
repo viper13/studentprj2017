@@ -15,14 +15,15 @@ public:
 
     char getIdClient();
 
-    bool hasRequest;
-    bool inChat;
-
     std::string message_;
 
     std::string getLogin() const;
 
     std::string getTargetLogin() const;
+
+    void setHasRequest(bool value);
+
+    void setInChat(bool value);
 
 private:
     void onRead(ByteBuffer data) override;
@@ -30,6 +31,8 @@ private:
     std::string targetLogin;
     int currentRoom;
     std::vector<int> availableRooms;
+    bool hasRequest;
+    bool inChat;
 };
 
 typedef std::shared_ptr<SessionEssence> SessionEssencePtr;

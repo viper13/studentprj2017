@@ -48,10 +48,6 @@ private:
     void handleWrite(BuffersVector data, system::error_code error, size_t writtedSize);
 protected:
     std::vector<char> buffer_;
-    char idClient;
-    std::string login;
-    bool isChatting;
-
 };
 
 #endif // CLIENT_H

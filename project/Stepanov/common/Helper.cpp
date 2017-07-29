@@ -37,3 +37,49 @@ bool Helper::paceFromPostgres(const pqxx::tuple &data, User &user)
     return true;
 }
 
+std::string Helper::makeRegisterMessage(std::string message)
+{
+    std::string result;
+    result = LOGIN_MESSAGE+message;
+    return result;
+}
+
+std::string Helper::makeListMessage()
+{
+    return GET_USER_LIST_MESSAGE;
+}
+
+std::string Helper::makeCreateChatMessage()
+{
+    std::string result;
+    LOG_INFO("Enter id of target to create chat");
+    std::cin >> result;
+    result = CREATE_CHAT_MESSAGE + result;
+    return result;
+}
+
+std::string Helper::makeDirectMessage()
+{
+
+}
+
+std::string Helper::makeYesMessage(int currentRoom)
+{
+    std::string result;
+    LOG_INFO("You accepted chat request!");
+    result=YES_MESSAGE;
+    result+=std::to_string(currentRoom);
+    return result;
+
+}
+
+std::string Helper::makeHistoryMessage()
+{
+    return GET_CHAT_HISTORY;
+}
+
+std::string Helper::makeExitMessage()
+{
+    return EXIT_MESSAGE;
+}
+

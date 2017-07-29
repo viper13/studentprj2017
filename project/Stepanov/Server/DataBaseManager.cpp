@@ -191,12 +191,13 @@ void DataBaseManager::registerChatMessage(std::string message, int idRoom, std::
     }
 }
 
-std::string DataBaseManager::getMessagesHistory(int idRoom)
+std::vector<std::string> DataBaseManager::getMessagesHistory(int idRoom)
 {
     ConnectionPtr connection = getConnection();
     try
     {
         std::string tempStr;
+        std::vector<std::string> answer;
         pqxx::work txn(*connection);
         pqxx::result result = txn.exec("SELECT name,message "
                                        "FROM users INNER JOIN messages ON users.id=messages.user_id"
@@ -206,18 +207,43 @@ std::string DataBaseManager::getMessagesHistory(int idRoom)
         LOG_INFO(result.size()<<"++++++++++++++++++++++++");
         for(const pqxx::tuple& row : result)
         {
-            tempStr += "User ";
+            tempStr = "[History] User ";
             tempStr += row["name"].as<std::string>();
-            tempStr += " write:\n";
+            tempStr += " write: ";
             tempStr += row["message"].as<std::string>();
             tempStr += "\n";
+            answer.push_back(tempStr);
         }
-        return tempStr;
+        return answer;
         LOG_INFO("messagesHistory otrabotal");
     }
     catch (std::exception& e)
     {
         LOG_ERR("Erron in messagesHistory"<<e.what());
+    }
+}
+
+std::vector<int> DataBaseManager::getRoomsToAdd(int userId)
+{
+    ConnectionPtr connection = getConnection();
+    try
+    {
+        std::vector<int> answer;
+        int tempInt;
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("SELECT chat_id FROM users_by_chats"
+                                       " WHERE user_id= "+std::to_string(userId)+" ;");
+        txn.commit();
+        for(const pqxx::tuple& row : result)
+        {
+            tempInt=row["chat_id"].as<int>();
+            answer.push_back(tempInt);
+        }
+        return answer;
+    }
+    catch (std::exception& e)
+    {
+        LOG_ERR("Erron in get rooms add"<<e.what());
     }
 }
 
@@ -227,7 +253,6 @@ ConnectionPtr DataBaseManager::getConnection()
     ss << std::this_thread::get_id();
     std::string thread_key = ss.str();
 
-    LOG_INFO(thread_key);
     ConnectionPtr connection;
     if(connections.find(thread_key) == connections.end())
     {
@@ -244,7 +269,7 @@ ConnectionPtr DataBaseManager::getConnection()
             LOG_ERR("Database connection failed "<<e.what());
         }
         connections[thread_key] = connection;
-        LOG_INFO("Created connection for thread " << thread_key);
+        //LOG_INFO("Created connection for thread " << thread_key);
     }
     else
     {

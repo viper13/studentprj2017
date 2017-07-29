@@ -13,11 +13,6 @@ std::shared_ptr<SessionEssence> SessionEssence::getNewSession()
     return session;
 }
 
-char SessionEssence::getIdClient()
-{
-    return idClient;
-}
-
 void SessionEssence::onRead(ByteBuffer data)
 {
     std::string message(buffer_.begin(), buffer_.end());
@@ -46,8 +41,13 @@ void SessionEssence::onRead(ByteBuffer data)
         LOG_INFO("Pass on server"<<message);
         if(c.loginIntoUser(login,message))
         {
-            message="Welcome to chat " + login;
+            message="Welcome back " + login;
             write(message);
+            availableRooms = c.regainChatRooms(login);
+            if(!availableRooms.empty())
+            {
+                write(" You joined you previus rooms. Type !roomslist to see more");
+            }
         }
         else
         {
@@ -61,6 +61,10 @@ void SessionEssence::onRead(ByteBuffer data)
     {
         message.erase(message.begin(),message.begin()+2);
         c.registerNewUser(login ,message);
+        std::string send = "Welcome to chat ";
+        send+=login;
+        send+="! Type !help to see commands!";
+        write(send);
     }
     else if(message.find(GET_USER_LIST_MESSAGE) != std::string::npos)
     {
@@ -68,10 +72,8 @@ void SessionEssence::onRead(ByteBuffer data)
     }
     else if(message.find(CREATE_CHAT_MESSAGE) != std::string::npos)
     {
-        idTarget=message[2];
         message.erase(message.begin(),message.begin()+2);
         targetLogin=message;
-        LOG_INFO("User "<<idClient<<" wish to create chat with " << idTarget<<" !");
         currentRoom = c.createChat();
         availableRooms.push_back(currentRoom);
         hasRequest=true;
@@ -83,10 +85,8 @@ void SessionEssence::onRead(ByteBuffer data)
     }
     else if(message.find(DIRECT_MESSAGE) != std::string::npos)
     {
-        idTarget=message[2];
         std::string send(message.begin()+3,message.end());
         LOG_INFO("message on server side"<<send);
-        c.sendMessage(idClient,idTarget,send);
     }
     else if((message.find(YES_MESSAGE) != std::string::npos)&&(hasRequest))
     {
@@ -121,6 +121,7 @@ void SessionEssence::onRead(ByteBuffer data)
     {
         std::string answer;
         answer = GET_ROOM_LIST_MESSAGE;
+        LOG_INFO(availableRooms.size())
         for(int i:availableRooms)
         {
             answer+=std::to_string(i);
@@ -140,6 +141,16 @@ void SessionEssence::onRead(ByteBuffer data)
         LOG_INFO("Removed user "<<login);
     }
 
+}
+
+void SessionEssence::setInChat(bool value)
+{
+    inChat = value;
+}
+
+void SessionEssence::setHasRequest(bool value)
+{
+    hasRequest = value;
 }
 
 std::string SessionEssence::getTargetLogin() const

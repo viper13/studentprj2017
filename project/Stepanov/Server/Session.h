@@ -23,11 +23,7 @@ public:
 
     virtual void onRead(ByteBuffer data) = 0;
 
-
 private:
-
-
-
     void read();
     void handleRead(system::error_code error, size_t bufferSize);
 
@@ -38,8 +34,6 @@ private:
     uint16_t messageSize_;
 protected:
     std::vector<char> buffer_;
-    char idClient;
-    char idTarget;
 };
 
 typedef std::shared_ptr<Session> SessionPtr;

@@ -25,7 +25,8 @@ public:
 
     static void registerChatMessage(std::string message, int idRoom, std::string userName);
 
-    static std::string getMessagesHistory(int idRoom);
+    static std::vector<std::string> getMessagesHistory(int idRoom);
+    static std::vector<int> getRoomsToAdd(int userId);
 
 private:
     static ConnectionPtr getConnection();

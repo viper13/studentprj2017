@@ -20,9 +20,19 @@ void ChatRoom::addPerson(std::string loginClient)
         if(sep->getLogin()==loginClient)
         {
             users_.push_back(sep);
-            sep->inChat=true;
-            LOG_INFO("User " << sep->getIdClient()<< " connected to chat with id "
-                     << idRoom_);
+            sep->setInChat(true);
+        }
+    }
+}
+
+void ChatRoom::removePerson(std::string loginClient)
+{
+    for (int var = 0; var < users_.size(); var++)
+    {
+        if(users_.at(var)->getLogin()==loginClient)
+        {
+            LOG_INFO("User "<<users_.at(var)->getLogin()<<" leave chat room");
+            users_.erase(users_.begin()+var);
         }
     }
 }

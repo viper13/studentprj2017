@@ -13,16 +13,15 @@ public:
 
     void onRead(ByteBuffer data) override;
 
+private:
+
+    std::vector<std::string>unReadMessages_;
+    std::string login;
+    int currentRoom;
     bool hasRequest;
     bool inChat;
     bool isLogin;
     bool isRegister;
-    int currentRoom;
-
-private:
-
-    std::vector<std::string>unReadMessages_;
-
 
 };
 
