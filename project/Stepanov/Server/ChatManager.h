@@ -37,6 +37,11 @@ public:
     void enterChat(int idRoom,std::string userLogin);
 
     void removeUser(std::string userLogin);
+    void setRoomName(std::string roomName, int idRoom, std::string userName);
+
+    bool checkUserOnline(std::string login);
+
+    std::string getRoomName(int idRoom);
 
     std::vector<int> regainChatRooms(std::string userLogin);
 

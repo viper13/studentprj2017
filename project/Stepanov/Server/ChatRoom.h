@@ -9,16 +9,23 @@ public:
     ChatRoom(int idRoom);
     static std::shared_ptr<ChatRoom> getNewChatRoom(int idRoom);
 
-    std::vector<SessionEssencePtr> users_;
-
-    std::string message_;
-
     void addPerson(std::string loginClient);
     void getChatUserList();
     void removePerson(std::string loginClient);
     void sendMessage(std::string message, std::string loginWriter);
+    int getIdRoom() const;
 
+    std::string getNameRoom() const;
+
+    void setNameRoom(const std::string &value);
+
+
+private:
     int idRoom_;
+    std::string nameRoom;
+    std::vector<SessionEssencePtr> users_;
+
+    std::string message_;
 };
 typedef std::shared_ptr<ChatRoom> ChatRoomPtr;
 #endif // CHATROOM_H

@@ -20,20 +20,26 @@ void SessionEssence::onRead(ByteBuffer data)
     if(message.find(LOGIN_MESSAGE) != std::string::npos)
     {
         message.erase(message.begin(),message.begin()+2);
-        login = message;
-        if(c.authFunction(message))
+        if(!(c.checkUserOnline(message)))
         {
-            message=LOGIN_INTO_ACCOUNT;
-            message+="That name already registered!Please enter a password!";
-            write(message);
+            login = message;
+            if(c.authFunction(message))
+            {
+                message=LOGIN_INTO_ACCOUNT;
+                message+="That name already registered!Please enter a password!";
+                write(message);
+            }
+            else
+            {
+                message=CREATE_NEW_USER;
+                message+="You a new user! Please enter a your password!";
+                write(message);
+            }
         }
         else
         {
-            message=CREATE_NEW_USER;
-            message+="You a new user! Please enter a your password!";
-            write(message);
+            write("That user already online");
         }
-        LOG_INFO("Login is"<<login);
     }
     else if(message.find(LOGIN_INTO_ACCOUNT) != std::string::npos)
     {
@@ -83,14 +89,12 @@ void SessionEssence::onRead(ByteBuffer data)
         message+=std::to_string(currentRoom);
         write(message);
     }
-    else if(message.find(DIRECT_MESSAGE) != std::string::npos)
-    {
-        std::string send(message.begin()+3,message.end());
-        LOG_INFO("message on server side"<<send);
-    }
     else if((message.find(YES_MESSAGE) != std::string::npos)&&(hasRequest))
     {
-        currentRoom=message[2]-'0';
+        message.erase(message.begin(),message.begin()+2);
+        std::stringstream ss(message);
+        ss >> currentRoom;
+        ss.get();
         availableRooms.push_back(currentRoom);
         c.addUserToChatRoom(login,currentRoom);
     }
@@ -102,9 +106,7 @@ void SessionEssence::onRead(ByteBuffer data)
     {
         message.erase(message.begin(),message.begin()+2);
         targetLogin=message;
-        LOG_INFO("-----===="<<login<<targetLogin<<currentRoom);
         c.requestMessage(login,targetLogin,REQUEST_TO_CREATE_CHAT_MESSAGE,currentRoom);
-        LOG_INFO("Session trying to send request");
     }
     else if(message.find(GET_CHAT_HISTORY) != std::string::npos)
     {
@@ -121,11 +123,13 @@ void SessionEssence::onRead(ByteBuffer data)
     {
         std::string answer;
         answer = GET_ROOM_LIST_MESSAGE;
-        LOG_INFO(availableRooms.size())
         for(int i:availableRooms)
         {
             answer+=std::to_string(i);
-            answer+="\n ";
+            answer+=" <-id    ";
+            answer+=c.getRoomName(i);
+            answer+=" <-name";
+            answer+="\n";
         }
         write(answer);
     }
@@ -139,6 +143,11 @@ void SessionEssence::onRead(ByteBuffer data)
     {
         c.removeUser(login);
         LOG_INFO("Removed user "<<login);
+    }
+    else if(message.find(SET_ROOM_NAME) != std::string::npos)
+    {
+        message.erase(message.begin(),message.begin()+2);
+        c.setRoomName(message,currentRoom,login);
     }
 
 }

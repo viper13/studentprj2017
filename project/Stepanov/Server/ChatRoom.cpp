@@ -1,11 +1,14 @@
 #include "ChatRoom.h"
 #include "ChatManager.h"
+
+ChatManager& chatManager = ChatManager::getInstance();
 ChatRoom::ChatRoom(int idRoom)
 {
     idRoom_=idRoom;
     LOG_INFO("Createdd room with id"<<idRoom_);
+    nameRoom = chatManager.getRoomName(idRoom_);
 }
-ChatManager& chatManager = ChatManager::getInstance();
+
 std::shared_ptr<ChatRoom> ChatRoom::getNewChatRoom(int idRoom)
 {
     ChatRoomPtr chatRoom = std::make_shared<ChatRoom>(idRoom);
@@ -42,6 +45,7 @@ void ChatRoom::sendMessage(std::string message, std::string loginWriter)
 {
     message_=CHAT_MESSAGE;
     message_+=std::to_string(idRoom_);
+    message_+=" ["+nameRoom+"]";
     message_+=" From client ";
     message_+=loginWriter;
     message_+=" : ";
@@ -51,4 +55,19 @@ void ChatRoom::sendMessage(std::string message, std::string loginWriter)
         if(sep->getLogin()!=loginWriter)
             sep->write(message_);
     }
+}
+
+int ChatRoom::getIdRoom() const
+{
+    return idRoom_;
+}
+
+std::string ChatRoom::getNameRoom() const
+{
+    return nameRoom;
+}
+
+void ChatRoom::setNameRoom(const std::string &value)
+{
+    nameRoom = value;
 }

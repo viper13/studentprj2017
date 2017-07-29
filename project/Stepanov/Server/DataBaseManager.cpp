@@ -59,7 +59,6 @@ bool DataBaseManager::registerNewUser(std::string name, std::string nick)
         pqxx::work txn(*connection);
         txn.exec("INSERT INTO users(name,nick) VALUES ('"+name+"','"+nick+"');");
         txn.commit();
-        LOG_INFO("Tut sql zapros choto ne to delaet----------");
     }
     catch (std::exception& e)
     {
@@ -79,7 +78,6 @@ bool DataBaseManager::loginIntoUser(std::string name, std::string nick)
         for(const pqxx::tuple& row : result)
         {
             temp=row["nick"].as<std::string>();
-            LOG_INFO("------------"<<temp<<"-----------");
             if(temp==nick)
             {
                 return true;
@@ -163,7 +161,6 @@ void DataBaseManager::addUserToChat(std::string userName, int idRoom)
         pqxx::work txn(*connection);
         txn.exec("INSERT INTO users_by_chats VALUES ("+std::to_string(idRoom)+","+std::to_string(userId)+");");
         txn.commit();
-        LOG_INFO("User bu chats_otrabotal");
     }
     catch (std::exception& e)
     {
@@ -183,7 +180,6 @@ void DataBaseManager::registerChatMessage(std::string message, int idRoom, std::
                  +std::to_string(userId)+",'"
                  +message+"');");
         txn.commit();
-        LOG_INFO("messages otrabotal");
     }
     catch (std::exception& e)
     {
@@ -215,7 +211,6 @@ std::vector<std::string> DataBaseManager::getMessagesHistory(int idRoom)
             answer.push_back(tempStr);
         }
         return answer;
-        LOG_INFO("messagesHistory otrabotal");
     }
     catch (std::exception& e)
     {
@@ -244,6 +239,43 @@ std::vector<int> DataBaseManager::getRoomsToAdd(int userId)
     catch (std::exception& e)
     {
         LOG_ERR("Erron in get rooms add"<<e.what());
+    }
+}
+
+void DataBaseManager::updateRoomName(std::string name,int idRoom)
+{
+    ConnectionPtr connection = getConnection();
+    try
+    {
+
+        pqxx::work txn(*connection);
+        txn.exec("UPDATE chats SET name='"+name+"' WHERE id ="+std::to_string(idRoom)+" ;");
+        txn.commit();
+
+    }
+    catch (std::exception& e)
+    {
+        LOG_ERR("Erron in get rooms add"<<e.what());
+    }
+}
+
+std::string DataBaseManager::getChatName(int idRoom)
+{
+    ConnectionPtr connection = getConnection();
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("SELECT name FROM chats"
+                                       " WHERE id ="+std::to_string(idRoom)+";");
+        txn.commit();
+        for(const pqxx::tuple& row : result)
+        {
+            return row["name"].as<std::string>();
+        }
+    }
+    catch (std::exception& e)
+    {
+        LOG_ERR("Erron in get room name"<<e.what());
     }
 }
 

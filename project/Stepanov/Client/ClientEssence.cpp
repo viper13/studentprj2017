@@ -25,6 +25,13 @@ void ClientEssence::processMessage(std::string message)
                 message=ADD_USER_TO_CHAT_MESSAGE+message;
                 write(message);
             }
+            else if(message.find("!setname") != std::string::npos)
+            {
+                LOG_INFO("Enter name:");
+                std::cin >> message;
+                message=SET_ROOM_NAME+message;
+                write(message);
+            }
             else
             {
                 message=CHAT_MESSAGE+message;
@@ -160,7 +167,9 @@ void ClientEssence::onRead(ByteBuffer data)
     {
         message.erase(message.begin(),message.begin()+2);
         int idRoom;
-        idRoom = message[0] - '0';//remake
+        std::stringstream ss(message);
+        ss >> idRoom;
+        ss.get();
         if(idRoom == currentRoom)
         {
             LOG_INFO("message from chat "<<idRoom);

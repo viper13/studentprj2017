@@ -47,8 +47,7 @@ bool ChatManager::loginIntoUser(std::string login, std::string pass)
 
 void ChatManager::getUserList(std::string loginClient)
 {
-    LOG_INFO(sessions_.size());
-    std::string userList;
+    std::string userList = "Online users:\n";
     for (SessionEssencePtr sep: sessions_)
     {
         userList+=sep->getLogin();
@@ -82,7 +81,7 @@ void ChatManager::sendChatMessage(int idRoom, std::string message, std::string l
     message.erase(message.begin(),message.begin()+2);
     for(ChatRoomPtr crp:chatRooms_)
     {
-        if(crp->idRoom_==idRoom)
+        if(crp->getIdRoom()==idRoom)
         {
             crp->sendMessage(message,loginClient);
             DataBaseManager::registerChatMessage(message,idRoom,loginClient);
@@ -122,7 +121,7 @@ void ChatManager::addUserToChatRoom(std::string loginClient, int idRoom)
 {
     for(ChatRoomPtr crp:chatRooms_)
     {
-        if(crp->idRoom_==idRoom)
+        if(crp->getIdRoom()==idRoom)
         {
             crp->addPerson(loginClient);
         }
@@ -150,7 +149,7 @@ void ChatManager::enterChat(int idRoom, std::string userLogin)
 {
     for(ChatRoomPtr crp:chatRooms_)
     {
-        if(crp->idRoom_==idRoom)
+        if(crp->getIdRoom()==idRoom)
         {
             crp->addPerson(userLogin);
             return;
@@ -159,7 +158,7 @@ void ChatManager::enterChat(int idRoom, std::string userLogin)
     chatRooms_.push_back(ChatRoom::getNewChatRoom(idRoom));
     for(ChatRoomPtr crp:chatRooms_)
     {
-        if(crp->idRoom_==idRoom)
+        if(crp->getIdRoom()==idRoom)
         {
             crp->addPerson(userLogin);
             return;
@@ -181,6 +180,38 @@ void ChatManager::removeUser(std::string userLogin)
             sessions_.erase(sessions_.begin()+var);
         }
     }
+}
+
+void ChatManager::setRoomName(std::string roomName, int idRoom, std::string userName)
+{
+    for(ChatRoomPtr crp:chatRooms_)
+    {
+        if(crp->getIdRoom()==idRoom)
+        {
+            crp->setNameRoom(roomName);
+            std::string temp;
+            temp = "User "+userName+" change room name to "+roomName;
+            crp->sendMessage(temp,"server");
+            DataBaseManager::updateRoomName(roomName,idRoom);
+        }
+    }
+}
+
+bool ChatManager::checkUserOnline(std::string login)
+{
+    for(SessionEssencePtr sep:sessions_)
+    {
+        if(sep->getLogin()==login)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+std::string ChatManager::getRoomName(int idRoom)
+{
+    return DataBaseManager::getChatName(idRoom);
 }
 
 std::vector<int> ChatManager::regainChatRooms(std::string userLogin)

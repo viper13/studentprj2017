@@ -28,6 +28,9 @@ public:
     static std::vector<std::string> getMessagesHistory(int idRoom);
     static std::vector<int> getRoomsToAdd(int userId);
 
+    static void updateRoomName(std::string name, int idRoom);
+    static std::string getChatName(int idRoom);
+
 private:
     static ConnectionPtr getConnection();
 
