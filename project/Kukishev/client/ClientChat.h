@@ -27,6 +27,7 @@ private:
     void confirmToStarChat(ByteBufferPtr userName);
     void singUp(ByteBufferPtr userName);
     void getQueueUsers();
+    void showChats();
 
     std::vector<std::string> usersWantToChat;
     std::string name;

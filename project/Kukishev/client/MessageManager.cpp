@@ -46,8 +46,9 @@ void MessageManager::printHelp()
               << "4 CONNECT_TO_USER [user's name]" << std::endl
               << "5 DISCONNECT_FROM_USER" << std::endl
               << "6 CONFIRM_TO_START_CHAT [name]" << std::endl
-              << "7 SHOW_QUEUE_USERS" << std::endl
-              << "8 SING_UP [yourself name]" << std::endl;
+              << "7 SHOW_REQUEST_USERS_TO_FRIEND" << std::endl
+              << "8 SING_UP [yourself name]" << std::endl
+              << "9 SHOW_CHATS" << std::endl;
 }
 
 std::pair<CommandCode, ByteBufferPtr> MessageManager::getCodeAndData(const std::string &str)
@@ -69,7 +70,7 @@ std::pair<CommandCode, ByteBufferPtr> MessageManager::getCodeAndData(const std::
         return std::pair<CommandCode, ByteBufferPtr>();
     }
 
-    if(code < static_cast<int>(CommandCode::LOGIN) || code > static_cast<int>(CommandCode::SING_UP))
+    if(code < static_cast<int>(CommandCode::LOGIN) || code > static_cast<int>(CommandCode::ENTER_CHATS))
     {
         std::cout << "Wrong number of command!" << std::endl;
         return std::pair<CommandCode, ByteBufferPtr>();

@@ -21,6 +21,7 @@ public:
     void sendMessage(ChatSessionPtr session, const std::string& text);
     void singUp(ChatSessionPtr session, const std::string& text);
     void usersRequestFriend(ChatSessionPtr session);
+    void showChats(ChatSessionPtr session);
 private:
     void readSessionBuffer(std::shared_ptr<ChatSession> session, ByteBufferPtr buffPtr);
     void disconectedSession(std::shared_ptr<ChatSession> session);

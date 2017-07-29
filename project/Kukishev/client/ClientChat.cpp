@@ -65,6 +65,11 @@ void ClientChat::onRead(ByteBufferPtr bufferPtr)
         std::cout << Helper::bufferToString(bufferPtr, 1) << std::endl;
         break;
     }
+    case CommandCode::SHOW_CHATS:
+    {
+        std::cout << Helper::bufferToString(bufferPtr, 1) << std::endl;
+        break;
+    }
     default:
         break;
     }
@@ -122,6 +127,15 @@ void ClientChat::execute(CommandCode cmd, ByteBufferPtr&& bufferPtr)
     case CommandCode::SING_UP:
     {
         singUp(bufferPtr);
+        break;
+    }
+    case CommandCode::ENTER_CHATS:
+    {
+        break;
+    }
+    case CommandCode::SHOW_CHATS:
+    {
+        showChats();
         break;
     }
     default:
@@ -196,25 +210,6 @@ void ClientChat::answerOnRequestToConnect(ByteBufferPtr userNameAndAnswer)
 
 void ClientChat::confirmToStarChat(ByteBufferPtr userName)
 {
-    std::string name = Helper::bufferToString(userName, 0);
-
-    if(!isContainUserWhoWantChat(name))
-    {
-        std::cout << "Wrong user's name!" << std::endl;
-        return;
-    }
-
-    int ind = -1;
-    for(int i = 0; i<usersWantToChat.size(); i++)
-    {
-        if(usersWantToChat[i] == name)
-        {
-            ind = i;
-            break;
-        }
-    }
-
-    usersWantToChat.erase(usersWantToChat.begin()+ind);
     userName->emplace(userName->begin(), static_cast<uint8_t>(1));
     execute(CommandCode::ANSWER_ON_REQUEST_TO_CONNECT, std::move(userName));
 }
@@ -235,6 +230,13 @@ void ClientChat::getQueueUsers()
 {
     ByteBufferPtr buff = std::make_shared<ByteBuffer>();
     Helper::insertCommandCode(buff, CommandCode::SHOW_QUEUE_USERS);
+    write(buff);
+}
+
+void ClientChat::showChats()
+{
+    ByteBufferPtr buff = std::make_shared<ByteBuffer>();
+    Helper::insertCommandCode(buff, CommandCode::SHOW_CHATS);
     write(buff);
 }
 

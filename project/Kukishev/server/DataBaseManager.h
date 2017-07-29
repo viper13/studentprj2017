@@ -16,6 +16,12 @@ public:
     static uint32_t getUserId(const std::string& str);
     static std::string getUserNameById(uint32_t id);
     static std::vector<NewUser> getUsersRequestToFriend(uint32_t id);
+    static bool addChatToDataBase(const std::string& chatName, uint32_t firstUserID, uint32_t secondUserId);
+    static bool isUserSendRequestToUser(uint32_t idFrom, uint32_t idTo);
+    static void deleteUserRequestToUser(uint32_t idFrom, uint32_t idTo);
+    static void addMessageToMessages(uint32_t idFrom, uint32_t chatId, const std::string& message);
+    static uint32_t getUsersChatId(uint32_t firstUser,  uint32_t secondUser);
+    static std::vector<uint32_t> getUserChatsList(uint32_t firstUser);
 private:
     static ConnectionPtr getConnection();
 

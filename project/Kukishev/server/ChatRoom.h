@@ -17,7 +17,6 @@ public:
     std::vector<std::string> getUsersName() const;
     std::vector<std::string> getUsersNameExcept(std::string name) const;
     size_t getCountUsers() const;
-
     std::map<std::string, ChatSessionPtr> getUsers() const;
 
 private:
