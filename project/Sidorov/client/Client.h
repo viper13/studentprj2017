@@ -24,6 +24,8 @@ public:
     void handleWrite(BuffersVector data
                      , asio::error_code error
                      , size_t writedBytes);
+
+private:
     asio::io_service& io_service_;
     asio::ip::tcp::socket socket_;
 

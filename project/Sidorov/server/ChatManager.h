@@ -11,6 +11,7 @@ class ChatManager
 public:
     ChatManager(Server& server);
 
+    //void synchronizeChatRooms();
     void onConnected(ChatSessionPtr session);
 
     void processCommand(std::shared_ptr<ChatSession> chatSession, ByteBufferPtr bufferPtr);
@@ -21,7 +22,8 @@ public:
     std::string login(ByteBufferPtr userNamePtr, ChatSessionPtr currentChatSessionPtr);
     std::string getUserList(ChatSessionPtr currentSessionPtr);
     std::string logout(ChatSessionPtr currentChatSessionPtr);
-    std::string connectToUser(ChatSessionPtr session, ByteBufferPtr name);
+    std::pair<std::string,std::string> connectToUser(ChatSessionPtr session, ByteBufferPtr name);
+    void connectAssist(ByteBufferPtr bufferPtr, ChatSessionPtr chatSessionPtr);
     void disconnectedFromUser(ChatSessionPtr session, ByteBufferPtr userName);
     void sendMessage(ChatSessionPtr session, ByteBufferPtr messageText);
     void acceptToChat(ChatSessionPtr session, ByteBufferPtr userName);
@@ -33,7 +35,7 @@ private:
 
     std::vector<ChatSessionPtr> sessions_;
 
-    std::vector<std::shared_ptr<ChatRoom> > chatRooms_;
+    std::vector<ChatRoom> chatRooms_;
 };
 
 #endif // CHATMANAGER_H

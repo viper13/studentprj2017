@@ -9,6 +9,11 @@ ChatManager::ChatManager(Server &server)
                          , std::placeholders::_1));
 }
 
+//void ChatManager::synchronizeChatRooms()
+//{
+
+//}
+
 void ChatManager::onConnected(ChatSessionPtr session)
 {
     LOG_INFO("Connected session.");
@@ -17,9 +22,6 @@ void ChatManager::onConnected(ChatSessionPtr session)
                                 , std::placeholders::_1
                                 , std::placeholders::_2));
     sessions_.push_back(session);
-
-//    std::vector<User> users;
-//    DataBaseManager::getUsersList(users);
 }
 
 
@@ -39,25 +41,7 @@ void ChatManager::execute(CodeCommand code, ByteBufferPtr bufferPtr, ChatSession
     {
         case CodeCommand::CONNECT_TO_USER:
         {
-            responce = connectToUser(chatSessionPtr, bufferPtr);
-            LOG_INFO(responce);
-            bool hasName = false;
-            for (ChatSessionPtr ptr : sessions_)
-            {
-                if (ptr->getUserName() == responce)
-                {
-                    std::string nameOfConnect = chatSessionPtr->getUserName();
-                    ByteBufferPtr responcePtr(new ByteBuffer(Helper::stringToBuffer(nameOfConnect)));
-                    ptr->execute(CodeCommand::CONNECT_TO_USER, responcePtr);
-                    hasName = true;
-                    break;
-                }
-            }
-            if (!hasName)
-            {
-                ByteBufferPtr responcePtr(new ByteBuffer(responce.begin(),responce.end()));
-                chatSessionPtr->write(responcePtr);
-            }
+            connectAssist(bufferPtr,chatSessionPtr);
             break;
         }
         case CodeCommand::DISCONNECT_FROM_USER:
@@ -104,6 +88,11 @@ void ChatManager::execute(CodeCommand code, ByteBufferPtr bufferPtr, ChatSession
         case CodeCommand::ACCEPT_TO_CHAT:
         {
             acceptToChat(chatSessionPtr, bufferPtr);
+            break;
+        }
+        case CodeCommand::START_CHAT:
+        {
+
             break;
         }
         default:
@@ -220,25 +209,79 @@ ChatSessionPtr ChatManager::findSession(const std::string &name)
         return chatSession;
 }
 
-std::string ChatManager::connectToUser(ChatSessionPtr session, ByteBufferPtr name)
+std::pair<std::string,std::string> ChatManager::connectToUser(ChatSessionPtr session, ByteBufferPtr name)
 {
     std::string responce;
-    ChatSessionPtr userSession = findSession(Helper::bufferToString(name));
-    if(!userSession)
+    std::string userName = Helper::bufferToString(name);
+    std::pair<bool,bool> isUserExist = DataBaseManager::isUserContain(userName);
+    if (!isUserExist.second)
     {
-        responce = "There isn't the user with same name!";
-        return responce;
+        responce = "There isn't the user with this name!";
+        return std::make_pair(responce,"");
     }
-    for (std::shared_ptr<ChatRoom> room: session->chatRoomsSession)
+    std::pair<bool,bool> isChatExist = DataBaseManager::isChatsWith(session->getUserName(),userName);
+    if (isChatExist.second)
     {
-        if (room->isUserContain(Helper::bufferToString(name)))
+        responce = "You are already chat with this user";
+        return std::make_pair(responce,"");
+    }
+    return std::make_pair(responce,userName);
+}
+
+void ChatManager::connectAssist(ByteBufferPtr bufferPtr, ChatSessionPtr chatSessionPtr)
+{
+    std::pair<std::string,std::string> ConnectionResult = connectToUser(chatSessionPtr, bufferPtr);
+    LOG_INFO(ConnectionResult.second);
+    bool isOnlineUser = false;
+    if (ConnectionResult.second !="")
+    {
+        for (ChatSessionPtr ptr : sessions_)
         {
-            responce = "You are already chat with this user";
-            return responce;
+            if (ptr->getUserName() == ConnectionResult.second)
+            {
+                std::string nameOfConnect = chatSessionPtr->getUserName();
+                ByteBufferPtr responcePtr(new ByteBuffer(Helper::stringToBuffer(nameOfConnect)));
+                ptr->execute(CodeCommand::CONNECT_TO_USER, responcePtr);
+                isOnlineUser = true;
+                std::pair<bool,std::string> result = DataBaseManager::addRequest(chatSessionPtr->getUserName(), ConnectionResult.second);
+                if (result.first)
+                {
+                    if (result.second == "")
+                    {
+                        std::string responce = "Request was sent";
+                        LOG_INFO(responce);
+                        chatSessionPtr->sendMessageToClient(responce);
+                    }
+                    else
+                    {
+                        chatSessionPtr->sendMessageToClient(result.second);
+                    }
+                }
+                break;
+            }
+        }
+        if (!isOnlineUser)
+        {
+            std::pair<bool,std::string> result = DataBaseManager::addRequest(chatSessionPtr->getUserName(), ConnectionResult.second);
+            if (result.first)
+            {
+                if (result.second == "")
+                {
+                    std::string responce = "Request was sent";
+                    LOG_INFO(responce);
+                    chatSessionPtr->sendMessageToClient(responce);
+                }
+                else
+                {
+                    chatSessionPtr->sendMessageToClient(result.second);
+                }
+            }
         }
     }
-    responce = userSession->getUserName();
-    return responce;
+    else
+    {
+        chatSessionPtr->sendMessageToClient(ConnectionResult.first);
+    }
 }
 
 void ChatManager::disconnectedFromUser(ChatSessionPtr session, ByteBufferPtr userName)
@@ -270,55 +313,98 @@ void ChatManager::sendMessage(ChatSessionPtr session, ByteBufferPtr messageText)
     std::istringstream ist(text);
     std::string name;
         ist >> name;
-    for (std::shared_ptr<ChatRoom> room : session->chatRoomsSession)
+    std::pair<bool,bool> result = DataBaseManager::isChatsWith(session->getUserName(),name);
+    if (result.second)
     {
-        if (room->isUserContain(name))
+        LOG_INFO("THEY CAN CHATS");
+        std::string message = session->getUserName() + ": ";
+        std::string partOfMessage;
+        ist >> partOfMessage;
+        message += partOfMessage;
+        while(ist >> partOfMessage)
         {
-            std::string message = session->getUserName() + ": ";
-            std::string partOfMessage;
-            ist >> partOfMessage;
-            message += partOfMessage;
-            while(ist >> partOfMessage)
-            {
-                message+= partOfMessage;
-            }
-            room->sendMessage(message, session->getUserName());
-            return;
+            message+= partOfMessage;
         }
-    }
-    std::string responce = "You can't chat with this user\nUse command CONNECT_TO_USER to chat";
-    session->sendMessageToClient(responce);
 
+        bool result = DataBaseManager::addMessage(session->getUserName(),name,message);
+
+        if (result)
+        {
+            LOG_INFO("MESSAGE WAS ADDED");
+            for (ChatSessionPtr session : sessions_)
+            {
+                if (session->getUserName() == name)
+                {
+                    session->sendMessageToClient(message);
+                }
+            }
+        }
+
+    }
+    else
+    {
+        std::string responce = "You can't chat with this user\nUse command CONNECT_TO_USER to chat";
+        session->sendMessageToClient(responce);
+    }
 }
 
 void ChatManager::acceptToChat(ChatSessionPtr session, ByteBufferPtr userName)
 {
-    ChatSessionPtr chatSession = findSession(Helper::bufferToString(userName));
-    if (!chatSession)
+    std::string username = Helper::bufferToString(userName);
+    std::pair<bool,bool> isContaineResult = DataBaseManager::isContaineRequest(username, session->getUserName());
+    if (isContaineResult.first)
     {
-        std::string responce = "This username doen't exist or doen't want to chat with you";
-        ByteBufferPtr bufferPtr(new ByteBuffer(Helper::stringToBuffer(responce)));
-        session->execute(CodeCommand::ACCEPT_TO_CHAT, bufferPtr);
-    }
-    else
-    {
-        std::shared_ptr<ChatRoom> newRoom(new ChatRoom());
+        if (!isContaineResult.second)
+        {
+            std::string responce = "This username doen't exist or doen't want to chat with you";
+            ByteBufferPtr bufferPtr(new ByteBuffer(Helper::stringToBuffer(responce)));
+            session->execute(CodeCommand::ACCEPT_TO_CHAT, bufferPtr);
+        }
+        else
+        {
+            std::pair<bool,bool> eraseResult = DataBaseManager::eraseRequest(username, session->getUserName());
+            if (eraseResult.first)
+            {
+                if (eraseResult.second)
+                {
+                    std::string chatName = session->getUserName() + "," + username;
+                    std::pair<bool,std::string> result = DataBaseManager::addChatRoom(chatName);
+                    if (result.first)
+                    {
+//                        newRoomPtr->addUser(session->getUserName(),session);
+//                        newRoomPtr->addUser(chatSession->getUserName(), chatSession);
 
-        newRoom->addUser(session->getUserName(),session);
-        newRoom->addUser(chatSession->getUserName(), chatSession);
+//                        std::string responce = "Congratulations, You now you can send messages to ";
 
-        std::string responce = "Congratulations, You now you can send messages to ";
+//                        ByteBufferPtr responceForFirst(new ByteBuffer(Helper::stringToBuffer(responce + chatSession->getUserName())));
+//                        session->execute(CodeCommand::ACCEPT_TO_CHAT, responceForFirst);
 
-        ByteBufferPtr responceForFirst(new ByteBuffer(Helper::stringToBuffer(responce + chatSession->getUserName())));
-        session->execute(CodeCommand::ACCEPT_TO_CHAT, responceForFirst);
+//                        ByteBufferPtr responceForSecond(new ByteBuffer(Helper::stringToBuffer(responce + session->getUserName())));
+//                        chatSession->write(responceForSecond);
 
-        ByteBufferPtr responceForSecond(new ByteBuffer(Helper::stringToBuffer(responce + session->getUserName())));
-        chatSession->write(responceForSecond);
+//                        session->chatRoomsSession.push_back(newRoomPtr);
+//                        chatSession->chatRoomsSession.push_back(newRoomPtr);
 
-        session->chatRoomsSession.push_back(newRoom);
-        chatSession->chatRoomsSession.push_back(newRoom);
+//                        chatRooms_.push_back(newRoom);
+                        LOG_INFO(result.second);
 
-        chatRooms_.push_back(newRoom);
+                        //add ChatId and UserId to users_by_chats
+                        std::pair<bool,std::string> byChatsResult1 = DataBaseManager::addUsers_by_chats(chatName, username);
+                        std::pair<bool,std::string> byChatsResult2 = DataBaseManager::addUsers_by_chats(chatName, session->getUserName());
+                        if (byChatsResult1.first && byChatsResult2.first)
+                        {
+                            LOG_INFO(byChatsResult1.second);
+                            LOG_INFO(byChatsResult2.second);
+                        }
+
+                    }
+                }
+                else
+                {
+                    LOG_INFO("CAN't DELETE THIS");
+                }
+            }
+        }
     }
 }
 
@@ -334,8 +420,6 @@ void ChatManager::eraseOnlineUsers(std::vector<User> &users, std::vector<User> o
     }
 
 }
-
-
 
 std::string ChatManager::getUserList(ChatSessionPtr currentSessionPtr)
 {

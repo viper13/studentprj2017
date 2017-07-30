@@ -117,7 +117,6 @@ void Client::handleRead(std::error_code error, size_t bufferSize)
         }
         else
         {
-            //LOG_INFO("Message: " << buffer_);
             ByteBufferPtr buff = std::make_shared<ByteBuffer>(std::move(buffer_));
 
             onRead(buff);

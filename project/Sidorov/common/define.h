@@ -28,7 +28,8 @@ enum class CodeCommand: uint8_t
     DISCONNECT_FROM_USER = 7,
     ACCEPT_TO_CHAT = 8,
     SEE_REQUESTS = 9,
-    ANSWER_ON_REQUEST = 10
+    PRINT_HELP = 10,
+    START_CHAT = 11
 };
 
 std::ostream& operator <<(std::ostream& stream, const ByteBuffer& buffer);

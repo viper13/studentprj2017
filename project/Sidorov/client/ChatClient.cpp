@@ -39,7 +39,7 @@ void ChatClient::onRead(ByteBufferPtr data)
             usersWantToChat.erase(std::find(usersWantToChat.begin()
                                               , usersWantToChat.end()
                                               , name));
-            //LOG_INFO(*data);
+            break;
         }
     default:
         LOG_INFO(*data);
@@ -51,54 +51,64 @@ void ChatClient::execute(CodeCommand code, ByteBufferPtr bufferPtr)
 {
     switch (code)
     {
-        case CodeCommand::CONNECT_TO_USER:
-        {
-            connectToUser(bufferPtr);
-            break;
-        }
-        case CodeCommand::DISCONNECT_FROM_USER:
-        {
-            disconnectFromUser(bufferPtr);
-            break;
-        }
-        case CodeCommand::REGISTRATION:
-        {
-            registration(bufferPtr);
-            break;
-        }
-        case CodeCommand::LOGIN:
-        {
-            login(bufferPtr);
-            break;
-        }
-        case CodeCommand::LOGOUT:
-        {
-            logout();
-            break;
-        }
-        case CodeCommand::SEND_MESSAGE:
-        {
-            sendMessage(bufferPtr);
-            break;
-        }
-        case CodeCommand::USER_LIST:
-        {
-            getUserList();
-            break;
-        }
-        case CodeCommand::SEE_REQUESTS:
-        {
-            seeRequests();
-            break;
-        }
-        case CodeCommand::ACCEPT_TO_CHAT:
-        {
-            acceptToChat(bufferPtr);
-            break;
-        }
-        default:
-            break;
-        }
+    case CodeCommand::CONNECT_TO_USER:
+    {
+        connectToUser(bufferPtr);
+        break;
+    }
+    case CodeCommand::DISCONNECT_FROM_USER:
+    {
+        disconnectFromUser(bufferPtr);
+        break;
+    }
+    case CodeCommand::REGISTRATION:
+    {
+        registration(bufferPtr);
+        break;
+    }
+    case CodeCommand::LOGIN:
+    {
+        login(bufferPtr);
+        break;
+    }
+    case CodeCommand::LOGOUT:
+    {
+        logout();
+        break;
+    }
+    case CodeCommand::SEND_MESSAGE:
+    {
+        sendMessage(bufferPtr);
+        break;
+    }
+    case CodeCommand::USER_LIST:
+    {
+        getUserList();
+        break;
+    }
+    case CodeCommand::SEE_REQUESTS:
+    {
+        seeRequests();
+        break;
+    }
+    case CodeCommand::ACCEPT_TO_CHAT:
+    {
+        acceptToChat(bufferPtr);
+        break;
+    }
+    case CodeCommand::PRINT_HELP:
+    {
+        printHelp();
+        break;
+    }
+    case CodeCommand::START_CHAT:
+    {
+        startChat(bufferPtr);
+        break;
+    }
+    default:
+        break;
+    }
 
 }
 
@@ -165,7 +175,7 @@ void ChatClient::connectToUser(ByteBufferPtr userName)
 {
     if ( 0 == userName->size())
     {
-        LOG_ERR("Input your Login");
+        LOG_ERR("Input UserName");
         return;
     }
     Helper::addCodeCommand(CodeCommand::CONNECT_TO_USER, userName);
@@ -202,6 +212,33 @@ void ChatClient::seeRequests()
         requests = "You don't have requests to chat";
         LOG_INFO(requests);
     }
+}
+
+void ChatClient::printHelp()
+{
+    std::cout << "Use next numbers for command:" << std::endl
+              << "1 REGISTRATION [name]" << std::endl
+              << "2 LOGIN [name]" << std::endl
+              << "3 LOGOUT" << std::endl
+              << "4 USER_LIST" << std::endl
+              << "5 SEND_MESSAGE [message]" << std::endl
+              << "6 CONNECT_TO_USER [user's name]" << std::endl
+              << "7 DISCONNECT_FROM_USER" << std::endl
+              << "8 ACCEPT_TO_CHAT [username]" << std::endl
+              << "9 SEE_REQUESTS" << std::endl
+              << "10 PRINT HELP" << std::endl
+              << "10 START CHAT" << std::endl;
+}
+
+void ChatClient::startChat(ByteBufferPtr userName)
+{
+    if ( 0 == userName->size())
+    {
+        LOG_ERR("Input your partner name");
+        return;
+    }
+    Helper::addCodeCommand(CodeCommand::START_CHAT, userName);
+    write(userName);
 }
 
 

@@ -23,6 +23,8 @@ private:
     void disconnectFromUser(ByteBufferPtr userName);
     void acceptToChat(ByteBufferPtr userName);
     void seeRequests();
+    void printHelp();
+    void startChat(ByteBufferPtr userName);
 
     std::function<void (ByteBufferPtr)> readHandle_;
     std::string username_;

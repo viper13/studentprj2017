@@ -83,7 +83,7 @@ std::pair<CodeCommand, ByteBufferPtr> Helper::getCodeAndData(const std::string &
             return std::pair<CodeCommand, ByteBufferPtr>();
         }
 
-        if(code < static_cast<int>(CodeCommand::REGISTRATION) || code > static_cast<int>(CodeCommand::ANSWER_ON_REQUEST))
+        if(code < static_cast<int>(CodeCommand::REGISTRATION) || code > static_cast<int>(CodeCommand::PRINT_HELP))
         {
             std::cout << "Wrong number of command!" << std::endl;
             return std::pair<CodeCommand, ByteBufferPtr>();
