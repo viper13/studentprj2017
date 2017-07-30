@@ -17,10 +17,13 @@ public:
     std::string getChatRoomName();
     void setChatRoomId(const int &id);
     int getChatRoomId();
+    void setMultyChat(bool isMultyChat);
+    bool getMultyChat();
 private:
     std::string chatRoomName_;
     int chatRoomId_;
     StringSetPtr users_;
+    bool isMultyChat_;
 };
 
 

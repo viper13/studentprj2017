@@ -13,9 +13,12 @@ public:
     void onRead(ChatSessionPtr session, std::string message);
 
 private:
-    std::string userListDispatcher(ChatSessionPtr session, std::string message);
+    std::string userListDispatcher();
     std::string logInDispatcher(ChatSessionPtr session, std::string message);
     std::string startChatDispatcher(ChatSessionPtr session, std::string message);
+    std::string createChatDispatcher(std::string message);
+    std::string chatListDispatcher();
+    std::string joinChatDispatcher(ChatSessionPtr session, std::string message);
     void messageDispatcher(ChatSessionPtr session, std::string message);
     std::string disconnectDispatcher(ChatSessionPtr session, std::string message);
     std::map<std::string, ChatSessionPtr> sessions_;

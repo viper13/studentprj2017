@@ -34,7 +34,7 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
     {
         case Protocol::Type::USER_LIST:
         {
-            messageToSend = userListDispatcher(session, message);
+            messageToSend = userListDispatcher();
             session->write(messageToSend);
             break;
         }
@@ -55,6 +55,24 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
             messageDispatcher(session, message);
             break;
         }
+        case Protocol::Type::CREATE_CHAT:
+        {
+            messageToSend = createChatDispatcher(message);
+            session->write(messageToSend);
+            break;
+        }
+        case Protocol::Type::CHAT_LIST:
+        {
+            messageToSend = chatListDispatcher();
+            session->write(messageToSend);
+            break;
+        }
+        case Protocol::Type::JOIN_CHAT:
+        {
+            messageToSend = joinChatDispatcher(session, message);
+            session->write(messageToSend);
+            break;
+        }
         case Protocol::Type::USER_DISCONNECT:
         {
             messageToSend = disconnectDispatcher(session, message);
@@ -68,7 +86,7 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
     }
 }
 
-std::string ChatManager::userListDispatcher(ChatSessionPtr session, std::string message)
+std::string ChatManager::userListDispatcher()
 {
     //think of this, may be you shold not return this list to user by his request
     std::set<std::string> names;
@@ -138,7 +156,6 @@ std::string ChatManager::startChatDispatcher(ChatSessionPtr session, std::string
     }
     messageToSend = Protocol::startChatServerMessageCreate(Protocol::Status::OK);
 
-    //TODO: Send chat-room history.
     std::vector<std::string> messages;
     result = DataBaseManager::getHistoryForChat(session->getChatRoom()->getChatRoomId(), messages);
     if (result && messages.size() > 0)
@@ -148,6 +165,83 @@ std::string ChatManager::startChatDispatcher(ChatSessionPtr session, std::string
             session->write(Protocol::chatMessageClientMessageCreate("HISTORY", messages[i]));
         }
     }
+    return messageToSend;
+}
+
+std::string ChatManager::createChatDispatcher(std::string message)
+{
+    std::string messageToSend;
+    std::string chatName = Protocol::typeRemover(message);
+    if (chats_.find(chatName) != chats_.end())
+    {
+        messageToSend = Protocol::createChatServerMessageCreate(Protocol::Status::BAD);
+        return messageToSend;
+    }
+    else
+    {
+        ChatRoomPtr room = ChatRoom::getNewChatRoom(chatName);
+        int id = DataBaseManager::createChatRoom(chatName);
+        room->setChatRoomId(id);
+        room->setMultyChat(true);
+        chats_[chatName] = room;
+        messageToSend = Protocol::createChatServerMessageCreate(Protocol::Status::OK);
+        return messageToSend;
+    }
+}
+
+std::string ChatManager::chatListDispatcher()
+{
+    std::set<std::string> chatNames;
+    std::map<std::string, ChatRoomPtr>::iterator parser;
+    for (parser = chats_.begin(); parser != chats_.end(); ++parser)
+    {
+        if (parser->second->getMultyChat())
+        {
+            chatNames.insert(parser->first);
+        }
+    }
+    std::string messageToSend = Protocol::chatListServerMessageCreate(chatNames);
+    return messageToSend;
+}
+
+std::string ChatManager::joinChatDispatcher(ChatSessionPtr session, std::string message)
+{
+    //Add user to chat in session and on DB
+    //User can be inside there!!!
+    std::string messageToSend;
+    std::string chatName = Protocol::typeRemover(message);
+    if (chats_.find(chatName) == chats_.end())
+    {
+        messageToSend = Protocol::joinChatServerMessageCreate(Protocol::Status::BAD);
+        return messageToSend;
+    }
+
+    ChatRoomPtr room = chats_[chatName];
+    if (!room->getMultyChat())
+    {
+        messageToSend = Protocol::joinChatServerMessageCreate(Protocol::Status::BAD);
+        return messageToSend;
+    }
+
+    StringSetPtr users = room->getUsers();
+    if (users->find(session->getUserName()) == users->end())
+    {
+        int id = DataBaseManager::addUserToMultyChat(session->getUserId(), room->getChatRoomId());
+        room->addUser(session->getUserName());
+    }
+    session->setChatRoom(room);
+
+    std::vector<std::string> messages;
+    bool result = DataBaseManager::getHistoryForChat(session->getChatRoom()->getChatRoomId(), messages);
+    if (result && messages.size() > 0)
+    {
+        for (int i = messages.size() - 1; i >= 0; --i)
+        {
+            session->write(Protocol::chatMessageClientMessageCreate("HISTORY", messages[i]));
+        }
+    }
+
+    messageToSend = Protocol::joinChatServerMessageCreate(Protocol::Status::OK);
     return messageToSend;
 }
 

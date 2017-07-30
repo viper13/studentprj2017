@@ -90,14 +90,16 @@ bool DataBaseManager::getRegisteredChats(std::map<std::string, ChatRoomPtr> &cha
         pqxx::work txn(*connection);
 
         //Let's take all our rooms
-        pqxx::result result = txn.exec("SELECT name, id FROM chats");
+        pqxx::result result = txn.exec("SELECT name, id, multy FROM chats");
         txn.commit();
         for (const pqxx::tuple& row : result)
         {
             std::string chatRoomName = row["name"].as<std::string>();
+            bool isMulty = row["multy"].as<bool>();
             ChatRoomPtr chatRoom = ChatRoom::getNewChatRoom(chatRoomName);
             chatRoom->setChatRoomId(row["id"].as<int>());
-            chats[chatRoomName] = chatRoom; //тут все вылетает
+            chatRoom->setMultyChat(isMulty);
+            chats[chatRoomName] = chatRoom;
         }
 
         //Now we have to add users to them
@@ -153,6 +155,48 @@ int DataBaseManager::synchronizeChatRoom(const std::string &user1, const std::st
     catch (const std::exception &e)
     {
         LOG_ERR("Failure to synchronize chatRoom: " << e.what());
+        resultToReturn  = -1;
+    }
+    return resultToReturn;
+}
+
+int DataBaseManager::createChatRoom(const std::string &chatName)
+{
+    ConnectionPtr connection = getConnection();
+    int resultToReturn = -1;
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("INSERT INTO chats(name, multy) VALUES ("
+                          + txn.quote(chatName)
+                          + ", TRUE) Returning id");
+        txn.commit();
+        resultToReturn = result[0]["id"].as<int>();
+    }
+    catch (const std::exception &e)
+    {
+        LOG_ERR("Failure to create multy-user chatRoom: " << e.what());
+        resultToReturn  = -1;
+    }
+    return resultToReturn;
+}
+
+int DataBaseManager::addUserToMultyChat(const int &userId, const int &chatId)
+{
+    ConnectionPtr connection = getConnection();
+    int resultToReturn = -1;
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("INSERT INTO users_by_chats (chat_id, user_id) VALUES ("
+                                       + txn.quote(chatId) + ", "
+                                       + txn.quote(userId) + ") Returning id");
+        txn.commit();
+        resultToReturn = result[0]["id"].as<int>();
+    }
+    catch (const std::exception &e)
+    {
+        LOG_ERR("Failure to add user to multy-chat Room: " << e.what());
         resultToReturn  = -1;
     }
     return resultToReturn;

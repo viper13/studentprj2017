@@ -5,6 +5,7 @@
 */
 ChatRoom::ChatRoom(const std::string &chatRoomName)
     : users_(new std::set<std::string>())
+    , isMultyChat_(false)
 {
     chatRoomName_ = chatRoomName;
 }
@@ -14,6 +15,7 @@ ChatRoom::ChatRoom(const std::string &chatRoomName)
 */
 ChatRoom::ChatRoom(const std::string &user1, const std::string &user2)
     : users_(new std::set<std::string>())
+    , isMultyChat_(false)
 {
     chatRoomName_ = Helper::getChatRoomName(user1, user2);
     addUser(user1);
@@ -56,5 +58,15 @@ void ChatRoom::setChatRoomId(const int &id)
 int ChatRoom::getChatRoomId()
 {
     return chatRoomId_;
+}
+
+void ChatRoom::setMultyChat(bool isMultyChat)
+{
+    isMultyChat_ = isMultyChat;
+}
+
+bool ChatRoom::getMultyChat()
+{
+    return isMultyChat_;
 }
 

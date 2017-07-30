@@ -12,7 +12,9 @@ public:
     void printUsersToConsole();
     void sendChatMessage(std::string message);
     void connectToUser(std::string user);
-    void stopChat();
+    void createNewChat(const std::string &chatName);
+    void getChatListFromServer();
+    void joinChat(const std::string &chatName);
     void disconnect();
     bool isInChat();
     bool isLoggedIn();
@@ -27,8 +29,10 @@ private:
     void messageDispatcher(const std::string &message);
     void logInDispatcher(const std::string &message);
     void startChatDispatcher(const std::string &message);
+    void createChatDispatcher(const std::string &message);
+    void chatListDispatcher(const std::string &message);
+    void joinChatDispatcher(const std::string &message);
     void userDisconnectDispatcher(const std::string &message);
-    void stopChatDispatcher(const std::string &message);
 };
 
 typedef std::shared_ptr<ChatClient> ChatClientPtr;

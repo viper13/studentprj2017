@@ -17,6 +17,8 @@ public:
     static int synchronizeUser(const std::string &userName);
     static bool getRegisteredChats(std::map<std::string, ChatRoomPtr> &chats);
     static int synchronizeChatRoom(const std::string &user1, const std::string &user2);
+    static int createChatRoom(const std::string &chatName);
+    static int addUserToMultyChat(const int &userId, const int &chatId);
     static bool saveMessage(const std::string &message, const int &userId, const int &chatId);
     static bool getHistoryForChat(const int &chatId, std::vector<std::string> &messages);
 

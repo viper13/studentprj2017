@@ -94,14 +94,52 @@ std::string Protocol::disconnectServerMessageCreate(Status status)
     return typeAdder(Type::USER_DISCONNECT, status);
 }
 
-std::string Protocol::stopChatClientMessageCreate()
+std::string Protocol::createChatClientMessageCreate(const std::string &nameOfChat)
 {
-    return typeAdder(Type::STOP_CHAT, "");
+    return typeAdder(Type::CREATE_CHAT, nameOfChat);
 }
 
-std::string Protocol::stopChatServerMessageCreate(Status status)
+std::string Protocol::createChatServerMessageCreate(Protocol::Status status)
 {
-    return typeAdder(Type::STOP_CHAT, status);
+    return typeAdder(Type::CREATE_CHAT, status);
+}
+
+std::string Protocol::chatListClientMessageCreate()
+{
+    return typeAdder(Type::CHAT_LIST, "");
+}
+
+std::string Protocol::chatListServerMessageCreate(const std::set<std::string> &chatNames)
+{
+    std::string result = "";
+    result.push_back(Type::CHAT_LIST);
+
+    for (std::string name : chatNames)
+    {
+        result += name;
+        result += " ";
+    }
+    return result;
+}
+
+void Protocol::chatListServerMessageParse(std::string message, std::set<std::string> &chatNames)
+{
+    std::stringstream tempStream(message.substr(1, message.length()));
+    std::string tempString;
+    while(tempStream >> tempString)
+    {
+        chatNames.insert(tempString);
+    }
+}
+
+std::string Protocol::joinChatClientMessageCreate(const std::string &nameOfChat)
+{
+    return typeAdder(Type::JOIN_CHAT, nameOfChat);
+}
+
+std::string Protocol::joinChatServerMessageCreate(Protocol::Status status)
+{
+    return typeAdder(Type::JOIN_CHAT, status);
 }
 
 std::string Protocol::typeAdder(Type type, std::string message)
