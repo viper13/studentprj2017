@@ -12,7 +12,7 @@ TEMPLATE = app
 INCLUDEPATH +=$$PWD/../common
 
 SOURCES += \
-    Worker.cpp \
+    ../common/Worker.cpp \
     Server.cpp \
     Session.cpp \
     Main.cpp \
@@ -37,7 +37,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 HEADERS += \
-    Worker.h \
+    ../common/Worker.h \
     Server.h \
     Session.h \
     ../common/Define.h \

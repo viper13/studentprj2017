@@ -12,7 +12,7 @@ TEMPLATE = app
 INCLUDEPATH +=$$PWD/../common
 
 SOURCES += \
-    Worker.cpp \
+    ../common/Worker.cpp \
     Client.cpp \
     Main.cpp \
     ../common/define.cpp \
@@ -34,6 +34,6 @@ LIBS += -lpqxx
 HEADERS += \
     ../common/Define.h \
     ../common/Helper.h \
-    Worker.h \
+    ../common/Worker.h \
     Client.h \
     ClientEssence.h

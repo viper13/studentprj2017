@@ -20,34 +20,25 @@ void ClientEssence::processMessage(std::string message)
         {
             if(message.find("!add") != std::string::npos)
             {
-                LOG_INFO("Enter id of target:");
-                std::cin >>message;
-                message=ADD_USER_TO_CHAT_MESSAGE+message;
-                write(message);
+                write(Helper::makeAddMessage());
             }
             else if(message.find("!setname") != std::string::npos)
             {
-                LOG_INFO("Enter name:");
-                std::cin >> message;
-                message=SET_ROOM_NAME+message;
-                write(message);
+                write(Helper::makeSetRoomNameMessage());
             }
             else
             {
-                message=CHAT_MESSAGE+message;
-                write(message);
+                write(Helper::makeChatMessage(message));
             }
         }
         if(isRegister)
         {
-            message=CREATE_NEW_USER+message;
-            write(message);
+            write(Helper::makeCreateNewUserMessage(message));
             isRegister=false;
         }
         if(isLogin)
         {
-            message=LOGIN_INTO_ACCOUNT+message;
-            write(message);
+            write(Helper::makeLoginMessage(message));
             isLogin=false;
         }
 
@@ -56,73 +47,50 @@ void ClientEssence::processMessage(std::string message)
             LOG_INFO("Enter your user name");
             std::cin >> message;
             login = message;
-            message=Helper::makeRegisterMessage(message);
-            write(message);
+            write(Helper::makeRegisterMessage(message));
         }
         else if(message.find("!list") != std::string::npos)
         {
-            message = Helper::makeListMessage();
-            write(message);
+            write(Helper::makeListMessage());
         }
         else if(message.find("!create") != std::string::npos)
         {
-            message = Helper::makeCreateChatMessage();
-            write(message);
+            write(Helper::makeCreateChatMessage());
             inChat = true;
-        }
-        else if(message.find("!server") != std::string::npos)
-        {
-            LOG_INFO("Enter message");
-            std::cin >> message;
-            write(message);
         }
         else if(message.find("!direct") != std::string::npos)
         {
-            char idTarget;
-            std::string send;
-            LOG_INFO("Enter id of target");
-            std::cin >> idTarget;
-            LOG_INFO("Enter a message to send");
-            std::cin >> send;
-            message=DIRECT_MESSAGE;
-            message+=idTarget;
-            message+=send;
-            LOG_INFO("message from client "<<message);
-            write(message);
+            //not maked. Is it good idea?
         }
         else if((message.find("!yes") != std::string::npos)&&(hasRequest))
         {
             inChat=true;
-            message = Helper::makeYesMessage(currentRoom);
-            write(message);
+            currentRoom = requestRoom;
+            write(Helper::makeYesMessage(currentRoom));
         }
         else if(message.find("!help") != std::string::npos)
         {
             LOG_INFO("You have next commands:");
-            std::cout << "!list -- to see who is online \n"
-                      << "!server -- to write direct message to server\n"
-                      << "!direct -- to write direct message to user\n"
+            std::cout << "!list     -- to see who is online \n"
                       << "!roomlist -- to get list of available rooms\n"
-                      << "!room   -- change current room\n"
-                      << "!create -- to create a chat\n";
+                      << "!room     -- change current room\n"
+                      << "!create   -- to create a chat\n"
+                      << "!exit     -- to close programm\n";
         }
         else if(message.find("!history") != std::string::npos)
         {
-            message = Helper::makeHistoryMessage();
-            write(message);
+            write(Helper::makeHistoryMessage());
         }
         else if(message.find("!roomlist") != std::string::npos)
         {
-            message = GET_ROOM_LIST_MESSAGE;
-            write(message);
+            write(Helper::makeRoomListMessage());
         }
         else if(message.find("!room") != std::string::npos)
         {
             LOG_INFO("Enter id of room to enter");
             std::cin >> currentRoom;
-            message = SET_ROOM_MESSAGE+std::to_string(currentRoom);
             inChat=true;
-            write(message);
+            write(Helper::makeRoomMessage(currentRoom));
         }
         else if(message.find("!read") != std::string::npos)
         {
@@ -134,11 +102,9 @@ void ClientEssence::processMessage(std::string message)
         }
         else if(message.find("!exit") != std::string::npos)
         {
-            message = Helper::makeExitMessage();
-            write(message);
+            write(Helper::makeExitMessage());
             closeConnection();
         }
-
 }
 
 void ClientEssence::onRead(ByteBuffer data)
@@ -147,7 +113,11 @@ void ClientEssence::onRead(ByteBuffer data)
     if(message.find(REQUEST_TO_CREATE_CHAT_MESSAGE)!=std::string::npos)
     {
         message.erase(message.begin(),message.begin()+2);
-        currentRoom=atoi(message.c_str());
+        std::stringstream ss(message);
+        ss >> requestRoom;
+        ss.get();
+        message.erase(message.begin(),message.begin()+1);
+        LOG_INFO(message);
         LOG_INFO("Type !yes to create chat!\n");
         hasRequest = true;
     }
@@ -172,7 +142,6 @@ void ClientEssence::onRead(ByteBuffer data)
         ss.get();
         if(idRoom == currentRoom)
         {
-            LOG_INFO("message from chat "<<idRoom);
             LOG_INFO(message);
         }
         else

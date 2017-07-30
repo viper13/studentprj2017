@@ -44,7 +44,6 @@ void SessionEssence::onRead(ByteBuffer data)
     else if(message.find(LOGIN_INTO_ACCOUNT) != std::string::npos)
     {
         message.erase(message.begin(),message.begin()+2);
-        LOG_INFO("Pass on server"<<message);
         if(c.loginIntoUser(login,message))
         {
             message="Welcome back " + login;
@@ -111,13 +110,6 @@ void SessionEssence::onRead(ByteBuffer data)
     else if(message.find(GET_CHAT_HISTORY) != std::string::npos)
     {
         c.sendMessagesHistory(currentRoom,login);
-    }
-    else if(message.find(ENTER_CHAT_MESSAGE) != std::string::npos)
-    {
-        message.erase(message.begin(),message.begin()+2);
-        currentRoom = atoi(message.c_str());
-        c.enterChat(currentRoom,login);
-        availableRooms.push_back(currentRoom);
     }
     else if(message.find(GET_ROOM_LIST_MESSAGE) != std::string::npos)
     {

@@ -22,7 +22,6 @@ void Server::start()
 void Server::subscribe(std::function<void (SessionEssencePtr)> callBack)
 {
     onConnectionFun.push_back(callBack);
-    LOG_INFO(onConnectionFun.size());
 }
 
 void Server::accept()
@@ -47,11 +46,8 @@ void Server::handleAccept(SessionEssencePtr session, system::error_code error)
             for(std::function<void(SessionEssencePtr)> callBackFun:onConnectionFun)
             {
                 callBackFun(session);
-                LOG_INFO("CALLBACK WoRKDER");
             }
         }
-
-
         accept();
     }
 }

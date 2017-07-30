@@ -18,6 +18,7 @@ private:
     std::vector<std::string>unReadMessages_;
     std::string login;
     int currentRoom;
+    int requestRoom;
     bool hasRequest;
     bool inChat;
     bool isLogin;

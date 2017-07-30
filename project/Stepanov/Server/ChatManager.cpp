@@ -10,10 +10,8 @@ ChatManager& ChatManager::getInstance()
 
 void ChatManager::onConnected(SessionEssencePtr session)
 {
-    LOG_INFO("onConnected from CHATMANAGER");
     sessions_.push_back(session);
-    LOG_INFO("Sessions size = "<<sessions_.size());
-
+    LOG_INFO("New connection! Now online : "<<sessions_.size());
 }
 
 bool ChatManager::authFunction(std::string login)
@@ -91,7 +89,6 @@ void ChatManager::sendChatMessage(int idRoom, std::string message, std::string l
 
 void ChatManager::requestMessage(std::string loginClient, std::string loginTarget, std::string message, int room)
 {
-    LOG_INFO("message on manager"<<message<<loginClient<<loginTarget);
     for(SessionEssencePtr sep: sessions_)
     {
         if(sep->getLogin()==loginTarget)
@@ -103,7 +100,6 @@ void ChatManager::requestMessage(std::string loginClient, std::string loginTarge
             message_+=" wish to create chat with you! \n";
             sep->write(message_);
             sep->setHasRequest(true);
-            LOG_INFO("Writing to destination "<<message_);
         }
     }
 }

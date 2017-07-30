@@ -22,6 +22,13 @@ public:
     static std::string makeYesMessage(int currentRoom);
     static std::string makeHistoryMessage();
     static std::string makeExitMessage();
+    static std::string makeRoomListMessage();
+    static std::string makeRoomMessage(int currentRoom);
+    static std::string makeAddMessage();
+    static std::string makeSetRoomNameMessage();
+    static std::string makeChatMessage(std::string message);
+    static std::string makeCreateNewUserMessage(std::string message);
+    static std::string makeLoginMessage(std::string message);
 
 };
 
