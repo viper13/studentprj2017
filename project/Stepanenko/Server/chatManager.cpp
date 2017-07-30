@@ -5,9 +5,8 @@
 
 ChatManager::ChatManager(Server &server)
 {
-
-    //TODO:: get all users add chats from DB
     DataBaseManager::getRegisteredChats(chats_);
+
     server.subscribe(std::bind(
                          &ChatManager::onConnected
                          , this

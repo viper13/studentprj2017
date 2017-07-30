@@ -98,72 +98,32 @@ void ChatClient::processInputMessage()
     {
         case Protocol::Type::USER_LIST:
         {
-            userNames_ = Protocol::userListServerMessageParse(message);
-            printUsersToConsole();
+            userListDispatcher(message);
             break;
         }
         case Protocol::Type::MESSAGE:
         {
-            std::string userMessage = Protocol::chatMessageClientMessageParse(message);
-            std::cout << userMessage << std::endl;
+            messageDispatcher(message);
             break;
         }
         case Protocol::Type::LOG_IN:
         {
-            std::string status = Protocol::typeRemover(message);
-            if (status[0] == Protocol::Status::OK)
-            {
-                loggedIn_ = true;
-                std::cout << "You logged in successfuly!" << std::endl;
-            }
-            else
-            {
-                std::cout << "Your login is failed!" << std::endl;
-                askNameAndRegister();
-            }
+            logInDispatcher(message);
             break;
         }
         case Protocol::Type::START_CHAT:
         {
-            std::string status = Protocol::typeRemover(message);
-            if (status[0] == Protocol::Status::OK)
-            {
-                inChat_ = true;
-                std::cout << "Your chat with remote user just has begun!" << std::endl;
-            }
-            else
-            {
-                std::cout << "You can't start chat with this user!" << std::endl;
-            }
+            startChatDispatcher(message);
             break;
         }
         case Protocol::Type::USER_DISCONNECT: //This is disconnecting for my username
         {
-            std::string status = Protocol::typeRemover(message);
-            if (status[0] == Protocol::Status::OK)
-            {
-                loggedIn_ = false;
-                inChat_ = false;
-                std::cout << "You logged out successfuly!" << std::endl;
-            }
-            else
-            {
-                std::cout << "Your logout is failed! Try again later." << std::endl;
-            }
+            userDisconnectDispatcher(message);
             break;
         }
         case Protocol::Type::STOP_CHAT:
         {
-            std::string status = Protocol::typeRemover(message);
-            if (status[0] == Protocol::Status::OK)
-            {
-                inChat_ = false;
-                std::cout << "You left successfuly!" << std::endl;
-            }
-            else
-            {
-                std::cout << "You can't leave the chat. Try again later." << std::endl;
-            }
+            stopChatDispatcher(message);
             break;
         }
         default:
@@ -171,6 +131,76 @@ void ChatClient::processInputMessage()
             LOG_ERR("Type of the message is unknown: " << messageType);
         }
 
+    }
+}
+
+void ChatClient::userListDispatcher(const std::string &message)
+{
+    userNames_ = Protocol::userListServerMessageParse(message);
+    printUsersToConsole();
+}
+
+void ChatClient::messageDispatcher(const std::string &message)
+{
+    std::string userMessage = Protocol::chatMessageClientMessageParse(message);
+    std::cout << userMessage << std::endl;
+}
+
+void ChatClient::logInDispatcher(const std::string &message)
+{
+    std::string status = Protocol::typeRemover(message);
+    if (status[0] == Protocol::Status::OK)
+    {
+        loggedIn_ = true;
+        std::cout << "You logged in successfuly!" << std::endl;
+    }
+    else
+    {
+        std::cout << "Your login is failed!" << std::endl;
+        askNameAndRegister();
+    }
+}
+
+void ChatClient::startChatDispatcher(const std::string &message)
+{
+    std::string status = Protocol::typeRemover(message);
+    if (status[0] == Protocol::Status::OK)
+    {
+        inChat_ = true;
+        std::cout << "Your chat with remote user just has begun!" << std::endl;
+    }
+    else
+    {
+        std::cout << "You can't start chat with this user!" << std::endl;
+    }
+}
+
+void ChatClient::userDisconnectDispatcher(const std::string &message)
+{
+    std::string status = Protocol::typeRemover(message);
+    if (status[0] == Protocol::Status::OK)
+    {
+        loggedIn_ = false;
+        inChat_ = false;
+        std::cout << "You logged out successfuly!" << std::endl;
+    }
+    else
+    {
+        std::cout << "Your logout is failed! Try again later." << std::endl;
+    }
+}
+
+void ChatClient::stopChatDispatcher(const std::string &message)
+{
+    std::string status = Protocol::typeRemover(message);
+    if (status[0] == Protocol::Status::OK)
+    {
+        inChat_ = false;
+        std::cout << "You left successfuly!" << std::endl;
+    }
+    else
+    {
+        std::cout << "You can't leave the chat. Try again later." << std::endl;
     }
 }
 

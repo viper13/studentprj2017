@@ -22,6 +22,13 @@ private:
     StringSetPtr userNames_;
     bool loggedIn_;
     bool inChat_;
+
+    void userListDispatcher(const std::string &message);
+    void messageDispatcher(const std::string &message);
+    void logInDispatcher(const std::string &message);
+    void startChatDispatcher(const std::string &message);
+    void userDisconnectDispatcher(const std::string &message);
+    void stopChatDispatcher(const std::string &message);
 };
 
 typedef std::shared_ptr<ChatClient> ChatClientPtr;
