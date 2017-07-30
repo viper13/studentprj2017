@@ -68,12 +68,6 @@ void ChatClient::connectToUser(std::string user)
     write(message);
 }
 
-void ChatClient::stopChat()
-{
-     std::string message = Protocol::stopChatClientMessageCreate();
-     write(message);
-}
-
 void ChatClient::disconnect()
 {
     std::string message = Protocol::disconnectClientMessageCreate();
@@ -119,11 +113,6 @@ void ChatClient::processInputMessage()
         case Protocol::Type::USER_DISCONNECT: //This is disconnecting for my username
         {
             userDisconnectDispatcher(message);
-            break;
-        }
-        case Protocol::Type::STOP_CHAT:
-        {
-            stopChatDispatcher(message);
             break;
         }
         default:
@@ -190,17 +179,4 @@ void ChatClient::userDisconnectDispatcher(const std::string &message)
     }
 }
 
-void ChatClient::stopChatDispatcher(const std::string &message)
-{
-    std::string status = Protocol::typeRemover(message);
-    if (status[0] == Protocol::Status::OK)
-    {
-        inChat_ = false;
-        std::cout << "You left successfuly!" << std::endl;
-    }
-    else
-    {
-        std::cout << "You can't leave the chat. Try again later." << std::endl;
-    }
-}
 

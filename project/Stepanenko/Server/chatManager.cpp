@@ -50,10 +50,6 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
             session->write(messageToSend);
             break;
         }
-        case Protocol::Type::STOP_CHAT: //Do we realy need this??
-        {
-            break;
-        }
         case Protocol::Type::MESSAGE:
         {
             messageDispatcher(session, message);

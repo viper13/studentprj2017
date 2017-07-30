@@ -23,52 +23,17 @@ void MessageManager::comunicateWithUser()
     std::cout << "Use COMMAND to control client" << std::endl;
     std::cout << "Use COMMAND HELP for help" << std::endl;
     std::string message;
-    std::string firstWord, secondWord, thirdWord;
-    while(true)
+    std::string firstWord;
+    bool shouldStop = false;
+    while(!shouldStop)
     {
         getline(std::cin, message);
         std::stringstream tempStream(message);
         tempStream >> firstWord;
         if (firstWord == "COMMAND")
         {
-            tempStream >> secondWord;
-            if (secondWord == "HELP")
-            {
-                showHelp();
-            }
-            else if (secondWord == "SERVER_USERS")
-            {
-                chatClient_->getUsersListFromServer();
-            }
-            else if (secondWord == "START_CHAT")
-            {
-                tempStream >> thirdWord;
-                chatClient_->connectToUser(thirdWord);
-            }
-            else if (secondWord == "STOP_CHAT")
-            {
-                if (chatClient_->isInChat())
-                {
-                    chatClient_->stopChat();
-                }
-                else
-                {
-                    std::cout << "You are not currently in chat, you can't leave it!" << std::endl;
-                }
-            }
-            else if (secondWord == "DISCONNECT")
-            {
-                chatClient_->disconnect();
-            }
-            else if (secondWord == "EXIT")
-            {
-                std::cout << "Good by!" << std::endl;
-                break;
-            }
-            else
-            {
-                std::cout << "I don't know this command! Use COMMAND HELP for command list" << std::endl;
-            }
+            shouldStop = parseCommand(tempStream);
+
         }
         else if (chatClient_->isInChat())
         {
@@ -99,9 +64,42 @@ void MessageManager::showHelp()
     std::cout << "COMMAND HELP - this output" << std::endl;
     std::cout << "COMMAND SERVER_USERS - send request to server for updating local users" << std::endl;
     std::cout << "COMMAND START_CHAT USER - begin chat with choosen user" << std::endl;
-    std::cout << "COMMAND STOP_CHAT - stop current chat with" << std::endl;
     std::cout << "COMMAND DISCONNECT - disconnect from server by choosen username" << std::endl;
     std::cout << "COMMAND EXIT - exit from program" << std::endl;
     std::cout << "----------------------------------------------------------------------" << std::endl << std::endl;
+}
+
+bool MessageManager::parseCommand(std::stringstream &tempStream)
+{
+    bool shouldStop = false;
+    std::string secondWord, thirdWord;
+    tempStream >> secondWord;
+    if (secondWord == "HELP")
+    {
+        showHelp();
+    }
+    else if (secondWord == "SERVER_USERS")
+    {
+        chatClient_->getUsersListFromServer();
+    }
+    else if (secondWord == "START_CHAT")
+    {
+        tempStream >> thirdWord;
+        chatClient_->connectToUser(thirdWord);
+    }
+    else if (secondWord == "DISCONNECT")
+    {
+        chatClient_->disconnect();
+    }
+    else if (secondWord == "EXIT")
+    {
+        std::cout << "Good by!" << std::endl;
+        shouldStop = true;
+    }
+    else
+    {
+        std::cout << "I don't know this command! Use COMMAND HELP for command list" << std::endl;
+    }
+    return shouldStop;
 }
 
