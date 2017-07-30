@@ -20,7 +20,7 @@ private:
     void sendMessage(ByteBufferPtr message);
     void getUserList();
     void connectToUser(ByteBufferPtr userName);
-    void disconnectFromUser(ByteBufferPtr userName);
+    void disconnectFromUser();
     void acceptToChat(ByteBufferPtr userName);
     void seeRequests();
     void printHelp();
@@ -31,6 +31,7 @@ private:
     bool isLogged_;
     bool inChat_;
     std::vector<std::string> usersWantToChat;
+    std::string inChatWith_;
 
 };
 

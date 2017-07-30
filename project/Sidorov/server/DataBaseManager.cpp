@@ -101,7 +101,6 @@ std::string DataBaseManager::getUserName(int id)
     {
         pqxx::work txn(*connection);
         pqxx::result result = txn.exec("SELECT name FROM users WHERE id="+std::to_string(id)+";");
-        txn.commit();
         for(const pqxx::tuple& row : result)
         {
             return row["name"].as<std::string>();
@@ -258,6 +257,33 @@ std::pair<bool, bool> DataBaseManager::isChatsWith(const std::string &userName, 
     return std::make_pair(is_sucess,is_contain);
 }
 
+std::pair<bool, std::vector<std::string>> DataBaseManager::getRequests(const std::string &username)// here
+{
+    ConnectionPtr connection = getConnection();
+    bool is_sucess = true;
+    int userId = getUserId(username);
+    std::vector<std::string> names;
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("SELECT from_user_id FROM requests_to_chat WHERE user_id = " + txn.quote(userId));
+        txn.commit();
+        if ( 0 != result.size() )
+        {
+            for (const pqxx::tuple& row : result)
+            {
+                names.push_back(getUserName(row["from_user_id"].as<int>()));
+            }
+        }
+    }
+    catch(const std::exception& e)
+    {
+        LOG_ERR("Failure to log in user: " << e.what());
+        is_sucess = false;
+    }
+    return std::make_pair(is_sucess,names);
+}
+
 bool DataBaseManager::addMessage(const std::string &fromUser, const std::string &whomUser, const std::string &message)
 {
     ConnectionPtr connection = getConnection();
@@ -384,6 +410,7 @@ std::pair<bool, bool> DataBaseManager::eraseRequest(const std::string &fromUser,
     bool resultErase = false;
     int fromUserId = getUserId(fromUser);
     int whomUserId = getUserId(whomUser);
+    LOG_INFO("FROM ID =" << fromUserId << "WHOM ID =" << whomUserId);
     try
     {
         if (findResult.first)
@@ -393,7 +420,8 @@ std::pair<bool, bool> DataBaseManager::eraseRequest(const std::string &fromUser,
                 pqxx::work txn(*connection);
                 pqxx::result result = txn.exec("DELETE FROM requests_to_chat WHERE from_user_id =" +txn.quote(fromUserId)+
                                                "AND user_id =" +txn.quote(whomUserId));
-               resultErase = true;
+                txn.commit();
+                resultErase = true;
             }
         }
     }
@@ -404,4 +432,37 @@ std::pair<bool, bool> DataBaseManager::eraseRequest(const std::string &fromUser,
     }
 
     return std::make_pair(is_sucess, resultErase);
+}
+
+std::pair<bool, std::vector<std::string> > DataBaseManager::getChatHistory(const std::string &firstName, const std::string secondName)
+{
+    ConnectionPtr connection = getConnection();
+    bool is_success = true;
+    std::vector<std::string> messages;
+    std::pair<bool,int> chatId = DataBaseManager::getChatId(firstName,secondName);
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("SELECT user_id,message FROM messages;");
+        txn.commit();
+        if( 0 != result.size())
+        {
+            for (const pqxx::tuple& row : result)
+            {
+                int userId = row["user_id"].as<int>();
+                std::string username = getUserName(userId);
+                std::string message = row["message"].as<std::string>();
+                std::string result = username + ": " + message + '\n';
+                messages.push_back(result);
+            }
+        }
+        txn.commit();
+    }
+    catch (const std::exception& e)
+    {
+        LOG_ERR("Failure get user list: " << e.what());
+        is_success = false;
+    }
+
+    return std::make_pair(is_success,messages);
 }

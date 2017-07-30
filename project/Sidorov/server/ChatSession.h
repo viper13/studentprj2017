@@ -17,10 +17,12 @@ public:
     std::string getUserName() const;
     bool getisLogged() const;
     bool getisInChat() const;
+    std::string getisChatWith() const;
     //setters
     void setUserName(std::string newName);
     void setisLogged(bool newState);
     void setisInChat(bool newState);
+    void setisChatWith(std::string newState);
 
     int findChatPos(std::shared_ptr<ChatRoom> chatRoom);
     void execute(CodeCommand code, ByteBufferPtr data);
@@ -30,9 +32,9 @@ public:
 private:
     std::function<void (std::shared_ptr<ChatSession>, ByteBufferPtr)> handleRead_;
     std::string userName_;
-
-    bool isLogged;
-    bool isinChat;
+    std::string isChatWith_;
+    bool isLogged_;
+    bool isInChat_;
 
     std::shared_ptr<ChatSession> getPointer();
 

@@ -25,11 +25,11 @@ enum class CodeCommand: uint8_t
     USER_LIST = 4,
     SEND_MESSAGE = 5,
     CONNECT_TO_USER = 6,
-    DISCONNECT_FROM_USER = 7,
-    ACCEPT_TO_CHAT = 8,
-    SEE_REQUESTS = 9,
-    PRINT_HELP = 10,
-    START_CHAT = 11
+    ACCEPT_TO_CHAT = 7,
+    SEE_REQUESTS = 8,
+    START_CHAT = 9,
+    DISCONNECT_FROM_USER = 10,
+    PRINT_HELP = 11
 };
 
 std::ostream& operator <<(std::ostream& stream, const ByteBuffer& buffer);

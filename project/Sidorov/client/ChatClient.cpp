@@ -6,6 +6,7 @@ ChatClient::ChatClient(std::string address, std::string port)
     username_ = "";
     isLogged_ = 0;
     inChat_ = 0;
+    inChatWith_="";
 }
 
 
@@ -15,32 +16,39 @@ void ChatClient::onRead(ByteBufferPtr data)
     Helper::eraseCodeCommand(data);
     switch (code)
     {
-        case CodeCommand::CONNECT_TO_USER:
+    case CodeCommand::CONNECT_TO_USER:
+    {
+        std::string userName = Helper::bufferToString(data);
+        if(isContainRequest(userName))
         {
-            std::string userName = Helper::bufferToString(data);
-            if(isContainRequest(userName))
-            {
-                break;
-            }
-            LOG_INFO(userName << " wants to chat with you" << "\n"
-                              << "Use command ACCEPT_TO_CHAT [name]" << "\n" );
-            usersWantToChat.push_back(userName);
             break;
         }
-        case CodeCommand::SEND_MESSAGE:
-        {
-            LOG_INFO(*data);
-            break;
-        }
-        case CodeCommand::ACCEPT_TO_CHAT:
-        {
-            std::string message = Helper::bufferToString(data);
-            std::string name = message.substr(message.find("to ")+3);
-            usersWantToChat.erase(std::find(usersWantToChat.begin()
-                                              , usersWantToChat.end()
-                                              , name));
-            break;
-        }
+        LOG_INFO(userName << " wants to chat with you" << "\n"
+                 << "Use command ACCEPT_TO_CHAT [name]" << "\n" );
+        usersWantToChat.push_back(userName);
+        break;
+    }
+    case CodeCommand::SEE_REQUESTS:
+    {
+        std::string names = Helper::bufferToString(data);
+        LOG_INFO("Your requests: " << names);
+        break;
+    }
+    case CodeCommand::SEND_MESSAGE:
+    {
+        LOG_INFO(*data);
+        break;
+    }
+    case CodeCommand::ACCEPT_TO_CHAT:
+    {
+        std::string message = Helper::bufferToString(data);
+        break;
+    }
+    case CodeCommand::START_CHAT:
+    {
+        std::string partner = Helper::bufferToString(data);
+        LOG_INFO("Your current chatman - " << partner);
+    }
     default:
         LOG_INFO(*data);
         break;
@@ -58,7 +66,7 @@ void ChatClient::execute(CodeCommand code, ByteBufferPtr bufferPtr)
     }
     case CodeCommand::DISCONNECT_FROM_USER:
     {
-        disconnectFromUser(bufferPtr);
+        disconnectFromUser();
         break;
     }
     case CodeCommand::REGISTRATION:
@@ -157,7 +165,7 @@ void ChatClient::sendMessage(ByteBufferPtr message)
 {
     if ( 0 == message->size())
     {
-        LOG_ERR("Input your Message");
+        LOG_INFO("Input your Message");
         return;
     }
     Helper::addCodeCommand(CodeCommand::SEND_MESSAGE, message);
@@ -182,8 +190,9 @@ void ChatClient::connectToUser(ByteBufferPtr userName)
     write(userName);
 }
 
-void ChatClient::disconnectFromUser(ByteBufferPtr bufferPtr)
+void ChatClient::disconnectFromUser()
 {
+    ByteBufferPtr bufferPtr = std::make_shared<ByteBuffer>();
     Helper::addCodeCommand(CodeCommand::DISCONNECT_FROM_USER,bufferPtr);
     write(bufferPtr);
 }
@@ -196,22 +205,9 @@ void ChatClient::acceptToChat(ByteBufferPtr userName)
 
 void ChatClient::seeRequests()
 {
-    std::string requests;
-    if (!usersWantToChat.empty())
-    {
-        requests = "Your requests to chat: ";
-        for (std::string name : usersWantToChat)
-        {
-            requests += name;
-            requests += ", ";
-        }
-        LOG_INFO(requests);
-    }
-    else
-    {
-        requests = "You don't have requests to chat";
-        LOG_INFO(requests);
-    }
+    ByteBufferPtr bufferPtr = std::make_shared<ByteBuffer>();
+    Helper::addCodeCommand(CodeCommand::SEE_REQUESTS,bufferPtr);
+    write(bufferPtr);
 }
 
 void ChatClient::printHelp()
@@ -223,11 +219,11 @@ void ChatClient::printHelp()
               << "4 USER_LIST" << std::endl
               << "5 SEND_MESSAGE [message]" << std::endl
               << "6 CONNECT_TO_USER [user's name]" << std::endl
-              << "7 DISCONNECT_FROM_USER" << std::endl
-              << "8 ACCEPT_TO_CHAT [username]" << std::endl
-              << "9 SEE_REQUESTS" << std::endl
-              << "10 PRINT HELP" << std::endl
-              << "10 START CHAT" << std::endl;
+              << "7 ACCEPT_TO_CHAT [username]" << std::endl
+              << "8 SEE_REQUESTS" << std::endl
+              << "9 START_CHAT" << std::endl
+              << "10 DISCONNECT_FROM_USER" << std::endl
+              << "11 PRINT HELP" << std::endl;
 }
 
 void ChatClient::startChat(ByteBufferPtr userName)
@@ -240,5 +236,6 @@ void ChatClient::startChat(ByteBufferPtr userName)
     Helper::addCodeCommand(CodeCommand::START_CHAT, userName);
     write(userName);
 }
+
 
 

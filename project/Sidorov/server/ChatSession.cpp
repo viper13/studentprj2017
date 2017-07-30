@@ -11,8 +11,9 @@ ChatSession::ChatSession()
     : Session()
 {
     userName_ = "";
-    isLogged = false;
-    isinChat = false;
+    isLogged_ = false;
+    isInChat_ = false;
+    isChatWith_="";
 }
 
 std::shared_ptr<ChatSession> ChatSession::getNewSession()
@@ -39,12 +40,17 @@ std::string ChatSession::getUserName() const
 
 bool ChatSession::getisLogged() const
 {
-    return isLogged;
+    return isLogged_;
 }
 
 bool ChatSession::getisInChat() const
 {
-    return isinChat;
+    return isInChat_;
+}
+
+std::string ChatSession::getisChatWith() const
+{
+    return isChatWith_;
 }
 
 void ChatSession::setUserName(std::string newName)
@@ -54,12 +60,17 @@ void ChatSession::setUserName(std::string newName)
 
 void ChatSession::setisLogged(bool newState)
 {
-    isLogged = newState;
+    isLogged_ = newState;
 }
 
 void ChatSession::setisInChat(bool newState)
 {
-    isinChat = newState;
+    isInChat_ = newState;
+}
+
+void ChatSession::setisChatWith(std::string newState)
+{
+    isChatWith_ = newState;
 }
 
 int ChatSession::findChatPos(std::shared_ptr<ChatRoom> chatRoom)
