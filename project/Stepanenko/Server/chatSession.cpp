@@ -3,7 +3,7 @@
 ChatSession::ChatSession()
     :Session()
 {
-    chat_ = NULL;
+
 }
 
 std::shared_ptr<ChatSession> ChatSession::getNewSession()

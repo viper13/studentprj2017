@@ -93,25 +93,25 @@ bool ChatClient::isLoggedIn()
 void ChatClient::processInputMessage()
 {
     std::string message = getMessage();
-    uint8_t messageType = static_cast<uint8_t>(message[0]);
+    char messageType = message[0];
     switch (messageType)
     {
-        case Protocol::USER_LIST:
+        case Protocol::Type::USER_LIST:
         {
             userNames_ = Protocol::userListServerMessageParse(message);
             printUsersToConsole();
             break;
         }
-        case Protocol::MESSAGE:
+        case Protocol::Type::MESSAGE:
         {
             std::string userMessage = Protocol::chatMessageClientMessageParse(message);
             std::cout << userMessage << std::endl;
             break;
         }
-        case Protocol::LOG_IN:
+        case Protocol::Type::LOG_IN:
         {
             std::string status = Protocol::typeRemover(message);
-            if (status == "OK")
+            if (status[0] == Protocol::Status::OK)
             {
                 loggedIn_ = true;
                 std::cout << "You logged in successfuly!" << std::endl;
@@ -123,10 +123,10 @@ void ChatClient::processInputMessage()
             }
             break;
         }
-        case Protocol::START_CHAT:
+        case Protocol::Type::START_CHAT:
         {
             std::string status = Protocol::typeRemover(message);
-            if (status == "OK")
+            if (status[0] == Protocol::Status::OK)
             {
                 inChat_ = true;
                 std::cout << "Your chat with remote user just has begun!" << std::endl;
@@ -137,10 +137,10 @@ void ChatClient::processInputMessage()
             }
             break;
         }
-        case Protocol::USER_DISCONNECT: //This is disconnecting for my username
+        case Protocol::Type::USER_DISCONNECT: //This is disconnecting for my username
         {
             std::string status = Protocol::typeRemover(message);
-            if (status == "OK")
+            if (status[0] == Protocol::Status::OK)
             {
                 loggedIn_ = false;
                 inChat_ = false;
@@ -152,10 +152,10 @@ void ChatClient::processInputMessage()
             }
             break;
         }
-        case Protocol::STOP_CHAT:
+        case Protocol::Type::STOP_CHAT:
         {
             std::string status = Protocol::typeRemover(message);
-            if (status == "OK")
+            if (status[0] == Protocol::Status::OK)
             {
                 inChat_ = false;
                 std::cout << "You left successfuly!" << std::endl;

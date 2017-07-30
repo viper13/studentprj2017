@@ -12,7 +12,7 @@ std::string Protocol::typeRemover(std::string message)
 
 std::string Protocol::userListClientMessageCreate()
 {
-    char firstSymbol = USER_LIST;
+    char firstSymbol = Type::USER_LIST;
     std::string result = "";
     result.push_back(firstSymbol);
     return result;
@@ -25,7 +25,7 @@ std::string Protocol::userListClientMessageCreate()
 
 std::string Protocol::userListServerMessageCreate(std::set<std::string> names)
 {
-    char firstSymbol = USER_LIST;
+    char firstSymbol = Type::USER_LIST;
     std::string result = "";
     result.push_back(firstSymbol);
 
@@ -53,7 +53,7 @@ StringSetPtr Protocol::userListServerMessageParse(std::string message)
 
 std::string Protocol::chatMessageClientMessageCreate(std::string user, std::string message)
 {
-    char firstSymbol = MESSAGE;
+    char firstSymbol = Type::MESSAGE;
     std::stringstream tempStream;
     tempStream << firstSymbol << user << ": " << message;
     return tempStream.str();
@@ -66,50 +66,58 @@ std::string Protocol::chatMessageClientMessageParse(std::string message)
 
 std::string Protocol::logInClientMessageCreate(std::string name)
 {
-    return typeAdder(LOG_IN, name);
+    return typeAdder(Type::LOG_IN, name);
 }
 
-std::string Protocol::logInServerMessageCreate(std::string status)
+std::string Protocol::logInServerMessageCreate(Status status)
 {
-    return typeAdder(LOG_IN, status);
+    return typeAdder(Type::LOG_IN, status);
 }
 
 std::string Protocol::startChatClientMessageCreate(std::string name)
 {
-    return typeAdder(START_CHAT, name);
+    return typeAdder(Type::START_CHAT, name);
 }
 
-std::string Protocol::startChatServerMessageCreate(std::string status)
+std::string Protocol::startChatServerMessageCreate(Status status)
 {
-    return typeAdder(START_CHAT, status);
+    return typeAdder(Type::START_CHAT, status);
 }
 
 std::string Protocol::disconnectClientMessageCreate()
 {
-    return typeAdder(USER_DISCONNECT, "");
+    return typeAdder(Type::USER_DISCONNECT, "");
 }
 
-std::string Protocol::disconnectServerMessageCreate(std::string status)
+std::string Protocol::disconnectServerMessageCreate(Status status)
 {
-    return typeAdder(USER_DISCONNECT, status);
+    return typeAdder(Type::USER_DISCONNECT, status);
 }
 
 std::string Protocol::stopChatClientMessageCreate()
 {
-    return typeAdder(STOP_CHAT, "");
+    return typeAdder(Type::STOP_CHAT, "");
 }
 
-std::string Protocol::stopChatServerMessageCreate(std::string status)
+std::string Protocol::stopChatServerMessageCreate(Status status)
 {
-    return typeAdder(STOP_CHAT, status);
+    return typeAdder(Type::STOP_CHAT, status);
 }
 
-std::string Protocol::typeAdder(uint8_t type, std::string message)
+std::string Protocol::typeAdder(Type type, std::string message)
 {
-    char firstSymbol = type;
+
     std::string result = "";
-    result.push_back(firstSymbol);
+    result.push_back(type);
     result += message;
+    return result;
+}
+
+std::string Protocol::typeAdder(Protocol::Type type, Status status)
+{
+    std::string result = "";
+    result.push_back(type);
+    result.push_back(status);
     return result;
 }
 

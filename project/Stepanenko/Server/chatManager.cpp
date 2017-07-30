@@ -29,38 +29,38 @@ void ChatManager::onConnected(ChatSessionPtr session)
 
 void ChatManager::onRead(ChatSessionPtr session, std::string message)
 {
-    uint8_t messageType = static_cast<uint8_t>(message[0]);
+    char messageType = message[0];
     std::string messageToSend;
     switch (messageType)
     {
-        case Protocol::USER_LIST:
+        case Protocol::Type::USER_LIST:
         {
             messageToSend = userListDispatcher(session, message);
             session->write(messageToSend);
             break;
         }
-        case Protocol::LOG_IN:
+        case Protocol::Type::LOG_IN:
         {
             messageToSend = logInDispatcher(session, message);
             session->write(messageToSend);
             break;
         }
-        case Protocol::START_CHAT:
+        case Protocol::Type::START_CHAT:
         {
             messageToSend = startChatDispatcher(session, message);
             session->write(messageToSend);
             break;
         }
-        case Protocol::STOP_CHAT: //Do we realy need this??
+        case Protocol::Type::STOP_CHAT: //Do we realy need this??
         {
             break;
         }
-        case Protocol::MESSAGE:
+        case Protocol::Type::MESSAGE:
         {
             messageDispatcher(session, message);
             break;
         }
-        case Protocol::USER_DISCONNECT:
+        case Protocol::Type::USER_DISCONNECT:
         {
             messageToSend = disconnectDispatcher(session, message);
             session->write(messageToSend);
@@ -100,16 +100,16 @@ std::string ChatManager::logInDispatcher(ChatSessionPtr session, std::string mes
         if (result >= 0)
         {
             session->setUserId(result);
-            messageToSend = Protocol::logInServerMessageCreate("OK");
+            messageToSend = Protocol::logInServerMessageCreate(Protocol::Status::OK);
         }
         else
         {
-            messageToSend = Protocol::logInServerMessageCreate("BAD");
+            messageToSend = Protocol::logInServerMessageCreate(Protocol::Status::BAD);
         }
     }
     else
     {
-        messageToSend = Protocol::logInServerMessageCreate("BAD");
+        messageToSend = Protocol::logInServerMessageCreate(Protocol::Status::BAD);
     }
     return messageToSend;
 }
@@ -124,7 +124,7 @@ std::string ChatManager::startChatDispatcher(ChatSessionPtr session, std::string
     bool result = DataBaseManager::getUsersSet(users);
     if (!result || users.find(remoteUser) == users.end())
     {
-        messageToSend = Protocol::startChatServerMessageCreate("BAD");
+        messageToSend = Protocol::startChatServerMessageCreate(Protocol::Status::BAD);
         return messageToSend;
     }
 
@@ -141,7 +141,7 @@ std::string ChatManager::startChatDispatcher(ChatSessionPtr session, std::string
         chats_[chatName] = room;
         session->setChatRoom(chats_[chatName]);
     }
-    messageToSend = Protocol::startChatServerMessageCreate("OK");
+    messageToSend = Protocol::startChatServerMessageCreate(Protocol::Status::OK);
 
     //TODO: Send chat-room history.
     std::vector<std::string> messages;
@@ -179,7 +179,7 @@ std::string ChatManager::disconnectDispatcher(ChatSessionPtr session, std::strin
     std::string currentUser = session->getUserName();
     std::map<std::string, ChatSessionPtr>::iterator it = sessions_.find(currentUser);
     sessions_.erase(it);
-    std::string messageToSend = Protocol::disconnectServerMessageCreate("OK");
+    std::string messageToSend = Protocol::disconnectServerMessageCreate(Protocol::Status::OK);
     return messageToSend;
 }
 

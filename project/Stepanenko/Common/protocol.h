@@ -10,6 +10,10 @@ class Protocol
 {
 public:
     Protocol();
+
+    enum Type: char{USER_LIST = 1, START_CHAT, MESSAGE, USER_DISCONNECT, LOG_IN, STOP_CHAT};
+    enum Status: char{UNKNOWN = 0, OK, BAD};
+
     static std::string typeRemover(std::string message);
 
     static std::string userListClientMessageCreate();
@@ -20,26 +24,20 @@ public:
     static std::string chatMessageClientMessageParse(std::string message);
 
     static std::string logInClientMessageCreate(std::string name);
-    static std::string logInServerMessageCreate(std::string status);
+    static std::string logInServerMessageCreate(Status status);
 
     static std::string startChatClientMessageCreate(std::string name);
-    static std::string startChatServerMessageCreate(std::string status);
+    static std::string startChatServerMessageCreate(Status status);
 
     static std::string disconnectClientMessageCreate();
-    static std::string disconnectServerMessageCreate(std::string status);
+    static std::string disconnectServerMessageCreate(Status status);
 
     static std::string stopChatClientMessageCreate();
-    static std::string stopChatServerMessageCreate(std::string status);
-
-    static const uint8_t USER_LIST = 1;
-    static const uint8_t START_CHAT = 2;
-    static const uint8_t MESSAGE = 3;
-    static const uint8_t USER_DISCONNECT = 4;
-    static const uint8_t LOG_IN = 5;
-    static const uint8_t STOP_CHAT = 6;
+    static std::string stopChatServerMessageCreate(Status status);
 
 private:
-    static std::string typeAdder(uint8_t type, std::string message);
+    static std::string typeAdder(Type type, std::string message);
+    static std::string typeAdder(Type type, Status status);
 };
 
 #endif // PROTOCOL_H
