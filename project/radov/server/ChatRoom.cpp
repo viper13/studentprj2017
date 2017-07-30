@@ -20,16 +20,16 @@ void ChatRoom::addPerson(std::string idClient)
 {
     for(SessionManagerPtr sep:chatManager.sessions_)
     {
-        if(sep -> getIdClient() == idClient)
+        if(sep -> idClient() == idClient)
         {
             users_.push_back(sep);
             sep -> inChat = true;
             LOG_INFO("User "
-                     << sep -> getIdClient()
+                     << sep -> idClient()
                      << " connected to chat with id "
                      << idRoom_);
 
-        DataBaseManager::usersByChats(idRoom_, sep -> getIdClient());
+        DataBaseManager::usersByChats(idRoom_, sep -> idClient());
         }
     }
 }
@@ -42,7 +42,7 @@ void ChatRoom::sendMessage(std::string message, std::string idWriter)
     message_ += message;
     for(SessionManagerPtr sep : users_)
     {
-        if(sep -> getIdClient() != idWriter)
+        if(sep -> idClient() != idWriter)
         {
             sep -> write(message_);
         }

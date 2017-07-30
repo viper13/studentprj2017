@@ -24,12 +24,12 @@ void ChatManager::getUserList(std::string idClient)
     std::string userList = "USERS ONLINE:\n";
     for (SessionManagerPtr sep: sessions_)
     {
-        userList += sep -> getIdClient();
+        userList += sep -> idClient();
         userList += " +\n";
     }
     for(SessionManagerPtr sep: sessions_)
     {
-        if(sep -> getIdClient() == idClient)
+        if(sep -> idClient() == idClient)
         {
             sep -> write(userList);
         }
@@ -49,7 +49,7 @@ void ChatManager::sendMessage(std::string idClient, std::string idTarget, std::s
 {
     for(SessionManagerPtr sep: sessions_)
     {
-        if(sep -> getIdClient() == idTarget)
+        if(sep -> idClient() == idTarget)
         {
             message_ = "User ";
             message_ += idClient;
@@ -69,7 +69,7 @@ void ChatManager::requestMessage(std::string idClient, std::string idTarget, int
 {
     for(SessionManagerPtr sep: sessions_)
     {
-        if(sep -> getIdClient() == idTarget)
+        if(sep -> idClient() == idTarget)
         {
             message_ = REQUEST_TO_CREATE_CHAT_MESSAGE;
             message_ += std::to_string(room);

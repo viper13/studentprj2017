@@ -16,6 +16,14 @@ public:
     void write(std::string message);
     virtual void onRead(ByteBuffer data) = 0;
 
+    std::string idClient() const;
+    void setIdClient(const std::string &idClient);
+
+    std::string idTarget() const;
+    void setIdTarget(const std::string &idTarget);
+
+
+
 private:
     void read();
     void handleRead(asio::error_code error, size_t bufferSize);
@@ -24,10 +32,12 @@ private:
     asio::ip::tcp::socket socket_;
     uint16_t messageSize_;
 
-protected:
-    ByteBuffer buffer_;
     std::string idClient_;
     std::string idTarget_;
+
+protected:
+    ByteBuffer buffer_;
+
 };
 
 typedef std::shared_ptr<Session> SessionPtr;

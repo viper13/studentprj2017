@@ -9,7 +9,6 @@ class SessionWrapper : public Session
 public:
     SessionWrapper();
     static std::shared_ptr<SessionWrapper> getNewSession();
-    std::string getIdClient();
     bool hasRequest;
     bool inChat;
 

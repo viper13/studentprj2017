@@ -99,3 +99,23 @@ void Session::handleWrite(BuffersVector /*data*/, asio::error_code error, size_t
         LOG_ERR("Failure write data." << error.message());
     }
 }
+
+void Session::setIdClient(const std::string &idClient)
+{
+    idClient_ = idClient;
+}
+
+std::string Session::idTarget() const
+{
+    return idTarget_;
+}
+
+void Session::setIdTarget(const std::string &idTarget)
+{
+    idTarget_ = idTarget;
+}
+
+std::string Session::idClient() const
+{
+    return idClient_;
+}

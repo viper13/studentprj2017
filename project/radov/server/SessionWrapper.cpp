@@ -16,10 +16,6 @@ std::shared_ptr<SessionWrapper> SessionWrapper::getNewSession()
     return session;
 }
 
-std::string SessionWrapper::getIdClient()
-{
-    return idClient_;
-}
 
 void SessionWrapper::onRead(ByteBuffer /*data*/)
 {
@@ -41,7 +37,7 @@ void SessionWrapper::onRead(ByteBuffer /*data*/)
         }
         case Commands::GET_USER_LIST_MESSAGE:
         {
-            c.getUserList(idClient_);
+            c.getUserList(idClient());
             break;
         }
         case Commands::CREATE_CHAT_MESSAGE:
@@ -51,14 +47,14 @@ void SessionWrapper::onRead(ByteBuffer /*data*/)
         }
         case Commands::CHAT_MESSAGE:
         {
-            c.sendChatMessage(currentRoom, data, idClient_);
+            c.sendChatMessage(currentRoom, data, idClient());
             break;
         }
         case Commands::ADD_USER_TO_CHAT_MESSAGE:
         {
-            idTarget_ = data;
-            c.requestMessage(idClient_
-                             , idTarget_
+            setIdTarget(data);
+            c.requestMessage(idClient()
+                             , idTarget()
                              , currentRoom);
             LOG_INFO("Session trying to send request");
             break;
@@ -67,7 +63,7 @@ void SessionWrapper::onRead(ByteBuffer /*data*/)
             if(hasRequest)
             {
                 currentRoom = std::stoi(data);
-                c.addUserToChatRoom(idClient_, currentRoom);
+                c.addUserToChatRoom(idClient(), currentRoom);
             }
             break;
 
@@ -81,17 +77,17 @@ void SessionWrapper::onRead(ByteBuffer /*data*/)
 
 void SessionWrapper::userLogin(std::string data)
 {
-    idClient_ = data;
+    setIdClient(data);
 
-    bool result = DataBaseManager::userExists(idClient_);
+    bool result = DataBaseManager::userExists(idClient());
 
     if (result)
     {
-        write("Welcome, " + idClient_);
+        write("Welcome, " + idClient());
     }
     else
     {
-        bool addUserSuccess = DataBaseManager::addUser(idClient_, idClient_);
+        bool addUserSuccess = DataBaseManager::addUser(idClient(), idClient());
 
         if(!addUserSuccess)
         {
@@ -106,19 +102,19 @@ void SessionWrapper::userLogin(std::string data)
 
 void SessionWrapper::createChatMessage(std::string data)
 {
-    idTarget_ = data;
+    setIdTarget(data);
     LOG_INFO("User "
-             << idClient_
+             << idClient()
              << " want to create chat with "
-             << idTarget_ << " !");
+             << idTarget() << " !");
 
     hasRequest = true;
     currentRoom = c.nextIdRoom;
-    c.requestMessage(idClient_
-                     , idTarget_
+    c.requestMessage(idClient()
+                     , idTarget()
                      , currentRoom);
-    c.createChat(idClient_, idTarget_);
+    c.createChat(idClient(), idTarget());
 
-    c.addUserToChatRoom(idClient_, currentRoom);
+    c.addUserToChatRoom(idClient(), currentRoom);
 }
 
