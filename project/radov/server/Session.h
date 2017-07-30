@@ -24,6 +24,9 @@ public:
 
 
 
+    std::string clientPassword() const;
+    void setClientPassword(const std::string &clientPassword);
+
 private:
     void read();
     void handleRead(asio::error_code error, size_t bufferSize);
@@ -34,6 +37,7 @@ private:
 
     std::string idClient_;
     std::string idTarget_;
+    std::string clientPassword_;
 
 protected:
     ByteBuffer buffer_;

@@ -77,17 +77,32 @@ void SessionWrapper::onRead(ByteBuffer /*data*/)
 
 void SessionWrapper::userLogin(std::string data)
 {
-    setIdClient(data);
+    int dividerPos = data.find_first_of(" ");
 
-    bool result = DataBaseManager::userExists(idClient());
+    setIdClient( data.substr(0, dividerPos) );
+    setClientPassword( data.substr(dividerPos+1) );
 
-    if (result)
+    bool exists = DataBaseManager::userExists(idClient());
+
+    if (exists)
     {
-        write("Welcome, " + idClient());
+        if(DataBaseManager::authUser(idClient(), clientPassword()))
+        {
+            Helper::prependCommand(Commands::AUTHORIZATION_SUCCESS, message_);
+            message_ += "Welcome, " + idClient();
+            write(message_);
+        }
+        else
+        {
+            Helper::prependCommand(Commands::AUTHORIZATION_FAILED, message_);
+            message_ += "AUTHIRIZATION FAILED!\n";
+            write(message_);
+            setIdClient("");
+        }
     }
     else
     {
-        bool addUserSuccess = DataBaseManager::addUser(idClient(), idClient());
+        bool addUserSuccess = DataBaseManager::addUser(idClient(), clientPassword());
 
         if(!addUserSuccess)
         {
@@ -95,7 +110,11 @@ void SessionWrapper::userLogin(std::string data)
         }
         else
         {
-            write("ADDed new USER");
+            Helper::prependCommand(Commands::AUTHORIZATION_SUCCESS, message_);
+            message_ += "Added new user: ";
+            message_ += idClient();
+            write(message_);
+
         }
     }
 }

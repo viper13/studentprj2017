@@ -71,7 +71,9 @@ void ChatManager::requestMessage(std::string idClient, std::string idTarget, int
     {
         if(sep -> idClient() == idTarget)
         {
-            message_ = REQUEST_TO_CREATE_CHAT_MESSAGE;
+            message_.erase();
+            Helper::prependCommand(Commands::REQUEST_TO_CREATE_CHAT_MESSAGE, message_);
+            //message_ = REQUEST_TO_CREATE_CHAT_MESSAGE;
             message_ += std::to_string(room);
             message_ += "\nUser ";
             message_ += idClient;

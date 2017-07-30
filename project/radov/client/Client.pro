@@ -26,5 +26,5 @@ HEADERS += \
     ../common/Helper.h \
     ../common/Worker.h \
     Client.h \
-    ClienManager.h \
-    ../common/define.h
+    ../common/define.h \
+    ClientManager.h

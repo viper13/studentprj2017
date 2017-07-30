@@ -1,5 +1,5 @@
-#ifndef CLIENTESSENCE_H
-#define CLIENTESSENCE_H
+#ifndef CLIENTMANAGER_H
+#define CLIENTMANAGER_H
 
 #include "Client.h"
 
@@ -12,6 +12,12 @@ public:
     void processMessage() override;
     void onRead(ByteBuffer data) override;
 
+    bool getIsAuthorized() const;
+    void setIsAuthorized(bool value);
+
+    bool getInChat() const;
+    void setInChat(bool value);
+
 private:
     std::string message;
     void userLogin();
@@ -21,9 +27,10 @@ private:
     bool hasRequest;
     bool inChat;
     bool stop;
+    bool isAuthorized;
 
     int currentRoom;
 
 };
 
-#endif // CLIENTESSENCE_H
+#endif // CLIENTMANAGER_H

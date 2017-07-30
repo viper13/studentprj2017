@@ -8,7 +8,7 @@ CREATE TABLE users
     --autoincrement key
     id SERIAL PRIMARY KEY,
     name varchar(100) NOT NULL,
-    nick varchar(100) DEFAULT NULL
+    pass varchar(100) NOT NULL
 );
 
 CREATE TABLE chats

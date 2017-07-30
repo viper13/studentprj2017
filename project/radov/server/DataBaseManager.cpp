@@ -50,7 +50,28 @@ bool DataBaseManager::userExists(std::string name)
     return exists;
 }
 
-bool DataBaseManager::addUser(std::string name, std::string nick)
+bool DataBaseManager::authUser(std::string name, std::string pass)
+{
+    ConnectionPtr connection = getConnection();
+    bool exists = false;
+
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("SELECT name FROM users WHERE"
+                                       " (name = '" + name + "') "
+                                       "and (pass = '" + pass + "')");
+        txn.commit();
+        exists = !result.empty();
+    }
+    catch(const std::exception& e)
+    {
+        LOG_INFO("Failure check user: " << e.what());
+    }
+    return exists;
+}
+
+bool DataBaseManager::addUser(std::string name, std::string pass)
 {
     ConnectionPtr connection = getConnection();
     bool is_success = true;
@@ -58,8 +79,8 @@ bool DataBaseManager::addUser(std::string name, std::string nick)
     try
     {
         pqxx::work txn(*connection);
-        pqxx::result result = txn.exec("INSERT INTO users (id, name, nick)"
-                                       "VALUES (DEFAULT, '" + name + "', '" + nick +"')"
+        txn.exec("INSERT INTO users (id, name, pass)"
+                                       "VALUES (DEFAULT, '" + name + "', '" + pass +"')"
                                        "RETURNING id");
         txn.commit();
 

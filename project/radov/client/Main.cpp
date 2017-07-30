@@ -2,7 +2,7 @@
 #include "Worker.h"
 #include "define.h"
 #include "Client.h"
-#include "ClienManager.h"
+#include "ClientManager.h"
 
 
 int main()

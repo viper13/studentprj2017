@@ -100,6 +100,16 @@ void Session::handleWrite(BuffersVector /*data*/, asio::error_code error, size_t
     }
 }
 
+std::string Session::clientPassword() const
+{
+    return clientPassword_;
+}
+
+void Session::setClientPassword(const std::string &clientPassword)
+{
+    clientPassword_ = clientPassword;
+}
+
 void Session::setIdClient(const std::string &idClient)
 {
     idClient_ = idClient;

@@ -11,7 +11,8 @@ class DataBaseManager
 public:
     static bool getUsersList(std::vector<User> &users);
     static bool userExists(std::string name);
-    static bool addUser(std::string name, std::string nick);
+    static bool authUser(std::string name, std::string pass);
+    static bool addUser(std::string name, std::string pass);
     static bool addChat(int& chatId, std::string name);
     static bool usersByChats(int chatId, std::string userName);
     static bool addMessage(int chatId, std::string userName, std::string message);

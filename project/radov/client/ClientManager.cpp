@@ -1,4 +1,4 @@
-#include "ClienManager.h"
+#include "ClientManager.h"
 #include "Client.h"
 
 
@@ -8,24 +8,92 @@ ClientManager::ClientManager(std::string address, std::string port)
     , hasRequest(false)
     , inChat(false)
     , stop(false)
+    , isAuthorized(false)
 {
 
 }
 
+void ClientManager::processMessage()
+{
+    while(!stop)
+    {
+
+        if(inChat)
+        {
+            chatCommandSet(message);
+        }
+        else
+        {
+            nonChatCommandSet(message);
+        }
+
+        defaultCommandSet(message);
+
+
+        while(!getIsAuthorized())
+        {
+            userLogin();
+        }
+        std::getline(std::cin, message);
+    }
+}
+
+void ClientManager::onRead(ByteBuffer /*data*/)
+{
+    std::string message(buffer_.begin(), buffer_.end());
+    Commands command = static_cast<Commands>(message[0]);
+
+    switch(command)
+    {
+        case Commands::REQUEST_TO_CREATE_CHAT_MESSAGE:
+        {
+            currentRoom = std::stoi(message.substr(1));
+            LOG_INFO("Type -yes to accept chatroom " << currentRoom);
+            hasRequest = true;
+            break;
+        }
+        case Commands::AUTHORIZATION_FAILED:
+        {
+            setIsAuthorized(false);
+            break;
+        }
+        case Commands::AUTHORIZATION_SUCCESS:
+        {
+            setIsAuthorized(true);
+        }
+        default:
+            //
+            break;
+    }
+}
+
+
 void ClientManager::userLogin()
 {
 
-        while(message.empty())
-        {
-            std::cout << "ENTER LOGIN:" << std::endl;
-            std::cin >> message;
-        }
-        idClient = message;
+        std::string login, pass;
 
-        Helper::prependCommand(Commands::LOGIN_MESSAGE, message);
+        while(login.empty() || pass.empty())
+        {
+
+            std::cout << "ENTER LOGIN:" << std::endl;
+            std::cin >> login;
+            std::cout << "ENTER YOUR PASSWORD:" << std::endl;
+            std::cin >> pass;
+
+            Helper::prependCommand(Commands::LOGIN_MESSAGE, message);
+            message += login;
+            message += " ";
+            message += pass;
+        }
+
+        idClient = login;
+
         write(message);
 
-        std::cout << "Type -help  a list of commands" << std::endl;
+        setIsAuthorized(true);
+
+        std::cout << "Type -help for list of commands" << std::endl;
 }
 
 void ClientManager::chatCommandSet(std::string message)
@@ -40,7 +108,7 @@ void ClientManager::chatCommandSet(std::string message)
     else if(message.find("-leave") != std::string::npos)
     {
                 write("You leaved chatroom");
-                inChat = false;
+                setInChat(false);
     }
     else if(message.find("-help") != std::string::npos)
     {
@@ -63,7 +131,7 @@ void ClientManager::nonChatCommandSet(std::string message)
         std::cin >> message;
         Helper::prependCommand(Commands::CREATE_CHAT_MESSAGE, message);
         write(message);
-        inChat = true;
+        setInChat(true);
     }
     else if(message.find("-help") != std::string::npos)
     {
@@ -83,7 +151,7 @@ void ClientManager::defaultCommandSet(std::string message)
     }
     else if((message.find("-yes") != std::string::npos)&&(hasRequest))
     {
-        inChat = true;
+        setInChat(true);
         message.erase();
         Helper::prependCommand(Commands::YES_MESSAGE, message);
         message += std::to_string(currentRoom);
@@ -91,39 +159,26 @@ void ClientManager::defaultCommandSet(std::string message)
     }
 }
 
-
-void ClientManager::processMessage()
+bool ClientManager::getInChat() const
 {
-    while(!stop)
-    {
-        while(idClient.empty())
-        {
-            userLogin();
-        }
-
-        if(inChat)
-        {
-            chatCommandSet(message);
-        }
-        else
-        {
-            nonChatCommandSet(message);
-        }
-
-        defaultCommandSet(message);
-
-        std::getline(std::cin, message);
-    }
+    return inChat;
 }
 
-void ClientManager::onRead(ByteBuffer /*data*/)
+void ClientManager::setInChat(bool value)
 {
-    std::string message(buffer_.begin(), buffer_.end());
-    if(message.find(REQUEST_TO_CREATE_CHAT_MESSAGE) != std::string::npos)
-    {
-        currentRoom = std::stoi(message.substr(2));
-        LOG_INFO("Type -yes to accept chatroom " << currentRoom);
-        hasRequest = true;
-    }
+    inChat = value;
 }
+
+bool ClientManager::getIsAuthorized() const
+{
+    return isAuthorized;
+}
+
+void ClientManager::setIsAuthorized(bool value)
+{
+    isAuthorized = value;
+}
+
+
+
 
