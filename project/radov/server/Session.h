@@ -25,9 +25,9 @@ private:
     uint16_t messageSize_;
 
 protected:
-    std::vector<char> buffer_;
-    char idClient;
-    char idTarget;
+    ByteBuffer buffer_;
+    std::string idClient_;
+    std::string idTarget_;
 };
 
 typedef std::shared_ptr<Session> SessionPtr;

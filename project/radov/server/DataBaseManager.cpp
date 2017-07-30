@@ -73,7 +73,7 @@ bool DataBaseManager::addUser(std::string name, std::string nick)
     return is_success;
 }
 
-bool DataBaseManager::addChat(int &chatId, std::string name)
+bool DataBaseManager::addChat(int& chatId, std::string name)
 {
     ConnectionPtr connection = getConnection();
     bool is_success = true;
@@ -87,7 +87,7 @@ bool DataBaseManager::addChat(int &chatId, std::string name)
         txn.commit();
 
         chatId = result[0][0].as<int>();
-        LOG_INFO("ChatId is: " << std::to_string(chatId));
+
 
     }
     catch(const std::exception& e)

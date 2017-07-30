@@ -12,11 +12,11 @@ public:
     std::vector<SessionManagerPtr> users_;
     std::string message_;
 
-    void addPerson(char idClient);
+    void addPerson(std::string idClient);
     void getChatUserList();
     void removePerson(SessionManagerPtr session);
 
-    void sendMessage(std::string message, char idWriter);
+    void sendMessage(std::string message, std::string idWriter);
 
 private:
     int idRoom_;

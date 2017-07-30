@@ -14,6 +14,7 @@ public:
     static EndBuffer makeEndBuffer(BuffersVector buffers);
     static uint16_t getSize(uint16_t left, uint16_t right);
     static bool parseFromPostgres(const pqxx::tuple& data, User& user);
+    static void prependCommand(Commands command, std::string& message);
 };
 
 #endif // HELPER_H

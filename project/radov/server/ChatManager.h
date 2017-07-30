@@ -10,13 +10,13 @@ class ChatManager
 public:
     static ChatManager &getInstance();
     void onConnected(SessionManagerPtr session);
-    void getUserList(char idClient);
+    void getUserList(std::string idClient);
     void start(Server& server);
-    void sendMessage(char idClient, char idTarget, std::string message);
-    void sendChatMessage(int idRoom, std::string message, char idClient);
-    void requestMessage(char idClient, char idTarget, std::string message, int room);
-    void createChat(char idClient, char idTarget);
-    void addUserToChatRoom(char idClient, int idRoom);
+    void sendMessage(std::string idClient, std::string idTarget, std::string message);
+    void sendChatMessage(int idRoom, std::string message, std::string idClient);
+    void requestMessage(std::string idClient, std::string idTarget, int room);
+    void createChat(std::string idClient, std::string idTarget);
+    void addUserToChatRoom(std::string idClient, int idRoom);
 
     std::string message_;
     std::vector<SessionManagerPtr> sessions_;
@@ -25,7 +25,7 @@ public:
 
 private:
     std::vector<ChatRoomPtr> chatRooms_;
-    static ChatManager * p_instance;
+    static ChatManager* p_instance;
 
     ChatManager();
     ChatManager(const ChatManager&);

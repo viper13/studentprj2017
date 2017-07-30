@@ -21,7 +21,6 @@ void Server::start()
 void Server::subscribe(std::function<void (SessionManagerPtr)> callBack)
 {
     onConnectionFun.push_back(callBack);
-    LOG_INFO(onConnectionFun.size());
 }
 
 void Server::accept()

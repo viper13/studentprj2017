@@ -16,69 +16,82 @@ std::shared_ptr<SessionWrapper> SessionWrapper::getNewSession()
     return session;
 }
 
-char SessionWrapper::getIdClient()
+std::string SessionWrapper::getIdClient()
 {
-    return idClient;
+    return idClient_;
 }
 
 void SessionWrapper::onRead(ByteBuffer /*data*/)
 {
     std::string message(buffer_.begin(), buffer_.end());
+    Commands command = static_cast<Commands>(message[0]);
 
-    if(message.find(LOGIN_MESSAGE) != std::string::npos)
+    std::string data;
+    if(message.size() > 1)
     {
-        SessionWrapper::userLogin(message);
+        data = message.substr(1);
     }
-    else if(message.find(GET_USER_LIST_MESSAGE) != std::string::npos)
-    {
-        c.getUserList(idClient);
-    }
-    else if(message.find(CREATE_CHAT_MESSAGE) != std::string::npos)
-    {
-        SessionWrapper::createChatMessage(message);
-    }
-    else if(message.find(DIRECT_MESSAGE) != std::string::npos)
-    {
-        idTarget = message[2];
-        std::string send(message.begin() + 3, message.end());
 
-        LOG_INFO("message on server side"<<send);
-
-        c.sendMessage(idClient, idTarget, send);
-    }
-    else if((message.find(YES_MESSAGE) != std::string::npos)&&(hasRequest))
+    switch(command)
     {
-        currentRoom = message[2] - '0';
-        c.addUserToChatRoom(idClient, currentRoom);
-    }
-    else if(message.find(CHAT_MESSAGE) != std::string::npos)
-    {
-        c.sendChatMessage(currentRoom, message, idClient);
+        case Commands::LOGIN_MESSAGE:
+        {
+            SessionWrapper::userLogin(data);
+            break;
+        }
+        case Commands::GET_USER_LIST_MESSAGE:
+        {
+            c.getUserList(idClient_);
+            break;
+        }
+        case Commands::CREATE_CHAT_MESSAGE:
+        {
+            SessionWrapper::createChatMessage(data);
+            break;
+        }
+        case Commands::CHAT_MESSAGE:
+        {
+            c.sendChatMessage(currentRoom, data, idClient_);
+            break;
+        }
+        case Commands::ADD_USER_TO_CHAT_MESSAGE:
+        {
+            idTarget_ = data;
+            c.requestMessage(idClient_
+                             , idTarget_
+                             , currentRoom);
+            LOG_INFO("Session trying to send request");
+            break;
+        }
+        case Commands::YES_MESSAGE:
+            if(hasRequest)
+            {
+                currentRoom = std::stoi(data);
+                c.addUserToChatRoom(idClient_, currentRoom);
+            }
+            break;
 
-    }
-    else if(message.find(ADD_USER_TO_CHAT_MESSAGE) != std::string::npos)
-    {
-        idTarget = message[2];
-        c.requestMessage(idClient, idTarget, REQUEST_TO_CREATE_CHAT_MESSAGE, currentRoom);
-
-        LOG_INFO("Session trying to send request");
+        default:
+            //operation;
+            write("Invalid command\n");
+            break;
     }
 
 }
 
-void SessionWrapper::userLogin(std::string message)
+void SessionWrapper::userLogin(std::string data)
 {
-    idClient = message[2];
+    idClient_ = data;
 
-    bool result = DataBaseManager::userExists(std::string(1, idClient));
+    bool result = DataBaseManager::userExists(idClient_);
 
     if (result)
     {
-        write("Welcome, " + std::string(1, idClient));
+        write("Welcome, " + idClient_);
     }
     else
     {
-        bool addUserSuccess = DataBaseManager::addUser(std::string(1, idClient), std::string(1, idClient));
+        bool addUserSuccess = DataBaseManager::addUser(idClient_, idClient_);
 
         if(!addUserSuccess)
         {
@@ -91,21 +104,21 @@ void SessionWrapper::userLogin(std::string message)
     }
 }
 
-void SessionWrapper::createChatMessage(std::string message)
+void SessionWrapper::createChatMessage(std::string data)
 {
-    idTarget=message[2];
+    idTarget_ = data;
     LOG_INFO("User "
-             << idClient
+             << idClient_
              << " want to create chat with "
-             << idTarget << " !");
+             << idTarget_ << " !");
 
     hasRequest = true;
-    currentRoom=c.nextIdRoom;
-    c.requestMessage(idClient
-                     , idTarget
-                     , REQUEST_TO_CREATE_CHAT_MESSAGE
+    currentRoom = c.nextIdRoom;
+    c.requestMessage(idClient_
+                     , idTarget_
                      , currentRoom);
-    c.createChat(idClient, idTarget);
-    c.addUserToChatRoom(idClient,currentRoom);
+    c.createChat(idClient_, idTarget_);
+
+    c.addUserToChatRoom(idClient_, currentRoom);
 }
 

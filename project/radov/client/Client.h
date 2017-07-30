@@ -35,7 +35,7 @@ private:
 
 protected:
     std::vector<char> buffer_;
-    char idClient;
+    std::string idClient;
     bool isChatting;
 
 };

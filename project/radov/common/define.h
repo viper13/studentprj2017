@@ -12,36 +12,23 @@
 
 #define BUFFER_MAX_SIZE 65535
 
-#define LOGIN_MESSAGE "$l"
-#define GET_USER_LIST_MESSAGE "$g"
-#define CREATE_CHAT_MESSAGE "$c"
-#define SEND_MESSAGE "$s"
-#define ERROR_MESSAGE "$e"
-#define WAIT_FOR_NEXT_MESSAGE "$w"
-#define DIRECT_MESSAGE "$d"
-#define REQUEST_TO_CREATE_CHAT_MESSAGE "$r"
-#define YES_MESSAGE "$y"
-#define NO_MESSAGE "$n"
-#define CHAT_MESSAGE "$C"
-#define ADD_USER_TO_CHAT_MESSAGE "$A"
 
-/*enum class CommandCode: uint8_t
+#define REQUEST_TO_CREATE_CHAT_MESSAGE "$r"
+
+enum class Commands: uint8_t
 {
-    NONE,
     LOGIN_MESSAGE,
     GET_USER_LIST_MESSAGE,
     CREATE_CHAT_MESSAGE,
     SEND_MESSAGE,
     ERROR_MESSAGE,
     WAIT_FOR_NEXT_MESSAGE,
-    DIRECT_MESSAGE,
-    REQUEST_TO_CREATE_CHAT_MESSAGE,
+    REQUEST_TO_CREATE_CHAT_MESSAGE_,
     YES_MESSAGE,
     NO_MESSAGE,
     CHAT_MESSAGE,
     ADD_USER_TO_CHAT_MESSAGE
-
-};*/
+};
 
 
 #define LOG_INFO(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [INF]"<<message<<std::endl;

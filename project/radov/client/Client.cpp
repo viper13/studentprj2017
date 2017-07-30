@@ -9,7 +9,6 @@ Client::Client(std::string address, std::string port)
     , address_(address)
     , port_(port)
     , resolver_(io_service_)
-    , idClient(0)
     , messageSize_ (0)
 {
 
@@ -74,7 +73,7 @@ void Client::handleRead(asio::error_code error, size_t /*buf_size*/)
     {
         if (0 != messageSize_)
         {
-            LOG_INFO("Message: \n" << buffer_);
+            std::cout << buffer_ << std::endl;
             messageSize_ = 0;
             onRead(buffer_);
             read();
@@ -82,7 +81,6 @@ void Client::handleRead(asio::error_code error, size_t /*buf_size*/)
         else
         {
             messageSize_ = Helper::getSize(buffer_[0],buffer_[1]);
-            LOG_INFO("Message size is: " << messageSize_);
             read();
         }
 

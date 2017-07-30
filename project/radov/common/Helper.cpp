@@ -36,3 +36,8 @@ bool Helper::parseFromPostgres(const pqxx::tuple &data, User &user)
 
     return true;
 }
+
+void Helper::prependCommand(Commands command, std::string &message)
+{
+    message.insert(message.begin(), (char)command);
+}

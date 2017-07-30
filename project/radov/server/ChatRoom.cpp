@@ -5,7 +5,7 @@
 ChatRoom::ChatRoom(int idRoom)
 {
     idRoom_ = idRoom;
-    LOG_INFO("Createdd chatroom id" << idRoom_);
+    LOG_INFO("Createdd chatroom id " << idRoom_);
 }
 
 ChatManager& chatManager = ChatManager::getInstance();
@@ -16,7 +16,7 @@ std::shared_ptr<ChatRoom> ChatRoom::getNewChatRoom(int idRoom)
     return chatRoom;
 }
 
-void ChatRoom::addPerson(char idClient)
+void ChatRoom::addPerson(std::string idClient)
 {
     for(SessionManagerPtr sep:chatManager.sessions_)
     {
@@ -29,26 +29,30 @@ void ChatRoom::addPerson(char idClient)
                      << " connected to chat with id "
                      << idRoom_);
 
-        DataBaseManager::usersByChats(idRoom_, std::string(1, sep -> getIdClient()));
+        DataBaseManager::usersByChats(idRoom_, sep -> getIdClient());
         }
     }
 }
 
-void ChatRoom::sendMessage(std::string message, char idWriter)
+void ChatRoom::sendMessage(std::string message, std::string idWriter)
 {
-    message_ = "Message from client ";
+    message_ = "CHATROOOM[" + std::to_string(idRoom_) + "] message from ";
     message_ += idWriter;
     message_ += " : ";
     message_ += message;
-    for(SessionManagerPtr sep:users_)
+    for(SessionManagerPtr sep : users_)
     {
-        sep -> write(message_);
+        if(sep -> getIdClient() != idWriter)
+        {
+            sep -> write(message_);
+        }
     }
 
     if(!message_.empty())
     {
         DataBaseManager::addMessage(idRoom_
-                                    , std::string(1, idWriter)
+                                    , idWriter
                                     , message);
+        LOG_INFO("MESSAGE:[" << message << "] has written to DB");
     }
 }
