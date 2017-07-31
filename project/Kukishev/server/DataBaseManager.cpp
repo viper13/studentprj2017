@@ -289,12 +289,9 @@ uint32_t DataBaseManager::getUsersChatId(uint32_t firstUser, uint32_t secondUser
     try
     {
         pqxx::work txn(*connection);
-        pqxx::result r = txn.exec("SELECT chat_id FROM users_by_chats WHERE id = "
-                                  "IN (SELECT chat_id FROM users_by_chats WHERE user_id IN ("
-                                  + std::to_string(firstUser)
-                                  + ", "
-                                  + std::to_string(secondUser)
-                                  + ")); ");
+        pqxx::result r = txn.exec("SELECT a.chat_id FROM (SELECT chat_id FROM users_by_chats WHERE user_id ="+ std::to_string(firstUser) +" ) a"
+                                  ", (SELECT chat_id FROM users_by_chats WHERE user_id = " + std::to_string(secondUser) + ") b"
+                                  " WHERE a.chat_id = b.chat_id ;");
         id = r[0][0].as<uint32_t>();
         txn.commit();
     }
@@ -302,6 +299,7 @@ uint32_t DataBaseManager::getUsersChatId(uint32_t firstUser, uint32_t secondUser
     {
         LOG_ERR("Failure make query : "<<e.what());
     }
+    return id;
 }
 
 std::vector<uint32_t> DataBaseManager::getUserChatsList(uint32_t firstUser)
@@ -339,6 +337,46 @@ std::vector<uint32_t> DataBaseManager::getUserChatsList(uint32_t firstUser)
         LOG_ERR("Failure make query : "<<e.what());
     }
     return usersId;
+}
+
+std::vector<std::pair<uint32_t, std::string> > DataBaseManager::getChatMessages(uint32_t chatId)
+{
+    ConnectionPtr connection = getConnection();
+    std::vector<std::pair<uint32_t, std::string>> usersId;
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result r = txn.exec("SELECT user_id, message FROM messages WHERE chat_id = " + std::to_string(chatId) + ";");
+
+        for (int rownum=0; rownum < r.size(); ++rownum)
+        {
+            const pqxx::result::tuple row = r[rownum];
+
+            usersId.emplace_back(std::pair<uint32_t, std::string>(row["user_id"].as<uint32_t>()
+                                                                  , row["message"].as<std::string>() ));
+        }
+
+        txn.commit();
+    }
+    catch(const std::exception& e)
+    {
+        LOG_ERR("Failure make query : "<<e.what());
+    }
+    return usersId;
+}
+
+bool DataBaseManager::singUp(const std::string &name)
+{
+    return DataBaseManager::sendQuery("INSERT INTO users(id, name, nick) VALUES (DEFAULT, '"+name+"', '0') RETURNING id;");
+}
+
+void DataBaseManager::addRequestToFriendIntoTable(uint32_t userFrom, uint32_t userTo)
+{
+    DataBaseManager::sendQuery("INSERT INTO users_friend_request(user_id_from, user_id_to) VALUES ("
+                               + std::to_string(userFrom)
+                               + ","
+                               + std::to_string(userTo)
+                               + ");");
 }
 
 ConnectionPtr DataBaseManager::getConnection()

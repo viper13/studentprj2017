@@ -8,7 +8,7 @@ struct User
     bool isLogin_ = false;
     std::string name_ = "";
     //
-    bool isConnected_ = false;
+    bool isInChat_ = false;
 };
 
 #endif // USER_H

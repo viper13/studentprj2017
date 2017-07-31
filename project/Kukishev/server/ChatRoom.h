@@ -19,8 +19,12 @@ public:
     size_t getCountUsers() const;
     std::map<std::string, ChatSessionPtr> getUsers() const;
 
+    uint32_t getChatId() const;
+    void setChatId(const uint32_t &value);
+
 private:
     std::map<std::string, ChatSessionPtr> users_;
+    uint32_t chatId;
 };
 
 #endif // CHATROOM_H

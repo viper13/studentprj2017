@@ -129,8 +129,9 @@ void ClientChat::execute(CommandCode cmd, ByteBufferPtr&& bufferPtr)
         singUp(bufferPtr);
         break;
     }
-    case CommandCode::ENTER_CHATS:
+    case CommandCode::ENTER_CHAT:
     {
+        enterChat(bufferPtr);
         break;
     }
     case CommandCode::SHOW_CHATS:
@@ -238,6 +239,12 @@ void ClientChat::showChats()
     ByteBufferPtr buff = std::make_shared<ByteBuffer>();
     Helper::insertCommandCode(buff, CommandCode::SHOW_CHATS);
     write(buff);
+}
+
+void ClientChat::enterChat(ByteBufferPtr chatName)
+{
+    Helper::insertCommandCode(chatName, CommandCode::ENTER_CHAT);
+    write(chatName);
 }
 
 void ClientChat::printServerAnswer(ByteBufferPtr buffPtr)

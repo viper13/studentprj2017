@@ -28,7 +28,7 @@ private:
     void singUp(ByteBufferPtr userName);
     void getQueueUsers();
     void showChats();
-
+    void enterChat(ByteBufferPtr chatName);
     std::vector<std::string> usersWantToChat;
     std::string name;
 };

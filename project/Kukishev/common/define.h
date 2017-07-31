@@ -18,7 +18,8 @@ enum class CommandCode: uint8_t
     SHOW_QUEUE_USERS,
     SING_UP,
     SHOW_CHATS,
-    ENTER_CHATS,
+    ENTER_CHAT,
+    OUT_FROM_CHAT,
     ANSWER_ON_REQUEST_TO_CONNECT
 };
 

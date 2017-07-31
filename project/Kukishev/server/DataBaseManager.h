@@ -22,6 +22,9 @@ public:
     static void addMessageToMessages(uint32_t idFrom, uint32_t chatId, const std::string& message);
     static uint32_t getUsersChatId(uint32_t firstUser,  uint32_t secondUser);
     static std::vector<uint32_t> getUserChatsList(uint32_t firstUser);
+    static std::vector<std::pair<uint32_t, std::string>> getChatMessages(uint32_t chatId);
+    static bool singUp(const std::string& name);
+    static void addRequestToFriendIntoTable(uint32_t userFrom, uint32_t userTo);
 private:
     static ConnectionPtr getConnection();
 

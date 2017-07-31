@@ -32,7 +32,7 @@ void ChatRoom::sendMessage(const std::string &text, const std::string& from)
 {
     for(std::pair<std::string, ChatSessionPtr> pair: users_)
     {
-        if(pair.first != from)
+        if(pair.first != from && pair.second->getUser().isInChat_)
             pair.second->sendMessageToClient(text);
     }
 }
@@ -69,4 +69,14 @@ size_t ChatRoom::getCountUsers() const
 std::map<std::string, ChatSessionPtr> ChatRoom::getUsers() const
 {
     return users_;
+}
+
+uint32_t ChatRoom::getChatId() const
+{
+    return chatId;
+}
+
+void ChatRoom::setChatId(const uint32_t &value)
+{
+    chatId = value;
 }
