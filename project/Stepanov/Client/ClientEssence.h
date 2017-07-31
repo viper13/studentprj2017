@@ -11,7 +11,7 @@ public:
 
     void processMessage(std::string message) override;
 
-    void onRead(ByteBuffer data) override;
+    void onRead() override;
 
 private:
 

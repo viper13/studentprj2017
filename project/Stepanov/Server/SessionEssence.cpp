@@ -82,7 +82,7 @@ void SessionEssence::onRead(ByteBuffer data)
         currentRoom = c.createChat();
         availableRooms.push_back(currentRoom);
         hasRequest=true;
-        c.requestMessage(login,targetLogin,REQUEST_TO_CREATE_CHAT_MESSAGE,currentRoom);
+        c.requestMessage(login,targetLogin,currentRoom);
         c.addUserToChatRoom(login,currentRoom);
         message=CREATE_CHAT_MESSAGE;
         message+=std::to_string(currentRoom);
@@ -105,7 +105,7 @@ void SessionEssence::onRead(ByteBuffer data)
     {
         message.erase(message.begin(),message.begin()+2);
         targetLogin=message;
-        c.requestMessage(login,targetLogin,REQUEST_TO_CREATE_CHAT_MESSAGE,currentRoom);
+        c.requestMessage(login,targetLogin,currentRoom);
     }
     else if(message.find(GET_CHAT_HISTORY) != std::string::npos)
     {
@@ -129,7 +129,7 @@ void SessionEssence::onRead(ByteBuffer data)
     {
         message.erase(message.begin(),message.begin()+2);
         currentRoom = atoi(message.c_str());
-        write("You room changed to"+message);
+        write("You room changed to "+message);
     }
     else if(message.find(EXIT_MESSAGE) != std::string::npos)
     {
@@ -142,6 +142,13 @@ void SessionEssence::onRead(ByteBuffer data)
         c.setRoomName(message,currentRoom,login);
     }
 
+}
+
+void SessionEssence::onUnexpectedClose()
+{
+    if(login.empty())
+        login = "Unregistered user";
+    c.removeUser(login);
 }
 
 void SessionEssence::setInChat(bool value)

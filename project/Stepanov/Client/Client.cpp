@@ -80,7 +80,7 @@ void Client::handleRead(system::error_code error, size_t buf_size)
         {
             //LOG_INFO("Message: " << buffer_);
             messageSize_ = 0;
-            onRead(buffer_);
+            onRead();
             read();
         }
         else

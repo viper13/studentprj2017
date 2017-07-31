@@ -69,10 +69,6 @@ void Session::handleRead(system::error_code error, size_t bufferSize)
     {
         if (messageSize_!=0)
         {
-
-
-
-
             messageSize_ = 0;
             onRead(buffer_);
             read();
@@ -80,9 +76,6 @@ void Session::handleRead(system::error_code error, size_t bufferSize)
         else
         {
             messageSize_=Helper::getSize(static_cast<uint16_t>(buffer_[0]),static_cast<uint16_t>(buffer_[1]));
-
-            //LOG_INFO("Data size = " << messageSize_);
-
             read();
         }
     }
@@ -90,6 +83,7 @@ void Session::handleRead(system::error_code error, size_t bufferSize)
     {
         LOG_ERR("Failure: read error code " << error.value()
                  << " description: " << error.message());
+        onUnexpectedClose();
     }
 }
 

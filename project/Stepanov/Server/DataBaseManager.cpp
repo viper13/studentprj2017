@@ -200,7 +200,6 @@ std::vector<std::string> DataBaseManager::getMessagesHistory(int idRoom)
                                        " WHERE chat_id="+std::to_string(idRoom)+" ORDER BY messages.id DESC "
                                                                                 " LIMIT 10;");
         txn.commit();
-        LOG_INFO(result.size()<<"++++++++++++++++++++++++");
         for(const pqxx::tuple& row : result)
         {
             tempStr = "[History] User ";

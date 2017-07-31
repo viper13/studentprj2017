@@ -13,10 +13,6 @@ public:
 
     static std::shared_ptr<SessionEssence> getNewSession();
 
-    char getIdClient();
-
-    std::string message_;
-
     std::string getLogin() const;
 
     std::string getTargetLogin() const;
@@ -27,12 +23,14 @@ public:
 
 private:
     void onRead(ByteBuffer data) override;
+    void onUnexpectedClose() override;
     std::string login;
     std::string targetLogin;
     int currentRoom;
     std::vector<int> availableRooms;
     bool hasRequest;
     bool inChat;
+    std::string message_;
 };
 
 typedef std::shared_ptr<SessionEssence> SessionEssencePtr;

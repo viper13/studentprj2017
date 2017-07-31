@@ -22,6 +22,7 @@ public:
     void write(std::string message);
 
     virtual void onRead(ByteBuffer data) = 0;
+    virtual void onUnexpectedClose() = 0;
 
 private:
     void read();

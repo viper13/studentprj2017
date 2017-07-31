@@ -27,7 +27,7 @@ public:
     void sendMessage(char idClient, char idTarget, std::string message);
 
     void sendChatMessage(int idRoom, std::string message, std::string loginClient);
-    void requestMessage(std::string loginClient, std::string loginTarget, std::string message, int room);
+    void requestMessage(std::string loginClient, std::string loginTarget, int room);
     int createChat();
 
     void addUserToChatRoom(std::string loginClient, int idRoom);

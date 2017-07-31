@@ -87,7 +87,7 @@ void ChatManager::sendChatMessage(int idRoom, std::string message, std::string l
     }
 }
 
-void ChatManager::requestMessage(std::string loginClient, std::string loginTarget, std::string message, int room)
+void ChatManager::requestMessage(std::string loginClient, std::string loginTarget, int room)
 {
     for(SessionEssencePtr sep: sessions_)
     {

@@ -8,6 +8,8 @@ ClientEssence::ClientEssence(std::string address, std::string port)
     , inChat(false)
     , isLogin(false)
     , isRegister(false)
+    , currentRoom(0)
+    , requestRoom(0)
 {
 
 }
@@ -24,7 +26,14 @@ void ClientEssence::processMessage(std::string message)
             }
             else if(message.find("!setname") != std::string::npos)
             {
-                write(Helper::makeSetRoomNameMessage());
+                if(currentRoom == 0)
+                {
+                    LOG_INFO("You are not in room!");
+                }
+                else
+                {
+                    write(Helper::makeSetRoomNameMessage());
+                }
             }
             else
             {
@@ -55,18 +64,20 @@ void ClientEssence::processMessage(std::string message)
         }
         else if(message.find("!create") != std::string::npos)
         {
-            write(Helper::makeCreateChatMessage());
-            inChat = true;
-        }
-        else if(message.find("!direct") != std::string::npos)
-        {
-            //not maked. Is it good idea?
+            if(!login.empty())
+            {
+                write(Helper::makeCreateChatMessage());
+                inChat = true;
+            }
         }
         else if((message.find("!yes") != std::string::npos)&&(hasRequest))
         {
-            inChat=true;
-            currentRoom = requestRoom;
-            write(Helper::makeYesMessage(currentRoom));
+            if(!login.empty())
+            {
+                inChat=true;
+                currentRoom = requestRoom;
+                write(Helper::makeYesMessage(currentRoom));
+            }
         }
         else if(message.find("!help") != std::string::npos)
         {
@@ -75,11 +86,20 @@ void ClientEssence::processMessage(std::string message)
                       << "!roomlist -- to get list of available rooms\n"
                       << "!room     -- change current room\n"
                       << "!create   -- to create a chat\n"
+                      << "!add      -- to add preson into you current room\n"
+                      << "!read     -- to read unread messages\n"
                       << "!exit     -- to close programm\n";
         }
         else if(message.find("!history") != std::string::npos)
         {
-            write(Helper::makeHistoryMessage());
+            if(currentRoom == 0)
+            {
+                LOG_INFO("You are not in room!");
+            }
+            else
+            {
+                write(Helper::makeHistoryMessage());
+            }
         }
         else if(message.find("!roomlist") != std::string::npos)
         {
@@ -87,10 +107,13 @@ void ClientEssence::processMessage(std::string message)
         }
         else if(message.find("!room") != std::string::npos)
         {
-            LOG_INFO("Enter id of room to enter");
-            std::cin >> currentRoom;
-            inChat=true;
-            write(Helper::makeRoomMessage(currentRoom));
+            if(!login.empty())
+            {
+                LOG_INFO("Enter id of room to enter");
+                std::cin >> currentRoom;
+                inChat=true;
+                write(Helper::makeRoomMessage(currentRoom));
+            }
         }
         else if(message.find("!read") != std::string::npos)
         {
@@ -107,7 +130,7 @@ void ClientEssence::processMessage(std::string message)
         }
 }
 
-void ClientEssence::onRead(ByteBuffer data)
+void ClientEssence::onRead()
 {
     std::string message(buffer_.begin(), buffer_.end());
     if(message.find(REQUEST_TO_CREATE_CHAT_MESSAGE)!=std::string::npos)
@@ -147,7 +170,7 @@ void ClientEssence::onRead(ByteBuffer data)
         else
         {
             unReadMessages_.push_back(message);
-            LOG_INFO("unreadMessage capacity "<<unReadMessages_.capacity());
+            LOG_INFO("You have  "<<unReadMessages_.capacity()<<" unread messages");
         }
 
     }

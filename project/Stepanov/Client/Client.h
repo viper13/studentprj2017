@@ -15,7 +15,7 @@ public:
 
     virtual void processMessage(std::string message) = 0;
 
-    virtual void onRead(ByteBuffer data) = 0;
+    virtual void onRead() = 0;
 
     void closeConnection();
 
