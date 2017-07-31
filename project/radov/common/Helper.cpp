@@ -37,6 +37,16 @@ bool Helper::parseFromPostgres(const pqxx::tuple &data, User &user)
     return true;
 }
 
+bool Helper::parseChatMessages(const pqxx::tuple &data, ChatMessage &chatMessage)
+{
+    chatMessage.id_ = data["id"].as<int>();
+    chatMessage.chat_id_ = data["chat_id"].as<std::string>();
+    chatMessage.user_id_ = data["user_id"].as<std::string>();
+    chatMessage.message_ = data["message"].as<std::string>();
+
+    return true;
+}
+
 void Helper::prependCommand(Commands command, std::string &message)
 {
     message.insert(message.begin(), (char)command);

@@ -172,6 +172,40 @@ bool DataBaseManager::addMessage(int chatId, std::string userName
     return is_success;
 }
 
+bool DataBaseManager::getMessageList(std::string name, std::vector<ChatMessage> &chatMessages)
+{
+    ConnectionPtr connection = getConnection();
+    bool is_success = true;
+
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("SELECT id, chat_id, user_id, message FROM messages"
+                                       " WHERE chat_id = "
+                                       " (SELECT id FROM users "
+                                       " WHERE name = '"+ name +"')");
+
+        for (const pqxx::tuple& row : result)
+        {
+            ChatMessage chatMessage;
+            Helper::parseChatMessages(row, chatMessage);
+            chatMessages.push_back(chatMessage);
+
+        }
+
+        txn.commit();
+
+
+    }
+    catch(const std::exception& e)
+    {
+        LOG_INFO("Failure get Message list: " << e.what());
+        is_success = false;
+    }
+
+    return is_success;
+}
+
 ConnectionPtr DataBaseManager::getConnection()
 {
     std::stringstream ss;

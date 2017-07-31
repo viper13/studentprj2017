@@ -36,6 +36,53 @@ void ChatManager::getUserList(std::string idClient)
     }
 }
 
+void ChatManager::getMessageList(std::string idClient)
+{
+    std::string messageList;
+    std::vector<ChatMessage> chatMessages;
+
+    DataBaseManager::getMessageList(idClient,chatMessages);
+
+    for (std::vector<ChatMessage>::iterator it = chatMessages.begin();
+         it!= chatMessages.end(); it++)
+    {
+       messageList += "Chatroom:[" + it -> chat_id_ + "] ";
+       messageList += "Message:[" + it -> message_ + "]\n";
+
+    }
+
+    for(SessionManagerPtr sep: sessions_)
+    {
+        if(sep -> idClient() == idClient)
+        {
+            sep -> write(messageList);
+        }
+    }
+
+}
+
+void ChatManager::getChatsList(std::string idClient)
+{
+    std::string messageList;
+    std::vector<ChatMessage> chatMessages;
+
+    DataBaseManager::getMessageList(idClient,chatMessages);
+
+    for (std::vector<ChatMessage>::iterator it = chatMessages.begin();
+         it!= chatMessages.end(); it++)
+    {
+       messageList += "Chatroom:[" + it -> chat_id_ + "]\n";
+    }
+
+    for(SessionManagerPtr sep: sessions_)
+    {
+        if(sep -> idClient() == idClient)
+        {
+            sep -> write(messageList);
+        }
+    }
+}
+
 void ChatManager::start(Server& server)
 {
     server.subscribe(std::bind(

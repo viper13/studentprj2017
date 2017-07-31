@@ -60,13 +60,24 @@ void SessionWrapper::onRead(ByteBuffer /*data*/)
             break;
         }
         case Commands::YES_MESSAGE:
+        {
             if(hasRequest)
             {
                 currentRoom = std::stoi(data);
                 c.addUserToChatRoom(idClient(), currentRoom);
             }
             break;
-
+        }
+        case Commands::GET_MESSAGE_LIST:
+        {
+            c.getMessageList(idClient());
+            break;
+        }
+        case Commands::GET_CHATS_LIST:
+        {
+            c.getChatsList(idClient());
+            break;
+        }
         default:
             //operation;
             write("Invalid command\n");
@@ -89,7 +100,7 @@ void SessionWrapper::userLogin(std::string data)
         if(DataBaseManager::authUser(idClient(), clientPassword()))
         {
             Helper::prependCommand(Commands::AUTHORIZATION_SUCCESS, message_);
-            message_ += "Welcome, " + idClient();
+            message_ += "Welcome, " + idClient() + "\n";
             write(message_);
         }
         else

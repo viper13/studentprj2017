@@ -27,7 +27,9 @@ enum class Commands: uint8_t
     CHAT_MESSAGE,
     ADD_USER_TO_CHAT_MESSAGE,
     AUTHORIZATION_FAILED,
-    AUTHORIZATION_SUCCESS
+    AUTHORIZATION_SUCCESS,
+    GET_MESSAGE_LIST,
+    GET_CHATS_LIST
 };
 
 
@@ -47,6 +49,14 @@ struct User
     int id_;
     std::string name_;
     std::string nick_;
+};
+
+struct ChatMessage
+{
+    int id_;
+    std::string chat_id_;
+    std::string user_id_;
+    std::string message_;
 };
 
 std::ostream& operator<<(std::ostream& stream,const User& buffer);

@@ -48,7 +48,7 @@ void ChatRoom::sendMessage(std::string message, std::string idWriter)
         }
     }
 
-    if(!message_.empty())
+    if(!message.empty())
     {
         DataBaseManager::addMessage(idRoom_
                                     , idWriter

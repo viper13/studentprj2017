@@ -11,6 +11,8 @@ public:
     static ChatManager &getInstance();
     void onConnected(SessionManagerPtr session);
     void getUserList(std::string idClient);
+    void getMessageList(std::string idClient);
+    void getChatsList(std::string idClient);
     void start(Server& server);
     void sendMessage(std::string idClient, std::string idTarget, std::string message);
     void sendChatMessage(int idRoom, std::string message, std::string idClient);

@@ -72,6 +72,7 @@ void ClientManager::userLogin()
 {
 
         std::string login, pass;
+        message.erase();
 
         while(login.empty() || pass.empty())
         {
@@ -112,7 +113,7 @@ void ClientManager::chatCommandSet(std::string message)
     }
     else if(message.find("-help") != std::string::npos)
     {
-        std::cout << "-list   -- get online user list \n"
+        std::cout << "-users   -- get online user list \n"
                   << "-add    -- add user to current chat \n"
                   << "-leave  -- exit from current chat \n";
     }
@@ -136,7 +137,7 @@ void ClientManager::nonChatCommandSet(std::string message)
     else if(message.find("-help") != std::string::npos)
     {
         std::cout << std::endl
-                  << "-list   -- get online user list \n"
+                  << "-users   -- get online user list \n"
                   << "-direct -- write direct message to user\n"
                   << "-create -- create a chat\n";
     }
@@ -144,7 +145,7 @@ void ClientManager::nonChatCommandSet(std::string message)
 
 void ClientManager::defaultCommandSet(std::string message)
 {
-    if(message.find("-list") != std::string::npos)
+    if(message.find("-users") != std::string::npos)
     {
         Helper::prependCommand(Commands::GET_USER_LIST_MESSAGE, message);
         write(message);
@@ -157,6 +158,27 @@ void ClientManager::defaultCommandSet(std::string message)
         message += std::to_string(currentRoom);
         write(message);
     }
+    else if((message.find("-messages") != std::string::npos))
+    {
+        message.erase();
+        Helper::prependCommand(Commands::GET_MESSAGE_LIST, message);
+        message += std::to_string(currentRoom);
+        write(message);
+    }
+    else if((message.find("-chats") != std::string::npos))
+    {
+        message.erase();
+        Helper::prependCommand(Commands::GET_CHATS_LIST, message);
+        message += std::to_string(currentRoom);
+        write(message);
+    }
+//    else if((message.find("-logout") != std::string::npos))
+//    {
+//        message.erase();
+//        setIsAuthorized(false);
+//        setInChat(false);
+//        hasRequest = false;
+//    }
 }
 
 bool ClientManager::getInChat() const
