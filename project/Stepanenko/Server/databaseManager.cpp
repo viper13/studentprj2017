@@ -188,11 +188,11 @@ int DataBaseManager::addUserToMultyChat(const int &userId, const int &chatId)
     try
     {
         pqxx::work txn(*connection);
-        pqxx::result result = txn.exec("INSERT INTO users_by_chats (chat_id, user_id) VALUES ("
+        txn.exec("INSERT INTO users_by_chats (chat_id, user_id) VALUES ("
                                        + txn.quote(chatId) + ", "
-                                       + txn.quote(userId) + ") Returning id");
+                                       + txn.quote(userId) + ")");
         txn.commit();
-        resultToReturn = result[0]["id"].as<int>();
+        resultToReturn = 1;
     }
     catch (const std::exception &e)
     {

@@ -227,6 +227,7 @@ std::string ChatManager::joinChatDispatcher(ChatSessionPtr session, std::string 
     if (users->find(session->getUserName()) == users->end())
     {
         int id = DataBaseManager::addUserToMultyChat(session->getUserId(), room->getChatRoomId());
+        LOG_INFO("Id in multychat: " << id);
         room->addUser(session->getUserName());
     }
     session->setChatRoom(room);

@@ -14,7 +14,6 @@ void MessageManager::initializeSession()
     Worker::instance()->start();
     LOG_INFO("Thread started!!!");
 
-    chatClient_->getUsersListFromServer(); //TODO: Delete this line from here, change behavior...
     chatClient_->askNameAndRegister();
 }
 
