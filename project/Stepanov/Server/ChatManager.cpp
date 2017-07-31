@@ -172,7 +172,7 @@ void ChatManager::removeUser(std::string userLogin)
     {
         if(sessions_.at(var)->getLogin()==userLogin)
         {
-            LOG_INFO("Erased "<<sessions_.at(var)->getLogin());
+            LOG_INFO("User "<<sessions_.at(var)->getLogin()<<" wish to exit chat!");
             sessions_.erase(sessions_.begin()+var);
         }
     }

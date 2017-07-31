@@ -30,11 +30,15 @@ void ChatRoom::addPerson(std::string loginClient)
 
 void ChatRoom::removePerson(std::string loginClient)
 {
+    std::string answer;
     for (int var = 0; var < users_.size(); var++)
     {
         if(users_.at(var)->getLogin()==loginClient)
         {
-            LOG_INFO("User "<<users_.at(var)->getLogin()<<" leave chat room");
+            answer="User ";
+            answer+=users_.at(var)->getLogin();
+            answer+= " leave chat room";
+            sendMessage(answer,"Server");
             users_.erase(users_.begin()+var);
         }
     }
