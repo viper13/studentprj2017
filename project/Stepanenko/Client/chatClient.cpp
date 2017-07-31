@@ -1,5 +1,7 @@
 #include "chatClient.h"
 #include "protocol.h"
+#include <thread>
+#include <chrono>
 
 ChatClient::ChatClient(std::string address, std::string port)
     : Client(address, port)
@@ -13,24 +15,11 @@ ChatClient::ChatClient(std::string address, std::string port)
 
 void ChatClient::askNameAndRegister()
 {
-    name_.clear();
-    while (name_.empty())
-    {
-        LOG_INFO("Please enter your name: ");
-        std::cin >> name_;
-        if (userNames_->find(name_) != userNames_->end())
-        {
-            LOG_INFO("Your name should be unique! This name is already used by other person.");
-            name_.clear();
-        }
-        else
-        {
-            break;
-        }
-    }
-
+    std::cout << "Please enter your name: " << std::endl;
+    std::cin >> name_;
     std::string registerMessage = Protocol::logInClientMessageCreate(name_);
     write(registerMessage);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 }
 
 void ChatClient::getUsersListFromServer()
@@ -100,6 +89,11 @@ bool ChatClient::isInChat()
 bool ChatClient::isLoggedIn()
 {
     return loggedIn_;
+}
+
+void ChatClient::setLoggedIn(bool loggedIn)
+{
+    loggedIn_ = loggedIn;
 }
 
 void ChatClient::processInputMessage()
@@ -178,8 +172,7 @@ void ChatClient::logInDispatcher(const std::string &message)
     }
     else
     {
-        std::cout << "Your login is failed!" << std::endl;
-        askNameAndRegister();
+        std::cout << "Your login is failed! This name is already used. Start program again." << std::endl;
     }
 }
 
@@ -250,7 +243,7 @@ void ChatClient::userDisconnectDispatcher(const std::string &message)
     {
         loggedIn_ = false;
         inChat_ = false;
-        std::cout << "You logged out successfuly!" << std::endl;
+        std::cout << "You logged out successfuly! Input anything to exit!" << std::endl;
     }
     else
     {

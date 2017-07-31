@@ -18,6 +18,7 @@ public:
     void disconnect();
     bool isInChat();
     bool isLoggedIn();
+    void setLoggedIn(bool loggedIn);
 private:
     void processInputMessage() override;
     std::string name_;

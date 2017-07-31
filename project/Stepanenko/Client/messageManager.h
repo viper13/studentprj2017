@@ -13,7 +13,7 @@ public:
     void closeSession();
 private:
     void showHelp();
-    bool parseCommand(std::stringstream &tempStream);
+    void parseCommand(std::stringstream &tempStream);
     std::shared_ptr<ChatClient> chatClient_;
 };
 

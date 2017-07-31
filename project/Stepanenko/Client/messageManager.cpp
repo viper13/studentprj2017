@@ -23,15 +23,15 @@ void MessageManager::comunicateWithUser()
     std::cout << "Use COMMAND HELP for help" << std::endl;
     std::string message;
     std::string firstWord;
-    bool shouldStop = false;
-    while(!shouldStop)
+
+    while(chatClient_->isLoggedIn())
     {
         getline(std::cin, message);
         std::stringstream tempStream(message);
         tempStream >> firstWord;
         if (firstWord == "COMMAND")
         {
-            shouldStop = parseCommand(tempStream);
+            parseCommand(tempStream);
 
         }
         else if (chatClient_->isInChat())
@@ -71,9 +71,8 @@ void MessageManager::showHelp()
     std::cout << "----------------------------------------------------------------------" << std::endl << std::endl;
 }
 
-bool MessageManager::parseCommand(std::stringstream &tempStream)
+void MessageManager::parseCommand(std::stringstream &tempStream)
 {
-    bool shouldStop = false;
     std::string secondWord, thirdWord;
     tempStream >> secondWord;
     if (secondWord == "HELP")
@@ -110,12 +109,12 @@ bool MessageManager::parseCommand(std::stringstream &tempStream)
     else if (secondWord == "EXIT")
     {
         std::cout << "Good by!" << std::endl;
-        shouldStop = true;
+        chatClient_->disconnect();
     }
     else
     {
         std::cout << "I don't know this command! Use COMMAND HELP for command list" << std::endl;
     }
-    return shouldStop;
+
 }
 
