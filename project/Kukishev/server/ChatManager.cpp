@@ -167,7 +167,7 @@ void ChatManager::connectToUser(ChatSessionPtr session, const std::string &name)
             break;
         }
 
-        ByteBufferPtr buff = std::make_shared<ByteBuffer>(name);
+        ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer(name));
         session->execute(CommandCode::CONNECT_TO_USER, buff);
 
         DataBaseManager::addRequestToFriendIntoTable(sessionId, userId);
@@ -246,7 +246,7 @@ void ChatManager::sendMessage(ChatSessionPtr session, const std::string &text)
             break;
         }
 
-        if(!session->getUser().isInChat_)
+        if(session->getUser().isInChat_)
         {
             session->sendMessageToClient("You must be entered to chat!");
             break;
@@ -358,7 +358,7 @@ void ChatManager::enterChat(ChatSessionPtr session, const std::string &userName)
             break;
         }
 
-        if(!session->getUser().isInChat_)
+        if(session->getUser().isInChat_)
         {
             session->sendMessageToClient("You must out from chat firstly!");
             break;
@@ -392,6 +392,36 @@ void ChatManager::enterChat(ChatSessionPtr session, const std::string &userName)
         session->getUser().isInChat_ = true;
     }
     while(false);
+}
+
+void ChatManager::outChat(ChatSessionPtr session)
+{
+    do
+    {
+        if(!session->getUser().isLogin_)
+        {
+            session->sendMessageToClient("You must be login first");
+            break;
+        }
+
+        if(!session->getUser().isInChat_)
+        {
+            session->sendMessageToClient("You aren't at chat");
+            break;
+        }
+
+        session->getUser().isInChat_ = false;
+        std::string name = session->getUser().name_;
+
+        for(std::pair<std::string, std::shared_ptr<ChatRoom>> userChatRoom: usersChatRooms_)
+        {
+            if(userChatRoom.second->isUserContain(name))
+                userChatRoom.second->removeUser(name);
+        }
+
+        session->sendMessageToClient("You are out");
+    }
+    while (false);
 }
 
 void ChatManager::readSessionBuffer(std::shared_ptr<ChatSession> session, ByteBufferPtr buffPtr)
@@ -454,6 +484,11 @@ void ChatManager::readSessionBuffer(std::shared_ptr<ChatSession> session, ByteBu
     case CommandCode::ENTER_CHAT:
     {
         enterChat(session, Helper::bufferToString(buffPtr, 1));
+        break;
+    }
+    case CommandCode::OUT_FROM_CHAT:
+    {
+        outChat(session);
         break;
     }
     }

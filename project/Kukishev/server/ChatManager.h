@@ -23,6 +23,7 @@ public:
     void usersRequestFriend(ChatSessionPtr session);
     void showChats(ChatSessionPtr session);
     void enterChat(ChatSessionPtr session, const std::string& userName);
+    void outChat(ChatSessionPtr session);
 private:
     void readSessionBuffer(std::shared_ptr<ChatSession> session, ByteBufferPtr buffPtr);
     void disconectedSession(std::shared_ptr<ChatSession> session);

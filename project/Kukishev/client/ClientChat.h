@@ -29,6 +29,7 @@ private:
     void getQueueUsers();
     void showChats();
     void enterChat(ByteBufferPtr chatName);
+    void outChat();
     std::vector<std::string> usersWantToChat;
     std::string name;
 };
