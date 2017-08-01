@@ -18,6 +18,7 @@ public:
     void write(ByteBufferPtr buffer);
 
     virtual void onRead(ByteBuffer data) = 0;
+    virtual void onDisconnect() = 0;
 private:
     void read();
 

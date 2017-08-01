@@ -78,11 +78,11 @@ std::pair<bool, std::string> DataBaseManager::registerUser(const std::string &us
             txn.exec("INSERT INTO users(name,nick) VALUES ("+ txn.quote(userName)
                                                             +","+ txn.quote("")+")");
             txn.commit();
-            message = "You registered succesfull\n NOW USE COMMAND LOGIN(2) TO LOG IN";
+            message = " You registered succesfull\n NOW USE COMMAND LOGIN(2) TO LOG IN";
         }
         else
         {
-            message = "Your username is already registered";
+            message = " Your username is already registered";
         }
     }
     catch(const std::exception& e)
@@ -101,6 +101,7 @@ std::string DataBaseManager::getUserName(int id)
     {
         pqxx::work txn(*connection);
         pqxx::result result = txn.exec("SELECT name FROM users WHERE id="+std::to_string(id)+";");
+        txn.commit();
         for(const pqxx::tuple& row : result)
         {
             return row["name"].as<std::string>();
@@ -257,7 +258,7 @@ std::pair<bool, bool> DataBaseManager::isChatsWith(const std::string &userName, 
     return std::make_pair(is_sucess,is_contain);
 }
 
-std::pair<bool, std::vector<std::string>> DataBaseManager::getRequests(const std::string &username)// here
+std::pair<bool, std::vector<std::string>> DataBaseManager::getRequests(const std::string &username)
 {
     ConnectionPtr connection = getConnection();
     bool is_sucess = true;
@@ -440,10 +441,12 @@ std::pair<bool, std::vector<std::string> > DataBaseManager::getChatHistory(const
     bool is_success = true;
     std::vector<std::string> messages;
     std::pair<bool,int> chatId = DataBaseManager::getChatId(firstName,secondName);
+    LOG_INFO("CHATID -" << chatId.second)
     try
     {
         pqxx::work txn(*connection);
-        pqxx::result result = txn.exec("SELECT user_id,message FROM messages;");
+        pqxx::result result = txn.exec("SELECT user_id,message FROM messages WHERE chat_id =" + txn.quote(chatId.second)+
+                                       "ORDER BY id DESC " "LIMIT 10");
         txn.commit();
         if( 0 != result.size())
         {
@@ -460,9 +463,46 @@ std::pair<bool, std::vector<std::string> > DataBaseManager::getChatHistory(const
     }
     catch (const std::exception& e)
     {
-        LOG_ERR("Failure get user list: " << e.what());
+        LOG_ERR("Failure get chat history: " << e.what());
         is_success = false;
     }
 
     return std::make_pair(is_success,messages);
+}
+
+std::pair<bool, std::vector<std::string> > DataBaseManager::getFriendList(const std::string &firstName)
+{
+    ConnectionPtr connection = getConnection();
+    bool is_success = true;
+    std::vector<std::string> friends;
+    int userId = getUserId(firstName);
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("SELECT chat_id FROM users_by_chats WHERE user_id =" + txn.quote(userId));
+        txn.commit();
+        if( 0 != result.size())
+        {
+            for (const pqxx::tuple& row : result)
+            {
+                int chatId = row["chat_id"].as<int>();
+                pqxx::work txn2(*connection);
+                pqxx::result userids = txn2.exec("SELECT user_id FROM users_by_chats WHERE chat_id =" + txn2.quote(chatId) +
+                         "AND NOT user_id=" + txn2.quote(userId));
+
+                txn2.commit();
+                for (const pqxx::tuple& userid : userids)
+                {
+                    std::string name = getUserName(userid["user_id"].as<int>());
+                    friends.push_back(name);
+                }
+            }
+        }
+    }
+    catch (const std::exception& e)
+    {
+        LOG_ERR("Failure get user list: " << e.what());
+        is_success = false;
+    }
+    return std::make_pair(is_success,friends);
 }

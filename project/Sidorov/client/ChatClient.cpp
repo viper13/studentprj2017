@@ -5,7 +5,6 @@ ChatClient::ChatClient(std::string address, std::string port)
 {
     username_ = "";
     isLogged_ = 0;
-    inChat_ = 0;
     inChatWith_="";
 }
 
@@ -34,6 +33,12 @@ void ChatClient::onRead(ByteBufferPtr data)
         LOG_INFO("Your requests: " << names);
         break;
     }
+    case CodeCommand::SEE_FRIENDS:
+    {
+        std::string names = Helper::bufferToString(data);
+        LOG_INFO("Your friends: " << names);
+        break;
+    }
     case CodeCommand::SEND_MESSAGE:
     {
         LOG_INFO(*data);
@@ -48,6 +53,7 @@ void ChatClient::onRead(ByteBufferPtr data)
     {
         std::string partner = Helper::bufferToString(data);
         LOG_INFO("Your current chatman - " << partner);
+        break;
     }
     default:
         LOG_INFO(*data);
@@ -97,6 +103,11 @@ void ChatClient::execute(CodeCommand code, ByteBufferPtr bufferPtr)
     case CodeCommand::SEE_REQUESTS:
     {
         seeRequests();
+        break;
+    }
+    case CodeCommand::SEE_FRIENDS:
+    {
+        seeFriends();
         break;
     }
     case CodeCommand::ACCEPT_TO_CHAT:
@@ -210,6 +221,13 @@ void ChatClient::seeRequests()
     write(bufferPtr);
 }
 
+void ChatClient::seeFriends()
+{
+    ByteBufferPtr bufferPtr = std::make_shared<ByteBuffer>();
+    Helper::addCodeCommand(CodeCommand::SEE_FRIENDS,bufferPtr);
+    write(bufferPtr);
+}
+
 void ChatClient::printHelp()
 {
     std::cout << "Use next numbers for command:" << std::endl
@@ -221,9 +239,10 @@ void ChatClient::printHelp()
               << "6 CONNECT_TO_USER [user's name]" << std::endl
               << "7 ACCEPT_TO_CHAT [username]" << std::endl
               << "8 SEE_REQUESTS" << std::endl
-              << "9 START_CHAT" << std::endl
-              << "10 DISCONNECT_FROM_USER" << std::endl
-              << "11 PRINT HELP" << std::endl;
+              << "9 SEE_FRIENDS" << std::endl
+              << "10 START_CHAT" << std::endl
+              << "11 DISCONNECT_FROM_USER" << std::endl
+              << "12 PRINT HELP" << std::endl;
 }
 
 void ChatClient::startChat(ByteBufferPtr userName)
@@ -236,6 +255,3 @@ void ChatClient::startChat(ByteBufferPtr userName)
     Helper::addCodeCommand(CodeCommand::START_CHAT, userName);
     write(userName);
 }
-
-
-

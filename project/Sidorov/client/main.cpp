@@ -9,7 +9,6 @@ int main(int argc, char *argv[])
 {
     MessageManager* manager = new MessageManager();
     manager->initializeSession();
-    manager->printHelp();
     manager->inputMessage();
     manager->closeSession();
 

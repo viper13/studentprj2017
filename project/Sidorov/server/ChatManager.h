@@ -27,6 +27,7 @@ public:
     void sendMessage(ChatSessionPtr chatsession, ByteBufferPtr messageText);
     void acceptToChat(ChatSessionPtr session, ByteBufferPtr userName);
     void seeRequests(ChatSessionPtr session);
+    void seeFriends(ChatSessionPtr session);
     void startChat(ChatSessionPtr session, ByteBufferPtr userName);
 
     void eraseOnlineUsers(std::vector<User> &users, std::vector<User> online);

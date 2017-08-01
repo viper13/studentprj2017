@@ -9,7 +9,8 @@ public:
 
     ChatClient(std::string address, std::string port);
     void onRead(ByteBufferPtr data) override;
-    void execute (CodeCommand code, ByteBufferPtr bufferPtr);
+    void execute (CodeCommand code, ByteBufferPtr bufferPtr);   
+    void printHelp();
 
     bool isContainRequest(const std::string& name);
 private:
@@ -23,13 +24,12 @@ private:
     void disconnectFromUser();
     void acceptToChat(ByteBufferPtr userName);
     void seeRequests();
-    void printHelp();
+    void seeFriends();
     void startChat(ByteBufferPtr userName);
 
     std::function<void (ByteBufferPtr)> readHandle_;
     std::string username_;
     bool isLogged_;
-    bool inChat_;
     std::vector<std::string> usersWantToChat;
     std::string inChatWith_;
 

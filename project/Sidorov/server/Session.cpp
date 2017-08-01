@@ -22,7 +22,6 @@
 
     void Session::write(ByteBufferPtr buffer)
     {
-        //ByteBufferPtr buffer(new ByteBuffer(message.begin(), message.end()));
         BuffersVector buffers = Helper::addBufferSize(buffer);
 
         BufferSequence sequence = Helper::toBufferSequence(buffers);
@@ -102,6 +101,6 @@
         {
             LOG_ERR("Failure: read error code " << error.value()
                     << " description: " << error.message());
+            onDisconnect();
         }
     }
-

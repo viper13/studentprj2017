@@ -12,7 +12,6 @@ private:
 
 public:
     MessageManager();
-    void printHelp();
     void initializeSession();
     void inputMessage();
     void closeSession();

@@ -14,12 +14,9 @@ int main(int argc, char *argv[])
 
     LOG_INFO("Threads started!!!");
 
-
-
     Worker::instance()->join();
 
     LOG_INFO("Threads FINISHED!!!");
 
     return 0;
 }
-

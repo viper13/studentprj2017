@@ -12,7 +12,6 @@ ChatSession::ChatSession()
 {
     userName_ = "";
     isLogged_ = false;
-    isInChat_ = false;
     isChatWith_="";
 }
 
@@ -33,6 +32,13 @@ void ChatSession::setHandleRead(std::function<void (std::shared_ptr<ChatSession>
     if ( nullptr != handle) handleRead_ = handle;
 }
 
+void ChatSession::onDisconnect()
+{
+    getPointer()->setUserName("");
+    getPointer()->setisLogged(false);
+}
+
+
 std::string ChatSession::getUserName() const
 {
     return userName_;
@@ -41,11 +47,6 @@ std::string ChatSession::getUserName() const
 bool ChatSession::getisLogged() const
 {
     return isLogged_;
-}
-
-bool ChatSession::getisInChat() const
-{
-    return isInChat_;
 }
 
 std::string ChatSession::getisChatWith() const
@@ -63,25 +64,9 @@ void ChatSession::setisLogged(bool newState)
     isLogged_ = newState;
 }
 
-void ChatSession::setisInChat(bool newState)
-{
-    isInChat_ = newState;
-}
-
 void ChatSession::setisChatWith(std::string newState)
 {
     isChatWith_ = newState;
-}
-
-int ChatSession::findChatPos(std::shared_ptr<ChatRoom> chatRoom)
-{
-    for (int i=0; i<chatRoomsSession.size(); i++)
-    {
-        if (chatRoomsSession[i] == chatRoom)
-        {
-            return i;
-        }
-    }
 }
 
 void ChatSession::execute(CodeCommand code, ByteBufferPtr data)
@@ -94,29 +79,4 @@ void ChatSession::sendMessageToClient(const std::string &text)
 {
     execute(CodeCommand::SEND_MESSAGE
             , std::make_shared<ByteBuffer>(Helper::stringToBuffer(text)));
-}
-
-void ChatSession::disconnectedFromAll()
-{
-    if(!chatRoomsSession.empty())
-    {
-        for (std::shared_ptr<ChatRoom> room : chatRoomsSession)
-        {
-            if (room->isUserContain(this->getUserName()))
-            {
-                std::shared_ptr<std::map<std::string, ChatSessionPtr>> thisRoom(new std::map<std::string, ChatSessionPtr>(room->getChat()));
-                for (auto it = thisRoom->begin(); it != thisRoom->end(); ++it)
-                {
-                    if (it->first != this->getUserName())
-                    {
-                        ChatSessionPtr anotherSession = it->second;
-                        anotherSession->chatRoomsSession.erase(std::find(anotherSession->chatRoomsSession.begin()
-                                                                         , anotherSession->chatRoomsSession.end()
-                                                                         , room));
-                    }
-                }
-                chatRoomsSession.erase(std::find(chatRoomsSession.begin(),chatRoomsSession.end(), room));
-            }
-        }
-    }
 }
