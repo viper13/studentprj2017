@@ -5,20 +5,19 @@
 
 ClientManager::ClientManager(std::string address, std::string port)
     : Client(address,port)
-    , hasRequest(false)
-    , inChat(false)
-    , stop(false)
-    , isAuthorized(false)
+    , hasRequest_(false)
+    , inChat_(false)
+    , stop_(false)
+    , isAuthorized_(false)
 {
 
 }
 
 void ClientManager::processMessage()
 {
-    while(!stop)
+    while(!getStop())
     {
-
-        if(inChat)
+        if(getInChat())
         {
             chatCommandSet(message);
         }
@@ -49,7 +48,7 @@ void ClientManager::onRead(ByteBuffer /*data*/)
         {
             currentRoom = std::stoi(message.substr(1));
             LOG_INFO("Type -yes to accept chatroom " << currentRoom);
-            hasRequest = true;
+            setHasRequest(true);
             break;
         }
         case Commands::AUTHORIZATION_FAILED:
@@ -62,7 +61,6 @@ void ClientManager::onRead(ByteBuffer /*data*/)
             setIsAuthorized(true);
         }
         default:
-            //
             break;
     }
 }
@@ -88,8 +86,6 @@ void ClientManager::userLogin()
             message += pass;
         }
 
-        idClient = login;
-
         write(message);
 
         setIsAuthorized(true);
@@ -102,14 +98,14 @@ void ClientManager::chatCommandSet(std::string message)
     if(message.find("-add") != std::string::npos)
     {
         std::cout << "Enter id of target: " << std::endl;
-        std::cin >> message;
         Helper::prependCommand(Commands::ADD_USER_TO_CHAT_MESSAGE, message);
+        std::cin >> message;
         write(message);
     }
     else if(message.find("-leave") != std::string::npos)
     {
-                write("You leaved chatroom");
-                setInChat(false);
+        write("You leaved chatroom");
+        setInChat(false);
     }
     else if(message.find("-help") != std::string::npos)
     {
@@ -129,8 +125,8 @@ void ClientManager::nonChatCommandSet(std::string message)
     if(message.find("-create") != std::string::npos)
     {
         std::cout << "Enter id of target to create chat" << std::endl;
-        std::cin >> message;
         Helper::prependCommand(Commands::CREATE_CHAT_MESSAGE, message);
+        std::cin >> message;
         write(message);
         setInChat(true);
     }
@@ -150,7 +146,7 @@ void ClientManager::defaultCommandSet(std::string message)
         Helper::prependCommand(Commands::GET_USER_LIST_MESSAGE, message);
         write(message);
     }
-    else if((message.find("-yes") != std::string::npos)&&(hasRequest))
+    else if((message.find("-yes") != std::string::npos)&&(getHasRequest()))
     {
         setInChat(true);
         message.erase();
@@ -177,28 +173,48 @@ void ClientManager::defaultCommandSet(std::string message)
 //        message.erase();
 //        setIsAuthorized(false);
 //        setInChat(false);
-//        hasRequest = false;
+//        setHasRequest(false);
 //    }
+}
+
+bool ClientManager::getStop() const
+{
+    return stop_;
+}
+
+void ClientManager::setStop(bool stop)
+{
+    stop_ = stop;
+}
+
+bool ClientManager::getHasRequest() const
+{
+    return hasRequest_;
+}
+
+void ClientManager::setHasRequest(bool hasRequest)
+{
+    hasRequest_ = hasRequest;
 }
 
 bool ClientManager::getInChat() const
 {
-    return inChat;
+    return inChat_;
 }
 
 void ClientManager::setInChat(bool value)
 {
-    inChat = value;
+    inChat_ = value;
 }
 
 bool ClientManager::getIsAuthorized() const
 {
-    return isAuthorized;
+    return isAuthorized_;
 }
 
 void ClientManager::setIsAuthorized(bool value)
 {
-    isAuthorized = value;
+    isAuthorized_ = value;
 }
 
 

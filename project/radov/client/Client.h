@@ -34,9 +34,7 @@ private:
     void handleWrite(BuffersVector data, asio::error_code error, size_t writtedSize);
 
 protected:
-    std::vector<char> buffer_;
-    std::string idClient;
-    bool isChatting;
+    ByteBuffer buffer_;
 
 };
 

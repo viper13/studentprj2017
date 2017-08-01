@@ -6,7 +6,7 @@ BuffersVector Helper::addSize(ByteBufferPtr buffer)
     ByteBufferPtr size_buffer(new ByteBuffer());
     size_buffer -> resize(2);
     uint16_t size = buffer -> size();
-    (*size_buffer)[0] = ((size & 0xff00) << 8);
+    (*size_buffer)[0] = ((size & 0xff00) >> 8);
     (*size_buffer)[1] = (size & 0x00ff);
     result.push_back(size_buffer);
     result.push_back(buffer);
@@ -23,7 +23,7 @@ EndBuffer Helper::makeEndBuffer(BuffersVector buffers)
     return result;
 }
 
-uint16_t Helper::getSize(uint16_t left, uint16_t right)
+uint16_t Helper::getSize(uint8_t left, uint8_t right)
 {
     return ((left << 8) + right);
 }

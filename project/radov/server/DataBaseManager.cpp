@@ -180,10 +180,11 @@ bool DataBaseManager::getMessageList(std::string name, std::vector<ChatMessage> 
     try
     {
         pqxx::work txn(*connection);
-        pqxx::result result = txn.exec("SELECT id, chat_id, user_id, message FROM messages"
-                                       " WHERE chat_id = "
-                                       " (SELECT id FROM users "
-                                       " WHERE name = '"+ name +"')");
+        pqxx::result result = txn.exec(" SELECT messages.id, users_by_chats.chat_id, messages.user_id, message "
+                                       " FROM users_by_chats inner JOIN messages ON users_by_chats.chat_id = messages.chat_id "
+                                       " WHERE users_by_chats.user_id = (SELECT id from users where name = '"+name+"')");
+
+        txn.commit();
 
         for (const pqxx::tuple& row : result)
         {
@@ -192,10 +193,6 @@ bool DataBaseManager::getMessageList(std::string name, std::vector<ChatMessage> 
             chatMessages.push_back(chatMessage);
 
         }
-
-        txn.commit();
-
-
     }
     catch(const std::exception& e)
     {

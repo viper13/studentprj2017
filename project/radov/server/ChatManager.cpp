@@ -38,7 +38,6 @@ void ChatManager::getUserList(std::string idClient)
 
 void ChatManager::getMessageList(std::string idClient)
 {
-    std::string messageList;
     std::vector<ChatMessage> chatMessages;
 
     DataBaseManager::getMessageList(idClient,chatMessages);
@@ -46,16 +45,15 @@ void ChatManager::getMessageList(std::string idClient)
     for (std::vector<ChatMessage>::iterator it = chatMessages.begin();
          it!= chatMessages.end(); it++)
     {
-       messageList += "Chatroom:[" + it -> chat_id_ + "] ";
-       messageList += "Message:[" + it -> message_ + "]\n";
-
+       message_ += "Chatroom:[" + it -> chat_id_ + "] Message:[" + it -> message_ + "]\n";
     }
+    LOG_INFO("Message list size: " << message_.size());
 
     for(SessionManagerPtr sep: sessions_)
     {
         if(sep -> idClient() == idClient)
         {
-            sep -> write(messageList);
+            sep -> write(message_);
         }
     }
 
@@ -120,7 +118,6 @@ void ChatManager::requestMessage(std::string idClient, std::string idTarget, int
         {
             message_.erase();
             Helper::prependCommand(Commands::REQUEST_TO_CREATE_CHAT_MESSAGE, message_);
-            //message_ = REQUEST_TO_CREATE_CHAT_MESSAGE;
             message_ += std::to_string(room);
             message_ += "\nUser ";
             message_ += idClient;
