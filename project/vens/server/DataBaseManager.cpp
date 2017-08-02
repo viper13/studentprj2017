@@ -19,6 +19,7 @@ bool DataBaseManager::getUsersList(std::vector<User> &users)
             Helper::paceFromPostgres(row, user);
             users.push_back(user);
         }
+        txn.commit();
     }
     catch (const std::exception& e)
     {
