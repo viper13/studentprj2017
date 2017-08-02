@@ -19,6 +19,7 @@ public:
     void requestMessage(std::string idClient, std::string idTarget, int room);
     void createChat(std::string idClient, std::string idTarget);
     void addUserToChatRoom(std::string idClient, int idRoom);
+    void disconnectUser(std::string idClient);
 
     std::string message_;
     std::vector<SessionManagerPtr> sessions_;

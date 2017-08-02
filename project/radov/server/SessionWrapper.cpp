@@ -78,9 +78,14 @@ void SessionWrapper::onRead(ByteBuffer /*data*/)
             c.getChatsList(idClient());
             break;
         }
+        case Commands::EXIT:
+        {
+            c.disconnectUser(idClient());
+            break;
+        }
         default:
             //operation;
-            write("Invalid command\n");
+            LOG_INFO("Invalid command: " << data);
             break;
     }
 

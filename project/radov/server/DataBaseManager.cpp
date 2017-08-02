@@ -117,7 +117,7 @@ bool DataBaseManager::addChat(int& chatId, std::string name)
     catch(const std::exception& e)
     {
         LOG_INFO("Failure select chat by name: " << e.what());
-        is_success= false;
+        is_success = false;
     }
 
     if(!exist)
@@ -149,21 +149,40 @@ bool DataBaseManager::usersByChats(int chatId, std::string userName)
 {
     ConnectionPtr connection = getConnection();
     bool is_success = true;
+    bool exist = false;
 
     std::string chatId_ = std::to_string(chatId);
-
     try
     {
         pqxx::work txn(*connection);
-        txn.exec("INSERT INTO users_by_chats (chat_id, user_id)"
-                 "VALUES('" + chatId_ + "',"
-                 "(SELECT id FROM users WHERE name = '" + userName + "'))");
+        pqxx::result result = txn.exec("SELECT chat_id, user_id FROM users_by_chats"
+                                       " WHERE chat_id = '" + chatId_ + "'"
+                                         " and user_id = (SELECT id FROM users WHERE name = '" + userName + "') ");
         txn.commit();
+        exist = !result.empty();
+
     }
     catch(const std::exception& e)
     {
         LOG_INFO("Failure add users_by_chats: " << e.what());
         is_success = false;
+    }
+
+    if(!exist)
+    {
+        try
+        {
+            pqxx::work txn(*connection);
+            txn.exec("INSERT INTO users_by_chats (chat_id, user_id)"
+                     "VALUES('" + chatId_ + "',"
+                     "(SELECT id FROM users WHERE name = '" + userName + "'))");
+            txn.commit();
+        }
+        catch(const std::exception& e)
+        {
+            LOG_INFO("Failure add users_by_chats: " << e.what());
+            is_success = false;
+        }
     }
 
     return is_success;
@@ -242,11 +261,8 @@ bool DataBaseManager::getChatsList(std::string& message)
         message.erase();
         for (const pqxx::tuple& row : result)
         {
-              message += "CHATROOM:[" + row[0].as<std::string>() + "] " + "Name: [" + row[1].as<std::string>() + "]\n";
-//            ChatMessage chatMessage;
-//            Helper::parseChatMessages(row, chatMessage);
-//            chatMessages.push_back(chatMessage);
-
+              message += "CHATROOM:[" + row[0].as<std::string>() + "] "
+                      + "Name: [" + row[1].as<std::string>() + "]\n";
         }
     }
     catch(const std::exception& e)

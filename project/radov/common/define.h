@@ -29,7 +29,8 @@ enum class Commands: uint8_t
     AUTHORIZATION_FAILED,
     AUTHORIZATION_SUCCESS,
     GET_MESSAGE_LIST,
-    GET_CHATS_LIST
+    GET_CHATS_LIST,
+    EXIT
 };
 
 

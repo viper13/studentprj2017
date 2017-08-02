@@ -11,6 +11,7 @@ class Session
 {
 public:
     Session();
+    ~Session();
     void start();
     asio::ip::tcp::socket &socket();
     void write(std::string message);

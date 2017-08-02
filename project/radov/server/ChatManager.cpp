@@ -24,8 +24,11 @@ void ChatManager::getUserList(std::string idClient)
     std::string userList = "USERS ONLINE:\n";
     for (SessionManagerPtr sep: sessions_)
     {
-        userList += sep -> idClient();
-        userList += " +\n";
+        if(sep -> socket().is_open())
+        {
+            userList += sep -> idClient();
+            userList += " +\n";
+        }
     }
     for(SessionManagerPtr sep: sessions_)
     {
@@ -131,6 +134,17 @@ void ChatManager::createChat(std::string idClient, std::string idTarget)
 void ChatManager::addUserToChatRoom(std::string idClient, int idRoom)
 {
     chatRooms_.at(idRoom) -> addPerson(idClient);
+}
+
+void ChatManager::disconnectUser(std::string idClient)
+{
+    for(SessionManagerPtr sep: sessions_)
+    {
+        if(sep -> idClient() == idClient)
+        {
+            sep -> socket().close();
+        }
+    }
 }
 
 ChatManager::ChatManager()

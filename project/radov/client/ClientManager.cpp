@@ -50,8 +50,8 @@ void ClientManager::onRead(ByteBuffer /*data*/)
             int dividerPos = message.find_first_of(" ");
 
             currentRoom = std::stoi(message.substr(1, dividerPos));
-
-            LOG_INFO("Type -yes to accept chatroom ");
+            LOG_INFO("REQUEST: " << message << " Room is: " << currentRoom);
+            std::cout << "Type -yes to accept chatroom " << std::endl;
             setHasRequest(true);
             break;
         }
@@ -110,14 +110,17 @@ void ClientManager::chatCommandSet(std::string message)
     }
     else if(message.find("-leave") != std::string::npos)
     {
-        write("You leaved chatroom");
+        std::cout << "You leaved chatroom" << std::endl;
         setInChat(false);
     }
     else if(message.find("-help") != std::string::npos)
     {
         std::cout << "-users   -- get online user list \n"
                   << "-add    -- add user to current chat \n"
-                  << "-leave  -- exit from current chat \n";
+                  << "-leave  -- exit from current chat \n"
+                  << "-messages  -- get OWN messages list \n"
+                  << "-chats  -- get chats list \n"
+                  << "-exit  -- close socket \n";
     }
     else if(!(message.find("-") != std::string::npos))
     {
@@ -171,6 +174,11 @@ void ClientManager::defaultCommandSet(std::string message)
     else if((message.find("-chats") != std::string::npos))
     {
         Helper::prependCommand(Commands::GET_CHATS_LIST, message);
+        write(message);
+    }
+    else if((message.find("-exit") != std::string::npos))
+    {
+        Helper::prependCommand(Commands::EXIT, message);
         write(message);
     }
 //    else if((message.find("-logout") != std::string::npos))

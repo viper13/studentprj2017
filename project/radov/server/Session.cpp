@@ -9,6 +9,16 @@ Session::Session()
 
 }
 
+Session::~Session()
+{
+    if (socket_.is_open())
+    {
+        socket_.close();
+        LOG_ERR("Socked Closed!!!");
+    }
+}
+
+
 
 void Session::start()
 {
