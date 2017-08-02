@@ -26,7 +26,7 @@ public:
 
 private:
     std::string message;
-    void userLogin();
+    void userLogin(std::string message);
     void chatCommandSet(std::string message);
     void nonChatCommandSet(std::string message);
     void defaultCommandSet(std::string message);

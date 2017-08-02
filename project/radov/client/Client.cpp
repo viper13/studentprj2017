@@ -73,7 +73,8 @@ void Client::handleRead(asio::error_code error, size_t /*buf_size*/)
     {
         if (0 != messageSize_)
         {
-            LOG_INFO("Message: \n" << buffer_);
+            //LOG_INFO("Message: \n" << buffer_);
+            std::cout << "Message:\n" << buffer_ << std::endl;
             messageSize_ = 0;
             onRead(buffer_);
             read();

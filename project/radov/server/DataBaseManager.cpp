@@ -98,23 +98,48 @@ bool DataBaseManager::addChat(int& chatId, std::string name)
 {
     ConnectionPtr connection = getConnection();
     bool is_success = true;
+    bool exist = false;
 
     try
     {
         pqxx::work txn(*connection);
-        pqxx::result result = txn.exec("INSERT INTO chats (id,name)"
-                                       " VALUES (DEFAULT,'" + name +"')"
-                                       " RETURNING id;");
+        pqxx::result result = txn.exec("SELECT id FROM chats WHERE name = '" + name + "'");
         txn.commit();
 
-        chatId = result[0][0].as<int>();
+        exist = !result.empty();
 
-
+        if(exist)
+        {
+            chatId = result[0][0].as<int>();
+            LOG_INFO("Chat" << chatId << "allready exists");
+        }
     }
     catch(const std::exception& e)
     {
-        LOG_INFO("Failure add user: " << e.what());
+        LOG_INFO("Failure select chat by name: " << e.what());
         is_success= false;
+    }
+
+    if(!exist)
+    {
+        try
+        {
+            pqxx::work txn(*connection);
+            pqxx::result result = txn.exec("INSERT INTO chats (id,name)"
+                                           " VALUES (DEFAULT,'" + name +"')"
+                                           " RETURNING id;");
+            txn.commit();
+
+            chatId = result[0][0].as<int>();
+            LOG_INFO("Create new chat: " << chatId );
+
+
+        }
+        catch(const std::exception& e)
+        {
+            LOG_INFO("Failure add chat: " << e.what());
+            is_success= false;
+        }
     }
 
     return is_success;
@@ -197,6 +222,36 @@ bool DataBaseManager::getMessageList(std::string name, std::vector<ChatMessage> 
     catch(const std::exception& e)
     {
         LOG_INFO("Failure get Message list: " << e.what());
+        is_success = false;
+    }
+
+    return is_success;
+}
+
+bool DataBaseManager::getChatsList(std::string& message)
+{
+    ConnectionPtr connection = getConnection();
+    bool is_success = true;
+
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec(" SELECT id, name FROM chats;");
+
+        txn.commit();
+        message.erase();
+        for (const pqxx::tuple& row : result)
+        {
+              message += "CHATROOM:[" + row[0].as<std::string>() + "] " + "Name: [" + row[1].as<std::string>() + "]\n";
+//            ChatMessage chatMessage;
+//            Helper::parseChatMessages(row, chatMessage);
+//            chatMessages.push_back(chatMessage);
+
+        }
+    }
+    catch(const std::exception& e)
+    {
+        LOG_INFO("Failure get Chats list: " << e.what());
         is_success = false;
     }
 

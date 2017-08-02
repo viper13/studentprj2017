@@ -49,5 +49,6 @@ bool Helper::parseChatMessages(const pqxx::tuple &data, ChatMessage &chatMessage
 
 void Helper::prependCommand(Commands command, std::string &message)
 {
+    message.erase();
     message.insert(message.begin(), (char)command);
 }

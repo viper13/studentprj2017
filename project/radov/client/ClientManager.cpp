@@ -17,6 +17,14 @@ void ClientManager::processMessage()
 {
     while(!getStop())
     {
+        while(!getIsAuthorized())
+        {
+            userLogin(message);
+        }
+        std::getline(std::cin, message);
+
+        defaultCommandSet(message);
+
         if(getInChat())
         {
             chatCommandSet(message);
@@ -26,14 +34,7 @@ void ClientManager::processMessage()
             nonChatCommandSet(message);
         }
 
-        defaultCommandSet(message);
 
-
-        while(!getIsAuthorized())
-        {
-            userLogin();
-        }
-        std::getline(std::cin, message);
     }
 }
 
@@ -46,8 +47,11 @@ void ClientManager::onRead(ByteBuffer /*data*/)
     {
         case Commands::REQUEST_TO_CREATE_CHAT_MESSAGE:
         {
-            currentRoom = std::stoi(message.substr(1));
-            LOG_INFO("Type -yes to accept chatroom " << currentRoom);
+            int dividerPos = message.find_first_of(" ");
+
+            currentRoom = std::stoi(message.substr(1, dividerPos));
+
+            LOG_INFO("Type -yes to accept chatroom ");
             setHasRequest(true);
             break;
         }
@@ -66,7 +70,7 @@ void ClientManager::onRead(ByteBuffer /*data*/)
 }
 
 
-void ClientManager::userLogin()
+void ClientManager::userLogin(std::string message)
 {
 
         std::string login, pass;
@@ -97,9 +101,11 @@ void ClientManager::chatCommandSet(std::string message)
 {
     if(message.find("-add") != std::string::npos)
     {
+        std::string temp;
         std::cout << "Enter id of target: " << std::endl;
         Helper::prependCommand(Commands::ADD_USER_TO_CHAT_MESSAGE, message);
-        std::cin >> message;
+        std::cin >> temp;
+        message += temp;
         write(message);
     }
     else if(message.find("-leave") != std::string::npos)
@@ -113,9 +119,11 @@ void ClientManager::chatCommandSet(std::string message)
                   << "-add    -- add user to current chat \n"
                   << "-leave  -- exit from current chat \n";
     }
-    else
+    else if(!(message.find("-") != std::string::npos))
     {
+        std::string message_ = message;
         Helper::prependCommand(Commands::CHAT_MESSAGE, message);
+        message += message_;
         write(message);
     }
 }
@@ -124,9 +132,11 @@ void ClientManager::nonChatCommandSet(std::string message)
 {
     if(message.find("-create") != std::string::npos)
     {
+        std::string temp;
         std::cout << "Enter id of target to create chat" << std::endl;
         Helper::prependCommand(Commands::CREATE_CHAT_MESSAGE, message);
-        std::cin >> message;
+        std::cin >> temp;
+        message += temp;
         write(message);
         setInChat(true);
     }
@@ -149,23 +159,18 @@ void ClientManager::defaultCommandSet(std::string message)
     else if((message.find("-yes") != std::string::npos)&&(getHasRequest()))
     {
         setInChat(true);
-        message.erase();
         Helper::prependCommand(Commands::YES_MESSAGE, message);
         message += std::to_string(currentRoom);
         write(message);
     }
     else if((message.find("-messages") != std::string::npos))
     {
-        message.erase();
         Helper::prependCommand(Commands::GET_MESSAGE_LIST, message);
-        message += std::to_string(currentRoom);
         write(message);
     }
     else if((message.find("-chats") != std::string::npos))
     {
-        message.erase();
         Helper::prependCommand(Commands::GET_CHATS_LIST, message);
-        message += std::to_string(currentRoom);
         write(message);
     }
 //    else if((message.find("-logout") != std::string::npos))
