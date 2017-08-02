@@ -75,7 +75,7 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
         }
         case Protocol::Type::USER_DISCONNECT:
         {
-            messageToSend = disconnectDispatcher(session, message);
+            messageToSend = disconnectDispatcher(session);
             session->write(messageToSend);
             break;
         }
@@ -246,7 +246,7 @@ void ChatManager::messageDispatcher(ChatSessionPtr session, std::string message)
     std::string messageForDB = Protocol::typeRemover(message);
     int userId = session->getUserId();
     int chatRoomId = session->getChatRoom()->getChatRoomId();
-    bool result = DataBaseManager::saveMessage(messageForDB, userId, chatRoomId);
+    DataBaseManager::saveMessage(messageForDB, userId, chatRoomId);
 
     std::string currentUser = session->getUserName();
     StringSetPtr users = session->getChatRoom()->getUsers();
@@ -259,7 +259,7 @@ void ChatManager::messageDispatcher(ChatSessionPtr session, std::string message)
     }
 }
 
-std::string ChatManager::disconnectDispatcher(ChatSessionPtr session, std::string message)
+std::string ChatManager::disconnectDispatcher(ChatSessionPtr session)
 {
     std::string currentUser = session->getUserName();
     std::map<std::string, ChatSessionPtr>::iterator it = sessions_.find(currentUser);

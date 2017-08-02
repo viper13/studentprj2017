@@ -95,7 +95,7 @@ void Session::handleWrite(BuffersVector data, asio::error_code error, size_t buf
 {
     if(!error)
     {
-        LOG_INFO("data  writted success");
+        LOG_INFO("data  writted success size: " << bufferSize << " with vector: " << data.size());
     }
     else
     {
