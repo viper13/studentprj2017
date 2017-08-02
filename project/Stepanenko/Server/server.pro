@@ -1,7 +1,7 @@
 
 QT -= qui
 
-TARGET = qtTestApp
+TARGET = server
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG += c++11

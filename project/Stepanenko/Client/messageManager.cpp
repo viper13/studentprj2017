@@ -62,10 +62,10 @@ void MessageManager::showHelp()
     std::cout << "----------------------------------------------------------------------" << std::endl;
     std::cout << "COMMAND HELP - this output" << std::endl;
     std::cout << "COMMAND SERVER_USERS - send request to server for updating local users" << std::endl;
-    std::cout << "COMMAND START_CHAT USER - begin chat with choosen user" << std::endl;
+    std::cout << "COMMAND START_CHAT <USER> - begin chat with choosen user" << std::endl;
     std::cout << "COMMAND CREATE_CHAT chatName - create new public multy-chat on server with choosen chatName" << std::endl;
     std::cout << "COMMAND CHAT_LIST - send request to server for getting list of chats" << std::endl;
-    std::cout << "COMMAND JOIN_CHAT chatName - begin chat with other users in choosen multy-chat" << std::endl;
+    std::cout << "COMMAND JOIN_CHAT <CHAT NAME> - begin chat with other users in choosen multy-chat" << std::endl;
     std::cout << "COMMAND DISCONNECT - disconnect from server by choosen username" << std::endl;
     std::cout << "COMMAND EXIT - exit from program" << std::endl;
     std::cout << "----------------------------------------------------------------------" << std::endl << std::endl;
