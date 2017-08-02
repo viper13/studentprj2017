@@ -96,6 +96,11 @@ void ChatClient::setLoggedIn(bool loggedIn)
     loggedIn_ = loggedIn;
 }
 
+std::string ChatClient::getName()
+{
+    return name_;
+}
+
 void ChatClient::processInputMessage()
 {
     std::string message = getMessage();

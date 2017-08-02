@@ -86,7 +86,14 @@ void MessageManager::parseCommand(std::stringstream &tempStream)
     else if (secondWord == "START_CHAT")
     {
         tempStream >> thirdWord;
-        chatClient_->connectToUser(thirdWord);
+        if (thirdWord == chatClient_->getName())
+        {
+            std::cout << "You can't start chat with yourself!" << std::endl;
+        }
+        else
+        {
+            chatClient_->connectToUser(thirdWord);
+        }
     }
     else if (secondWord == "CREATE_CHAT")
     {
