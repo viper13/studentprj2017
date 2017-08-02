@@ -16,7 +16,7 @@ public:
     void logout(ChatSessionPtr session);
     void getUserList(ChatSessionPtr session);
     void connectToUser(ChatSessionPtr session, const std::string& name);
-    void disconnectedFromUser(ChatSessionPtr session);
+    void disconnectedFromUser(ChatSessionPtr session, const std::string& userName);
     void answerOnRequestConnect(ChatSessionPtr session, const std::string& name, bool answer);
     void sendMessage(ChatSessionPtr session, const std::string& text);
     void singUp(ChatSessionPtr session, const std::string& text);

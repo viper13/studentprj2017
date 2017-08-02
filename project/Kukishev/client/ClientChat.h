@@ -22,7 +22,7 @@ private:
     void sendMessage(ByteBufferPtr message);
     void getUserList();
     void connectToUser(ByteBufferPtr userName);
-    void disconnectFromUser();
+    void disconnectFromUser(ByteBufferPtr userName);
     void answerOnRequestToConnect(ByteBufferPtr userNameAndAnswer);
     void confirmToStarChat(ByteBufferPtr userName);
     void singUp(ByteBufferPtr userName);

@@ -379,6 +379,39 @@ void DataBaseManager::addRequestToFriendIntoTable(uint32_t userFrom, uint32_t us
                                + ");");
 }
 
+bool DataBaseManager::isUserChatWith(uint32_t userIdFirst, uint32_t userIdSecond)
+{
+    ConnectionPtr connection = getConnection();
+    bool is_success = true;
+
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result r = txn.exec("SELECT COUNT(a.chat_id) FROM (SELECT chat_id FROM users_by_chats WHERE user_id ="
+                                  + std::to_string(userIdFirst) +" ) a, (SELECT chat_id FROM users_by_chats WHERE user_id = "
+                                  + std::to_string(userIdSecond) + ") b WHERE a.chat_id = b.chat_id ;");
+
+        is_success = static_cast<bool>(r[0][0].as<bool>() > 0? 1: 0);
+        txn.commit();
+    }
+    catch(const std::exception& e)
+    {
+        LOG_ERR("Failure make query : "<<e.what());
+        is_success = false;
+    }
+
+    return is_success;
+}
+
+void DataBaseManager::deleteChatUserWith(uint32_t userIdFirst, uint32_t userIdSecond)
+{
+    uint32_t chatId = getUsersChatId(userIdFirst, userIdSecond);
+
+    sendQuery("DELETE FROM users_by_chats WHERE chat_id = " + std::to_string(chatId));
+    sendQuery("DELETE FROM messages WHERE chat_id = " + std::to_string(chatId));
+    sendQuery("DELETE FROM chats WHERE id = " + std::to_string(chatId));
+}
+
 ConnectionPtr DataBaseManager::getConnection()
 {
     std::stringstream ss;

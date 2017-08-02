@@ -25,6 +25,8 @@ public:
     static std::vector<std::pair<uint32_t, std::string>> getChatMessages(uint32_t chatId);
     static bool singUp(const std::string& name);
     static void addRequestToFriendIntoTable(uint32_t userFrom, uint32_t userTo);
+    static bool isUserChatWith(uint32_t userIdFirst, uint32_t userIdSecond);
+    static void deleteChatUserWith(uint32_t userIdFirst, uint32_t userIdSecond);
 private:
     static ConnectionPtr getConnection();
 

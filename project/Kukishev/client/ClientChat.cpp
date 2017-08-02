@@ -91,7 +91,7 @@ void ClientChat::execute(CommandCode cmd, ByteBufferPtr&& bufferPtr)
     }
     case CommandCode::DISCONNECT_FROM_USER:
     {
-        disconnectFromUser();
+        disconnectFromUser(bufferPtr);
         break;
     }
     case CommandCode::LOGIN:
@@ -141,7 +141,7 @@ void ClientChat::execute(CommandCode cmd, ByteBufferPtr&& bufferPtr)
     }
     case CommandCode::OUT_FROM_CHAT:
     {
-
+        outChat();
         break;
     }
     default:
@@ -201,11 +201,10 @@ void ClientChat::connectToUser(ByteBufferPtr userName)
 
 }
 
-void ClientChat::disconnectFromUser()
+void ClientChat::disconnectFromUser(ByteBufferPtr userName)
 {
-    ByteBufferPtr buff = std::make_shared<ByteBuffer>();
-    Helper::insertCommandCode(buff, CommandCode::DISCONNECT_FROM_USER);
-    write(buff);
+    Helper::insertCommandCode(userName, CommandCode::DISCONNECT_FROM_USER);
+    write(userName);
 }
 
 void ClientChat::answerOnRequestToConnect(ByteBufferPtr userNameAndAnswer)

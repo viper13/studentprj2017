@@ -81,7 +81,6 @@ void ChatManager::logout(ChatSessionPtr session)
         }
 
         std::string name = session->getUser().name_;
-        usersChatRooms_.at(name)->sendMessage("User " + name + " was logout", name);
 
         for(std::pair<std::string, std::shared_ptr<ChatRoom>> userChatRoom: usersChatRooms_)
         {
@@ -167,15 +166,14 @@ void ChatManager::connectToUser(ChatSessionPtr session, const std::string &name)
             break;
         }
 
-        ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer(name));
-        session->execute(CommandCode::CONNECT_TO_USER, buff);
+        session->sendMessageToClient("Request has been send to user: " + name);
 
         DataBaseManager::addRequestToFriendIntoTable(sessionId, userId);
     }
     while(false);
 }
 
-void ChatManager::disconnectedFromUser(ChatSessionPtr session)
+void ChatManager::disconnectedFromUser(ChatSessionPtr session, const std::string &userName)
 {
     do
     {
@@ -185,21 +183,26 @@ void ChatManager::disconnectedFromUser(ChatSessionPtr session)
             break;
         }
 
-        std::string name = session->getUser().name_;
-
-        if(usersChatRooms_.at(name)->getCountUsers() < 2)
+        if(session->getUser().isInChat_)
         {
-            session->sendMessageToClient("There isn't user");
-            return;
+            session->sendMessageToClient("You must get out from chat firstly");
+            break;
         }
 
-        std::string userName = usersChatRooms_.at(name)->getUsersNameExcept(name)[0];
+        std::string name = session->getUser().name_;
 
-        usersChatRooms_.at(name)->removeUser(userName);
-        usersChatRooms_.at(userName)->removeUser(name);
+        uint32_t userSessionId = DataBaseManager::getUserId(name);
+        uint32_t userId = DataBaseManager::getUserId(userName);
+
+        if(!DataBaseManager::isUserChatWith(userSessionId, userId))
+        {
+            session->sendMessageToClient("Wrong user name!");
+            break;
+        }
+
+        DataBaseManager::deleteChatUserWith(userSessionId, userId);
 
         session->sendMessageToClient("User was disconnected from you!");
-        findSession(userName)->sendMessageToClient("User " + name + " was disconnected from you");
     }
     while(false);
 }
@@ -246,7 +249,7 @@ void ChatManager::sendMessage(ChatSessionPtr session, const std::string &text)
             break;
         }
 
-        if(session->getUser().isInChat_)
+        if(!session->getUser().isInChat_)
         {
             session->sendMessageToClient("You must be entered to chat!");
             break;
@@ -364,10 +367,18 @@ void ChatManager::enterChat(ChatSessionPtr session, const std::string &userName)
             break;
         }
 
+
         std::string nameSession = session->getUser().name_;
 
         uint32_t sessionId = DataBaseManager::getUserId(nameSession);
         uint32_t userSessionId = DataBaseManager::getUserId(userName);
+
+
+        if(!DataBaseManager::isUserChatWith(sessionId, userSessionId))
+        {
+            session->sendMessageToClient("Wrong name of chat!");
+            break;
+        }
 
         uint32_t chatId = DataBaseManager::getUsersChatId(sessionId, userSessionId);
 
@@ -386,7 +397,9 @@ void ChatManager::enterChat(ChatSessionPtr session, const std::string &userName)
         if(usersChatRooms_.find(userName) != usersChatRooms_.end())
         {
             usersChatRooms_.at(userName)->addUser(nameSession, session);
+            usersChatRooms_.at(nameSession)->addUser(userName,findSession(userName));
         }
+
 
         usersChatRooms_.at(nameSession)->setChatId(chatId);
         session->getUser().isInChat_ = true;
@@ -410,14 +423,18 @@ void ChatManager::outChat(ChatSessionPtr session)
             break;
         }
 
-        session->getUser().isInChat_ = false;
+        User& user = session->getUser();
+        user.isInChat_ = false;
         std::string name = session->getUser().name_;
 
         for(std::pair<std::string, std::shared_ptr<ChatRoom>> userChatRoom: usersChatRooms_)
         {
             if(userChatRoom.second->isUserContain(name))
-                userChatRoom.second->removeUser(name);
+                userChatRoom.second->clear();
+
         }
+
+        usersChatRooms_.at(name)->addUser(name, session);
 
         session->sendMessageToClient("You are out");
     }
@@ -463,7 +480,7 @@ void ChatManager::readSessionBuffer(std::shared_ptr<ChatSession> session, ByteBu
     }
     case CommandCode::DISCONNECT_FROM_USER:
     {
-        disconnectedFromUser(session);
+        disconnectedFromUser(session, Helper::bufferToString(buffPtr, 1));
         break;
     }
     case CommandCode::SING_UP:

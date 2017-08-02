@@ -43,8 +43,8 @@ void MessageManager::printHelp()
               << "1 LOGOUT" << std::endl
               << "2 USER_LIST" << std::endl
               << "3 SEND_MESSAGE [message]" << std::endl
-              << "4 CONNECT_TO_USER [user's name]" << std::endl
-              << "5 DISCONNECT_FROM_USER" << std::endl
+              << "4 SEND_REQUEST_TO_FRIEND_TO_USER [user's name]" << std::endl
+              << "5 DISCONNECT_FROM_USER [user's name]" << std::endl
               << "6 CONFIRM_TO_START_CHAT [name]" << std::endl
               << "7 SHOW_REQUEST_USERS_TO_FRIEND" << std::endl
               << "8 SING_UP [yourself name]" << std::endl
