@@ -37,9 +37,6 @@ void ClientChat::onRead(ByteBufferPtr bufferPtr)
         std::cout << userName + " want star chat with you!" << std::endl
                   << "Use command CONFIRM_TO_START_CHAT [name]" << std::endl;
 
-        auto it = std::find(usersWantToChat.begin(), usersWantToChat.end(), userName);
-        if(it==usersWantToChat.end())
-            usersWantToChat.emplace_back(userName);
         break;
     }
     case CommandCode::ANSWER_ON_REQUEST_TO_CONNECT:
@@ -57,17 +54,17 @@ void ClientChat::onRead(ByteBufferPtr bufferPtr)
     }
     case CommandCode::SEND_MESSAGE:
     {
-        std::cout << Helper::bufferToString(bufferPtr, 1) << std::endl;
+        USER_INFO(Helper::bufferToString(bufferPtr, 1));
         break;
     }
     case CommandCode::SHOW_QUEUE_USERS:
     {
-        std::cout << Helper::bufferToString(bufferPtr, 1) << std::endl;
+        USER_INFO(Helper::bufferToString(bufferPtr, 1));
         break;
     }
     case CommandCode::SHOW_CHATS:
     {
-        std::cout << Helper::bufferToString(bufferPtr, 1) << std::endl;
+        USER_INFO(Helper::bufferToString(bufferPtr, 1));
         break;
     }
     default:
@@ -153,7 +150,7 @@ void ClientChat::login(ByteBufferPtr name)
 {
     if(name->empty())
     {
-        std::cout << "Login is empty!" << std::endl;
+        USER_INFO("Login is empty!");
         return;
     }
 
@@ -192,7 +189,7 @@ void ClientChat::connectToUser(ByteBufferPtr userName)
 {
     if(userName->empty())
     {
-        std::cout << "User's name is empty!" << std::endl;
+        USER_INFO("User's name is empty!");
         return;
     }
 
@@ -203,6 +200,12 @@ void ClientChat::connectToUser(ByteBufferPtr userName)
 
 void ClientChat::disconnectFromUser(ByteBufferPtr userName)
 {
+    if(userName->empty())
+    {
+        USER_INFO("User's name is empty!");
+        return;
+    }
+
     Helper::insertCommandCode(userName, CommandCode::DISCONNECT_FROM_USER);
     write(userName);
 }
@@ -223,7 +226,7 @@ void ClientChat::singUp(ByteBufferPtr userName)
 {
     if(userName->empty())
     {
-        std::cout << "User's name is empty!" << std::endl;
+        USER_INFO("User's name is empty!");
         return;
     }
 
@@ -256,34 +259,4 @@ void ClientChat::outChat()
     ByteBufferPtr buff = std::make_shared<ByteBuffer>();
     Helper::insertCommandCode(buff, CommandCode::OUT_FROM_CHAT);
     write(buff);
-}
-
-void ClientChat::printServerAnswer(ByteBufferPtr buffPtr)
-{
-    LOG_INFO(*buffPtr);
-}
-
-bool ClientChat::isContainUserWhoWantChat(const std::__cxx11::string &name)
-{
-    for(std::string user: usersWantToChat)
-    {
-        if(user == name)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool ClientChat::isEmptyQueueForChat()
-{
-    return usersWantToChat.empty();
-}
-
-void ClientChat::printQueueChat()
-{
-    for(std::string user: usersWantToChat)
-    {
-        std::cout << user << std::endl;
-    }
 }

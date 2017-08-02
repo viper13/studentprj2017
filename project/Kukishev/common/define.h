@@ -20,7 +20,9 @@ enum class CommandCode: uint8_t
     SHOW_CHATS,
     ENTER_CHAT,
     OUT_FROM_CHAT,
+    MENU,
     ANSWER_ON_REQUEST_TO_CONNECT
+
 };
 
 #define WORKER_THREAD_COUNT 4

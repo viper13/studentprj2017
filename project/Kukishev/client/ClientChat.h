@@ -11,10 +11,6 @@ public:
     virtual void onRead(ByteBufferPtr bufferPtr) override;
     void execute(CommandCode cmd, ByteBufferPtr &&bufferPtr);
 
-    void printServerAnswer(ByteBufferPtr buffPtr);
-    bool isContainUserWhoWantChat(const std::string& name);
-    bool isEmptyQueueForChat();
-    void printQueueChat();
 private:
 
     void login(ByteBufferPtr name);
@@ -30,8 +26,7 @@ private:
     void showChats();
     void enterChat(ByteBufferPtr chatName);
     void outChat();
-    std::vector<std::string> usersWantToChat;
-    std::string name;
+
 };
 
 #endif // CLIENTCHAT_H

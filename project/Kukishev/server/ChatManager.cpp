@@ -149,6 +149,12 @@ void ChatManager::connectToUser(ChatSessionPtr session, const std::string &name)
             break;
         }
 
+        if(session->getUser() == name)
+        {
+            session->sendMessageToClient("You cannot send request to yourself!");
+            break;
+        }
+
         std::string sessionName = session->getUser().name_;
 
         if(!DataBaseManager::isContainUser(name))

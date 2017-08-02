@@ -21,13 +21,20 @@ void MessageManager::start()
     {
         std::getline(std::cin, message);
 
+
         if ( (isExit = (message == "stop")) )
             continue;
 
-        auto pairCodeData = getCodeAndData(message);
+        std::pair<CommandCode, ByteBufferPtr> pairCodeData = getCodeAndData(message);
 
         if(pairCodeData.second == nullptr)
             continue;
+
+        if(pairCodeData.first == CommandCode::MENU)
+        {
+            printHelp();
+            continue;
+        }
 
         clientChatPtr_->execute(pairCodeData.first, std::move(pairCodeData.second));
     }
@@ -50,50 +57,78 @@ void MessageManager::printHelp()
               << "8 SING_UP [yourself name]" << std::endl
               << "9 SHOW_CHATS" << std::endl
               << "10 ENTER TO CHAT [name of chat]" << std::endl
-              << "11 OUT_FROM_CHAT" << std::endl;
+              << "11 OUT_FROM_CHAT" << std::endl
+              << "12 SHOW THE MENU" << std::endl;
+}
+
+int MessageManager::getCode(const std::string &strCode)
+{
+    int code = -1;
+
+    try
+    {
+        code = std::stoi(strCode);
+    }
+    catch(const std::invalid_argument& exp)
+    {
+        code = -1;
+    }
+
+    if(code < static_cast<int>(CommandCode::LOGIN) || code > static_cast<int>(CommandCode::MENU))
+    {
+        code = -1;
+    }
+
+    return code;
+}
+
+std::string MessageManager::getData(std::istringstream &issData)
+{
+    std::string data;
+
+    std::string s;
+    issData >> s;
+    data = std::move(s);
+    while(issData >> s)
+    {
+        data+=" "+s;
+    }
+    return data;
 }
 
 std::pair<CommandCode, ByteBufferPtr> MessageManager::getCodeAndData(const std::string &str)
 {
-    std::istringstream ist(str);
+    std::pair<CommandCode, ByteBufferPtr> result;
 
-    std::string codeStr;
-    ist >> codeStr;
-
-    int code;
-
-    try
+    do
     {
-        code = std::stoi(codeStr);
+
+        std::istringstream ist(str);
+
+        std::string codeStr;
+        ist >> codeStr;
+
+        int code = getCode(codeStr);
+
+        if(0 > code)
+        {
+            std::cout << "Wrong number of command!" << std::endl;
+            break;
+        }
+
+        CommandCode commandCode = static_cast<CommandCode>(code);
+
+        std::string data = getData(ist);
+
+        ByteBufferPtr buff = std::make_shared<ByteBuffer>();
+
+        if(!data.empty())
+            buff = std::make_shared<ByteBuffer>(data.begin(), data.end());
+
+        result = std::make_pair(commandCode, buff);
+
     }
-    catch(const std::invalid_argument& exp)
-    {
-        std::cout << "Wrong number of command!" << std::endl;
-        return std::pair<CommandCode, ByteBufferPtr>();
-    }
+    while(false);
 
-    if(code < static_cast<int>(CommandCode::LOGIN) || code > static_cast<int>(CommandCode::OUT_FROM_CHAT))
-    {
-        std::cout << "Wrong number of command!" << std::endl;
-        return std::pair<CommandCode, ByteBufferPtr>();
-    }
-
-
-    CommandCode commandCode = static_cast<CommandCode>(code);
-
-    std::string data;
-    std::string s;
-    ist >> s;
-    data = s;
-    while(ist >> s)
-    {
-        data+=" "+s;
-    }
-
-    ByteBufferPtr buff = std::make_shared<ByteBuffer>();
-
-    if(!data.empty())
-        buff = std::make_shared<ByteBuffer>(data.begin(), data.end());
-
-    return std::make_pair(commandCode, buff);
+    return result;
 }
