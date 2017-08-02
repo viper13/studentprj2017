@@ -37,12 +37,24 @@ std::ostream& operator <<(std::ostream& stream, const ByteBuffer& buffer);
 
 struct User
 {
-    int id_;
-    std::string name_;
-    std::string nick_;
+public:
     bool operator==(const User &rhs) const {
             return rhs.name_ == name_;
         }
+
+    //getters
+    int getID() const;
+    std::string getName() const;
+    std::string getNick() const;
+
+    //setters
+    void setID(int newId);
+    void setName(std::string newName);
+    void setNick(std::string newNick);
+private:
+    int id_;
+    std::string name_;
+    std::string nick_;
 };
 
 

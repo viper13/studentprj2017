@@ -39,16 +39,6 @@ void ChatClient::onRead(ByteBufferPtr data)
         LOG_INFO("Your friends: " << names);
         break;
     }
-    case CodeCommand::SEND_MESSAGE:
-    {
-        LOG_INFO(*data);
-        break;
-    }
-    case CodeCommand::ACCEPT_TO_CHAT:
-    {
-        std::string message = Helper::bufferToString(data);
-        break;
-    }
     case CodeCommand::START_CHAT:
     {
         std::string partner = Helper::bufferToString(data);

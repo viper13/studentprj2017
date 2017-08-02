@@ -17,9 +17,9 @@ ByteBuffer Helper::stringToBuffer(const std::string &str)
 
 bool Helper::parseFromPostgres(const pqxx::tuple &data, User &user)
 {
-    user.id_ = data["id"].as<int>();
-    user.name_ = data["name"].as<std::string>();
-    user.nick_ = data["nick"].as<std::string>();
+    user.setID(data["id"].as<int>());
+    user.setName(data["name"].as<std::string>());
+    user.setNick(data["nick"].as<std::string>());
 
     LOG_INFO("Parsed user: " << user);
 

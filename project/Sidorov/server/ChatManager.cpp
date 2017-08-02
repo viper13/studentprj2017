@@ -216,6 +216,11 @@ std::pair<std::string,std::string> ChatManager::connectToUser(ChatSessionPtr ses
         responce = "You must log in at first";
         return std::make_pair(responce,"");
     }
+    if (session->getUserName() == userName)
+    {
+        responce = "You can't chat with yourself";
+        return std::make_pair(responce,"");
+    }
     std::pair<bool,bool> isUserExist = DataBaseManager::isUserContain(userName);
     if (!isUserExist.second)
     {
@@ -363,8 +368,7 @@ void ChatManager::acceptToChat(ChatSessionPtr session, ByteBufferPtr userName)
         if (!isContaineResult.second)
         {
             std::string responce = "This username doen't exist or doen't want to chat with you";
-            ByteBufferPtr bufferPtr(new ByteBuffer(Helper::stringToBuffer(responce)));
-            session->write(bufferPtr);
+            session->sendMessageToClient(responce);
         }
         else
         {
@@ -552,12 +556,12 @@ std::string ChatManager::getUserList(ChatSessionPtr currentSessionPtr)
     {
         for (std::shared_ptr<ChatSession> session : sessions_)
         {
-            if (user.name_ == session->getUserName())
+            if (user.getName() == session->getUserName())
             {
-                if(currentSessionPtr->getUserName()!= user.name_)
+                if(currentSessionPtr->getUserName()!= user.getName())
                 {
                     online += "\n";
-                    online += "name: " + user.name_;
+                    online += "name: " + user.getName();
                     usersOnline.push_back(user);
                 }
             }
@@ -566,17 +570,17 @@ std::string ChatManager::getUserList(ChatSessionPtr currentSessionPtr)
     eraseOnlineUsers(users, usersOnline);
     for (User user : users)
     {
-        if (user.name_ != currentSessionPtr->getUserName())
+        if (user.getName() != currentSessionPtr->getUserName())
         {
             offline += "\n";
-            offline += "name: " + user.name_;
+            offline += "name: " + user.getName();
             usersOffline.push_back(user);
         }
     }
 
     if (online == "")
     {
-        responce = " There are not users online\n" + respOffline + offline;
+        responce = "\nThere are not users online\n" + respOffline + offline;
         return responce;
     }
     if (offline == "")

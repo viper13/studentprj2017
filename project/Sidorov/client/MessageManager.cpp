@@ -32,7 +32,7 @@ void MessageManager::inputMessage()
             LOG_INFO("Enter message:");
             std::getline(std::cin, message);
 
-            needStop = (message == "stop");
+           if (needStop = (message == "stop")) continue;
 
             std::pair<CodeCommand, ByteBufferPtr> pairCodeData = Helper::getCodeAndData(message);
 
