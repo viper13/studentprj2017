@@ -6,10 +6,10 @@
 
 Client::Client(std::string address, std::string port)
     : io_service_(Worker::instance()->ioService())
-    , socket_(io_service_)
     , address_(address)
     , port_(port)
     , resolver_(io_service_)
+    , socket_(io_service_)
 {
     buffer_.resize(BUFFER_MAX_SIZE);
 }
@@ -111,7 +111,7 @@ void Client::handleWrite(BuffersVector data, asio::error_code error, size_t writ
     }
     else
     {
-        LOG_ERR("Failure to wirte data  with error " << error.message());
+        LOG_ERR("Failure to wirte data  with error " << error.message() << " with size " << writtedSize << " " << data.size());
     }
 }
 

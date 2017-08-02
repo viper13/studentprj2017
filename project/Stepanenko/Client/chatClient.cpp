@@ -6,9 +6,9 @@
 ChatClient::ChatClient(std::string address, std::string port)
     : Client(address, port)
     , name_("")
+    , userNames_(new std::set<std::string>())
     , loggedIn_(false)
     , inChat_(false)
-    , userNames_(new std::set<std::string>())
 {
 
 }
