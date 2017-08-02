@@ -88,13 +88,8 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
 
 std::string ChatManager::userListDispatcher()
 {
-    //think of this, may be you shold not return this list to user by his request
     std::set<std::string> names;
-    std::map<std::string, ChatSessionPtr>::iterator parser;
-    for (parser = sessions_.begin(); parser != sessions_.end(); ++parser)
-    {
-        names.insert(parser->first);
-    }
+    DataBaseManager::getUsersSet(names);
     std::string namesMessage = Protocol::userListServerMessageCreate(names);
     return namesMessage;
 }

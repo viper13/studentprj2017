@@ -244,6 +244,7 @@ void ChatClient::userDisconnectDispatcher(const std::string &message)
         loggedIn_ = false;
         inChat_ = false;
         std::cout << "You logged out successfuly! Input anything to exit!" << std::endl;
+        stop();
     }
     else
     {
