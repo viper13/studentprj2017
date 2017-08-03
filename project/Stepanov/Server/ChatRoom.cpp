@@ -31,7 +31,7 @@ void ChatRoom::addPerson(std::string loginClient)
 void ChatRoom::removePerson(std::string loginClient)
 {
     std::string answer;
-    for (int var = 0; var < users_.size(); var++)
+    for (uint var = 0; var < users_.size(); var++)
     {
         if(users_.at(var)->getLogin()==loginClient)
         {
@@ -74,4 +74,14 @@ std::string ChatRoom::getNameRoom() const
 void ChatRoom::setNameRoom(const std::string &value)
 {
     nameRoom = value;
+}
+
+bool ChatRoom::checkUserInChat(std::string loginClient)
+{
+    for(SessionEssencePtr sep:users_)
+    {
+        if(sep->getLogin()==loginClient)
+            return true;
+    }
+    return false;
 }

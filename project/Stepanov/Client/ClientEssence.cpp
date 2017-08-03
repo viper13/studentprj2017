@@ -6,8 +6,9 @@ ClientEssence::ClientEssence(std::string address, std::string port)
     : Client(address,port)
     , hasRequest(false)
     , inChat(false)
-    , isLogin(false)
+    , isAuthorization(false)
     , isRegister(false)
+    , isLogged(false)
     , currentRoom(0)
     , requestRoom(0)
 {
@@ -22,7 +23,14 @@ void ClientEssence::processMessage(std::string message)
         {
             if(message.find("!add") != std::string::npos)
             {
-                write(Helper::makeAddMessage());
+                if(currentRoom!=0)
+                {
+                    write(Helper::makeAddMessage());
+                }
+                else
+                {
+                    LOG_INFO("You are not in room");
+                }
             }
             else if(message.find("!setname") != std::string::npos)
             {
@@ -44,11 +52,13 @@ void ClientEssence::processMessage(std::string message)
         {
             write(Helper::makeCreateNewUserMessage(message));
             isRegister=false;
+            isLogged = true;
         }
-        if(isLogin)
+        if(isAuthorization)
         {
             write(Helper::makeLoginMessage(message));
-            isLogin=false;
+            isAuthorization=false;
+            isLogged = true;
         }
 
         if(message.find("!register") != std::string::npos)
@@ -69,6 +79,10 @@ void ClientEssence::processMessage(std::string message)
                 write(Helper::makeCreateChatMessage());
                 inChat = true;
             }
+            else
+            {
+                LOG_INFO("You are not registered!");
+            }
         }
         else if((message.find("!yes") != std::string::npos)&&(hasRequest))
         {
@@ -77,6 +91,10 @@ void ClientEssence::processMessage(std::string message)
                 inChat=true;
                 currentRoom = requestRoom;
                 write(Helper::makeYesMessage(currentRoom));
+            }
+            else
+            {
+                LOG_INFO("You are not registered!");
             }
         }
         else if(message.find("!help") != std::string::npos)
@@ -88,6 +106,8 @@ void ClientEssence::processMessage(std::string message)
                       << "!create   -- to create a chat\n"
                       << "!add      -- to add preson into you current room\n"
                       << "!read     -- to read unread messages\n"
+                      << "!setname  -- set name for your room\n"
+                      << "!history  -- to see last 10 messages in chat\n"
                       << "!exit     -- to close programm\n";
         }
         else if(message.find("!history") != std::string::npos)
@@ -106,13 +126,14 @@ void ClientEssence::processMessage(std::string message)
             write(Helper::makeRoomListMessage());
         }
         else if(message.find("!room") != std::string::npos)
-        {
+        {//dva raza room ono idet po ppppppp
             if(!login.empty())
             {
-                LOG_INFO("Enter id of room to enter");
-                std::cin >> currentRoom;
-                inChat=true;
-                write(Helper::makeRoomMessage(currentRoom));
+                checkChangeRoom();
+            }
+            else
+            {
+                LOG_INFO("You are not loggined!");
             }
         }
         else if(message.find("!read") != std::string::npos)
@@ -128,21 +149,18 @@ void ClientEssence::processMessage(std::string message)
             write(Helper::makeExitMessage());
             closeConnection();
         }
+        else if(currentRoom == 0)
+        {
+            LOG_INFO("Bad command! Type !help to see available commands");
+        }
 }
 
-void ClientEssence::onRead()
+void ClientEssence::onRead(ByteBuffer data)
 {
-    std::string message(buffer_.begin(), buffer_.end());
+    std::string message(data.begin(), data.end());
     if(message.find(REQUEST_TO_CREATE_CHAT_MESSAGE)!=std::string::npos)
     {
-        message.erase(message.begin(),message.begin()+2);
-        std::stringstream ss(message);
-        ss >> requestRoom;
-        ss.get();
-        message.erase(message.begin(),message.begin()+1);
-        LOG_INFO(message);
-        LOG_INFO("Type !yes to create chat!\n");
-        hasRequest = true;
+        processRequestMessage(message);
     }
     else if(message.find(CREATE_NEW_USER) != std::string::npos)
     {
@@ -154,25 +172,11 @@ void ClientEssence::onRead()
     {
         message.erase(message.begin(),message.begin()+2);
         LOG_INFO(message);
-        isLogin=true;
+        isAuthorization=true;
     }
     else if(message.find(CHAT_MESSAGE) != std::string::npos)
     {
-        message.erase(message.begin(),message.begin()+2);
-        int idRoom;
-        std::stringstream ss(message);
-        ss >> idRoom;
-        ss.get();
-        if(idRoom == currentRoom)
-        {
-            LOG_INFO(message);
-        }
-        else
-        {
-            unReadMessages_.push_back(message);
-            LOG_INFO("You have  "<<unReadMessages_.capacity()<<" unread messages");
-        }
-
+        processChatMessage(message);
     }
     else if(message.find(CREATE_CHAT_MESSAGE) != std::string::npos)
     {
@@ -188,4 +192,56 @@ void ClientEssence::onRead()
     {
         LOG_INFO(message);
     }
+}
+
+void ClientEssence::processChatMessage(std::string message)
+{
+    message.erase(message.begin(),message.begin()+2);
+    int idRoom;
+    std::stringstream ss(message);
+    ss >> idRoom;
+    ss.get();
+    if(idRoom == currentRoom)
+    {
+        LOG_INFO(message);
+    }
+    else
+    {
+        unReadMessages_.push_back(message);
+        LOG_INFO("You have  "<<unReadMessages_.size()<<" unread messages");
+    }
+}
+
+void ClientEssence::processRequestMessage(std::string message)
+{
+    message.erase(message.begin(),message.begin()+2);
+    std::stringstream ss(message);
+    ss >> requestRoom;
+    ss.get();
+    message.erase(message.begin(),message.begin()+1);
+    LOG_INFO(message);
+    LOG_INFO("Type !yes to create chat!\n");
+    hasRequest = true;
+}
+
+void ClientEssence::checkChangeRoom()
+{
+    int tempIdRoom = 0;
+    std::string tempUserMessage;
+    LOG_INFO("Enter id of room to enter");
+    while (true) {
+        std::cin >> tempUserMessage;
+        tempIdRoom = atoi(tempUserMessage.c_str());
+        if(tempIdRoom!=0)
+        {
+            break;
+        }
+        else
+        {
+            LOG_INFO("Wrong number! Try again!")
+        }
+    }
+    currentRoom=tempIdRoom;
+    inChat=true;
+    write(Helper::makeRoomMessage(currentRoom));
 }

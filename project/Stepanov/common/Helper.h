@@ -18,7 +18,6 @@ public:
     static std::string makeRegisterMessage(std::string message);
     static std::string makeListMessage();
     static std::string makeCreateChatMessage();
-    static std::string makeDirectMessage();
     static std::string makeYesMessage(int currentRoom);
     static std::string makeHistoryMessage();
     static std::string makeExitMessage();

@@ -8,9 +8,7 @@ using namespace boost;
 
 int main()
 {
-    //std::shared_ptr<Client> clientPtr(new Client("127.0.0.1","1122"));  //less safe
-
-    std::shared_ptr<Client> clientPtr = std::make_shared<ClientEssence>("127.0.0.1","1122"); //more safe
+    std::shared_ptr<Client> clientPtr = std::make_shared<ClientEssence>("127.0.0.1","1122");
 
     clientPtr->start();
 

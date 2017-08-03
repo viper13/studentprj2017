@@ -58,10 +58,6 @@ std::string Helper::makeCreateChatMessage()
     return result;
 }
 
-std::string Helper::makeDirectMessage()
-{
-
-}
 
 std::string Helper::makeYesMessage(int currentRoom)
 {

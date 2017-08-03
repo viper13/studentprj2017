@@ -51,7 +51,7 @@ bool DataBaseManager::checkUser(std::string name)
     }
 }
 
-bool DataBaseManager::registerNewUser(std::string name, std::string nick)
+void DataBaseManager::registerNewUser(std::string name, std::string nick)
 {
     ConnectionPtr connection = getConnection();
     try
@@ -275,7 +275,9 @@ std::string DataBaseManager::getChatName(int idRoom)
     catch (std::exception& e)
     {
         LOG_ERR("Erron in get room name"<<e.what());
+
     }
+    return "Error";
 }
 
 ConnectionPtr DataBaseManager::getConnection()

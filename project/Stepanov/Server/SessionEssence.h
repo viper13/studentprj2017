@@ -31,6 +31,14 @@ private:
     bool hasRequest;
     bool inChat;
     std::string message_;
+    void processSetRoomMessage(std::string message);
+    void processCreateNewUserMessage(std::string message);
+    void processLoginInteAccMessage(std::string message);
+    void processCreateChatMessage(std::string message);
+    void processAddUserToChatMessage(std::string message);
+    void processYesMessage(std::string message);
+    void processGetRoomListMessage();
+    void processSetRoomNameMessage(std::string message);
 };
 
 typedef std::shared_ptr<SessionEssence> SessionEssencePtr;

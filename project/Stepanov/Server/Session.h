@@ -26,14 +26,13 @@ public:
 
 private:
     void read();
-    void handleRead(system::error_code error, size_t bufferSize);
+    void handleRead(system::error_code error);
 
-    void handleWrite(BuffersVector data, system::error_code error, size_t bufferSize);
+    void handleWrite(system::error_code error);
 
     asio::ip::tcp::socket socket_;
 
     uint16_t messageSize_;
-protected:
     std::vector<char> buffer_;
 };
 

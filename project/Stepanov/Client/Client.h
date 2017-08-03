@@ -15,7 +15,7 @@ public:
 
     virtual void processMessage(std::string message) = 0;
 
-    virtual void onRead() = 0;
+    virtual void onRead(ByteBuffer data) = 0;
 
     void closeConnection();
 
@@ -43,10 +43,9 @@ private:
 
     void read();
 
-    void handleRead(system::error_code error, size_t);
+    void handleRead(system::error_code error);
 
-    void handleWrite(BuffersVector data, system::error_code error, size_t writtedSize);
-protected:
+    void handleWrite(system::error_code error);
     std::vector<char> buffer_;
 };
 

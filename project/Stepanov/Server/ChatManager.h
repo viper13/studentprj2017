@@ -31,6 +31,7 @@ public:
     int createChat();
 
     void addUserToChatRoom(std::string loginClient, int idRoom);
+    bool checkUserInChat(std::string loginClient, int idRoom);
 
     void sendMessagesHistory(int idRoom, std::string userLogin);
 

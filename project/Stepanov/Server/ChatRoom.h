@@ -18,7 +18,7 @@ public:
     std::string getNameRoom() const;
 
     void setNameRoom(const std::string &value);
-
+    bool checkUserInChat(std::string loginClient);
 
 private:
     int idRoom_;
@@ -26,6 +26,7 @@ private:
     std::vector<SessionEssencePtr> users_;
 
     std::string message_;
+
 };
 typedef std::shared_ptr<ChatRoom> ChatRoomPtr;
 #endif // CHATROOM_H

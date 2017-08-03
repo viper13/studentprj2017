@@ -34,14 +34,12 @@ void Client::write(std::string message)
                       , endBuffer
                       , std::bind(&Client::handleWrite
                                   , shared_from_this()
-                                  , buffers
-                                  , std::placeholders::_1
-                                  , std::placeholders::_2));
+                                  , std::placeholders::_1));
 }
 
 void Client::closeConnection()
 {
-    LOG_INFO("connection closed!");
+    LOG_INFO("Connection closed!");
     socket_.close();
 }
 
@@ -55,8 +53,7 @@ void Client::read()
                          , asio::transfer_exactly(2)
                          , std::bind(&Client::handleRead
                                      , shared_from_this()
-                                     , std::placeholders::_1
-                                     , std::placeholders::_2));
+                                     , std::placeholders::_1));
     }
     else
     {
@@ -66,27 +63,24 @@ void Client::read()
                          , asio::transfer_exactly(messageSize_)
                          , std::bind(&Client::handleRead
                                      , shared_from_this()
-                                     , std::placeholders::_1
-                                     , std::placeholders::_2));
+                                     , std::placeholders::_1));
     }
 
 }
 
-void Client::handleRead(system::error_code error, size_t buf_size)
+void Client::handleRead(system::error_code error)
 {
     if (!error)
     {
         if (0 != messageSize_)
         {
-            //LOG_INFO("Message: " << buffer_);
             messageSize_ = 0;
-            onRead();
+            onRead(buffer_);
             read();
         }
         else
         {
             messageSize_ = Helper::getSize(buffer_[0],buffer_[1]);
-            //LOG_INFO("Message size is: " << messageSize_);
             read();
         }
 
@@ -98,13 +92,9 @@ void Client::handleRead(system::error_code error, size_t buf_size)
     }
 }
 
-void Client::handleWrite(BuffersVector data, system::error_code error, size_t writtedSize)
+void Client::handleWrite(system::error_code error)
 {
-    if (!error)
-    {
-        //LOG_INFO("Message writted!!!");
-    }
-    else
+    if (error)
     {
         LOG_ERR("Failure to wirte data  with error " << error.message());
     }

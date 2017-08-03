@@ -30,3 +30,4 @@ CREATE TABLE users_by_chats
     FOREIGN KEY (chat_id) REFERENCES chats(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+INSERT INTO chats(name) VALUES('General chat');

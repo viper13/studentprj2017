@@ -2,7 +2,7 @@
 #include "Server.h"
 #include "ChatManager.h"
 
-int main(int argc, char *argv[])
+int main()
 {
     Server server(1122);
     ChatManager& chatManager = ChatManager::getInstance();

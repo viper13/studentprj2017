@@ -7,7 +7,6 @@ ChatManager& ChatManager::getInstance()
     return c;
 }
 
-
 void ChatManager::onConnected(SessionEssencePtr session)
 {
     sessions_.push_back(session);
@@ -48,6 +47,8 @@ void ChatManager::getUserList(std::string loginClient)
     std::string userList = "Online users:\n";
     for (SessionEssencePtr sep: sessions_)
     {
+        if(sep->getLogin().empty())
+            continue;
         userList+=sep->getLogin();
         userList+=" -\n";
     }
@@ -66,6 +67,7 @@ void ChatManager::start(Server &server)
                          &ChatManager::onConnected
                          , this
                          , std::placeholders::_1));
+    chatRooms_.push_back(ChatRoom::getNewChatRoom(1));
 }
 
 void ChatManager::debug()
@@ -119,10 +121,29 @@ void ChatManager::addUserToChatRoom(std::string loginClient, int idRoom)
     {
         if(crp->getIdRoom()==idRoom)
         {
-            crp->addPerson(loginClient);
+            if(!(crp->checkUserInChat(loginClient)))
+            {
+                crp->addPerson(loginClient);
+                DataBaseManager::addUserToChat(loginClient,idRoom);
+                return;
+            }
         }
     }
-    DataBaseManager::addUserToChat(loginClient,idRoom);
+}
+
+bool ChatManager::checkUserInChat(std::string loginClient, int idRoom)
+{
+    for(ChatRoomPtr crp:chatRooms_)
+    {
+        if(crp->getIdRoom()==idRoom)
+        {
+            if(crp->checkUserInChat(loginClient))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 void ChatManager::sendMessagesHistory(int idRoom, std::string userLogin)
@@ -168,7 +189,7 @@ void ChatManager::removeUser(std::string userLogin)
     {
         crp->removePerson(userLogin);
     }
-    for (uint var = 0; var < sessions_.capacity(); var++)
+    for (uint var = 0; var < sessions_.size(); var++)
     {
         if(sessions_.at(var)->getLogin()==userLogin)
         {

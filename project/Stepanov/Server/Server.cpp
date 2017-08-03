@@ -40,8 +40,6 @@ void Server::handleAccept(SessionEssencePtr session, system::error_code error)
     {
         if (!error)
         {
-            asio::ip::tcp::endpoint client_addr = session->socket().remote_endpoint();
-            sessions_.push_back(session);
             session->start();
             for(std::function<void(SessionEssencePtr)> callBackFun:onConnectionFun)
             {

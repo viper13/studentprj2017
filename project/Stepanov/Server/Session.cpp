@@ -31,9 +31,7 @@ void Session::write(std::string message)
                       , endBuffer
                       , std::bind(&Session::handleWrite
                                   , shared_from_this()
-                                  , buffers
-                                  , std::placeholders::_1
-                                  , std::placeholders::_2));
+                                  , std::placeholders::_1));
 }
 
 void Session::read()
@@ -46,8 +44,7 @@ void Session::read()
                          , asio::transfer_exactly(2)
                          , std::bind(&Session::handleRead
                                      , shared_from_this()
-                                     , std::placeholders::_1
-                                     , std::placeholders::_2));
+                                     , std::placeholders::_1));
     }
     else
     {
@@ -57,13 +54,12 @@ void Session::read()
                          , asio::transfer_exactly(messageSize_)
                          , std::bind(&Session::handleRead
                                      , shared_from_this()
-                                     , std::placeholders::_1
-                                     , std::placeholders::_2));
+                                     , std::placeholders::_1));
     }
 
 }
 
-void Session::handleRead(system::error_code error, size_t bufferSize)
+void Session::handleRead(system::error_code error)
 {
     if (!error)
     {
@@ -87,13 +83,11 @@ void Session::handleRead(system::error_code error, size_t bufferSize)
     }
 }
 
-void Session::handleWrite(BuffersVector data, system::error_code error, size_t bufferSize)
+void Session::handleWrite(system::error_code error)
 {
-    if(!error)
-    {
-    }
-    else
+    if(error)
     {
         LOG_ERR("Failure write data." << error.message());
+        onUnexpectedClose();
     }
 }
