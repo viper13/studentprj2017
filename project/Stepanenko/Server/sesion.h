@@ -12,6 +12,7 @@ class Session
 public:
     Session();
     void start();
+    void stop();
     asio::ip::tcp::socket &socket();
     void write(std::string message);
     void setUserName(std::string &userName);

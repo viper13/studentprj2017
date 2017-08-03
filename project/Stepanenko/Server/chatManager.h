@@ -20,7 +20,8 @@ private:
     std::string chatListDispatcher();
     std::string joinChatDispatcher(ChatSessionPtr session, std::string message);
     void messageDispatcher(ChatSessionPtr session, std::string message);
-    std::string disconnectDispatcher(ChatSessionPtr session);
+    void disconnectDispatcher(ChatSessionPtr session);
+    void unxpectedDisconnectDispatcher(ChatSessionPtr session);
     std::map<std::string, ChatSessionPtr> sessions_;
     std::map<std::string, ChatRoomPtr> chats_;
 };

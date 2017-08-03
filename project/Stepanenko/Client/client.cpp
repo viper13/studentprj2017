@@ -96,6 +96,10 @@ void Client::handleRead(asio::error_code error, size_t /*buf_size*/)
         }
 
     }
+    else if (asio::error::eof == error || asio::error::connection_reset == error)
+    {
+        LOG_INFO("User has been disconnected");
+    }
     else
     {
         LOG_ERR("Failure: read error code " << error.value()

@@ -11,7 +11,7 @@ class Protocol
 public:
     Protocol();
 
-    enum Type: char{USER_LIST = 1, START_CHAT, MESSAGE, USER_DISCONNECT, LOG_IN, CREATE_CHAT, CHAT_LIST, JOIN_CHAT};
+    enum Type: char{USER_LIST = 1, START_CHAT, MESSAGE, USER_DISCONNECT, LOG_IN, CREATE_CHAT, CHAT_LIST, JOIN_CHAT, UNEXPECT_CLOSE};
     enum Status: char{UNKNOWN = 0, OK, BAD};
 
     static std::string typeRemover(std::string message);

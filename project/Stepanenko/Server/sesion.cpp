@@ -1,6 +1,7 @@
 #include "sesion.h"
 #include "worker.h"
 #include "helper.h"
+#include "protocol.h"
 
 Session::Session()
     : socket_(Worker::instance()->ioService())
@@ -12,6 +13,12 @@ Session::Session()
 void Session::start()
 {
     read();
+}
+
+void Session::stop()
+{
+    socket_.shutdown(asio::ip::tcp::socket::shutdown_both);
+    socket_.close();
 }
 
 asio::ip::tcp::socket &Session::socket()
@@ -83,6 +90,17 @@ void Session::handleRead(asio::error_code error, size_t /*bufferSize*/)
                                 + static_cast<uint16_t>(buffer_[1]);
             read();
         }
+    }
+    else if (asio::error::bad_descriptor == error)
+    {
+        LOG_INFO("User has been normaly disconnected.");
+    }
+    else if (asio::error::eof == error || asio::error::connection_reset == error)
+    {
+        LOG_INFO("User disconnected unexpectedly!");
+        buffer_.resize(1);
+        buffer_[0] = Protocol::Type::UNEXPECT_CLOSE;
+        onRead(buffer_);
     }
     else
     {

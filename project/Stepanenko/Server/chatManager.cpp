@@ -75,8 +75,12 @@ void ChatManager::onRead(ChatSessionPtr session, std::string message)
         }
         case Protocol::Type::USER_DISCONNECT:
         {
-            messageToSend = disconnectDispatcher(session);
-            session->write(messageToSend);
+            disconnectDispatcher(session);
+            break;
+        }
+        case Protocol::Type::UNEXPECT_CLOSE:
+        {
+            unxpectedDisconnectDispatcher(session);
             break;
         }
         default:
@@ -268,13 +272,21 @@ void ChatManager::messageDispatcher(ChatSessionPtr session, std::string message)
     }
 }
 
-std::string ChatManager::disconnectDispatcher(ChatSessionPtr session)
+void ChatManager::disconnectDispatcher(ChatSessionPtr session)
+{
+    std::string currentUser = session->getUserName();
+    std::map<std::string, ChatSessionPtr>::iterator it = sessions_.find(currentUser);
+    std::string messageToSend = Protocol::disconnectServerMessageCreate(Protocol::Status::OK);
+    session->write(messageToSend);
+    session->stop();
+    sessions_.erase(it);
+}
+
+void ChatManager::unxpectedDisconnectDispatcher(ChatSessionPtr session)
 {
     std::string currentUser = session->getUserName();
     std::map<std::string, ChatSessionPtr>::iterator it = sessions_.find(currentUser);
     sessions_.erase(it);
-    std::string messageToSend = Protocol::disconnectServerMessageCreate(Protocol::Status::OK);
-    return messageToSend;
 }
 
 

@@ -248,8 +248,8 @@ void ChatClient::userDisconnectDispatcher(const std::string &message)
     {
         loggedIn_ = false;
         inChat_ = false;
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         std::cout << "You logged out successfuly! Input anything to exit!" << std::endl;
-        stop();
     }
     else
     {
