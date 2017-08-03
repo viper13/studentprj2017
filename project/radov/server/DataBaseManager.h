@@ -17,7 +17,7 @@ public:
     static bool usersByChats(int chatId, std::string userName);
     static bool addMessage(int chatId, std::string userName, std::string message);
     static bool getMessageList(std::string name, std::vector<ChatMessage> &chatMessages);
-    static bool getChatsList(std::string &message);
+    static bool getChatsList(std::string idClient, std::string &message);
 
 
 private:

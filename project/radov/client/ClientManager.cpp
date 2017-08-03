@@ -120,13 +120,17 @@ void ClientManager::chatCommandSet(std::string message)
         std::cout << "You leaved chatroom" << std::endl;
         inChat_ = false;
     }
+    else if(message.find("-leave") != std::string::npos)
+    {
+        std::cout << "You leaved chatroom" << std::endl;
+        inChat_ = false;
+    }
     else if(message.find("-help") != std::string::npos)
     {
         std::cout << std::endl
                   << "--------------------------------------\n"
                   << "-users   -- get online user list \n"
                   << "-add    -- add user to current chat \n"
-                  << "-leave  -- exit from current chat \n"
                   << "-messages  -- get OWN messages list \n"
                   << "-chats  -- get chats list \n"
                   << "-exit  -- close socket \n"
@@ -158,7 +162,6 @@ void ClientManager::nonChatCommandSet(std::string message)
         std::cout << std::endl
                   << "-----------------------------------------\n"
                   << "-users   -- get online user list \n"
-                  << "-direct -- write direct message to user\n"
                   << "-create -- create a chat\n"
                   << "-----------------------------------------\n";
     }
@@ -194,6 +197,15 @@ void ClientManager::defaultCommandSet(std::string message)
     else if((message.find("-exit") != std::string::npos))
     {
         Helper::prependCommand(Commands::EXIT, message);
+        write(message);
+    }
+    else if((message.find("-setroom") != std::string::npos))
+    {
+        std::cout << "Enter id of room:\n";
+        std::cin >> currentRoom_;
+        inChat_ = true;
+        Helper::prependCommand(Commands::SET_ROOM, message);
+        message += std::to_string(currentRoom_);
         write(message);
     }
 

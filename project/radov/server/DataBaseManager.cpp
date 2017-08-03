@@ -131,9 +131,6 @@ bool DataBaseManager::usersByChats(int chatId, std::string userName)
     try
     {
         pqxx::work txn(*connection);
-        LOG_INFO("INSERT INTO users_by_chats (chat_id, user_id)"
-                 "VALUES('" + chatId_ + "',"
-                 "(SELECT id FROM users WHERE name = '" + userName + "'))");
         txn.exec("INSERT INTO users_by_chats (chat_id, user_id)"
                  "VALUES('" + chatId_ + "',"
                  "(SELECT id FROM users WHERE name = '" + userName + "'))");
@@ -208,7 +205,7 @@ bool DataBaseManager::getMessageList(std::string name, std::vector<ChatMessage> 
     return is_success;
 }
 
-bool DataBaseManager::getChatsList(std::string& message)
+bool DataBaseManager::getChatsList(std::string idClient, std::string& message)
 {
     ConnectionPtr connection = getConnection();
     bool is_success = true;
@@ -216,14 +213,16 @@ bool DataBaseManager::getChatsList(std::string& message)
     try
     {
         pqxx::work txn(*connection);
-        pqxx::result result = txn.exec(" SELECT id, name FROM chats;");
+        pqxx::result result = txn.exec(" SELECT chat_id FROM users_by_chats "
+                                       " WHERE user_id = (SELECT id FROM users"
+                                       " WHERE name = '" + idClient + "') ;");
 
         txn.commit();
         message.erase();
+        message += "YOUR CHATS LIST:\n";
         for (const pqxx::tuple& row : result)
         {
-              message += "CHATROOM:[" + row[0].as<std::string>() + "] "
-                      + "Name: [" + row[1].as<std::string>() + "]\n";
+              message += "ID:[" + row[0].as<std::string>() + "]\n";
         }
     }
     catch(const std::exception& e)

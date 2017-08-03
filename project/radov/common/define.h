@@ -30,6 +30,7 @@ enum class Commands: uint8_t
     AUTHORIZATION_SUCCESS,
     GET_MESSAGE_LIST,
     GET_CHATS_LIST,
+    SET_ROOM,
     EXIT
 };
 

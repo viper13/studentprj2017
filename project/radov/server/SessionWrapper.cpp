@@ -79,6 +79,12 @@ void SessionWrapper::onRead(ByteBuffer buffer)
             c.getChatsList(idClient());
             break;
         }
+        case Commands::SET_ROOM:
+        {
+            currentRoom_ = std::stoi(data);
+            write("You changed room to " + data);
+            break;
+        }
         case Commands::EXIT:
         {
             c.disconnectUser(idClient());
@@ -97,7 +103,7 @@ void SessionWrapper::userLogin_(std::string data)
     int dividerPos = data.find_first_of(" ");
     std::string idClientTemp = data.substr(0, dividerPos);
 
-    setClientPassword( data.substr(dividerPos+1) );
+    setClientPassword(data.substr(dividerPos+1));
 
     bool exists = DataBaseManager::userExists(idClientTemp);
 
@@ -112,6 +118,7 @@ void SessionWrapper::userLogin_(std::string data)
                 Helper::prependCommand(Commands::AUTHORIZATION_SUCCESS, message_);
                 message_ += "Welcome, " + idClient() + "\n";
                 write(message_);
+                availableRooms = c.pullChatRooms(idClient());
             }
             else
             {

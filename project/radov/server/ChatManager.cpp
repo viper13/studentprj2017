@@ -62,8 +62,7 @@ void ChatManager::getMessageList(std::string idClient)
 
 void ChatManager::getChatsList(std::string idClient)
 {
-    DataBaseManager::getChatsList(message_);
-
+    DataBaseManager::getChatsList(idClient, message_);
 
     for(SessionManagerPtr sep: sessions_)
     {
