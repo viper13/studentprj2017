@@ -64,6 +64,22 @@ std::string Protocol::chatMessageClientMessageParse(std::string message)
     return message.substr(1, message.length());
 }
 
+std::string Protocol::chatMessageServerMessageDialog(const std::string &message)
+{
+    char firstSymbol = Type::MESSAGE;
+    std::stringstream tempStream;
+    tempStream << firstSymbol << "(dialog) " << message.substr(1, message.length());
+    return tempStream.str();
+}
+
+std::string Protocol::chatMessageServerMessageMulty(const std::string &chatName, const std::string &message)
+{
+    char firstSymbol = Type::MESSAGE;
+    std::stringstream tempStream;
+    tempStream << firstSymbol << "[" << chatName << "] " << message.substr(1, message.length());
+    return tempStream.str();
+}
+
 std::string Protocol::logInClientMessageCreate(std::string name)
 {
     return typeAdder(Type::LOG_IN, name);

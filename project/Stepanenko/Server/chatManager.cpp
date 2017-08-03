@@ -254,7 +254,16 @@ void ChatManager::messageDispatcher(ChatSessionPtr session, std::string message)
     {
         if (user != currentUser && sessions_.find(user) != sessions_.end())
         {
-            sessions_.at(user)->write(message);
+            if (session->getChatRoom()->getMultyChat())
+            {
+                std::string chatName = session->getChatRoom()->getChatRoomName();
+                sessions_.at(user)->write(Protocol::chatMessageServerMessageMulty(chatName, message));
+            }
+            else
+            {
+                sessions_.at(user)->write(Protocol::chatMessageServerMessageDialog(message));
+            }
+
         }
     }
 }

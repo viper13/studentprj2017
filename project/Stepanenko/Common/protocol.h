@@ -22,6 +22,8 @@ public:
 
     static std::string chatMessageClientMessageCreate(std::string user, std::string message);
     static std::string chatMessageClientMessageParse(std::string message);
+    static std::string chatMessageServerMessageDialog(const std::string &message);
+    static std::string chatMessageServerMessageMulty(const std::string &chatName, const std::string &message);
 
     static std::string logInClientMessageCreate(std::string name);
     static std::string logInServerMessageCreate(Status status);
