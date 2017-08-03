@@ -15,7 +15,7 @@ public:
     void start();
     asio::ip::tcp::socket &socket();
     void write(std::string message);
-    virtual void onRead(ByteBuffer data) = 0;
+    virtual void onRead(ByteBuffer buffer) = 0;
     virtual void onUnexpectedClose() = 0;
 
     std::string idClient() const;
@@ -40,8 +40,6 @@ private:
     std::string idClient_;
     std::string idTarget_;
     std::string clientPassword_;
-
-protected:
     ByteBuffer buffer_;
 
 };

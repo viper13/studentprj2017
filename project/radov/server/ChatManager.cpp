@@ -25,10 +25,10 @@ void ChatManager::getUserList(std::string idClient)
     uint i = 0;
     for (SessionManagerPtr sep: sessions_)
     {
-        if(sep -> idClient() != idClient)
+        if((sep -> idClient()) != idClient)
         {
             ++i;
-            userList += std::to_string(i) + ".[" + sep -> idClient() + "]\n";
+            userList += std::to_string(i) + ".[" + (sep -> idClient()) + "]\n";
         }
     }
     for(SessionManagerPtr sep: sessions_)
@@ -83,6 +83,18 @@ void ChatManager::start(Server& server)
                          &ChatManager::onConnected
                          , this
                          , std::placeholders::_1));
+}
+
+bool ChatManager::checkClientOnline(std::string idClient)
+{
+    for(SessionManagerPtr sep:sessions_)
+    {
+        if(sep -> idClient() == idClient)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 
@@ -143,7 +155,7 @@ void ChatManager::removeClient(std::string idClient)
     {
         crp -> removePerson(idClient);
     }
-    for (uint var = 0; var < sessions_.capacity(); var++)
+    for (uint var = 0; var < sessions_.size(); var++)
     {
         if(sessions_.at(var)->idClient() == idClient)
         {

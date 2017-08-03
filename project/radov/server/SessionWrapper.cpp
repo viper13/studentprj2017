@@ -17,9 +17,9 @@ std::shared_ptr<SessionWrapper> SessionWrapper::getNewSession()
 }
 
 
-void SessionWrapper::onRead(ByteBuffer /*data*/)
+void SessionWrapper::onRead(ByteBuffer buffer)
 {
-    std::string message(buffer_.begin(), buffer_.end());
+    std::string message(buffer.begin(), buffer.end());
     Commands command = static_cast<Commands>(message[0]);
 
     std::string data;
@@ -94,26 +94,36 @@ void SessionWrapper::onRead(ByteBuffer /*data*/)
 void SessionWrapper::userLogin_(std::string data)
 {
     int dividerPos = data.find_first_of(" ");
+    std::string idClientTemp = data.substr(0, dividerPos);
 
-    setIdClient( data.substr(0, dividerPos) );
     setClientPassword( data.substr(dividerPos+1) );
 
-    bool exists = DataBaseManager::userExists(idClient());
+    bool exists = DataBaseManager::userExists(idClientTemp);
 
     if (exists)
     {
-        if(DataBaseManager::authUser(idClient(), clientPassword()))
+        if(!c.checkClientOnline(idClientTemp))
         {
-            Helper::prependCommand(Commands::AUTHORIZATION_SUCCESS, message_);
-            message_ += "Welcome, " + idClient() + "\n";
-            write(message_);
+            setIdClient(idClientTemp);
+
+            if(DataBaseManager::authUser(idClient(), clientPassword()))
+            {
+                Helper::prependCommand(Commands::AUTHORIZATION_SUCCESS, message_);
+                message_ += "Welcome, " + idClient() + "\n";
+                write(message_);
+            }
+            else
+            {
+                Helper::prependCommand(Commands::AUTHORIZATION_FAILED, message_);
+                message_ += "AUTHIRIZATION FAILED!\n";
+                write(message_);
+                setIdClient("");
+            }
         }
         else
         {
             Helper::prependCommand(Commands::AUTHORIZATION_FAILED, message_);
-            message_ += "AUTHIRIZATION FAILED!\n";
-            write(message_);
-            setIdClient("");
+            write(message_ + "FAILED: Current user online now!");
         }
     }
     else
@@ -122,7 +132,9 @@ void SessionWrapper::userLogin_(std::string data)
 
         if(!addUserSuccess)
         {
-            write("DB: add user error, try later");
+            Helper::prependCommand(Commands::AUTHORIZATION_FAILED, message_);
+            message_ += "DATABASE say: add user error, try later";
+            write(message_);
         }
         else
         {

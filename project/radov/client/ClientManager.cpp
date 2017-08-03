@@ -34,7 +34,6 @@ void ClientManager::processMessage()
             nonChatCommandSet(message);
         }
 
-
     }
 }
 
@@ -51,7 +50,7 @@ void ClientManager::onRead(ByteBuffer data)
 
             currentRoom = std::stoi(message.substr(1, dividerPos));
             LOG_INFO("REQUEST: " << message << " Room is: " << currentRoom);
-            std::cout << "Type -yes to accept chatroom " << std::endl;
+            std::cout << "Type [-yes] to accept chatroom " << std::endl;
             hasRequest_ = true;
             break;
         }
@@ -94,7 +93,7 @@ void ClientManager::userLogin(std::string message)
 
         isAuthorized_ = true;
 
-        std::cout << "Type -help for list of commands" << std::endl;
+        //std::cout << "Type [-help] for list of commands" << std::endl;
 }
 
 void ClientManager::chatCommandSet(std::string message)
@@ -155,6 +154,11 @@ void ClientManager::nonChatCommandSet(std::string message)
                   << "-create -- create a chat\n"
                   << "-----------------------------------------\n";
     }
+    else
+    {
+        std::cout << "Unregistered command. Type [-help]" << std::endl;
+    }
+
 }
 
 void ClientManager::defaultCommandSet(std::string message)
@@ -186,6 +190,7 @@ void ClientManager::defaultCommandSet(std::string message)
         Helper::prependCommand(Commands::EXIT, message);
         write(message);
     }
+
 //    else if((message.find("-logout") != std::string::npos))
 //    {
 //        message.erase();

@@ -14,7 +14,7 @@ public:
 
 private:
     int currentRoom_;
-    void onRead(ByteBuffer data) override;
+    void onRead(ByteBuffer buffer) override;
     void onUnexpectedClose() override;
     void userLogin_(std::string data);
     void createChatMessage(std::string data);
