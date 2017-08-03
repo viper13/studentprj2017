@@ -16,6 +16,7 @@ public:
     asio::ip::tcp::socket &socket();
     void write(std::string message);
     virtual void onRead(ByteBuffer data) = 0;
+    virtual void onUnexpectedClose() = 0;
 
     std::string idClient() const;
     void setIdClient(const std::string &idClient);

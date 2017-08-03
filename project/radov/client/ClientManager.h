@@ -12,18 +12,6 @@ public:
     void processMessage() override;
     void onRead(ByteBuffer data) override;
 
-    bool getIsAuthorized() const;
-    void setIsAuthorized(bool value);
-
-    bool getInChat() const;
-    void setInChat(bool value);
-
-    bool getHasRequest() const;
-    void setHasRequest(bool hasRequest);
-
-    bool getStop() const;
-    void setStop(bool stop);
-
 private:
     std::string message;
     void userLogin(std::string message);

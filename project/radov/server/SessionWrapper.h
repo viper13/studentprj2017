@@ -13,9 +13,10 @@ public:
     bool inChat;
 
 private:
-    int currentRoom;
+    int currentRoom_;
     void onRead(ByteBuffer data) override;
-    void userLogin(std::string data);
+    void onUnexpectedClose() override;
+    void userLogin_(std::string data);
     void createChatMessage(std::string data);
     std::string message_;
 };

@@ -32,7 +32,7 @@ void SessionWrapper::onRead(ByteBuffer /*data*/)
     {
         case Commands::LOGIN_MESSAGE:
         {
-            SessionWrapper::userLogin(data);
+            SessionWrapper::userLogin_(data);
             break;
         }
         case Commands::GET_USER_LIST_MESSAGE:
@@ -47,7 +47,7 @@ void SessionWrapper::onRead(ByteBuffer /*data*/)
         }
         case Commands::CHAT_MESSAGE:
         {
-            c.sendChatMessage(currentRoom, data, idClient());
+            c.sendChatMessage(currentRoom_, data, idClient());
             break;
         }
         case Commands::ADD_USER_TO_CHAT_MESSAGE:
@@ -55,7 +55,7 @@ void SessionWrapper::onRead(ByteBuffer /*data*/)
             setIdTarget(data);
             c.requestMessage(idClient()
                              , idTarget()
-                             , currentRoom);
+                             , currentRoom_);
             LOG_INFO("Session trying to send request");
             break;
         }
@@ -63,8 +63,8 @@ void SessionWrapper::onRead(ByteBuffer /*data*/)
         {
             if(hasRequest)
             {
-                currentRoom = std::stoi(data);
-                c.addUserToChatRoom(idClient(), currentRoom);
+                currentRoom_ = std::stoi(data);
+                c.addUserToChatRoom(idClient(), currentRoom_);
             }
             break;
         }
@@ -91,7 +91,7 @@ void SessionWrapper::onRead(ByteBuffer /*data*/)
 
 }
 
-void SessionWrapper::userLogin(std::string data)
+void SessionWrapper::userLogin_(std::string data)
 {
     int dividerPos = data.find_first_of(" ");
 
@@ -144,12 +144,16 @@ void SessionWrapper::createChatMessage(std::string data)
              << idTarget() << " !");
 
     hasRequest = true;
-    currentRoom = c.nextIdRoom;
+    currentRoom_ = c.nextIdRoom;
     c.requestMessage(idClient()
                      , idTarget()
-                     , currentRoom);
+                     , currentRoom_);
     c.createChat(idClient(), idTarget());
 
-    c.addUserToChatRoom(idClient(), currentRoom);
+    c.addUserToChatRoom(idClient(), currentRoom_);
 }
 
+void SessionWrapper::onUnexpectedClose()
+{
+    LOG_INFO("UNEXPECTED HANDLER WORK!");
+}

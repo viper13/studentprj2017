@@ -15,9 +15,9 @@ ClientManager::ClientManager(std::string address, std::string port)
 
 void ClientManager::processMessage()
 {
-    while(!getStop())
+    while(!stop_)
     {
-        while(!getIsAuthorized())
+        while(!isAuthorized_)
         {
             userLogin(message);
         }
@@ -25,7 +25,7 @@ void ClientManager::processMessage()
 
         defaultCommandSet(message);
 
-        if(getInChat())
+        if(inChat_)
         {
             chatCommandSet(message);
         }
@@ -38,9 +38,9 @@ void ClientManager::processMessage()
     }
 }
 
-void ClientManager::onRead(ByteBuffer /*data*/)
+void ClientManager::onRead(ByteBuffer data)
 {
-    std::string message(buffer_.begin(), buffer_.end());
+    std::string message(data.begin(), data.end());
     Commands command = static_cast<Commands>(message[0]);
 
     switch(command)
@@ -52,17 +52,17 @@ void ClientManager::onRead(ByteBuffer /*data*/)
             currentRoom = std::stoi(message.substr(1, dividerPos));
             LOG_INFO("REQUEST: " << message << " Room is: " << currentRoom);
             std::cout << "Type -yes to accept chatroom " << std::endl;
-            setHasRequest(true);
+            hasRequest_ = true;
             break;
         }
         case Commands::AUTHORIZATION_FAILED:
         {
-            setIsAuthorized(false);
+            isAuthorized_ = false;
             break;
         }
         case Commands::AUTHORIZATION_SUCCESS:
         {
-            setIsAuthorized(true);
+            isAuthorized_ = true;
         }
         default:
             break;
@@ -92,7 +92,7 @@ void ClientManager::userLogin(std::string message)
 
         write(message);
 
-        setIsAuthorized(true);
+        isAuthorized_ = true;
 
         std::cout << "Type -help for list of commands" << std::endl;
 }
@@ -111,16 +111,19 @@ void ClientManager::chatCommandSet(std::string message)
     else if(message.find("-leave") != std::string::npos)
     {
         std::cout << "You leaved chatroom" << std::endl;
-        setInChat(false);
+        inChat_ = false;
     }
     else if(message.find("-help") != std::string::npos)
     {
-        std::cout << "-users   -- get online user list \n"
+        std::cout << std::endl
+                  << "--------------------------------------\n"
+                  << "-users   -- get online user list \n"
                   << "-add    -- add user to current chat \n"
                   << "-leave  -- exit from current chat \n"
                   << "-messages  -- get OWN messages list \n"
                   << "-chats  -- get chats list \n"
-                  << "-exit  -- close socket \n";
+                  << "-exit  -- close socket \n"
+                  << "--------------------------------------\n";
     }
     else if(!(message.find("-") != std::string::npos))
     {
@@ -141,14 +144,16 @@ void ClientManager::nonChatCommandSet(std::string message)
         std::cin >> temp;
         message += temp;
         write(message);
-        setInChat(true);
+        inChat_ = true;
     }
     else if(message.find("-help") != std::string::npos)
     {
         std::cout << std::endl
+                  << "-----------------------------------------\n"
                   << "-users   -- get online user list \n"
                   << "-direct -- write direct message to user\n"
-                  << "-create -- create a chat\n";
+                  << "-create -- create a chat\n"
+                  << "-----------------------------------------\n";
     }
 }
 
@@ -159,9 +164,9 @@ void ClientManager::defaultCommandSet(std::string message)
         Helper::prependCommand(Commands::GET_USER_LIST_MESSAGE, message);
         write(message);
     }
-    else if((message.find("-yes") != std::string::npos)&&(getHasRequest()))
+    else if((message.find("-yes") != std::string::npos) && hasRequest_)
     {
-        setInChat(true);
+        inChat_ = true;
         Helper::prependCommand(Commands::YES_MESSAGE, message);
         message += std::to_string(currentRoom);
         write(message);
@@ -189,47 +194,3 @@ void ClientManager::defaultCommandSet(std::string message)
 //        setHasRequest(false);
 //    }
 }
-
-bool ClientManager::getStop() const
-{
-    return stop_;
-}
-
-void ClientManager::setStop(bool stop)
-{
-    stop_ = stop;
-}
-
-bool ClientManager::getHasRequest() const
-{
-    return hasRequest_;
-}
-
-void ClientManager::setHasRequest(bool hasRequest)
-{
-    hasRequest_ = hasRequest;
-}
-
-bool ClientManager::getInChat() const
-{
-    return inChat_;
-}
-
-void ClientManager::setInChat(bool value)
-{
-    inChat_ = value;
-}
-
-bool ClientManager::getIsAuthorized() const
-{
-    return isAuthorized_;
-}
-
-void ClientManager::setIsAuthorized(bool value)
-{
-    isAuthorized_ = value;
-}
-
-
-
-
