@@ -17,14 +17,14 @@ public:
     static bool paceFromPostgres(const pqxx::tuple& data, User& user);
     static std::string makeRegisterMessage(std::string message);
     static std::string makeListMessage();
-    static std::string makeCreateChatMessage();
+    static std::string makeCreateChatMessage(std::string message);
     static std::string makeYesMessage(int currentRoom);
     static std::string makeHistoryMessage();
     static std::string makeExitMessage();
     static std::string makeRoomListMessage();
     static std::string makeRoomMessage(int currentRoom);
-    static std::string makeAddMessage();
-    static std::string makeSetRoomNameMessage();
+    static std::string makeAddMessage(std::string message);
+    static std::string makeSetRoomNameMessage(std::string message);
     static std::string makeChatMessage(std::string message);
     static std::string makeCreateNewUserMessage(std::string message);
     static std::string makeLoginMessage(std::string message);

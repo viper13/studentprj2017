@@ -16,7 +16,6 @@ std::shared_ptr<SessionEssence> SessionEssence::getNewSession()
 void SessionEssence::onRead(ByteBuffer data)
 {
     std::string message(data.begin(), data.end());
-//sdelat po chelovecheski
     if(message.find(LOGIN_MESSAGE) != std::string::npos)
     {
         message.erase(message.begin(),message.begin()+2);
@@ -95,9 +94,7 @@ void SessionEssence::onRead(ByteBuffer data)
     {
         message.erase(message.begin(),message.begin()+2);
         processSetRoomNameMessage(message);
-
     }
-
 }
 
 void SessionEssence::onUnexpectedClose()

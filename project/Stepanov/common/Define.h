@@ -34,8 +34,8 @@
 #define SET_ROOM_NAME "$R"
 
 
-#define LOG_INFO(message) std::cout<<"\n [INFO]"<<message<<std::endl;
-#define LOG_ERR(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<"\n [ERR]"<<message<<std::endl;
+#define LOG_INFO(message) std::cout<<"\n[INFO] "<<message<<std::endl;
+#define LOG_ERR(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<"\n[ERR] "<<message<<std::endl;
 
 
 typedef std::vector<char> ByteBuffer;

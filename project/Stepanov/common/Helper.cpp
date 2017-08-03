@@ -49,13 +49,9 @@ std::string Helper::makeListMessage()
     return GET_USER_LIST_MESSAGE;
 }
 
-std::string Helper::makeCreateChatMessage()
+std::string Helper::makeCreateChatMessage(std::string message)
 {
-    std::string result;
-    LOG_INFO("Enter id of target to create chat");
-    std::cin >> result;
-    result = CREATE_CHAT_MESSAGE + result;
-    return result;
+    return CREATE_CHAT_MESSAGE + message;
 }
 
 
@@ -89,22 +85,14 @@ std::string Helper::makeRoomMessage(int currentRoom)
     return SET_ROOM_MESSAGE+std::to_string(currentRoom);
 }
 
-std::string Helper::makeAddMessage()
+std::string Helper::makeAddMessage(std::string message)
 {
-    std::string result;
-    LOG_INFO("Enter id of target:");
-    std::cin >>result;
-    result = ADD_USER_TO_CHAT_MESSAGE + result;
-    return result;
+    return ADD_USER_TO_CHAT_MESSAGE + message;
 }
 
-std::string Helper::makeSetRoomNameMessage()
-{
-    std::string result;
-    LOG_INFO("Enter name:");
-    std::cin >> result;
-    result = SET_ROOM_NAME + result;
-    return result;
+std::string Helper::makeSetRoomNameMessage(std::string message)
+{ 
+    return SET_ROOM_NAME + message;
 }
 
 std::string Helper::makeChatMessage(std::string message)

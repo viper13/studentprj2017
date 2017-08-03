@@ -10,7 +10,7 @@ class DataBaseManager
 {
 
 public:
-    static bool getUsersList(std::vector<User>& users);
+
     static bool checkUser(std::string name);
     static void registerNewUser(std::string name,std::string nick);
     static bool loginIntoUser(std::string name,std::string nick);

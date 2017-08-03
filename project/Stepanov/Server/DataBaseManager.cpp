@@ -3,29 +3,6 @@
 #include "Helper.h"
 std::map<std::string,ConnectionPtr> DataBaseManager::connections;
 
-bool DataBaseManager::getUsersList(std::vector<User> &users)
-{
-    ConnectionPtr connection = getConnection();
-    bool isSuccess = true;
-    try{
-        pqxx::work txn(*connection);
-        pqxx::result result = txn.exec("SELECT id,name,nick FROM users;");
-        for(const pqxx::tuple& row : result)
-        {
-            User user;
-            Helper::paceFromPostgres(row,user);
-            users.push_back(user);
-
-        }
-    }
-    catch(const std::exception& e)
-    {
-        LOG_ERR("Error on parse "<<e.what());
-        isSuccess=false;
-    }
-    return true;
-}
-
 bool DataBaseManager::checkUser(std::string name)
 {
     ConnectionPtr connection = getConnection();
@@ -49,6 +26,7 @@ bool DataBaseManager::checkUser(std::string name)
     {
         LOG_ERR("Error in check user"<<e.what());
     }
+    return false;
 }
 
 void DataBaseManager::registerNewUser(std::string name, std::string nick)
@@ -89,6 +67,7 @@ bool DataBaseManager::loginIntoUser(std::string name, std::string nick)
     {
         LOG_ERR("Error in logining"<<e.what());
     }
+    return false;
 }
 
 int DataBaseManager::getUserId(std::string name)
@@ -108,6 +87,7 @@ int DataBaseManager::getUserId(std::string name)
     {
         LOG_ERR("Error while getting user name "<<e.what());
     }
+    return -1;
 }
 
 std::string DataBaseManager::getUserName(int id)
@@ -127,6 +107,7 @@ std::string DataBaseManager::getUserName(int id)
     {
         LOG_ERR("Error while getting user name "<<e.what());
     }
+    return 0;
 }
 
 int DataBaseManager::registerChat(std::string name)
@@ -215,6 +196,7 @@ std::vector<std::string> DataBaseManager::getMessagesHistory(int idRoom)
     {
         LOG_ERR("Erron in messagesHistory"<<e.what());
     }
+    return std::vector<std::string>();
 }
 
 std::vector<int> DataBaseManager::getRoomsToAdd(int userId)
@@ -239,6 +221,7 @@ std::vector<int> DataBaseManager::getRoomsToAdd(int userId)
     {
         LOG_ERR("Erron in get rooms add"<<e.what());
     }
+    return std::vector<int>();
 }
 
 void DataBaseManager::updateRoomName(std::string name,int idRoom)

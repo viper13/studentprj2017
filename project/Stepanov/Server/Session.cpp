@@ -88,6 +88,5 @@ void Session::handleWrite(system::error_code error)
     if(error)
     {
         LOG_ERR("Failure write data." << error.message());
-        onUnexpectedClose();
     }
 }
