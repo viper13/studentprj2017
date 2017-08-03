@@ -30,27 +30,22 @@ void ChatManager::login(ChatSessionPtr session, const std::string &name)
 {
     do
     {
+
         if(session->getUser().isLogin_)
         {
-            ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("You have already logined!"));
-            buff->emplace(buff->begin(), static_cast<uint8_t>(0));
-            session->execute(CommandCode::LOGIN, buff);
+            onLoginError(session, "SYSTEM: You are login");
             break;
         }
 
         if(!DataBaseManager::isContainUser(name))
         {
-            ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("There isn't the same name"));
-            buff->emplace(buff->begin(), static_cast<uint8_t>(0));
-            session->execute(CommandCode::LOGIN, buff);
+            onLoginError(session, "SYSTEM: There isn't the same name");
             break;
         }
 
         if(usersChatRooms_.find(name) != usersChatRooms_.end())
         {
-            ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("Some user had already logined with same name"));
-            buff->emplace(buff->begin(), static_cast<uint8_t>(0));
-            session->execute(CommandCode::LOGIN, buff);
+            onLoginError(session, "SYSTEM: Some user had already logined with same name");
             break;
         }
 
@@ -76,7 +71,7 @@ void ChatManager::logout(ChatSessionPtr session)
 
         if(!session->getUser().isLogin_)
         {
-            session->sendMessageToClient("You must be login first!");
+            session->sendMessageToClient("SYSTEM: You must be login first!");
             break;
         }
 
@@ -105,7 +100,7 @@ void ChatManager::getUserList(ChatSessionPtr session)
     {
         if(!session->getUser().isLogin_)
         {
-            ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("You must be login!"));
+            ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("SYSTEM: You must be login!"));
             session->execute(CommandCode::USER_LIST, buff);
             break;
         }
@@ -143,38 +138,53 @@ void ChatManager::connectToUser(ChatSessionPtr session, const std::string &name)
 {
     do
     {
-        if(!session->getUser().isLogin_)
+        User user = session->getUser();
+
+        if(!user.isLogin_)
         {
-            session->sendMessageToClient("You must be login first!");
+            session->sendMessageToClient("SYSTEM: You must be login first!");
             break;
         }
 
-        if(session->getUser() == name)
+        if(user.name_ == name)
         {
-            session->sendMessageToClient("You cannot send request to yourself!");
+            session->sendMessageToClient("SYSTEM: You cannot send request to yourself!");
             break;
         }
 
-        std::string sessionName = session->getUser().name_;
+
+        std::string sessionName = user.name_;
 
         if(!DataBaseManager::isContainUser(name))
         {
-            ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer("There isn't the user with same name!"));
-            session->execute(CommandCode::CONNECT_TO_USER, buff);
+            session->sendMessageToClient("SYSTEM: There isn't the user with same name!");
             break;
         }
 
         uint32_t sessionId = DataBaseManager::getUserId(sessionName);
         uint32_t userId = DataBaseManager::getUserId(name);
 
+        if(DataBaseManager::isUserChatWith(sessionId, userId))
+        {
+            session->sendMessageToClient("SYSTEM: You have already in friends!");
+            break;
+        }
+
         if(DataBaseManager::isUserSendRequestToUser(sessionId, userId))
         {
             break;
         }
 
-        session->sendMessageToClient("Request has been send to user: " + name);
+        session->sendMessageToClient("SYSTEM: Request has been send to user: " + name);
 
         DataBaseManager::addRequestToFriendIntoTable(sessionId, userId);
+
+        ChatSessionPtr userTo = findSession(name);
+
+        if(userTo)
+        {
+            userTo->execute(CommandCode::CONNECT_TO_USER, std::make_shared<ByteBuffer>(Helper::stringToBuffer(sessionName)));
+        }
     }
     while(false);
 }
@@ -183,59 +193,69 @@ void ChatManager::disconnectedFromUser(ChatSessionPtr session, const std::string
 {
     do
     {
-        if(!session->getUser().isLogin_)
+        User user = session->getUser();
+
+        if(!user.isLogin_)
         {
-            session->sendMessageToClient("You must be login first!");
+            session->sendMessageToClient("SYSTEM: You must be login first!");
             break;
         }
 
-        if(session->getUser().isInChat_)
+        if(user.isInChat_)
         {
-            session->sendMessageToClient("You must get out from chat firstly");
+            session->sendMessageToClient("SYSTEM: You must get out from chat firstly");
             break;
         }
 
-        std::string name = session->getUser().name_;
+        std::string name = user.name_;
 
         uint32_t userSessionId = DataBaseManager::getUserId(name);
         uint32_t userId = DataBaseManager::getUserId(userName);
 
         if(!DataBaseManager::isUserChatWith(userSessionId, userId))
         {
-            session->sendMessageToClient("Wrong user name!");
+            session->sendMessageToClient("SYSTEM: Wrong user name!");
             break;
         }
 
         DataBaseManager::deleteChatUserWith(userSessionId, userId);
 
-        session->sendMessageToClient("User was disconnected from you!");
+        session->sendMessageToClient("SYSTEM: User was disconnected from you!");
     }
     while(false);
 }
 
-void ChatManager::answerOnRequestConnect(ChatSessionPtr session, const std::string &name, bool answer)
+void ChatManager::answerOnRequestConnect(ChatSessionPtr session, const std::string &name)
 {
-    do{
+    do
+    {
         if(!session->getUser().isLogin_)
         {
-            session->sendMessageToClient("You must be login first!");
+            session->sendMessageToClient("SYSTEM: You must be login first!");
+            break;
+        }
+
+        if(!DataBaseManager::isContainUser(name))
+        {
+            session->sendMessageToClient("SYSTEM: Wrong name!");
             break;
         }
 
         ChatSessionPtr userSession = findSession(name);
         std::string sessionName = session->getUser().name_;
 
-        ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer(sessionName));
-        buff->emplace(buff->begin(), static_cast<uint8_t>(answer));
-        userSession->execute(CommandCode::ANSWER_ON_REQUEST_TO_CONNECT, buff);
+        uint32_t sessionId = DataBaseManager::getUserId(sessionName);
+        uint32_t userSessionId = DataBaseManager::getUserId(name);
 
-        if(!answer)
+        if(!DataBaseManager::isUserSendRequestToUser(userSessionId, sessionId))
         {
+            session->sendMessageToClient("SYSTEM: Wrong name!");
             break;
         }
 
-        uint32_t sessionId = DataBaseManager::getUserId(sessionName);
-        uint32_t userSessionId = DataBaseManager::getUserId(name);
+        ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer(sessionName));
+        userSession->execute(CommandCode::ANSWER_ON_REQUEST_TO_CONNECT, buff);
+
         DataBaseManager::addChatToDataBase(sessionName+"_and_"+name, sessionId, userSessionId);
 
         DataBaseManager::deleteUserRequestToUser(userSessionId, sessionId);
@@ -251,13 +271,13 @@ void ChatManager::sendMessage(ChatSessionPtr session, const std::string &text)
     {
         if(!session->getUser().isLogin_)
         {
-            session->sendMessageToClient("You must be login first!");
+            session->sendMessageToClient("SYSTEM: You must be login first!");
             break;
         }
 
         if(!session->getUser().isInChat_)
         {
-            session->sendMessageToClient("You must be entered to chat!");
+            session->sendMessageToClient("SYSTEM: You must be entered to chat!");
             break;
         }
 
@@ -281,7 +301,7 @@ void ChatManager::singUp(ChatSessionPtr session, const std::string &text)
 
         if(session->getUser().isLogin_)
         {
-            session->sendMessageToClient("You are login!");
+            session->sendMessageToClient("SYSTEM: You are login!");
             break;
         }
 
@@ -289,14 +309,14 @@ void ChatManager::singUp(ChatSessionPtr session, const std::string &text)
 
         if(isContain)
         {
-            session->sendMessageToClient("The user is contain already");
+            session->sendMessageToClient("SYSTEM: The user is contain already");
             break;
         }
 
         if(DataBaseManager::singUp(text))
-            session->sendMessageToClient("DONE!");
+            session->sendMessageToClient("SYSTEM: DONE!");
         else
-            session->sendMessageToClient("Something wrong!");
+            session->sendMessageToClient("SYSTEM: Something wrong!");
     }
     while(false);
 }
@@ -307,7 +327,7 @@ void ChatManager::usersRequestFriend(ChatSessionPtr session)
     {
         if(!session->getUser().isLogin_)
         {
-            session->sendMessageToClient("You must be login first!");
+            session->sendMessageToClient("SYSTEM: You must be login first!");
             break;
         }
 
@@ -336,7 +356,7 @@ void ChatManager::showChats(ChatSessionPtr session)
     {
         if(!session->getUser().isLogin_)
         {
-            session->sendMessageToClient("You must be login first!");
+            session->sendMessageToClient("SYSTEM: You must be login first!");
             break;
         }
 
@@ -363,13 +383,13 @@ void ChatManager::enterChat(ChatSessionPtr session, const std::string &userName)
     do {
         if(!session->getUser().isLogin_)
         {
-            session->sendMessageToClient("You must be login first!");
+            session->sendMessageToClient("SYSTEM: You must be login first!");
             break;
         }
 
         if(session->getUser().isInChat_)
         {
-            session->sendMessageToClient("You must out from chat firstly!");
+            session->sendMessageToClient("SYSTEM: You must out from chat firstly!");
             break;
         }
 
@@ -382,7 +402,7 @@ void ChatManager::enterChat(ChatSessionPtr session, const std::string &userName)
 
         if(!DataBaseManager::isUserChatWith(sessionId, userSessionId))
         {
-            session->sendMessageToClient("Wrong name of chat!");
+            session->sendMessageToClient("SYSTEM: Wrong name of chat!");
             break;
         }
 
@@ -419,13 +439,13 @@ void ChatManager::outChat(ChatSessionPtr session)
     {
         if(!session->getUser().isLogin_)
         {
-            session->sendMessageToClient("You must be login first");
+            session->sendMessageToClient("SYSTEM: You must be login first");
             break;
         }
 
         if(!session->getUser().isInChat_)
         {
-            session->sendMessageToClient("You aren't at chat");
+            session->sendMessageToClient("SYSTEM: You aren't at chat");
             break;
         }
 
@@ -442,7 +462,7 @@ void ChatManager::outChat(ChatSessionPtr session)
 
         usersChatRooms_.at(name)->addUser(name, session);
 
-        session->sendMessageToClient("You are out");
+        session->sendMessageToClient("SYSTEM: You are out");
     }
     while (false);
 }
@@ -469,9 +489,7 @@ void ChatManager::readSessionBuffer(std::shared_ptr<ChatSession> session, ByteBu
     }
     case CommandCode::ANSWER_ON_REQUEST_TO_CONNECT:
     {
-        answerOnRequestConnect(session
-                               , Helper::bufferToString(buffPtr, 2)
-                               , static_cast<bool>( (*buffPtr)[1]) );
+        answerOnRequestConnect(session, Helper::bufferToString(buffPtr, 1));
         break;
     }
     case CommandCode::SEND_MESSAGE:
@@ -521,6 +539,13 @@ void ChatManager::disconectedSession(std::shared_ptr<ChatSession> session)
 {
     logout(session);
     session->stop();
+}
+
+void ChatManager::onLoginError(std::shared_ptr<ChatSession> session, const std::string &text)
+{
+    ByteBufferPtr buff = std::make_shared<ByteBuffer>(Helper::stringToBuffer(text));
+    buff->emplace(buff->begin(), static_cast<uint8_t>(0));
+    session->execute(CommandCode::LOGIN, buff);
 }
 
 ChatSessionPtr ChatManager::findSession(const std::__cxx11::string &name)

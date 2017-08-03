@@ -16,40 +16,35 @@ void ClientChat::onRead(ByteBufferPtr bufferPtr)
     switch (cCode) {
     case CommandCode::LOGIN:
     {
-        if( static_cast<bool>((*bufferPtr)[1]) )
+        bool isLoginSuccessful = static_cast<bool>((*bufferPtr)[1]);
+        if( isLoginSuccessful )
         {
-            std::cout << "Welcome!" << std::endl;
+            std::cout << "SYSTEM: Welcome!" << std::endl;
         }
         else
         {
-            std::cout << "Oops! Something wrong: " << Helper::bufferToString(bufferPtr, 1) << std::endl;
+            USER_INFO(Helper::bufferToString(bufferPtr, 1));
         }
         break;
     }
     case CommandCode::USER_LIST:
     {
-        std::cout << Helper::bufferToString(bufferPtr, 1) << std::endl;
+        USER_INFO(Helper::bufferToString(bufferPtr, 1));
         break;
     }
     case CommandCode::CONNECT_TO_USER:
     {
         std::string userName = Helper::bufferToString(bufferPtr, 1);
-        std::cout << userName + " want star chat with you!" << std::endl
-                  << "Use command CONFIRM_TO_START_CHAT [name]" << std::endl;
+        USER_INFO("SYSTEM: " + userName + " want star chat with you!" << std::endl
+                  << "Use command of confirm to start chat");
 
         break;
     }
     case CommandCode::ANSWER_ON_REQUEST_TO_CONNECT:
     {
-        std::string userName = Helper::bufferToString(bufferPtr, 2);
-        if(static_cast<bool>( (*bufferPtr)[0]))
-        {
-            USER_INFO("User " + userName + " had confirmed your request to start chat");
-        }
-        else
-        {
-           USER_INFO("User " + userName + " hadn't confirmed your request to start chat");
-        }
+        std::string userName = Helper::bufferToString(bufferPtr, 1);
+
+        USER_INFO("SYSTEM: User " + userName + " had confirmed your request to start chat");
         break;
     }
     case CommandCode::SEND_MESSAGE:
@@ -72,7 +67,7 @@ void ClientChat::onRead(ByteBufferPtr bufferPtr)
     }
 }
 
-void ClientChat::execute(CommandCode cmd, ByteBufferPtr&& bufferPtr)
+void ClientChat::execute(CommandCode cmd, ByteBufferPtr bufferPtr)
 {
     switch (cmd)
     {
@@ -150,7 +145,7 @@ void ClientChat::login(ByteBufferPtr name)
 {
     if(name->empty())
     {
-        USER_INFO("Login is empty!");
+        USER_INFO("SYSTEM: Login is empty!");
         return;
     }
 
@@ -169,7 +164,7 @@ void ClientChat::sendMessage(ByteBufferPtr message)
 {
     if(message->empty())
     {
-        std::cout << "Message is empty!" << std::endl;
+        USER_INFO("SYSTEM: Message is empty!");
         return;
     }
 
@@ -189,7 +184,7 @@ void ClientChat::connectToUser(ByteBufferPtr userName)
 {
     if(userName->empty())
     {
-        USER_INFO("User's name is empty!");
+        USER_INFO("SYSTEM: User's name is empty!");
         return;
     }
 
@@ -202,7 +197,7 @@ void ClientChat::disconnectFromUser(ByteBufferPtr userName)
 {
     if(userName->empty())
     {
-        USER_INFO("User's name is empty!");
+        USER_INFO("SYSTEM: User's name is empty!");
         return;
     }
 
@@ -218,7 +213,6 @@ void ClientChat::answerOnRequestToConnect(ByteBufferPtr userNameAndAnswer)
 
 void ClientChat::confirmToStarChat(ByteBufferPtr userName)
 {
-    userName->emplace(userName->begin(), static_cast<uint8_t>(1));
     execute(CommandCode::ANSWER_ON_REQUEST_TO_CONNECT, std::move(userName));
 }
 
@@ -226,7 +220,7 @@ void ClientChat::singUp(ByteBufferPtr userName)
 {
     if(userName->empty())
     {
-        USER_INFO("User's name is empty!");
+        USER_INFO("SYSTEM: User's name is empty!");
         return;
     }
 

@@ -46,19 +46,19 @@ void MessageManager::start()
 void MessageManager::printHelp()
 {
     std::cout << "Use next numbers for command:" << std::endl
-              << "0 LOGIN [name]" << std::endl
-              << "1 LOGOUT" << std::endl
-              << "2 USER_LIST" << std::endl
-              << "3 SEND_MESSAGE [message]" << std::endl
-              << "4 SEND_REQUEST_TO_FRIEND_TO_USER [user's name]" << std::endl
-              << "5 DISCONNECT_FROM_USER [user's name]" << std::endl
-              << "6 CONFIRM_TO_START_CHAT [name]" << std::endl
-              << "7 SHOW_REQUEST_USERS_TO_FRIEND" << std::endl
-              << "8 SING_UP [yourself name]" << std::endl
-              << "9 SHOW_CHATS" << std::endl
-              << "10 ENTER TO CHAT [name of chat]" << std::endl
-              << "11 OUT_FROM_CHAT" << std::endl
-              << "12 SHOW THE MENU" << std::endl;
+              << "0 [name] - login " << std::endl
+              << "1 - logout" << std::endl
+              << "2 - get user list" << std::endl
+              << "3 [message] - send message to user. Firstly you must enter to chat." << std::endl
+              << "4 [user's name] - send request to friend to user." << std::endl
+              << "5 [user's name] - remove user from friends." << std::endl
+              << "6 [name] - confirm to start chat (request to friend)." << std::endl
+              << "7 - show requests to friend." << std::endl
+              << "8 [yourself name] - sing up." << std::endl
+              << "9 - show chats" << std::endl
+              << "10 [name of chat] - enter to chat." << std::endl
+              << "11 - leave chat." << std::endl
+              << "12 - show menu." << std::endl;
 }
 
 int MessageManager::getCode(const std::string &strCode)
@@ -112,7 +112,7 @@ std::pair<CommandCode, ByteBufferPtr> MessageManager::getCodeAndData(const std::
 
         if(0 > code)
         {
-            std::cout << "Wrong number of command!" << std::endl;
+            std::cout << "SYSTEM: Wrong number of command!" << std::endl;
             break;
         }
 

@@ -102,7 +102,6 @@ uint32_t DataBaseManager::getUserId(const std::string &str)
     catch(const std::exception& e)
     {
         LOG_ERR("Failure make query : "<<e.what());
-        //is_success = false;
     }
 
     return id;
