@@ -55,16 +55,14 @@ void ChatManager::execute(CodeCommand code, ByteBufferPtr bufferPtr, ChatSession
         {
             responce = login(bufferPtr, chatSessionPtr);
             LOG_INFO(responce);
-            ByteBufferPtr responcePtr(new ByteBuffer(responce.begin(),responce.end()));
-            chatSessionPtr->execute(CodeCommand::LOGIN, responcePtr);
+            chatSessionPtr->sendMessageToClient(responce);
             break;
         }
         case CodeCommand::LOGOUT:
         {
             responce = logout(chatSessionPtr);
             LOG_INFO(responce);
-            ByteBufferPtr responcePtr(new ByteBuffer(responce.begin(),responce.end()));
-            chatSessionPtr->execute(CodeCommand::LOGOUT, responcePtr);
+            chatSessionPtr->sendMessageToClient(responce);
             break;
         }
         case CodeCommand::SEND_MESSAGE:
@@ -104,15 +102,15 @@ void ChatManager::execute(CodeCommand code, ByteBufferPtr bufferPtr, ChatSession
     }
 }
 
-void ChatManager::sendMessageToUsersExceptOne(ChatSessionPtr currentChatSessionPtr, ByteBufferPtr bufferPtr)
+void ChatManager::sendMessageToUsersExceptOne(ChatSessionPtr currentChatSessionPtr, std::string message)
 {
+
     for (ChatSessionPtr sessionPtr : sessions_)
     {
         if ( sessionPtr != currentChatSessionPtr)
         {
-            sessionPtr->write(bufferPtr);
+            sessionPtr->sendMessageToClient(message);
         }
-        else continue;
     }
 }
 
@@ -175,12 +173,11 @@ std::string ChatManager::logout(ChatSessionPtr currentChatSessionPtr)
         std::string exceptUserName = currentChatSessionPtr->getUserName();
         std::string messageForUsers = "User: " + exceptUserName + " was loged out.";
 
-        ByteBufferPtr messagePtr(new ByteBuffer(messageForUsers.begin(),messageForUsers.end()));
-
         currentChatSessionPtr->setUserName("");
+        currentChatSessionPtr->setisChatWith("");
         currentChatSessionPtr->setisLogged(false);
 
-        sendMessageToUsersExceptOne(currentChatSessionPtr, messagePtr);
+        sendMessageToUsersExceptOne(currentChatSessionPtr, messageForUsers);
 
         responce = "You are loged out";
     }
@@ -331,9 +328,8 @@ void ChatManager::sendMessage(ChatSessionPtr chatsession, ByteBufferPtr messageT
     if (result.second)
     {
         LOG_INFO("THEY CAN CHATS");
-        bool result = DataBaseManager::addMessage(chatsession->getUserName(),chatsession->getisChatWith(),text);
-
-        if (result)
+        std::pair<bool,std::string> result = DataBaseManager::addMessage(chatsession->getUserName(),chatsession->getisChatWith(),text);
+        if (result.second == "")
         {
             LOG_INFO("MESSAGE WAS ADDED");
             for (ChatSessionPtr session : sessions_)
@@ -344,7 +340,10 @@ void ChatManager::sendMessage(ChatSessionPtr chatsession, ByteBufferPtr messageT
                 }
             }
         }
-
+        else
+        {
+            chatsession->sendMessageToClient(result.second);
+        }
     }
     else
     {
@@ -391,6 +390,13 @@ void ChatManager::acceptToChat(ChatSessionPtr session, ByteBufferPtr userName)
                             LOG_INFO(byChatsResult2.second);
                         }
                         session->sendMessageToClient("You can send messages to: " + username);
+                        for (ChatSessionPtr another : sessions_)
+                        {
+                            if (another->getUserName() == username)
+                            {
+                                another ->sendMessageToClient("You can send messages to: " + session->getUserName());
+                            }
+                        }
 
                     }
                 }
@@ -444,6 +450,7 @@ void ChatManager::seeRequests(ChatSessionPtr session)
 
 void ChatManager::seeFriends(ChatSessionPtr session)
 {
+    LOG_INFO("seeFriends");
     if (!session->getisLogged())
     {
         std::string responce = "You must log in at first";

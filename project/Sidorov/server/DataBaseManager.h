@@ -19,7 +19,7 @@ public:
     static std::pair<bool,std::string> registerUser(const std::string& userName);
     static std::pair<bool,bool> isUserContain(const std::string& userName);    
     static std::pair<bool,bool> isChatsWith(const std::string& userName, const std::string &whomFind);
-    static bool addMessage(const std::string& fromUser, const std::string& whomUser,const std::string& message);
+    static std::pair<bool, std::string> addMessage(const std::string& fromUser, const std::string& whomUser,const std::string& message);
     static std::pair<bool,std::string> addRequest(const std::string& fromUser, const std::string& whomUser);
     static std::pair<bool,std::string> addChatRoom(const std::string& chatName);
     static std::pair<bool,std::string> addUsers_by_chats(const std::string& chatName, const std::string& userName);

@@ -16,7 +16,7 @@ public:
     void processCommand(std::shared_ptr<ChatSession> chatSession, ByteBufferPtr bufferPtr);
     void execute(CodeCommand code, ByteBufferPtr bufferPtr, ChatSessionPtr chatSessionPtr);
 
-    void sendMessageToUsersExceptOne(ChatSessionPtr currentChatSessionPtr, ByteBufferPtr bufferPtr);
+    void sendMessageToUsersExceptOne(ChatSessionPtr currentChatSessionPtr, std::string message);
     std::string registration(ByteBufferPtr userNamePtr, ChatSessionPtr currentChatSessionPtr);
     std::string login(ByteBufferPtr userNamePtr, ChatSessionPtr currentChatSessionPtr);
     std::string getUserList(ChatSessionPtr currentSessionPtr);

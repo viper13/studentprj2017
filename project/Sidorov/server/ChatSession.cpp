@@ -36,6 +36,7 @@ void ChatSession::onDisconnect()
 {
     getPointer()->setUserName("");
     getPointer()->setisLogged(false);
+    getPointer()->setisChatWith("");
 }
 
 
@@ -75,8 +76,8 @@ void ChatSession::execute(CodeCommand code, ByteBufferPtr data)
     write(data);
 }
 
-void ChatSession::sendMessageToClient(const std::string &text)
+void ChatSession::sendMessageToClient(const std::string &text)//here
 {
-    execute(CodeCommand::SEND_MESSAGE
+    execute(CodeCommand::NONE
             , std::make_shared<ByteBuffer>(Helper::stringToBuffer(text)));
 }

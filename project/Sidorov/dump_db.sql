@@ -38,6 +38,7 @@ CREATE TABLE users_by_chats
 
 CREATE TABLE requests_to_chat
 (
+    id SERIAL PRIMARY KEY,
     from_user_id integer NOT NULL,
     user_id integer NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),

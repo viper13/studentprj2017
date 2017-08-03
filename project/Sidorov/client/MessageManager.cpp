@@ -18,6 +18,7 @@ void MessageManager::initializeSession()
 
 void MessageManager::closeSession()
 {
+    clientPtr_->stop();
     Worker::instance()->join();
 
     LOG_INFO("Threads FINISHED!!!");
@@ -32,7 +33,7 @@ void MessageManager::inputMessage()
             LOG_INFO("Enter message:");
             std::getline(std::cin, message);
 
-           if (needStop = (message == "stop")) continue;
+           if (message.compare("13") == 0) break;
 
             std::pair<CodeCommand, ByteBufferPtr> pairCodeData = Helper::getCodeAndData(message);
 
@@ -40,6 +41,5 @@ void MessageManager::inputMessage()
                         continue;
 
             clientPtr_->execute(pairCodeData.first, std::move(pairCodeData.second));
-
     }
 }

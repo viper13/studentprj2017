@@ -30,7 +30,6 @@ private:
     std::function<void (ByteBufferPtr)> readHandle_;
     std::string username_;
     bool isLogged_;
-    std::vector<std::string> usersWantToChat;
     std::string inChatWith_;
 
 };

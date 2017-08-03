@@ -243,7 +243,7 @@ std::pair<bool, bool> DataBaseManager::isChatsWith(const std::string &userName, 
         if (ids.size()!=0)
         {
             std::sort(ids.begin(),ids.end());
-            for(int i = 0; i < ids.size()-1; ++i)
+            for(size_t i = 0; i < ids.size()-1; ++i)
             {
                 if(ids[i] == ids[i+1]) is_contain=true;
             }
@@ -285,19 +285,27 @@ std::pair<bool, std::vector<std::string>> DataBaseManager::getRequests(const std
     return std::make_pair(is_sucess,names);
 }
 
-bool DataBaseManager::addMessage(const std::string &fromUser, const std::string &whomUser, const std::string &message)
+std::pair<bool,std::string> DataBaseManager::addMessage(const std::string &fromUser, const std::string &whomUser, const std::string &message)
 {
     ConnectionPtr connection = getConnection();
     bool is_sucess = true;
     int userId = getUserId(fromUser);
+    std::string responce;
     std::pair<bool,int> chatId = getChatId(fromUser,whomUser);
     try
     {
-        pqxx::work txn(*connection);
-        pqxx::result result = txn.exec("INSERT INTO messages(chat_id,user_id,message) VALUES ("+ txn.quote(chatId.second) + ","
+        if (chatId.second != -1)
+        {
+            pqxx::work txn(*connection);
+            pqxx::result result = txn.exec("INSERT INTO messages(chat_id,user_id,message) VALUES ("+ txn.quote(chatId.second) + ","
                                                                                                 + txn.quote(userId) + ","
                                                                                                 + txn.quote(message)+")");
         txn.commit();
+        }
+        else
+        {
+            responce = "Chat was not found";
+        }
     }
     catch(const std::exception& e)
     {
@@ -305,7 +313,7 @@ bool DataBaseManager::addMessage(const std::string &fromUser, const std::string 
         is_sucess = false;
     }
 
-    return is_sucess;
+    return std::make_pair(is_sucess,responce);
 }
 
 std::pair<bool,std::string> DataBaseManager::addRequest(const std::string &fromUser, const std::string &whomUser)
@@ -346,7 +354,6 @@ std::pair<bool, int> DataBaseManager::getChatId(const std::string &firstName, co
 {
     ConnectionPtr connection = getConnection();
     bool is_sucess = true;
-    bool is_contain = false;
     int chatId= -1;
     int firstId = getUserId(firstName);
     int secondId = getUserId(secondName);
@@ -362,7 +369,7 @@ std::pair<bool, int> DataBaseManager::getChatId(const std::string &firstName, co
             ids.push_back(row["chat_id"].as<int>());
         }
         std::sort(ids.begin(),ids.end());
-        for(int i = 0; i < ids.size()-1; ++i)
+        for(size_t i = 0; i < ids.size()-1; ++i)
         {
             if(ids[i] == ids[i+1]) chatId = ids[i];
         }
@@ -441,7 +448,7 @@ std::pair<bool, std::vector<std::string> > DataBaseManager::getChatHistory(const
     bool is_success = true;
     std::vector<std::string> messages;
     std::pair<bool,int> chatId = DataBaseManager::getChatId(firstName,secondName);
-    LOG_INFO("CHATID -" << chatId.second)
+    LOG_INFO("CHATID - " << chatId.second)
     try
     {
         pqxx::work txn(*connection);

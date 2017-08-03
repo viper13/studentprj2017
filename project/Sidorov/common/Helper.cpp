@@ -37,7 +37,7 @@ BuffersVector Helper::addBufferSize(ByteBufferPtr buffer)
 
     ByteBufferPtr bufferSize_(new ByteBuffer());
     bufferSize_->resize(2);
-    int size = buffer->size();
+    uint16_t size = buffer->size();
 
     (*bufferSize_)[0] = ((size & 0xff00) << 8);
     (*bufferSize_)[1] = (size & 0x00ff);
@@ -75,7 +75,7 @@ std::pair<CodeCommand, ByteBufferPtr> Helper::getCodeAndData(const std::string &
             return std::pair<CodeCommand, ByteBufferPtr>();
         }
 
-        if(code < static_cast<int>(CodeCommand::REGISTRATION) || code > static_cast<int>(CodeCommand::PRINT_HELP))
+        if(code < static_cast<int>(CodeCommand::REGISTRATION) || code > static_cast<int>(CodeCommand::EXIT))
         {
             std::cout << "Wrong number of command!" << std::endl;
             return std::pair<CodeCommand, ByteBufferPtr>();

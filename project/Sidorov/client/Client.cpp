@@ -9,6 +9,7 @@ Client::Client(std::string address, std::string port)
     , port_(port)
     , resolver_(io_service_)
 {
+   buffer_.resize(BUFFER_MAX_SIZE);
 }
 
 void Client::start()
@@ -21,9 +22,13 @@ void Client::start()
                                             , std::placeholders::_2));
 }
 
+void Client::stop()
+{
+    socket_.close();
+}
+
 void Client::write(ByteBufferPtr bufferPtr)
 {
-    //ByteBufferPtr bufferPtr(new ByteBuffer(buffer));
     BuffersVector buffers = Helper::addBufferSize(bufferPtr);
     BufferSequence sequance = Helper::toBufferSequence(buffers);
 
@@ -108,10 +113,7 @@ void Client::handleRead(std::error_code error, size_t bufferSize)
     {
         if(0 == nextMessageSize_)
         {
-            uint16_t firstByte = (uint16_t)buffer_[0];
-            uint16_t secondByte = (uint16_t)buffer_[1];
-            nextMessageSize_ = (static_cast<uint16_t>(buffer_[0]))
-                    + static_cast<uint16_t>(buffer_[1]);
+            nextMessageSize_ = static_cast<uint8_t>((buffer_[0] << 8) | buffer_[1]);
             LOG_INFO("Message size is: " << nextMessageSize_);
             buffer_.resize(nextMessageSize_);
         }
@@ -122,6 +124,8 @@ void Client::handleRead(std::error_code error, size_t bufferSize)
             onRead(buff);
 
             nextMessageSize_ = 0;
+
+            buffer_.resize(2);
         }
 
        read();

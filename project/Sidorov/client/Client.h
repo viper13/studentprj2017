@@ -10,6 +10,7 @@ class Client : public std::enable_shared_from_this<Client>
 public:
     Client(std::string address, std::string port);
     void start();
+    void stop();
     void write(ByteBufferPtr bufferPtr);
 
     virtual void onRead(ByteBufferPtr data) = 0;

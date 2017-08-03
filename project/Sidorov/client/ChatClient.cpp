@@ -4,7 +4,6 @@ ChatClient::ChatClient(std::string address, std::string port)
     : Client(address,port)
 {
     username_ = "";
-    isLogged_ = 0;
     inChatWith_="";
 }
 
@@ -18,35 +17,31 @@ void ChatClient::onRead(ByteBufferPtr data)
     case CodeCommand::CONNECT_TO_USER:
     {
         std::string userName = Helper::bufferToString(data);
-        if(isContainRequest(userName))
-        {
-            break;
-        }
-        LOG_INFO(userName << " wants to chat with you" << "\n"
-                 << "Use command ACCEPT_TO_CHAT [name]" << "\n" );
-        usersWantToChat.push_back(userName);
+        std::cout << '\n' << userName << " wants to chat with you" << "\n"
+                 << "Use command ACCEPT_TO_CHAT [name]" << "\n" ;
         break;
     }
     case CodeCommand::SEE_REQUESTS:
     {
         std::string names = Helper::bufferToString(data);
-        LOG_INFO("Your requests: " << names);
+        std::cout << "\nYour requests: " << names  << '\n' << std::endl;
         break;
     }
     case CodeCommand::SEE_FRIENDS:
     {
         std::string names = Helper::bufferToString(data);
-        LOG_INFO("Your friends: " << names);
+        std::cout << "\nYour friends: " << names << '\n'<< std::endl;
         break;
     }
     case CodeCommand::START_CHAT:
     {
         std::string partner = Helper::bufferToString(data);
-        LOG_INFO("Your current chatman - " << partner);
+        LOG_INFO("\nYour current chatman - " << partner);
         break;
     }
     default:
-        LOG_INFO(*data);
+        std::string message = Helper::bufferToString(data);
+        std::cout << '\n' <<message << '\n'<< std::endl;
         break;
     }
 }
@@ -118,20 +113,8 @@ void ChatClient::execute(CodeCommand code, ByteBufferPtr bufferPtr)
     default:
         break;
     }
-
 }
 
-bool ChatClient::isContainRequest(const std::string &name)
-{
-    for (int i=0; i<usersWantToChat.size(); i++)
-    {
-        if (usersWantToChat.at(i) == name)
-        {
-            return true;
-        }
-    }
-    return false;
-}
 
 void ChatClient::registration(ByteBufferPtr name)
 {
@@ -221,18 +204,19 @@ void ChatClient::seeFriends()
 void ChatClient::printHelp()
 {
     std::cout << "Use next numbers for command:" << std::endl
-              << "1 REGISTRATION [name]" << std::endl
-              << "2 LOGIN [name]" << std::endl
-              << "3 LOGOUT" << std::endl
-              << "4 USER_LIST" << std::endl
-              << "5 SEND_MESSAGE [message]" << std::endl
-              << "6 CONNECT_TO_USER [user's name]" << std::endl
-              << "7 ACCEPT_TO_CHAT [username]" << std::endl
-              << "8 SEE_REQUESTS" << std::endl
-              << "9 SEE_FRIENDS" << std::endl
-              << "10 START_CHAT" << std::endl
-              << "11 DISCONNECT_FROM_USER" << std::endl
-              << "12 PRINT HELP" << std::endl;
+              << " '1 [name]' - (REGISTRATION)      --  Register your in our base" << std::endl
+              << " '2 [name]' - (LOGIN)             --  Authorization (use this command after registration)" << std::endl
+              << " '3'        - (LOGOUT)            " << std::endl
+              << " '4 [name]' - (CONNECT_TO_USER)   --  Send request to chat to user" << std::endl
+              << " '5 [name]' - (ACCEPT_TO_CHAT)    --  Accept request to chat (use '9' to see your requests)" << std::endl
+              << " '6 [name]' - (START_CHAT)        --  Start chat with user which accept your request to chat" << std::endl
+              << " '7 [text]' - (SEND_MESSAGE)      --  Send message to chat user" << std::endl
+              << " '8'        - (DISCONNECT_FROM_USER) -- Disconnect from your current chat user" << std::endl
+              << " '9'        - (SEE_REQUESTS)      -- Show requests from other users" << std::endl
+              << " '10'       - (SEE_FRIENDS)       -- Show your friend list" << std::endl
+              << " '11'       - (USER_LIST)         --  Output list of registered users (online,offline)" << std::endl
+              << " '12'       - (PRINT HELP)        -- Output command list" << std::endl
+              << " '13'       - (EXIT)" << std::endl;
 }
 
 void ChatClient::startChat(ByteBufferPtr userName)

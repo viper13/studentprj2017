@@ -21,16 +21,18 @@ enum class CodeCommand: uint8_t
 {
     REGISTRATION = 1,
     LOGIN = 2,
-    LOGOUT = 3,
-    USER_LIST = 4,
-    SEND_MESSAGE = 5,
-    CONNECT_TO_USER = 6,
-    ACCEPT_TO_CHAT = 7,
-    SEE_REQUESTS = 8,
-    SEE_FRIENDS = 9,
-    START_CHAT = 10,
-    DISCONNECT_FROM_USER = 11,
-    PRINT_HELP = 12
+    LOGOUT = 3,   
+    CONNECT_TO_USER = 4,
+    ACCEPT_TO_CHAT = 5,
+    START_CHAT = 6,
+    SEND_MESSAGE = 7,
+    DISCONNECT_FROM_USER = 8,
+    SEE_REQUESTS = 9,
+    SEE_FRIENDS = 10,
+    USER_LIST = 11,
+    PRINT_HELP = 12,
+    EXIT = 13,
+    NONE = 14
 };
 
 std::ostream& operator <<(std::ostream& stream, const ByteBuffer& buffer);
