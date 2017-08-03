@@ -5,26 +5,34 @@
 CommandClient::CommandClient(std::string address, std::string port) :
     MessageClient(address, port)
 {
-
+    onReadCallback_ = [](std::string){};
 }
 
 
 
-void CommandClient::logIn(std::string userName)
+void CommandClient::tryLogIn(std::string userName)
 {
     write( BufferConverter::addOpCode (Operation::logIn, userName) );
 }
 
 
 
-std::string CommandClient::getUserName()
+void CommandClient::disconnect(std::string userName)
 {
-    return userName_;
+    write( BufferConverter::addOpCode (Operation::disconnect, userName) );
 }
 
 
 
-void CommandClient::setUserName(std::string newUserName)
+void CommandClient::setOnReadCallBack(std::function<void (std::string)> onReadCallback) noexcept
 {
-    userName_ = newUserName;
+    onReadCallback_ = onReadCallback;
+}
+
+
+
+void CommandClient::onRead(const ByteBuffer& buffer)
+{
+    std::string message( buffer.begin(), buffer.end() );
+    onReadCallback_(message);
 }

@@ -14,7 +14,9 @@ class CommandSession
 
         CommandSession();
 
-        void setCallback( std::function< void(SessionPtr, std::string) > onReadCallback );
+        void setOnReadCallback( std::function< void(SessionPtr, std::string) > onReadCallback );
+        void replyRegestrationSuccess( std::string userName );
+        void replyRegestrationError( std::string userName );
 
         static SessionPtr getNewSession();
 

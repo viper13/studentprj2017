@@ -10,9 +10,25 @@ CommandSession::CommandSession() :
 
 
 
-void CommandSession::setCallback (std::function< void (SessionPtr, std::string) > onReadCallback)
+void CommandSession::setOnReadCallback (std::function< void (SessionPtr, std::string) > onReadCallback)
 {
     onReadCallback_ = onReadCallback;
+}
+
+
+
+void CommandSession::replyRegestrationSuccess(std::string userName)
+{
+    write (BufferConverter::addOpCode( Operation::regestrationSuccessful,
+                                       userName ));
+}
+
+
+
+void CommandSession::replyRegestrationError(std::string userName)
+{
+    write (BufferConverter::addOpCode( Operation::regestrationError,
+                                       userName ));
 }
 
 

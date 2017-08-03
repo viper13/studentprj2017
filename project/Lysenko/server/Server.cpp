@@ -15,7 +15,7 @@ Server::Server(int port)
 
 
 
-void Server::setCallback(std::function<void (SessionPtr)> onConnectedCallback)
+void Server::setOnConnectedCallback(std::function<void (SessionPtr)> onConnectedCallback)
 {
     onConnectedCallback_ = onConnectedCallback;
 }

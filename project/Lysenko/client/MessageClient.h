@@ -17,16 +17,9 @@ class MessageClient
     protected:
 
         void write(std::string message);
+        virtual void onRead(const ByteBuffer& buffer) = 0;
 
         asio::io_service& io_service_;
-        asio::ip::tcp::socket socket_;
-
-        std::string address_;
-        std::string port_;
-
-        asio::ip::tcp::resolver resolver_;
-
-        ByteBuffer buffer_;
 
     private:
 
@@ -41,6 +34,15 @@ class MessageClient
         void handleWrite(BuffersVector data,
                          asio::error_code error,
                          size_t writtenBytesCount);
+
+        asio::ip::tcp::socket socket_;
+
+        std::string address_;
+        std::string port_;
+
+        asio::ip::tcp::resolver resolver_;
+
+        ByteBuffer buffer_;
 };
 
 #endif // CLIENT_H

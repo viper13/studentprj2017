@@ -14,13 +14,13 @@ SOURCES += main.cpp \
     ../common/define.cpp \
     MessageClient.cpp \
     CommandClient.cpp \
-    ../common/BufferConverter.cpp
+    ../common/BufferConverter.cpp \
+    CommandManager.cpp
 
 HEADERS += \
     ../common/Worker.h \
     ../common/define.h \
     MessageClient.h \
     CommandClient.h \
-    ../common/BufferConverter.h
-
-LIBS += -lpqxx
+    ../common/BufferConverter.h \
+    CommandManager.h

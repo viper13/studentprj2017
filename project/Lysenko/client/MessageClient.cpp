@@ -21,9 +21,9 @@ void MessageClient::start()
 
     resolver_.async_resolve( query,
                              std::bind (&MessageClient::handleResolveEndPoint,
-                             shared_from_this(),
-                             std::placeholders::_1,
-                             std::placeholders::_2) );
+                                        shared_from_this(),
+                                        std::placeholders::_1,
+                                        std::placeholders::_2) );
 }
 
 
@@ -49,7 +49,7 @@ void MessageClient::write(std::string message)
 
 
 void MessageClient::handleResolveEndPoint(asio::error_code error,
-                                   asio::ip::tcp::resolver::iterator iterator)
+                                          asio::ip::tcp::resolver::iterator iterator)
 {
     if ( !error )
     {
@@ -71,7 +71,7 @@ void MessageClient::handleResolveEndPoint(asio::error_code error,
 
 
 void MessageClient::handleConnect(asio::error_code error,
-                           asio::ip::tcp::resolver::iterator iterator)
+                                  asio::ip::tcp::resolver::iterator iterator)
 {
     if ( !error )
     {
@@ -150,6 +150,8 @@ void MessageClient::handleReadMessage(asio::error_code error, size_t bufferSize)
     {
         LOG_INFO("Successfully read message " << buffer_ << " Size = " <<
                  bufferSize);
+
+        onRead(buffer_);
 
         readMessageSize();
     }

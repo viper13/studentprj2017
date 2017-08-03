@@ -12,7 +12,7 @@ class Server
         Server(int port);
 
         void start ();
-        void setCallback(std::function< void(SessionPtr) > onConnectedCallback);
+        void setOnConnectedCallback(std::function< void(SessionPtr) > onConnectedCallback);
 
     private:
 

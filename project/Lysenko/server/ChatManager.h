@@ -11,13 +11,11 @@ class ChatManager
 
         ChatManager(Server& server);
 
+        inline void logIn(const std::string& userName);
+
         void onConnected(SessionPtr newSession);
 
         void onRead(SessionPtr session, std::string message);
-
-    private:
-
-        std::map<std::string, SessionPtr> registeredUsers_;
 };
 
 #endif // CHATMANAGER_H

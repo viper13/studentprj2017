@@ -23,3 +23,13 @@ std::ostream& operator<<(std::ostream& stream, const BuffersVector& buffersVecto
 
     return stream;
 }
+
+
+
+std::ostream& operator<<(std::ostream& stream, const User& user)
+{
+    stream << "{ id = " << user.id_ <<
+              " name = " << user.name_ << " }";
+
+    return stream;
+}

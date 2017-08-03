@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     ../common/BufferConverter.cpp \
     MessageSession.cpp \
     CommandSession.cpp \
-    DataBaseManager.cpp
+    DataBaseManager.cpp \
+    ChatManager.cpp
 
 HEADERS += \
     ../common/Worker.h \
@@ -27,6 +28,7 @@ HEADERS += \
     ../common/BufferConverter.h \
     MessageSession.h \
     CommandSession.h \
-    DataBaseManager.h
+    DataBaseManager.h \
+    ChatManager.h
 
 OTHER_FILES += $$PWD/../dump_db.sql

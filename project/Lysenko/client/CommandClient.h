@@ -10,16 +10,18 @@ class CommandClient
 
         CommandClient(std::string address, std::string port);
 
-        void logIn(std::string userName);
+        void tryLogIn(std::string userName);
+        void disconnect(std::string userName);
 
-        std::string getUserName();
-        void setUserName(std::string newUserName);
+        void setOnReadCallBack(std::function< void(std::string) > onReadCallback) noexcept;
 
         virtual ~CommandClient() = default;
 
     private:
 
-        std::string userName_;
+        virtual void onRead(const ByteBuffer& buffer) override;
+
+        std::function< void(std::string) > onReadCallback_;
 };
 
 #endif // COMMANDCLIENT_H

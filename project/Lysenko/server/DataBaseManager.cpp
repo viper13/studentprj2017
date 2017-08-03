@@ -8,16 +8,72 @@ std::map<std::string, ConnectionPtr> DataBaseManager::connections_;
 
 
 
-bool DataBaseManager::getUsersList(std::vector<User>& users)
+uint32_t DataBaseManager::registerUser(const std::string& userName)
 {
     ConnectionPtr connection = getConnection();
-
-    bool is_successful = true;
+    uint32_t userId = 0;
 
     try
     {
         pqxx::work txn (*connection);
-        pqxx::result result = txn.exec("SELECT id, name, nick FROM users;");
+        pqxx::result result = txn.exec("INSERT INTO users "
+                                       "(id, name, online) "
+                                       "VALUES ("
+                                       "DEFAULT, '" +
+                                       userName + "', "
+                                       "true) "
+                                       "RETURNING id;");
+
+        userId = (result[0])["id"].as<int>();
+
+        txn.commit();
+    }
+    catch (const std::exception& ex)
+    {
+        LOG_ERR( "Failure register user: " << ex.what() );
+        userId = 0;
+    }
+
+    return userId;
+}
+
+
+
+bool DataBaseManager::setOnlineStatus(uint32_t userId, bool status)
+{
+    ConnectionPtr connection = getConnection();
+    bool isSuccessful = true;
+
+    try
+    {
+        pqxx::work txn (*connection);
+        txn.exec("UPDATE users"
+                 "SET online='" + status +
+                 "' WHERE id=" + static_cast<uint>(userId));
+
+        txn.commit();
+    }
+    catch (const std::exception& ex)
+    {
+        LOG_ERR( "Failure register user: " << ex.what() );
+        isSuccessful = false;
+    }
+
+    return isSuccessful;
+}
+
+
+
+bool DataBaseManager::getUsersList(std::vector<User>& users)
+{
+    ConnectionPtr connection = getConnection();
+    bool isSuccessful = true;
+
+    try
+    {
+        pqxx::work txn (*connection);
+        pqxx::result result = txn.exec("SELECT id, name"
+                                       "FROM users;");
 
         for (const pqxx::tuple& row : result)
         {
@@ -26,27 +82,70 @@ bool DataBaseManager::getUsersList(std::vector<User>& users)
 
             users.push_back(user);
         }
+
+        txn.commit();
     }
     catch (const std::exception& ex)
     {
         LOG_ERR( "Failure get users list: " << ex.what() );
-        is_successful = false;
+        isSuccessful = false;
     }
 
-    return is_successful;
+    return isSuccessful;
 }
 
 
-
-bool DataBaseManager::parseFromPostgres(const pqxx::tuple &data, User &user)
+// Remove
+bool DataBaseManager::parseFromPostgres(const pqxx::tuple& data, User& user)
 {
     user.id_ = data["id"].as<int>();
     user.name_ = data["name"].as<std::string>();
-    user.nick_ = data["nick"].as<std::string>();
 
     LOG_INFO("Parsed user: " << user);
 
     return true;
+}
+
+
+
+int DataBaseManager::getUserId(const std::string& userName)
+{
+    ConnectionPtr connection = getConnection();
+    uint32_t userId = 0;
+
+    try
+    {
+        pqxx::work txn (*connection);
+        pqxx::result result = txn.exec("SELECT name, id "
+                                       "FROM users "
+                                       "WHERE name='" +
+                                       userName + "'");
+
+        if ( result.empty() )
+        {
+            return 0;
+        }
+        else
+        {
+            userId = (result[0])["id"].as<int>();
+        }
+
+        txn.commit();
+    }
+    catch (const std::exception& ex)
+    {
+        LOG_ERR( "Failure to check get user ID: " << ex.what() );
+        userId = 0;
+    }
+
+    return userId;
+}
+
+
+
+bool DataBaseManager::isUserRegistered(const std::string& userName)
+{
+    return static_cast< bool >( getUserId( userName ) );
 }
 
 
@@ -59,7 +158,7 @@ ConnectionPtr DataBaseManager::getConnection()
 
     ConnectionPtr connection;
 
-    if ( connections_.find (thread_id) == connections_.end() )
+    if ( connections_.find( thread_id ) == connections_.end() )
     {
         try
         {
