@@ -98,49 +98,26 @@ bool DataBaseManager::addChat(int& chatId, std::string name)
 {
     ConnectionPtr connection = getConnection();
     bool is_success = true;
-    bool exist = false;
 
     try
     {
         pqxx::work txn(*connection);
-        pqxx::result result = txn.exec("SELECT id FROM chats WHERE name = '" + name + "'");
+        pqxx::result result = txn.exec("INSERT INTO chats (id,name)"
+                                       " VALUES (DEFAULT,'" + name +"')"
+                                       " RETURNING id;");
         txn.commit();
 
-        exist = !result.empty();
+        chatId = result[0][0].as<int>();
+        LOG_INFO("Create new chat: " << chatId );
 
-        if(exist)
-        {
-            chatId = result[0][0].as<int>();
-            LOG_INFO("Chat" << chatId << "allready exists");
-        }
+
     }
     catch(const std::exception& e)
     {
-        LOG_INFO("Failure select chat by name: " << e.what());
-        is_success = false;
+        LOG_INFO("Failure add chat: " << e.what());
+        is_success= false;
     }
 
-    if(!exist)
-    {
-        try
-        {
-            pqxx::work txn(*connection);
-            pqxx::result result = txn.exec("INSERT INTO chats (id,name)"
-                                           " VALUES (DEFAULT,'" + name +"')"
-                                           " RETURNING id;");
-            txn.commit();
-
-            chatId = result[0][0].as<int>();
-            LOG_INFO("Create new chat: " << chatId );
-
-
-        }
-        catch(const std::exception& e)
-        {
-            LOG_INFO("Failure add chat: " << e.what());
-            is_success= false;
-        }
-    }
 
     return is_success;
 }
@@ -149,18 +126,18 @@ bool DataBaseManager::usersByChats(int chatId, std::string userName)
 {
     ConnectionPtr connection = getConnection();
     bool is_success = true;
-    bool exist = false;
 
     std::string chatId_ = std::to_string(chatId);
     try
     {
         pqxx::work txn(*connection);
-        pqxx::result result = txn.exec("SELECT chat_id, user_id FROM users_by_chats"
-                                       " WHERE chat_id = '" + chatId_ + "'"
-                                         " and user_id = (SELECT id FROM users WHERE name = '" + userName + "') ");
+        LOG_INFO("INSERT INTO users_by_chats (chat_id, user_id)"
+                 "VALUES('" + chatId_ + "',"
+                 "(SELECT id FROM users WHERE name = '" + userName + "'))");
+        txn.exec("INSERT INTO users_by_chats (chat_id, user_id)"
+                 "VALUES('" + chatId_ + "',"
+                 "(SELECT id FROM users WHERE name = '" + userName + "'))");
         txn.commit();
-        exist = !result.empty();
-
     }
     catch(const std::exception& e)
     {
@@ -168,22 +145,6 @@ bool DataBaseManager::usersByChats(int chatId, std::string userName)
         is_success = false;
     }
 
-    if(!exist)
-    {
-        try
-        {
-            pqxx::work txn(*connection);
-            txn.exec("INSERT INTO users_by_chats (chat_id, user_id)"
-                     "VALUES('" + chatId_ + "',"
-                     "(SELECT id FROM users WHERE name = '" + userName + "'))");
-            txn.commit();
-        }
-        catch(const std::exception& e)
-        {
-            LOG_INFO("Failure add users_by_chats: " << e.what());
-            is_success = false;
-        }
-    }
 
     return is_success;
 }

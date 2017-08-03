@@ -64,6 +64,7 @@ void SessionWrapper::onRead(ByteBuffer buffer)
             if(hasRequest)
             {
                 currentRoom_ = std::stoi(data);
+                availableRooms.push_back(currentRoom_);
                 c.addUserToChatRoom(idClient(), currentRoom_);
             }
             break;
@@ -128,6 +129,7 @@ void SessionWrapper::userLogin_(std::string data)
     }
     else
     {
+        setIdClient(idClientTemp);
         bool addUserSuccess = DataBaseManager::addUser(idClient(), clientPassword());
 
         if(!addUserSuccess)
@@ -155,14 +157,17 @@ void SessionWrapper::createChatMessage(std::string data)
              << " want to create chat with "
              << idTarget() << " !");
 
+    currentRoom_ = c.createChat(idClient(), idTarget());
+    availableRooms.push_back(currentRoom_);
     hasRequest = true;
-    currentRoom_ = c.nextIdRoom;
     c.requestMessage(idClient()
                      , idTarget()
                      , currentRoom_);
-    c.createChat(idClient(), idTarget());
-
     c.addUserToChatRoom(idClient(), currentRoom_);
+
+    Helper::prependCommand(Commands::CREATE_CHAT_MESSAGE, message_);
+    message_ += std::to_string(currentRoom_);
+    write(message_);
 }
 
 void SessionWrapper::onUnexpectedClose()

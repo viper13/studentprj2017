@@ -9,6 +9,8 @@ ClientManager::ClientManager(std::string address, std::string port)
     , inChat_(false)
     , stop_(false)
     , isAuthorized_(false)
+    , currentRoom_(0)
+    , requestRoom_(0)
 {
 
 }
@@ -48,10 +50,16 @@ void ClientManager::onRead(ByteBuffer data)
         {
             int dividerPos = message.find_first_of(" ");
 
-            currentRoom = std::stoi(message.substr(1, dividerPos));
-            LOG_INFO("REQUEST: " << message << " Room is: " << currentRoom);
+            requestRoom_ = std::stoi(message.substr(1, dividerPos-1));
+            LOG_INFO("REQUEST: " << message << " Room is: " << requestRoom_);
             std::cout << "Type [-yes] to accept chatroom " << std::endl;
             hasRequest_ = true;
+            break;
+        }
+        case Commands::CREATE_CHAT_MESSAGE:
+        {
+            currentRoom_ = std::stoi(message.substr(1));
+            LOG_INFO("PUT INTO ROOM: " << message << " Room is: " << currentRoom_);
             break;
         }
         case Commands::AUTHORIZATION_FAILED:
@@ -154,10 +162,6 @@ void ClientManager::nonChatCommandSet(std::string message)
                   << "-create -- create a chat\n"
                   << "-----------------------------------------\n";
     }
-    else
-    {
-        std::cout << "Unregistered command. Type [-help]" << std::endl;
-    }
 
 }
 
@@ -171,8 +175,10 @@ void ClientManager::defaultCommandSet(std::string message)
     else if((message.find("-yes") != std::string::npos) && hasRequest_)
     {
         inChat_ = true;
+        currentRoom_ = requestRoom_;
         Helper::prependCommand(Commands::YES_MESSAGE, message);
-        message += std::to_string(currentRoom);
+        message += std::to_string(currentRoom_);
+        std::cout << "You accepted chat invite!\n";
         write(message);
     }
     else if((message.find("-messages") != std::string::npos))

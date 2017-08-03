@@ -12,10 +12,7 @@ void ChatManager::onConnected(SessionManagerPtr session)
 {
     LOG_INFO("onConnected from CHATMANAGER");
     sessions_.push_back(session);
-    LOG_INFO("Sessions size = " << sessions_.size());
 
-    //std::vector<User> users;
-    //DataBaseManager::getUsersList(users);
 }
 
 void ChatManager::getUserList(std::string idClient)
@@ -115,7 +112,18 @@ void ChatManager::sendMessage(std::string idClient, std::string idTarget, std::s
 
 void ChatManager::sendChatMessage(int idRoom, std::string message,std::string idClient)
 {
-    chatRooms_.at(idRoom) -> sendMessage(message, idClient);
+    if(!message.empty())
+    {
+        for(ChatRoomPtr crp : chatRooms_)
+        {
+            if(crp -> getIdRoom() == idRoom)
+            {
+                crp -> sendMessage(message,idClient);
+                DataBaseManager::addMessage(idRoom, idClient, message);
+                LOG_INFO("MESSAGE:[" << message << "] has written to DB");
+            }
+        }
+    }
 }
 
 void ChatManager::requestMessage(std::string idClient, std::string idTarget, int room)
@@ -137,16 +145,25 @@ void ChatManager::requestMessage(std::string idClient, std::string idTarget, int
     }
 }
 
-void ChatManager::createChat(std::string idClient, std::string idTarget)
+int ChatManager::createChat(std::string idClient, std::string idTarget)
 {
+    int idChat;
     std::string chatName =  idClient + " + " + idTarget;
-    DataBaseManager::addChat(nextIdRoom, chatName);
-    chatRooms_.push_back(ChatRoom::getNewChatRoom(nextIdRoom));
+    DataBaseManager::addChat(idChat, chatName);
+    chatRooms_.push_back(ChatRoom::getNewChatRoom(idChat));
+    return idChat;
 }
 
 void ChatManager::addUserToChatRoom(std::string idClient, int idRoom)
 {
-    chatRooms_.at(idRoom) -> addPerson(idClient);
+    for(ChatRoomPtr crp: chatRooms_)
+    {
+        if(crp -> getIdRoom() == idRoom)
+        {
+            crp -> addPerson(idClient);
+        }
+    }
+    DataBaseManager::usersByChats(idRoom, idClient);
 }
 
 void ChatManager::removeClient(std::string idClient)

@@ -18,6 +18,8 @@ public:
 
     void sendMessage(std::string message, std::string idWriter);
 
+    int getIdRoom() const;
+
 private:
     int idRoom_;
 };

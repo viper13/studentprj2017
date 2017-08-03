@@ -18,6 +18,7 @@ private:
     void onUnexpectedClose() override;
     void userLogin_(std::string data);
     void createChatMessage(std::string data);
+    std::vector<int> availableRooms;
     std::string message_;
 };
 

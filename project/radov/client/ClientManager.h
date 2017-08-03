@@ -23,7 +23,8 @@ private:
     bool stop_;
     bool isAuthorized_;
 
-    int currentRoom;
+    int currentRoom_;
+    int requestRoom_;
 
 };
 

@@ -18,7 +18,7 @@ std::shared_ptr<ChatRoom> ChatRoom::getNewChatRoom(int idRoom)
 
 void ChatRoom::addPerson(std::string idClient)
 {
-    for(SessionManagerPtr sep:chatManager.sessions_)
+    for(SessionManagerPtr sep : chatManager.sessions_)
     {
         if(sep -> idClient() == idClient)
         {
@@ -28,8 +28,6 @@ void ChatRoom::addPerson(std::string idClient)
                      << sep -> idClient()
                      << " connected to chat with id "
                      << idRoom_);
-
-        DataBaseManager::usersByChats(idRoom_, sep -> idClient());
         }
     }
 }
@@ -72,4 +70,9 @@ void ChatRoom::sendMessage(std::string message, std::string idWriter)
                                     , message);
         LOG_INFO("MESSAGE:[" << message << "] has written to DB");
     }
+}
+
+int ChatRoom::getIdRoom() const
+{
+    return idRoom_;
 }
