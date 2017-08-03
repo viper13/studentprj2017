@@ -14,7 +14,7 @@ public:
 
     void addPerson(std::string idClient);
     void getChatUserList();
-    void removePerson(SessionManagerPtr session);
+    void removePerson(std::string idClient);
 
     void sendMessage(std::string message, std::string idWriter);
 

@@ -155,5 +155,9 @@ void SessionWrapper::createChatMessage(std::string data)
 
 void SessionWrapper::onUnexpectedClose()
 {
-    LOG_INFO("UNEXPECTED HANDLER WORK!");
+    if(idClient().empty())
+    {
+        setIdClient("Unregistered user");
+    }
+    c.removeClient(idClient());
 }

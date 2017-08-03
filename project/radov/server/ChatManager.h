@@ -26,6 +26,7 @@ public:
 
     int nextIdRoom;
 
+    void removeClient(std::string idClient);
 private:
     std::vector<ChatRoomPtr> chatRooms_;
     static ChatManager* p_instance;

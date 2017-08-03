@@ -34,6 +34,23 @@ void ChatRoom::addPerson(std::string idClient)
     }
 }
 
+void ChatRoom::removePerson(std::string idClient)
+{
+    std::string answer;
+
+    for (uint var = 0; var < users_.size(); var++)
+    {
+        if(users_.at(var) -> idClient() == idClient)
+        {
+            answer = "User ";
+            answer += users_.at(var) -> idClient();
+            answer += " leave chat room";
+            sendMessage(answer,"Server");
+            users_.erase(users_.begin() + var);
+        }
+    }
+}
+
 void ChatRoom::sendMessage(std::string message, std::string idWriter)
 {
     message_ = "CHATROOOM[" + std::to_string(idRoom_) + "] message from ";

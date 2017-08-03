@@ -22,12 +22,13 @@ void ChatManager::getUserList(std::string idClient)
 {
     LOG_INFO(sessions_.size());
     std::string userList = "USERS ONLINE:\n";
+    uint i = 0;
     for (SessionManagerPtr sep: sessions_)
     {
-        if(sep -> socket().is_open())
+        if(sep -> idClient() != idClient)
         {
-            userList += sep -> idClient();
-            userList += " +\n";
+            ++i;
+            userList += std::to_string(i) + ".[" + sep -> idClient() + "]\n";
         }
     }
     for(SessionManagerPtr sep: sessions_)
@@ -134,6 +135,23 @@ void ChatManager::createChat(std::string idClient, std::string idTarget)
 void ChatManager::addUserToChatRoom(std::string idClient, int idRoom)
 {
     chatRooms_.at(idRoom) -> addPerson(idClient);
+}
+
+void ChatManager::removeClient(std::string idClient)
+{
+    for(ChatRoomPtr crp:chatRooms_)
+    {
+        crp -> removePerson(idClient);
+    }
+    for (uint var = 0; var < sessions_.capacity(); var++)
+    {
+        if(sessions_.at(var)->idClient() == idClient)
+        {
+            LOG_INFO("User " << sessions_.at(var) -> idClient()
+                     << " wish to exit chat!");
+            sessions_.erase(sessions_.begin() + var);
+        }
+    }
 }
 
 void ChatManager::disconnectUser(std::string idClient)
