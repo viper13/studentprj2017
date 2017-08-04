@@ -15,6 +15,7 @@ int main()
     Worker::instance()->start();
 
     std::string message;
+
     LOG_INFO("Welcome to chat! Write !register [name] to start using chat!");
 
     while(true)
