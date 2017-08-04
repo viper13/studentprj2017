@@ -139,7 +139,6 @@ void ClientEssence::processMessage(std::string message)
         else if(isAuthorization)
         {
             write(Helper::makeLoginMessage(message));
-            LOG_INFO(Helper::makeLoginMessage(message));
             isAuthorization=false;
         }
         else if(currentRoom==0)

@@ -145,7 +145,7 @@ void SessionEssence::processLoginInteAccMessage(std::string message)
         availableRooms = c.regainChatRooms(login);
         if(!availableRooms.empty())
         {
-            write(" You joined you previus rooms. Type !roomslist to see more");
+            write("You joined you previus rooms. Type !roomslist to see more");
         }
     }
     else
