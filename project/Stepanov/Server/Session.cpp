@@ -87,6 +87,6 @@ void Session::handleWrite(system::error_code error)
 {
     if(error)
     {
-        LOG_ERR("Failure write data." << error.message());
+        LOG_INFO("Data can't be writed! Is user online?");
     }
 }

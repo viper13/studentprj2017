@@ -28,15 +28,6 @@ uint16_t Helper::getSize(uint16_t left, uint16_t right)
     return ((left << 8) + right);
 }
 
-bool Helper::paceFromPostgres(const pqxx::tuple &data, User &user)
-{
-    user.id_=data["id"].as<int>();
-    user.name=data["name"].as<std::string>();
-    user.nick=data["nick"].as<std::string>();
-    LOG_INFO(user);
-    return true;
-}
-
 std::string Helper::makeRegisterMessage(std::string message)
 {
     std::string result;

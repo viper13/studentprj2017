@@ -14,7 +14,6 @@ public:
     static BuffersVector addSize(ByteBufferPtr buffer);
     static EndBuffer makeEndBuffer(BuffersVector buffers);
     static uint16_t getSize(uint16_t left, uint16_t right);
-    static bool paceFromPostgres(const pqxx::tuple& data, User& user);
     static std::string makeRegisterMessage(std::string message);
     static std::string makeListMessage();
     static std::string makeCreateChatMessage(std::string message);

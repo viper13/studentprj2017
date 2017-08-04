@@ -23,8 +23,16 @@ void ClientEssence::processMessage(std::string message)
         if(command.find("!register") != std::string::npos)
         {
             UserStream>>data;
-            login = data;
-            write(Helper::makeRegisterMessage(data));
+            if(data.empty())
+            {
+                LOG_INFO("Name can't be empty");
+            }
+            else
+            {
+                login = data;
+                write(Helper::makeRegisterMessage(data));
+            }
+
         }
         else if(command.find("!list") != std::string::npos)
         {

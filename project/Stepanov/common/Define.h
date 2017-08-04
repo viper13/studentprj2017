@@ -43,14 +43,6 @@ typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
 
 using namespace boost;
 
-struct User
-{
-    int id_;
-    std::string name;
-    std::string nick;
-};
-
-std::ostream& operator<<(std::ostream& stream,const User& user);
 std::ostream& operator<<(std::ostream& stream,const ByteBuffer& buffer);
 
 

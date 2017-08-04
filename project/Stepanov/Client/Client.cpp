@@ -88,7 +88,7 @@ void Client::handleRead(system::error_code error)
     else
     {
         LOG_ERR("Failure: read error code " << error.value()
-                 << " description: " << error.message());
+                 << " description: " << error.message() << " Is server online?");
     }
 }
 
@@ -136,6 +136,6 @@ void Client::handleConnect(system::error_code error, asio::ip::tcp::resolver::it
     }
     else
     {
-        LOG_ERR("Failure to connect: " << address_ << ":" << port_);
+        LOG_ERR("Failure to connect: " << address_ << ":" << port_<<". Is server online?");
     }
 }
