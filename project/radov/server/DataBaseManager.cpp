@@ -4,32 +4,6 @@
 
 std::map<std::string, ConnectionPtr> DataBaseManager::connections_;
 
-bool DataBaseManager::getUsersList(std::vector<User> &users)
-{
-    ConnectionPtr connection = getConnection();
-    bool is_success = true;
-
-    try
-    {
-        pqxx::work txn(*connection);
-        pqxx::result result = txn.exec("SELECT id, name, nick FROM users;");
-
-        for (const pqxx::tuple& row : result)
-        {
-            User user;
-            Helper::parseFromPostgres(row, user);
-            users.push_back(user);
-        }
-        txn.commit();
-    }
-    catch(const std::exception& e)
-    {
-        LOG_INFO("Failure get user list " << e.what());
-        is_success= false;
-    }
-
-    return is_success;
-}
 
 bool DataBaseManager::userExists(std::string name)
 {
@@ -270,3 +244,50 @@ ConnectionPtr DataBaseManager::getConnection()
 
     return connection;
 }
+
+int DataBaseManager::getUserId(std::string name)
+{
+    ConnectionPtr connection = getConnection();
+    try
+    {
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("SELECT id FROM users"
+                                       " WHERE name='"+ name +"';");
+        txn.commit();
+        for(const pqxx::tuple& row : result)
+        {
+            return row["id"].as<int>();
+        }
+    }
+    catch (std::exception& e)
+    {
+        LOG_ERR("Error while getting user name from ID "<<e.what());
+    }
+}
+
+
+
+std::vector<int> DataBaseManager::getRoomsToPull(int userId)
+{
+    ConnectionPtr connection = getConnection();
+    try
+    {
+        std::vector<int> answer;
+        int tempInt;
+        pqxx::work txn(*connection);
+        pqxx::result result = txn.exec("SELECT chat_id FROM users_by_chats"
+                                       " WHERE user_id= "+std::to_string(userId)+" ;");
+        txn.commit();
+        for(const pqxx::tuple& row : result)
+        {
+            tempInt=row["chat_id"].as<int>();
+            answer.push_back(tempInt);
+        }
+        return answer;
+    }
+    catch (std::exception& e)
+    {
+        LOG_ERR("Erron in get rooms add"<<e.what());
+    }
+}
+

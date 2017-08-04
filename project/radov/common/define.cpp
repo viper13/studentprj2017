@@ -7,10 +7,4 @@ std::ostream& operator<<(std::ostream& stream,const ByteBuffer& buffer)
     return stream;
 }
 
-std::ostream &operator<<(std::ostream &stream, const User &user)
-{
-    stream << "id: " << user.id_ << " name: [" << user.name_ << "]"
-           << "[ nick:" << user.nick_ << "]";
 
-    return stream;
-}

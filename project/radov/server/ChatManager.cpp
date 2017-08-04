@@ -43,12 +43,38 @@ void ChatManager::getMessageList(std::string idClient)
 
     DataBaseManager::getMessageList(idClient,chatMessages);
     message_.erase();
+    message_ += "-----------------\nYour messages:\n";
     for (std::vector<ChatMessage>::iterator it = chatMessages.begin();
          it!= chatMessages.end(); it++)
     {
        message_ += "Chatroom:[" + it -> chat_id_ + "] Message:[" + it -> message_ + "]\n";
     }
-    LOG_INFO("Message list size: " << message_.size());
+
+    for(SessionManagerPtr sep: sessions_)
+    {
+        if(sep -> idClient() == idClient)
+        {
+            sep -> write(message_);
+        }
+    }
+
+}
+
+void ChatManager::getChatMessages(int idRoom, std::string idClient)
+{
+    std::vector<ChatMessage> chatMessages;
+
+    DataBaseManager::getMessageList(idClient,chatMessages);
+    message_.erase();
+    message_ += "-----------------\nChat messages:\n";
+    for (std::vector<ChatMessage>::iterator it = chatMessages.begin();
+         it!= chatMessages.end(); it++)
+    {
+        if(std::stoi(it -> chat_id_) == idRoom)
+        {
+            message_ += "Author:[" + it -> user_id_ + "] Message:[" + it -> message_ + "]\n";
+        }
+    }
 
     for(SessionManagerPtr sep: sessions_)
     {
@@ -73,6 +99,41 @@ void ChatManager::getChatsList(std::string idClient)
     }
 }
 
+
+
+std::vector<int> ChatManager::pullChatRooms(std::string idClient)
+{
+    int userId = DataBaseManager::getUserId(idClient);
+
+    std::vector<int> roomsToPull = DataBaseManager::getRoomsToPull(userId);
+    for(int i : roomsToPull)
+    {
+        joinChat(i, idClient);
+    }
+    return roomsToPull;
+}
+
+void ChatManager::joinChat(int idRoom, std::string idClient)
+{
+    for(ChatRoomPtr crp:chatRooms_)
+    {
+        if(crp -> getIdRoom() == idRoom)
+        {
+            crp -> addPerson(idClient);
+            return;
+        }
+    }
+    chatRooms_.push_back(ChatRoom::getNewChatRoom(idRoom));
+    for(ChatRoomPtr crp:chatRooms_)
+    {
+        if(crp -> getIdRoom() == idRoom)
+        {
+            crp -> addPerson(idClient);
+            return;
+        }
+    }
+}
+
 void ChatManager::start(Server& server)
 {
     server.subscribe(std::bind(
@@ -91,22 +152,6 @@ bool ChatManager::checkClientOnline(std::string idClient)
         }
     }
     return false;
-}
-
-
-void ChatManager::sendMessage(std::string idClient, std::string idTarget, std::string message)
-{
-    for(SessionManagerPtr sep: sessions_)
-    {
-        if(sep -> idClient() == idTarget)
-        {
-            message_ = "User ";
-            message_ += idClient;
-            message_ += " send you a message: ";
-            message_ += message;
-            sep -> write(message_);
-        }
-    }
 }
 
 void ChatManager::sendChatMessage(int idRoom, std::string message,std::string idClient)
@@ -173,7 +218,7 @@ void ChatManager::removeClient(std::string idClient)
     }
     for (uint var = 0; var < sessions_.size(); var++)
     {
-        if(sessions_.at(var)->idClient() == idClient)
+        if(sessions_.at(var) -> idClient() == idClient)
         {
             LOG_INFO("User " << sessions_.at(var) -> idClient()
                      << " wish to exit chat!");
@@ -182,18 +227,4 @@ void ChatManager::removeClient(std::string idClient)
     }
 }
 
-void ChatManager::disconnectUser(std::string idClient)
-{
-    for(SessionManagerPtr sep: sessions_)
-    {
-        if(sep -> idClient() == idClient)
-        {
-            sep -> socket().close();
-        }
-    }
-}
-
-ChatManager::ChatManager()
-{
-
-}
+ChatManager::ChatManager(){}

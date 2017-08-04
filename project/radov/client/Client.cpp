@@ -40,6 +40,12 @@ void Client::write(std::string message)
                                   , std::placeholders::_2));
 }
 
+void Client::closeConnection()
+{
+    socket_.close();
+    LOG_INFO("Socket closed!");
+}
+
 void Client::read()
 {
     if (0 == messageSize_)
@@ -74,7 +80,7 @@ void Client::handleRead(asio::error_code error, size_t /*buf_size*/)
         if (0 != messageSize_)
         {
             //LOG_INFO("Message: \n" << buffer_);
-            std::cout << "Message:\n" << buffer_ << std::endl;
+            std::cout << "\n" << buffer_ << std::endl;
             messageSize_ = 0;
             onRead(buffer_);
             read();

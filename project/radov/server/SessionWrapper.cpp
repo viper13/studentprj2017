@@ -32,7 +32,7 @@ void SessionWrapper::onRead(ByteBuffer buffer)
     {
         case Commands::LOGIN_MESSAGE:
         {
-            SessionWrapper::userLogin_(data);
+            SessionWrapper::userLogin(data);
             break;
         }
         case Commands::GET_USER_LIST_MESSAGE:
@@ -79,6 +79,11 @@ void SessionWrapper::onRead(ByteBuffer buffer)
             c.getChatsList(idClient());
             break;
         }
+        case Commands::GET_CHAT_MESSAGES:
+        {
+            c.getChatMessages(currentRoom_, idClient());
+            break;
+        }
         case Commands::SET_ROOM:
         {
             currentRoom_ = std::stoi(data);
@@ -87,7 +92,12 @@ void SessionWrapper::onRead(ByteBuffer buffer)
         }
         case Commands::EXIT:
         {
-            c.disconnectUser(idClient());
+            c.removeClient(idClient());
+            break;
+        }
+        case Commands::LOGOUT:
+        {
+            c.removeClient(idClient());
             break;
         }
         default:
@@ -98,7 +108,7 @@ void SessionWrapper::onRead(ByteBuffer buffer)
 
 }
 
-void SessionWrapper::userLogin_(std::string data)
+void SessionWrapper::userLogin(std::string data)
 {
     int dividerPos = data.find_first_of(" ");
     std::string idClientTemp = data.substr(0, dividerPos);
@@ -119,6 +129,13 @@ void SessionWrapper::userLogin_(std::string data)
                 message_ += "Welcome, " + idClient() + "\n";
                 write(message_);
                 availableRooms = c.pullChatRooms(idClient());
+                if(!availableRooms.empty())
+                {
+                    c.getChatsList(idClient());
+                    write("You are now signed into the old chats.\n"
+                          "Use [SETCHAT] for switch\n"
+                          "Use [HELP] for command list\n");
+                }
             }
             else
             {

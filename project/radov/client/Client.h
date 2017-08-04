@@ -16,6 +16,7 @@ public:
     virtual void processMessage() = 0;
     virtual void onRead(ByteBuffer data) = 0;
 
+    void closeConnection();
 private:
 
     asio::io_service& io_service_;

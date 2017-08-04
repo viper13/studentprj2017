@@ -29,14 +29,16 @@ enum class Commands: uint8_t
     AUTHORIZATION_FAILED,
     AUTHORIZATION_SUCCESS,
     GET_MESSAGE_LIST,
+    GET_CHAT_MESSAGES,
     GET_CHATS_LIST,
     SET_ROOM,
+    LOGOUT,
     EXIT
 };
 
 
-#define LOG_INFO(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [INF]"<<message<<std::endl;
-#define LOG_ERR(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [ERR]"<<message<<std::endl;
+#define LOG_INFO(message) std::cout << " [INF]"<<message<<std::endl;
+#define LOG_ERR(message) std::cout << " [ERR]"<<message<<std::endl;
 
 
 typedef std::vector<char> ByteBuffer;
@@ -45,14 +47,6 @@ typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
 
 std::ostream& operator<<(std::ostream& stream,const ByteBuffer& buffer);
 
-
-struct User
-{
-    int id_;
-    std::string name_;
-    std::string nick_;
-};
-
 struct ChatMessage
 {
     int id_;
@@ -60,7 +54,5 @@ struct ChatMessage
     std::string user_id_;
     std::string message_;
 };
-
-std::ostream& operator<<(std::ostream& stream,const User& buffer);
 
 #endif // DEFINE

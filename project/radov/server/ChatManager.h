@@ -14,12 +14,10 @@ public:
     void getMessageList(std::string idClient);
     void getChatsList(std::string idClient);
     void start(Server& server);
-    void sendMessage(std::string idClient, std::string idTarget, std::string message);
     void sendChatMessage(int idRoom, std::string message, std::string idClient);
     void requestMessage(std::string idClient, std::string idTarget, int room);
     int createChat(std::string idClient, std::string idTarget);
     void addUserToChatRoom(std::string idClient, int idRoom);
-    void disconnectUser(std::string idClient);
 
     std::string message_;
     std::vector<SessionManagerPtr> sessions_;
@@ -27,6 +25,10 @@ public:
     void removeClient(std::string idClient);
     bool checkClientOnline(std::string idClient);
 
+    std::vector<int> pullChatRooms(std::string idClient);
+
+    void joinChat(int idRoom, std::string idClient);
+    void getChatMessages(int idRoom, std::string idClient);
 private:
     std::vector<ChatRoomPtr> chatRooms_;
     static ChatManager* p_instance;

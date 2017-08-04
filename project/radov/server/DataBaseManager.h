@@ -9,7 +9,6 @@ typedef std::shared_ptr<pqxx::connection> ConnectionPtr;
 class DataBaseManager
 {
 public:
-    static bool getUsersList(std::vector<User> &users);
     static bool userExists(std::string name);
     static bool authUser(std::string name, std::string pass);
     static bool addUser(std::string name, std::string pass);
@@ -18,7 +17,8 @@ public:
     static bool addMessage(int chatId, std::string userName, std::string message);
     static bool getMessageList(std::string name, std::vector<ChatMessage> &chatMessages);
     static bool getChatsList(std::string idClient, std::string &message);
-
+    static int getUserId(std::string name);
+    static std::vector<int> getRoomsToPull(int userId);
 
 private:
     static ConnectionPtr getConnection();

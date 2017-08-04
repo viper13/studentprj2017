@@ -28,14 +28,6 @@ uint16_t Helper::getSize(uint8_t left, uint8_t right)
     return ((left << 8) + right);
 }
 
-bool Helper::parseFromPostgres(const pqxx::tuple &data, User &user)
-{
-    user.id_ = data["id"].as<int>();
-    user.name_ = data["name"].as<std::string>();
-    user.nick_ = data["nick"].as<std::string>();
-
-    return true;
-}
 
 bool Helper::parseChatMessages(const pqxx::tuple &data, ChatMessage &chatMessage)
 {
