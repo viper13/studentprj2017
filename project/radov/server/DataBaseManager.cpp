@@ -193,10 +193,9 @@ bool DataBaseManager::getChatsList(std::string idClient, std::string& message)
 
         txn.commit();
         message.erase();
-        message += "YOUR CHATS LIST:\n";
         for (const pqxx::tuple& row : result)
         {
-              message += "ID:[" + row[0].as<std::string>() + "]\n";
+              message += row[0].as<std::string>() + "\n";
         }
     }
     catch(const std::exception& e)

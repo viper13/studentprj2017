@@ -12,7 +12,7 @@ public:
     void onConnected(SessionManagerPtr session);
     void getUserList(std::string idClient);
     void getMessageList(std::string idClient);
-    void getChatsList(std::string idClient);
+    std::string getChatsList(std::string idClient);
     void start(Server& server);
     void sendChatMessage(int idRoom, std::string message, std::string idClient);
     void requestMessage(std::string idClient, std::string idTarget, int room);

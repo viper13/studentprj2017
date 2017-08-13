@@ -59,6 +59,13 @@ void ClientManager::onRead(ByteBuffer data)
             currentRoom_ = std::stoi(message.substr(1));
             break;
         }
+        case Commands::SET_ROOM_ACCEPT:
+        {
+            currentRoom_ = std::stoi(message.substr(1));
+            inChat_ = true;
+            std::cout << "NOW you in chatroom: " << currentRoom_ << std::endl;
+            break;
+        }
         case Commands::AUTHORIZATION_FAILED:
         {
             isAuthorized_ = false;
@@ -122,7 +129,10 @@ void ClientManager::chatCommandSet(std::string message)
         Helper::prependCommand(Commands::GET_CHAT_MESSAGES, message);
         write(message);
     }
-    else if(!(isupper(tempChar2) && isupper(tempChar1) && isupper(tempChar0)) )
+    else if(!(isupper(tempChar2)
+              && isupper(tempChar1)
+              && isupper(tempChar0)
+              && (message.find("OK") != std::string::npos)) )
     {
         std::string message_ = message;
         Helper::prependCommand(Commands::CHAT_MESSAGE, message);
@@ -200,10 +210,10 @@ void ClientManager::defaultCommandSet(std::string message)
     else if((message.find("SETCHAT") != std::string::npos))
     {
         std::cout << "Enter id of chatroom:\n";
-        std::cin >> currentRoom_;
-        inChat_ = true;
+        std::cin >> requestRoom_;
+        //inChat_ = true;
         Helper::prependCommand(Commands::SET_ROOM, message);
-        message += std::to_string(currentRoom_);
+        message += std::to_string(requestRoom_);
         write(message);
     }
     else if((message.find("LOGOUT") != std::string::npos))

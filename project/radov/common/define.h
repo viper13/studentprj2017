@@ -19,6 +19,7 @@ enum class Commands: uint8_t
     GET_USER_LIST_MESSAGE,
     CREATE_CHAT_MESSAGE,
     SEND_MESSAGE,
+    SET_ROOM_ACCEPT,
     ERROR_MESSAGE,
     WAIT_FOR_NEXT_MESSAGE,
     REQUEST_TO_CREATE_CHAT_MESSAGE,
@@ -39,7 +40,8 @@ enum class Commands: uint8_t
 
 #define LOG_INFO(message) std::cout << " [INF]"<<message<<std::endl;
 #define LOG_ERR(message) std::cout << " [ERR]"<<message<<std::endl;
-
+//#define LOG_INFO(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [INF]"<<message<<std::endl;
+//#define LOG_ERR(message) std::cout<<__FILE__<<":"<<__FUNCTION__<<":"<<__LINE__<<" [ERR]"<<message<<std::endl;
 
 typedef std::vector<char> ByteBuffer;
 typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;

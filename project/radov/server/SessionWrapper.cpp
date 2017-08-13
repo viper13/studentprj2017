@@ -76,7 +76,7 @@ void SessionWrapper::onRead(ByteBuffer buffer)
         }
         case Commands::GET_CHATS_LIST:
         {
-            c.getChatsList(idClient());
+            write("YOUR CHATLIST:\n" + c.getChatsList(idClient()));
             break;
         }
         case Commands::GET_CHAT_MESSAGES:
@@ -86,8 +86,19 @@ void SessionWrapper::onRead(ByteBuffer buffer)
         }
         case Commands::SET_ROOM:
         {
-            currentRoom_ = std::stoi(data);
-            write("You changed room to " + data);
+            std::string temp = c.getChatsList(idClient());
+            if(temp[temp.find(data)] == NULL)
+            {
+                write("FAILED TO CHANGE ROOM\nSEE YOU CHATLIST:" + c.getChatsList(idClient()) );
+            }
+            else
+            {
+                currentRoom_ = std::stoi(data);
+                Helper::prependCommand(Commands::SET_ROOM_ACCEPT, data);
+                data += std::to_string(currentRoom_);
+                write(data);
+            }
+
             break;
         }
         case Commands::EXIT:
@@ -131,10 +142,11 @@ void SessionWrapper::userLogin(std::string data)
                 availableRooms = c.pullChatRooms(idClient());
                 if(!availableRooms.empty())
                 {
-                    c.getChatsList(idClient());
+                    //c.getChatsList(idClient());
                     write("You are now signed into the old chats.\n"
-                          "Use [SETCHAT] for switch\n"
-                          "Use [HELP] for command list\n");
+                          "Use [SETCHAT] for switch to YOUR CHATROOM's:\n"
+                          + c.getChatsList(idClient())
+                          + "Use [HELP] for command list\n");
                 }
             }
             else

@@ -34,7 +34,6 @@ private:
     void handleRead(asio::error_code error, size_t);
     void handleWrite(BuffersVector data, asio::error_code error, size_t writtedSize);
 
-protected:
     ByteBuffer buffer_;
 
 };

@@ -86,17 +86,11 @@ void ChatManager::getChatMessages(int idRoom, std::string idClient)
 
 }
 
-void ChatManager::getChatsList(std::string idClient)
+std::string ChatManager::getChatsList(std::string idClient)
 {
     DataBaseManager::getChatsList(idClient, message_);
 
-    for(SessionManagerPtr sep: sessions_)
-    {
-        if(sep -> idClient() == idClient)
-        {
-            sep -> write(message_);
-        }
-    }
+    return message_;
 }
 
 

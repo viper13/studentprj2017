@@ -13,7 +13,6 @@ public:
     std::string message_;
 
     void addPerson(std::string idClient);
-    void getChatUserList();
     void removePerson(std::string idClient);
 
     void sendMessage(std::string message, std::string idWriter);
